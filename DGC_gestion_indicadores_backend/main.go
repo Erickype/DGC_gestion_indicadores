@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	controller "github.com/Erickype/DGC_gestion_indicadores_backend/controller/auth"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	model "github.com/Erickype/DGC_gestion_indicadores_backend/model/auth"
 	"log"
@@ -60,6 +61,10 @@ func seedData() {
 
 func serveApplication() {
 	router := gin.Default()
+
+	authRoutes := router.Group("/auth/user")
+	authRoutes.POST("/register", controller.Register)
+	authRoutes.POST("/login", controller.Login)
 
 	err := router.Run(":8000")
 	if err != nil {
