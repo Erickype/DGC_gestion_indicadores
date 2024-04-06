@@ -5,6 +5,7 @@ import (
 	controller "github.com/Erickype/DGC_gestion_indicadores_backend/controller/auth"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	model "github.com/Erickype/DGC_gestion_indicadores_backend/model/auth"
+	"github.com/Erickype/DGC_gestion_indicadores_backend/util"
 	"log"
 	"os"
 
@@ -65,6 +66,15 @@ func serveApplication() {
 	authRoutes := router.Group("/auth/user")
 	authRoutes.POST("/register", controller.Register)
 	authRoutes.POST("/login", controller.Login)
+
+	adminRoutes := router.Group("/admin")
+	adminRoutes.Use(util.JWTAuth())
+	adminRoutes.GET("/users", controller.GetUsers)
+	adminRoutes.GET("/user/:id", controller.GetUser)
+	adminRoutes.PUT("/user/:id", controller.UpdateUser)
+	adminRoutes.POST("/user/role", controller.CreateRole)
+	adminRoutes.GET("/user/roles", controller.GetRoles)
+	adminRoutes.PUT("/user/role/:id", controller.UpdateRole)
 
 	err := router.Run(":8000")
 	if err != nil {

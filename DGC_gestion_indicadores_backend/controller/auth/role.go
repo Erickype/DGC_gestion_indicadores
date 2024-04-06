@@ -16,6 +16,7 @@ func CreateRole(c *gin.Context) {
 	err := c.BindJSON(&Role)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err})
+		return
 	}
 	err = model.CreateRole(&Role)
 	if err != nil {
@@ -70,6 +71,7 @@ func UpdateRole(c *gin.Context) {
 	err = c.BindJSON(&Role)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err})
+		return
 	}
 	err = model.UpdateRole(&Role)
 	if err != nil {
