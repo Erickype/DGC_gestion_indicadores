@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	model "github.com/Erickype/DGC_gestion_indicadores_backend/model/auth"
+	"github.com/Erickype/DGC_gestion_indicadores_backend/util"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"gorm.io/gorm"
@@ -69,7 +70,16 @@ func Login(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"username": input.Username, "message": "Successfully logged in"})
+	jwt, err := util.GenerateJWT(user)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{
+		"token":    jwt,
+		"username": input.Username,
+		"message":  "Successfully logged in"})
 
 }
 
@@ -103,6 +113,7 @@ func GetUser(context *gin.Context) {
 
 // UpdateUser a user info based on route param "id" and body
 func UpdateUser(c *gin.Context) {
+	var Update model.Update
 	var User model.User
 	id, _ := strconv.Atoi(c.Param("id"))
 
@@ -116,10 +127,15 @@ func UpdateUser(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
 	}
-	err = c.BindJSON(&User)
+	err = c.BindJSON(&Update)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err})
+		return
 	}
+	User.Username = Update.Username
+	User.Email = Update.Email
+	User.RoleID = Update.RoleID
+
 	err = model.UpdateUser(&User)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
