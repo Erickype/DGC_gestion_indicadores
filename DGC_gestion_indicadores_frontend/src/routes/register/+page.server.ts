@@ -3,7 +3,10 @@ import type { Action, Actions, PageServerLoad } from './$types'
 import type { RegisterError, RegisterRequest } from '$lib/api/model/auth/register'
 import { Register } from '$lib/api/controller/auth/auth'
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals }) => {
+    if (locals.user) {
+        throw redirect(302, "/")
+    }
 }
 
 const register: Action = async ({ request }) => {
@@ -31,9 +34,9 @@ const register: Action = async ({ request }) => {
 
     const res = await Register(registerRequest)
 
-    if(!res.ok){
+    if (!res.ok) {
         const err: RegisterError = await res.json()
-        return fail(res.status, {error: err.error})
+        return fail(res.status, { error: err.error })
     }
 
     redirect(303, "/login")
