@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/controller/academicPeriod"
 	controller "github.com/Erickype/DGC_gestion_indicadores_backend/controller/auth"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
+	model2 "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicPeriod"
 	model "github.com/Erickype/DGC_gestion_indicadores_backend/model/auth"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/util"
 	"log"
@@ -40,6 +42,10 @@ func loadDatabase() {
 	if err != nil {
 		log.Fatal("Error while migration: ", err.Error())
 	}
+	err = database.DB.AutoMigrate(&model2.AcademicPeriod{})
+	if err != nil {
+		log.Fatal("Error while migrating: ", err.Error())
+	}
 	seedData()
 }
 
@@ -67,6 +73,7 @@ func serveApplication() {
 	authRoutes.POST("/register", controller.Register)
 	authRoutes.POST("/login", controller.Login)
 
+	// Admin routes
 	adminRoutes := router.Group("/admin")
 	adminRoutes.Use(util.JWTAuth())
 	adminRoutes.GET("/users", controller.GetUsers)
@@ -75,6 +82,12 @@ func serveApplication() {
 	adminRoutes.POST("/user/role", controller.CreateRole)
 	adminRoutes.GET("/user/roles", controller.GetRoles)
 	adminRoutes.PUT("/user/role/:id", controller.UpdateRole)
+
+	adminRoutes.POST("/academicPeriod", academicPeriod.CreateAcademicPeriod)
+
+	// Public view routes
+	academicPeriodRoutes := router.Group("/view")
+	academicPeriodRoutes.GET("/academicPeriods", academicPeriod.GetAcademicPeriods)
 
 	err := router.Run(":8000")
 	if err != nil {
