@@ -1,5 +1,5 @@
 import type { RegisterRequest } from "$lib/api/model/auth/register";
-import { authRouteLogin, authRouteRegister } from "../../constants";
+import { authRouteLogin, authRouteRegister } from "$lib/api/routes/auth/auth";
 import type { LoginRequest } from "../../model/auth/login";
 
 export async function Login(login: LoginRequest) {

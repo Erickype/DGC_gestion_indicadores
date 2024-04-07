@@ -1,10 +1,8 @@
-// Base domain
-const domain = "http://localhost:8000"
+import { domain } from "../base"
 
-// Auth routes
+// AUTH ROUTES
 const authRoute = "/auth/user"
 const authBaseURL = domain + authRoute
 
 export const authRouteRegister = authBaseURL + "/register"
 export const authRouteLogin = authBaseURL + "/login"
-
