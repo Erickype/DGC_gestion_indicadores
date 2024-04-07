@@ -5,10 +5,8 @@
 </script>
 
 <div class="navbar bg-primary">
-	<div class="flex-1">
-		{#if $page.data.user}
-			<a href="/admin" class="btn btn-ghost text-lg">Admin</a>
-		{/if}
+	<div class="flex-1 pl-4">
+		<h1 class="text-xl font-semibold">Gestión de Indicadores</h1>
 	</div>
 	<div class="flex-none">
 		{#if !$page.data.user}
