@@ -1,2 +1,7 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<svelte:head>
+	<title>Dashboard</title>
+</svelte:head>
+
+<div class="flex items-center justify-center mt-10">
+	<h1 class="text-xl">Dashboard</h1>
+</div>
