@@ -8,11 +8,11 @@ import (
 	model2 "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicPeriod"
 	model "github.com/Erickype/DGC_gestion_indicadores_backend/model/auth"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/util"
-	"log"
-	"os"
-
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"log"
+	"os"
 )
 
 func main() {
@@ -68,6 +68,17 @@ func seedData() {
 
 func serveApplication() {
 	router := gin.Default()
+
+	// - No origin allowed by default
+	// - GET,POST, PUT, HEAD methods
+	// - Credentials share disabled
+	// - Preflight requests cached for 12 hours
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:5173"}
+	// config.AllowOrigins = []string{"http://google.com", "http://facebook.com"}
+	// config.AllowAllOrigins = true
+
+	router.Use(cors.New(config))
 
 	authRoutes := router.Group("/auth/user")
 	authRoutes.POST("/register", controller.Register)
