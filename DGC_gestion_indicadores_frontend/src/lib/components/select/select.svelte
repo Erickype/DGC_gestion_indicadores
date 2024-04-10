@@ -10,29 +10,33 @@
 
 	function itemSelected(event: Event) {
 		const button = event.target as HTMLButtonElement;
-        const value = parseInt(button.value);
-        selected = value;
-        dispatch('selected', selected);		
+		const value = parseInt(button.value);
+		selected = value;
+		dispatch('selected', selected);
+
+		const dropdown = button.closest('.dropdown');
+		dropdown!.removeAttribute('open');
 	}
-	$: console.log(selected);
-	
+
+	function openSelect(event: Event) {
+		const input = event.target as HTMLInputElement;
+		const dropdown = input.closest('.dropdown');
+		dropdown!.setAttribute('open', 'open');
+	}
 </script>
 
-<div class="flex flex-col w-1/2">
-	<div class="dropdown w-full">
-		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-		<label tabindex="0" class="input input-bordered flex items-center gap-2">
-			<input type="text" class="grow" placeholder="Search" />
+<details class="dropdown w-1/3">
+	<summary class="list-none">
+		<label class="input input-bordered flex items-center gap-2">
+			<input type="text" class="grow" placeholder="Search" on:focus={openSelect} />
 			<Search customClass="w-4 h-4"></Search>
 		</label>
-		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-		<ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-full">
-			{#each messages as message}
-				<!-- svelte-ignore a11y-missing-attribute -->
-				<li value={message.id}>
-					<button value={message.id} type="button" on:click={itemSelected}>{message.name}</button>
-				</li>
-			{/each}
-		</ul>
-	</div>
-</div>
+	</summary>
+	<ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-full">
+		{#each messages as message}
+			<li value={message.id}>
+				<button value={message.id} type="button" on:click={itemSelected}>{message.name}</button>
+			</li>
+		{/each}
+	</ul>
+</details>
