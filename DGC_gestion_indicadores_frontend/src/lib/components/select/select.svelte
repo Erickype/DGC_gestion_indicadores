@@ -19,12 +19,18 @@
 		selected = value;
 		dispatch('selected', selected);
 
+		const input = document.getElementById('input') as HTMLInputElement;
+		const text = button.innerText;
+		input.value = text;
+
 		const dropdown = button.closest('.dropdown');
 		dropdown!.removeAttribute('open');
 	}
 
 	function openSelect(event: Event) {
 		const input = event.target as HTMLInputElement;
+		selected = 0;
+		input.value = '';
 		const dropdown = input.closest('.dropdown');
 		dropdown!.setAttribute('open', 'open');
 	}
@@ -42,9 +48,10 @@
 
 <details class="dropdown w-1/3">
 	<summary class="list-none">
-		<label class="input input-bordered flex items-center gap-2">
+		<label class="input input-bordered input-sm flex items-center gap-2">
 			<input
-				type="text"
+				id="input"
+				type="search"
 				class="grow"
 				placeholder="Buscar"
 				on:focus={openSelect}
@@ -55,7 +62,7 @@
 	</summary>
 	<ul id="items" class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-full">
 		{#each messagesFilter as message}
-			<li value={message.id}>
+			<li tabindex="-1" value={message.id}>
 				<button value={message.id} type="button" on:click={itemSelected}>{message.name}</button>
 			</li>
 		{/each}
