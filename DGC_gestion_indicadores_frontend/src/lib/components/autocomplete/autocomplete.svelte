@@ -4,8 +4,9 @@
 	import { createEventDispatcher } from 'svelte';
 
 	export let messages: Message[] = [];
-	let messagesFilter: Message[] = [];
 	export let selected: number = 0;
+	export let width: string = 'w-1/3';
+	let messagesFilter: Message[] = [];
 
 	const dispatch = createEventDispatcher();
 
@@ -44,9 +45,16 @@
 		const dropdown = input.closest('.dropdown');
 		dropdown!.setAttribute('open', 'open');
 	}
+
+	function reset(event: Event) {
+		const input = event.target as HTMLInputElement;
+		if ((input.value = '')) {
+			messagesFilter = messages;
+		}
+	}
 </script>
 
-<details class="dropdown w-1/3">
+<details class="dropdown {width}">
 	<summary class="list-none">
 		<label class="input input-bordered input-sm flex items-center gap-2">
 			<input
@@ -54,6 +62,7 @@
 				type="search"
 				class="grow"
 				placeholder="Buscar"
+				on:reset={reset}
 				on:focus={openSelect}
 				on:input={filterMessages}
 			/>

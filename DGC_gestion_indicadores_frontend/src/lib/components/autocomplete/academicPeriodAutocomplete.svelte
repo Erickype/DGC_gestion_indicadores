@@ -2,7 +2,7 @@
 	import { GetAcademicPeriods } from '$lib/api/controller/view/academicPeriod';
 	import type { AcademicPeriod } from '$lib/api/model/view/academicPeriod';
 	import type { Message } from './select';
-	import Select from './select.svelte';
+	import Autocomplete from './autocomplete.svelte';
 	import { onMount } from 'svelte';
 
 	let messages: Message[] = [];
@@ -26,11 +26,10 @@
 	$: selectedPeriod = periods.find((period) => period.ID === selected);
 </script>
 
-<Select {messages} bind:selected></Select>
+<Autocomplete {messages} bind:selected></Autocomplete>
 {#if selectedPeriod}
-<div class="flex flex-col text-sm text-accent-content p-2 m-2">
-
-	<p>Selected id: {selectedPeriod?.ID}</p>
-	<p>Selected name: {selectedPeriod?.name}</p>
-</div>
+	<div class="flex flex-col text-sm text-accent-content p-2 m-2">
+		<p>Selected id: {selectedPeriod?.ID}</p>
+		<p>Selected name: {selectedPeriod?.name}</p>
+	</div>
 {/if}

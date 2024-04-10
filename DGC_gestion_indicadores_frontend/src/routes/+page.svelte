@@ -1,5 +1,5 @@
 <script>
-	import AcademicPeriodSelect from "$lib/components/select/academicPeriodSelect.svelte";
+	import AcademicPeriodSelect from "$lib/components/autocomplete/academicPeriodAutocomplete.svelte";
 </script>
 
 <svelte:head>
