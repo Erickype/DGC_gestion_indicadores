@@ -3,8 +3,8 @@
 	import Search from '$lib/icons/search.svelte';
 	import { createEventDispatcher } from 'svelte';
 
-	export let id: string
-	export let name: string
+	export let id: string;
+	export let name: string;
 	export let messages: Message[] = [];
 	export let selected: number = 0;
 	export let width: string = 'w-1/3';
@@ -28,19 +28,30 @@
 	}
 
 	function manageItemSelected(event: KeyboardEvent) {
-		switch (event.key) {
-			case 'ArrowUp':
-				event.preventDefault();
-				items[currentItem].classList.remove('focus');
-				currentItem = currentItem > 0 ? --currentItem : 0;
-				items[currentItem].classList.add('focus');
-				break;
-			case 'ArrowDown':
-				event.preventDefault();
-				items[currentItem].classList.remove('focus');
-				currentItem = currentItem < items.length - 1 ? ++currentItem : items.length - 1;
-				items[currentItem].classList.add('focus');
-				break;
+		// Check if the current component's input is focused
+		if (document.activeElement === input) {
+			switch (event.key) {
+				case 'ArrowUp':
+					event.preventDefault();
+					items[currentItem].classList.remove('focus');
+					currentItem = currentItem > 0 ? --currentItem : 0;
+					items[currentItem].classList.add('focus');
+					break;
+				case 'ArrowDown':
+					event.preventDefault();
+					items[currentItem].classList.remove('focus');
+					currentItem = currentItem < items.length - 1 ? ++currentItem : items.length - 1;
+					items[currentItem].classList.add('focus');
+					break;
+				case 'Enter':
+					const button = items[currentItem] as HTMLButtonElement;
+					selected = parseInt(button.value);
+					dispatch('selected', selected);
+					const text = button.innerText;
+					input.value = text;
+					dropdown.removeAttribute('open');
+					break;
+			}
 		}
 	}
 
@@ -54,6 +65,7 @@
 		input.value = text;
 
 		dropdown.removeAttribute('open');
+		keepItemsOpen = true;
 	}
 
 	function openSelect() {
@@ -90,9 +102,27 @@
 	function reset() {
 		messagesFilter = messages;
 	}
+
+	let keepItemsOpen = false;
+	function closeSelect() {
+		if (!keepItemsOpen) {
+			currentItem = 0;
+			messagesFilter = messages;
+			dropdown.removeAttribute('open');
+		}
+	}
+
+	function closeItemsList() {
+		if (keepItemsOpen) {
+			currentItem = 0;
+			messagesFilter = messages;
+			dropdown.removeAttribute('open');
+			keepItemsOpen = false;
+		}
+	}
 </script>
 
-<svelte:document on:keydown={manageItemSelected} />
+<svelte:document on:keydown={manageItemSelected} on:mouseup={closeItemsList} />
 
 <details bind:this={dropdown} class="dropdown {width}">
 	<summary class="list-none">
@@ -105,6 +135,7 @@
 				class="grow"
 				placeholder="Buscar"
 				autocomplete="off"
+				on:blur={closeSelect}
 				on:reset={reset}
 				on:focus={openSelect}
 				on:input={filterMessages}
@@ -115,7 +146,7 @@
 	<ul bind:this={ul} class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-full">
 		{#each messagesFilter as message}
 			<li value={message.id}>
-				<button class="item" value={message.id} type="button" on:click={itemSelected}
+				<button class="item" value={message.id} type="button" on:mousedown={itemSelected}
 					>{message.name}</button
 				>
 			</li>
