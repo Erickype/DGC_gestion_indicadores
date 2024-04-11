@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Message } from './select';
 	import Search from '$lib/icons/search.svelte';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 
 	export let id: string;
 	export let name: string;
@@ -19,12 +19,19 @@
 	let items: NodeListOf<HTMLButtonElement>;
 	let currentItem = 0;
 
+	let hasInitialLoad = false;
+
 	$: if (messages.length > 0) {
 		messagesFilter = messages;
 	}
 
 	$: if (input && input.value === '') {
 		reset();
+	}
+
+	$: if (messages && messages.length > 0 && input && !hasInitialLoad) {
+		loadInitialSelected();
+		hasInitialLoad = true;
 	}
 
 	function manageItemSelected(event: KeyboardEvent) {
@@ -49,6 +56,7 @@
 					dispatch('selected', selected);
 					const text = button.innerText;
 					input.value = text;
+					input.blur();
 					dropdown.removeAttribute('open');
 					break;
 			}
@@ -120,6 +128,14 @@
 			keepItemsOpen = false;
 		}
 	}
+
+	function loadInitialSelected() {
+		const item = messages[selected]
+		const text = item.name;
+		selected = item.id;
+		dispatch('selected', selected);
+		input.value = text;
+	}
 </script>
 
 <svelte:document on:keydown={manageItemSelected} on:mouseup={closeItemsList} />
@@ -139,6 +155,7 @@
 				on:reset={reset}
 				on:focus={openSelect}
 				on:input={filterMessages}
+				on:loadeddata={loadInitialSelected}
 			/>
 			<Search width="w-4" height="h4"></Search>
 		</label>

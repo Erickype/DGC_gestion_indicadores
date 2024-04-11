@@ -24,14 +24,6 @@
 			}))
 		);
 	});
-
-	$: selectedPeriod = periods.find((period) => period.ID === selected);
 </script>
 
 <Autocomplete {id} {name} {messages} bind:selected></Autocomplete>
-{#if selectedPeriod}
-	<div class="flex flex-col text-sm text-accent-content p-2 m-2">
-		<p>Selected id: {selectedPeriod?.ID}</p>
-		<p>Selected name: {selectedPeriod?.name}</p>
-	</div>
-{/if}
