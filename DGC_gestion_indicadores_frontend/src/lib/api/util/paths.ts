@@ -1,0 +1,1 @@
+export const mainDashboarRoute = "/dashboards/evaluation-periods"

@@ -20,9 +20,9 @@
 			name: 'Información',
 			icon: FileIcon,
 			links: [
-				{ name: 'Docentes', route: 'information/teachers' },
-				{ name: 'Publicaciones Académicas', route: 'information/academic-publications' },
-				{ name: 'Libros', route: 'information/books' }
+				{ name: 'Docentes', route: '/information/teachers' },
+				{ name: 'Publicaciones Académicas', route: '/information/academic-publications' },
+				{ name: 'Libros', route: '/information/books' }
 			],
 			roles: [1, 2]
 		}
