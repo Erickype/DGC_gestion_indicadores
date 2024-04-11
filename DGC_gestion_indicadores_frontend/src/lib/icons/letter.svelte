@@ -1,8 +1,16 @@
 <script lang="ts">
-	export let customClass: string;
+	export let fill = 'fill-secondary-content';
+	export let stroke = 'stroke-secondary-content';
+	export let width = 'w-8';
+	export let height = 'h-8';
+	export let opacity = 'opacity-80';
 </script>
 
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class={customClass}
+<svg
+	class="{fill} {stroke} {width} {height} {opacity}"
+	xmlns="http://www.w3.org/2000/svg"
+	viewBox="0 0 16 16"
+	fill="currentColor"
 	><path
 		d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z"
 	/><path

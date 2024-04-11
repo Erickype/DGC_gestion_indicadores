@@ -1,9 +1,13 @@
 <script lang="ts">
-    export let customClass:string = "fill-info w-8 h-8 opacity-80"
+	export let fill = 'fill-secondary-content';
+	export let stroke = 'stroke-secondary-content';
+	export let width = 'w-8';
+	export let height = 'h-8';
+	export let opacity = 'opacity-80';
 </script>
 
 <svg
-    class={customClass}
+	class="{fill} {stroke} {width} {height} {opacity}"
 	viewBox="0 0 32 32"
 	version="1.1"
 	xmlns="http://www.w3.org/2000/svg"
