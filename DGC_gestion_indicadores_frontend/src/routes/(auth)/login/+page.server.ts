@@ -5,7 +5,7 @@ import { Login } from '$lib/api/controller/auth/auth'
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (locals.user) {
-        throw redirect(302, "/")
+        throw redirect(302, "/dashboards/evaluation-periods")
     }
 }
 
@@ -42,10 +42,10 @@ const login: Action = async ({ cookies, request }) => {
         path: '/',
         secure: true,
         sameSite: 'strict',
-        maxAge: 60 * 60 * 30 // 30 minutes
+        maxAge: 60 * 30 // 30 minutes
     });
 
-    redirect(303, "/")
+    redirect(303, "/dashboards/evaluation-periods")
 }
 
 export const actions: Actions = { login }

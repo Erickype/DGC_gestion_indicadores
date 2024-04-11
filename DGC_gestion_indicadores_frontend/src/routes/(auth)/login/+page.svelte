@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
+	import { applyAction, enhance } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
 	import Avatar from '$lib/icons/avatar.svelte';
 	import Info from '$lib/icons/info.svelte';
 	import Key from '$lib/icons/key.svelte';
@@ -19,7 +20,16 @@
 			<Login customClass="fill-primary stroke-secondary-content/10 w-14 h-14"></Login>
 			<h1 class="card-title text-4xl font-bold mb-4">Bienvenido!</h1>
 
-			<form action="?/login" method="POST" use:enhance>
+			<form
+				action="?/login"
+				method="POST"
+				use:enhance={() => {
+					return async ({ result }) => {
+						invalidateAll();
+						await applyAction(result);
+					};
+				}}
+			>
 				<label class="input input-bordered flex items-center gap-2 mb-4" for="username">
 					<Avatar customClass="w-4 h-4 opacity-70"></Avatar>
 					<input

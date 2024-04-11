@@ -2,7 +2,8 @@
 	import { onMount } from 'svelte';
 	import MenuIcon from '$lib/icons/menu.svelte';
 	import MainMenu from '$lib/components/menu/mainMenu.svelte';
-	import { enhance } from '$app/forms';
+	import { applyAction, enhance } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import '../app.css';
 
@@ -47,7 +48,16 @@
 			</div>
 		{/if}
 		{#if $page.data.user}
-			<form action="/logout" method="post" use:enhance>
+			<form
+				action="/logout"
+				method="POST"
+				use:enhance={() => {
+					return async ({ result }) => {
+						invalidateAll();
+						await applyAction(result);
+					};
+				}}
+			>
 				<button class="btn btn-ghost" type="submit">Salir</button>
 			</form>
 		{/if}

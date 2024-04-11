@@ -5,7 +5,7 @@ import { Register } from '$lib/api/controller/auth/auth'
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (locals.user) {
-        throw redirect(302, "/")
+        throw redirect(302, "/dashboards/evaluation-periods")
     }
 }
 
