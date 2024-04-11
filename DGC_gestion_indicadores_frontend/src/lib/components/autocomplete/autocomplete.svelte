@@ -3,6 +3,8 @@
 	import Search from '$lib/icons/search.svelte';
 	import { createEventDispatcher } from 'svelte';
 
+	export let id: string
+	export let name: string
 	export let messages: Message[] = [];
 	export let selected: number = 0;
 	export let width: string = 'w-1/3';
@@ -10,8 +12,36 @@
 
 	const dispatch = createEventDispatcher();
 
+	let input: HTMLInputElement;
+	let dropdown: HTMLDetailsElement;
+
+	let ul: HTMLUListElement;
+	let items: NodeListOf<HTMLButtonElement>;
+	let currentItem = 0;
+
 	$: if (messages.length > 0) {
 		messagesFilter = messages;
+	}
+
+	$: if (input && input.value === '') {
+		reset();
+	}
+
+	function manageItemSelected(event: KeyboardEvent) {
+		switch (event.key) {
+			case 'ArrowUp':
+				event.preventDefault();
+				items[currentItem].classList.remove('focus');
+				currentItem = currentItem > 0 ? --currentItem : 0;
+				items[currentItem].classList.add('focus');
+				break;
+			case 'ArrowDown':
+				event.preventDefault();
+				items[currentItem].classList.remove('focus');
+				currentItem = currentItem < items.length - 1 ? ++currentItem : items.length - 1;
+				items[currentItem].classList.add('focus');
+				break;
+		}
 	}
 
 	function itemSelected(event: Event) {
@@ -20,59 +50,74 @@
 		selected = value;
 		dispatch('selected', selected);
 
-		const input = document.getElementById('input') as HTMLInputElement;
 		const text = button.innerText;
 		input.value = text;
 
-		const dropdown = button.closest('.dropdown');
-		dropdown!.removeAttribute('open');
+		dropdown.removeAttribute('open');
 	}
 
-	function openSelect(event: Event) {
-		const input = event.target as HTMLInputElement;
+	function openSelect() {
 		selected = 0;
+		currentItem = 0;
 		input.value = '';
-		const dropdown = input.closest('.dropdown');
-		dropdown!.setAttribute('open', 'open');
+		dropdown.setAttribute('open', 'open');
+
+		setTimeout(() => {
+			items = ul.querySelectorAll('.item');
+
+			if (items.length > 0) {
+				items[currentItem].classList.add('focus');
+			}
+		}, 0);
 	}
 
-	function filterMessages(event: Event) {
-		const input = event.target as HTMLInputElement;
-
+	function filterMessages() {
 		const searchText = input.value.toLowerCase();
 		messagesFilter = messages.filter((message) => message.name.toLowerCase().includes(searchText));
 
-		const dropdown = input.closest('.dropdown');
-		dropdown!.setAttribute('open', 'open');
+		setTimeout(() => {
+			items = ul.querySelectorAll('.item');
+
+			if (items.length > 0) {
+				currentItem = 0;
+				items.forEach((item) => item.classList.remove('focus'));
+				items[currentItem].classList.add('focus');
+			}
+			dropdown.setAttribute('open', 'true');
+		}, 0);
 	}
 
-	function reset(event: Event) {
-		const input = event.target as HTMLInputElement;
-		if ((input.value = '')) {
-			messagesFilter = messages;
-		}
+	function reset() {
+		messagesFilter = messages;
 	}
 </script>
 
-<details class="dropdown {width}">
+<svelte:document on:keydown={manageItemSelected} />
+
+<details bind:this={dropdown} class="dropdown {width}">
 	<summary class="list-none">
 		<label class="input input-bordered input-sm flex items-center gap-2">
 			<input
-				id="input"
+				bind:this={input}
+				{id}
+				{name}
 				type="search"
 				class="grow"
 				placeholder="Buscar"
+				autocomplete="off"
 				on:reset={reset}
 				on:focus={openSelect}
 				on:input={filterMessages}
 			/>
-			<Search customClass="w-4 h-4"></Search>
+			<Search width="w-4" height="h4"></Search>
 		</label>
 	</summary>
-	<ul id="items" class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-full">
+	<ul bind:this={ul} class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-full">
 		{#each messagesFilter as message}
-			<li tabindex="-1" value={message.id}>
-				<button value={message.id} type="button" on:click={itemSelected}>{message.name}</button>
+			<li value={message.id}>
+				<button class="item" value={message.id} type="button" on:click={itemSelected}
+					>{message.name}</button
+				>
 			</li>
 		{/each}
 	</ul>
