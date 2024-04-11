@@ -5,8 +5,10 @@
 	import Autocomplete from './autocomplete.svelte';
 	import { onMount } from 'svelte';
 
-	let messages: Message[] = [];
 	export let selected: number;
+	export let id: string;
+	export let name: string;
+	let messages: Message[] = [];
 	let periods: AcademicPeriod[] = [];
 
 	onMount(async () => {
@@ -26,7 +28,7 @@
 	$: selectedPeriod = periods.find((period) => period.ID === selected);
 </script>
 
-<Autocomplete {messages} bind:selected></Autocomplete>
+<Autocomplete {id} {name} {messages} bind:selected></Autocomplete>
 {#if selectedPeriod}
 	<div class="flex flex-col text-sm text-accent-content p-2 m-2">
 		<p>Selected id: {selectedPeriod?.ID}</p>
