@@ -2,8 +2,11 @@
 	import DashboardIcon from '$lib/icons/dashboard.svelte';
 	import FileIcon from '$lib/icons/file.svelte';
 	import { page } from '$app/stores';
+	import { createEventDispatcher } from 'svelte';
 
 	let filteredMenus: Menu[] = [];
+
+	const dispatch = createEventDispatcher();
 
 	$: menus = [
 		{
@@ -33,6 +36,10 @@
 			(menu) => $page.data.user.role && menu.roles.includes($page.data.user.role)
 		);
 	}
+
+	function sendLIClickedEvent(event: MouseEvent) {
+		dispatch('clicked', { event });
+	}
 </script>
 
 {#if filteredMenus.length > 0}
@@ -46,7 +53,7 @@
 				<ul>
 					{#each menu.links as link}
 						<li>
-							<a href={link.route}>{link.name}</a>
+							<a on:click={sendLIClickedEvent} href={link.route}>{link.name}</a>
 						</li>
 					{/each}
 				</ul>

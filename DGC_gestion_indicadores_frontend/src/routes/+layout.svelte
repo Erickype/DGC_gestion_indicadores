@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import MenuIcon from '$lib/icons/menu.svelte';
 	import MainMenu from '$lib/components/menu/mainMenu.svelte';
 	import { applyAction, enhance } from '$app/forms';
@@ -8,27 +7,12 @@
 	import '../app.css';
 
 	// Function to close the drawer
-	function closeDrawer() {
+	function closeDrawer(event: CustomEvent<MouseEvent>) {
 		const drawerCheckbox = document.getElementById('my-drawer') as HTMLInputElement;
 		if (drawerCheckbox) {
 			drawerCheckbox.checked = false;
 		}
 	}
-
-	onMount(() => {
-		// Add click event listeners to all anchor elements in the sidebar
-		const sidebarLinks = document.querySelectorAll('.menu a');
-		sidebarLinks.forEach((link) => {
-			link.addEventListener('click', closeDrawer);
-		});
-
-		// Clean up event listeners on component unmount
-		return () => {
-			sidebarLinks.forEach((link) => {
-				link.removeEventListener('click', closeDrawer);
-			});
-		};
-	});
 </script>
 
 <div class="navbar bg-primary">
@@ -75,7 +59,7 @@
 	<div class="drawer-side">
 		<label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
 		<ul class="menu bg-base-200 w-1/4">
-			<MainMenu></MainMenu>
+			<MainMenu on:clicked={closeDrawer}></MainMenu>
 		</ul>
 	</div>
 </div>
