@@ -8,6 +8,7 @@
 	export let selected: number;
 	export let id: string;
 	export let name: string;
+	let width: "w-3/5"
 	let messages: Message[] = [];
 	let periods: AcademicPeriod[] = [];
 
@@ -26,4 +27,4 @@
 	});
 </script>
 
-<Autocomplete {id} {name} {messages} bind:selected></Autocomplete>
+<Autocomplete {id} {name} {messages} bind:selected bind:width></Autocomplete>
