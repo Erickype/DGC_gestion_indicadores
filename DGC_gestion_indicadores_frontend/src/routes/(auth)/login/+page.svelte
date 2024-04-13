@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card/index.js';
-	import type { ActionData, PageData } from './$types.js';
+	import type { PageData } from './$types.js';
 	import LoginForm from './loginForm.svelte';
 	export let data: PageData;
 </script>

@@ -34,12 +34,15 @@
 		<Form.Description>Contraseña del usuario</Form.Description>
 		<Form.FieldErrors />
 	</Form.Field>
+	<div class="mt-4 text-center text-sm">
+		No tiene una cuenta?
+		<a href="/register" class="underline"> Registrarse </a>
+	</div>
 	{#if $message && $page.status >= 400}
 		<Alert.Root class="my-2" variant="destructive">
 			<CircleAlert class="h-4 w-4" />
 			<Alert.Title>Error</Alert.Title>
-			<Alert.Description>Credenciales Incorrectas. Vuelva a intentarlo.</Alert.Description
-			>
+			<Alert.Description>Credenciales Incorrectas. Vuelva a intentarlo.</Alert.Description>
 		</Alert.Root>
 	{/if}
 	<Form.Button class="my-2 w-full">Enviar</Form.Button>
