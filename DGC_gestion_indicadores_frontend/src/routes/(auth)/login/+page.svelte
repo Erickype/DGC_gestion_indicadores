@@ -11,9 +11,9 @@
 
 <div class="flex h-screen w-screen">
 	<div
-		class="bg-primary-foreground flex h-full w-2/5 flex-col items-center justify-center p-5 text-center"
+		class="bg-muted flex h-full w-2/5 flex-col items-center justify-center p-5 text-center"
 	>
-		<h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+		<h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-muted-foreground">
 			Gestión de indicadores
 		</h1>
 		<p class="text-muted-foreground text-sm">Dirección de Gestión de Calidad</p>
