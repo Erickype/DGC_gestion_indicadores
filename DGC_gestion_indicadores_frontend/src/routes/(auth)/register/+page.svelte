@@ -1,63 +1,32 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import Avatar from '$lib/icons/avatar.svelte';
-	import Info from '$lib/icons/info.svelte';
-	import Key from '$lib/icons/key.svelte';
-	import Letter from '$lib/icons/letter.svelte';
-	import type { ActionData } from './$types';
-
-	export let form: ActionData;
+	import * as Card from '$lib/components/ui/card/index.js';
+	import type { PageData } from './$types.js';
+	import RegisterForm from './registerForm.svelte';
+	export let data: PageData;
 </script>
 
 <svelte:head>
-	<title>Registrarse</title>
+	<title>Registro</title>
 </svelte:head>
 
-<div class="flex items-center justify-center mt-10">
-	<div class="card card-bordered bg-accent/10 border-secondary w-96 text-secondary-content">
-		<div class="card-body items-center text-center">
-			<Avatar fill="fill-primary" stroke="secondary-content/10" width="w-12" height="h-12"></Avatar>
-			<h1 class="card-title text-4xl font-bold mb-4">Crear cuenta!</h1>
-
-			<form action="?/register" method="POST" use:enhance>
-				<label class="input input-bordered flex items-center gap-2 mb-4" for="username">
-					<Avatar width="w-4" height="h-4" opacity="opacity-70"></Avatar>
-					<input
-						class="glow"
-						placeholder="Usuario"
-						id="username"
-						name="username"
-						type="text"
-						required
-					/>
-				</label>
-
-				<label class="input input-bordered flex items-center gap-2 mb-4" for="email">
-					<Letter width="w-4" height="h-6" opacity="opacity-70"></Letter>
-					<input class="glow" placeholder="E-mail" id="email" name="email" type="email" required />
-				</label>
-
-				<label class="input input-bordered flex items-center gap-2 mb-4" for="password">
-					<Key width="w-4" height="h-4" opacity="opacity-70"></Key>
-					<input
-						class="glow"
-						placeholder="Password"
-						id="password"
-						name="password"
-						type="password"
-						required
-					/>
-				</label>
-
-				{#if form?.error}
-					<div role="alert" class="alert alert-warning mb-4">
-						<Info stroke="stroke-error" width="w-6" height="h-6"></Info>
-						<span class="text-md">Error registrando usuario!</span>
-					</div>
-				{/if}
-
-				<button class="btn btn-primary" type="submit">Registarse</button>
-			</form>
-		</div>
+<div class="flex h-screen w-screen">
+	<div
+		class="bg-muted flex h-full w-2/5 flex-col items-center justify-center p-5 text-center"
+	>
+		<h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-muted-foreground">
+			Gestión de indicadores
+		</h1>
+		<p class="text-muted-foreground text-sm">Dirección de Gestión de Calidad</p>
+	</div>
+	<div class="flex h-full w-3/5 items-center justify-center">
+		<Card.Root class="w-full max-w-sm">
+			<Card.Header>
+				<Card.Title class="text-2xl">Registro</Card.Title>
+				<Card.Description>Ingresar datos para registrarse.</Card.Description>
+			</Card.Header>
+			<Card.Content class="grid gap-4">
+				<RegisterForm data={data.registerForm} />
+			</Card.Content>
+		</Card.Root>
 	</div>
 </div>

@@ -2,18 +2,32 @@ import { fail, redirect } from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 import type { RegisterError, RegisterRequest } from '$lib/api/model/auth/register'
 import { Register } from '$lib/api/controller/auth/auth'
+import { registerSchema } from './schema'
+import { message, superValidate } from 'sveltekit-superforms'
+import { zod } from 'sveltekit-superforms/adapters'
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (locals.user) {
         throw redirect(302, "/dashboards/evaluation-periods")
     }
+    return {
+        registerForm: await superValidate(zod(registerSchema)),
+    }
 }
 
-const register: Action = async ({ request }) => {
-    const data = await request.formData()
-    const username = data.get('username')
-    const email = data.get('email')
-    const password = data.get('password')
+const register: Action = async (event) => {
+    const form = await superValidate(event, zod(registerSchema));
+
+    if (!form.valid) {
+        return fail(400, {
+            form,
+        });
+    };
+
+    const data = form.data
+    const username = data.username
+    const email = data.email
+    const password = data.password
 
     if (
         typeof username !== 'string' ||
@@ -36,7 +50,7 @@ const register: Action = async ({ request }) => {
 
     if (!res.ok) {
         const err: RegisterError = await res.json()
-        return fail(res.status, { error: err.error })
+        return message(form, "Register error: " + err.error, { status: 400 })
     }
 
     redirect(303, "/login")

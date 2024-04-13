@@ -3,27 +3,35 @@
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import CircleAlert from 'lucide-svelte/icons/circle-alert';
-	import { loginSchema, type LoginSchema } from './schema';
-	import { type SuperValidated, type Infer, superForm} from 'sveltekit-superforms';
+	import { registerSchema, type RegisterSchema } from './schema';
+	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { page } from '$app/stores';
 
-	export let data: SuperValidated<Infer<LoginSchema>>;
+	export let data: SuperValidated<Infer<RegisterSchema>>;
 
 	const form = superForm(data, {
-		validators: zodClient(loginSchema)
+		validators: zodClient(registerSchema)
 	});
 
 	const { form: formData, message, enhance } = form;
 </script>
 
-<form action="?/login" method="POST" use:enhance>
+<form action="?/register" method="POST" use:enhance>
 	<Form.Field {form} name="username" class="my-2">
 		<Form.Control let:attrs>
 			<Form.Label>Usuario</Form.Label>
 			<Input type="text" {...attrs} bind:value={$formData.username} />
 		</Form.Control>
-		<Form.Description>Nombre de usuario registrado</Form.Description>
+		<Form.Description>Nombre de nuevo usuario</Form.Description>
+		<Form.FieldErrors />
+	</Form.Field>
+	<Form.Field {form} name="email" class="my-2">
+		<Form.Control let:attrs>
+			<Form.Label>Email</Form.Label>
+			<Input type="email" placeholder="ma@example.com" {...attrs} bind:value={$formData.email} />
+		</Form.Control>
+		<Form.Description>Email de nuevo usuario</Form.Description>
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Field {form} name="password" class="my-2">
@@ -35,8 +43,8 @@
 		<Form.FieldErrors />
 	</Form.Field>
 	<div class="mt-4 text-center text-sm">
-		No tiene una cuenta?
-		<a href="/register" class="underline"> Registrarse </a>
+		Ya tiene una cuenta?
+		<a href="/login" class="underline"> Ingresr </a>
 	</div>
 	{#if $message && $page.status >= 400}
 		<Alert.Root class="my-2" variant="destructive">
