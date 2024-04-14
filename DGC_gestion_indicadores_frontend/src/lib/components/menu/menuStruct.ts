@@ -1,11 +1,46 @@
-interface Menu{
+import CircleGauge from "lucide-svelte/icons/circle-gauge"
+import FileText from "lucide-svelte/icons/file-text"
+import Settings from "lucide-svelte/icons/settings"
+
+export interface Menu {
     name: string,
     links: Link[]
     icon: any
     roles: number[]
 }
 
-interface Link{
+interface Link {
     name: string
     route: string
 }
+
+export const menus: Menu[] = [
+    {
+        name: 'Dashboards',
+        icon: CircleGauge,
+        links: [
+            { name: 'Periodos Evaluación', route: '/dashboards/evaluation-periods' },
+            { name: 'Periodos Académicos', route: '/dashboards/academic-periods' },
+            { name: 'Tasas académicas', route: '/dashboards/academic-fees' }
+        ],
+        roles: [1, 2, 3]
+    },
+    {
+        name: 'Información',
+        icon: FileText,
+        links: [
+            { name: 'Docentes', route: '/information/teachers' },
+            { name: 'Publicaciones Académicas', route: '/information/academic-publications' },
+            { name: 'Libros', route: '/information/books' }
+        ],
+        roles: [1, 2]
+    },
+    {
+        name: 'Administrador',
+        icon: Settings,
+        links: [
+            { name: 'Usuarios', route: '/admin/users' },
+        ],
+        roles: [1]
+    }
+];
