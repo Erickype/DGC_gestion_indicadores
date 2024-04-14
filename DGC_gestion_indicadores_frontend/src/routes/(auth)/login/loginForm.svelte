@@ -4,7 +4,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import CircleAlert from 'lucide-svelte/icons/circle-alert';
 	import { loginSchema, type LoginSchema } from './schema';
-	import { type SuperValidated, type Infer, superForm} from 'sveltekit-superforms';
+	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { page } from '$app/stores';
 
@@ -34,10 +34,6 @@
 		<Form.Description>Contraseña del usuario</Form.Description>
 		<Form.FieldErrors />
 	</Form.Field>
-	<div class="mt-4 text-center text-sm">
-		No tiene una cuenta?
-		<a href="/register" class="underline"> Registrarse </a>
-	</div>
 	{#if $message && $page.status >= 400}
 		<Alert.Root class="my-2" variant="destructive">
 			<CircleAlert class="h-4 w-4" />
@@ -46,4 +42,8 @@
 		</Alert.Root>
 	{/if}
 	<Form.Button class="my-2 w-full">Enviar</Form.Button>
+	<div class="mt-4 text-center text-sm">
+		No tiene una cuenta?
+		<a href="/register" class="underline"> Registrarse </a>
+	</div>
 </form>

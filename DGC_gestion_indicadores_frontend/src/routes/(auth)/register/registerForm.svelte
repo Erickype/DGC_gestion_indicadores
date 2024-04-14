@@ -42,10 +42,6 @@
 		<Form.Description>Contraseña del usuario</Form.Description>
 		<Form.FieldErrors />
 	</Form.Field>
-	<div class="mt-4 text-center text-sm">
-		Ya tiene una cuenta?
-		<a href="/login" class="underline"> Ingresr </a>
-	</div>
 	{#if $message && $page.status >= 400}
 		<Alert.Root class="my-2" variant="destructive">
 			<CircleAlert class="h-4 w-4" />
@@ -54,4 +50,8 @@
 		</Alert.Root>
 	{/if}
 	<Form.Button class="my-2 w-full">Enviar</Form.Button>
+	<div class="mt-4 text-center text-sm">
+		Ya tiene una cuenta?
+		<a href="/login" class="underline"> Ingresr </a>
+	</div>
 </form>
