@@ -17,14 +17,15 @@
 
 	export let data: SuperValidated<Infer<AddTeacherSchema>>;
 	export let people: Message[];
+	export let careers: Message[];
 
 	const form = superForm(data, {
 		validators: zodClient(addTeacherSchema),
 		onUpdated: ({ form: f }) => {
 			if (f.valid) {
-				toast.success(`You submitted ${JSON.stringify(f.data, null, 2)}`);
+				toast.success(`Se envió ${JSON.stringify(f.data, null, 2)}`);
 			} else {
-				toast.error('Please fix the errors in the form.');
+				toast.error('Por favor completa todos los campos.');
 			}
 		}
 	});
@@ -32,9 +33,16 @@
 	const { form: formData, message, enhance } = form;
 
 	let open = false;
+	let openCareer = false;
 
 	function closeAndFocusTrigger(triggerId: string) {
 		open = false;
+		tick().then(() => {
+			document.getElementById(triggerId)?.focus();
+		});
+	}
+	function closeAndFocusTriggerCareer(triggerId: string) {
+		openCareer = false;
 		tick().then(() => {
 			document.getElementById(triggerId)?.focus();
 		});
@@ -63,7 +71,7 @@
 			<Popover.Content class="w-[200px] p-0">
 				<Command.Root>
 					<Command.Input autofocus placeholder="Search language..." class="h-9" />
-					<Command.Empty>No language found.</Command.Empty>
+					<Command.Empty>No se encontró la cédula.</Command.Empty>
 					<Command.Group>
 						{#each people as person}
 							<Command.Item
@@ -86,10 +94,57 @@
 				</Command.Root>
 			</Popover.Content>
 		</Popover.Root>
-		<Form.Description>This is the language that will be used in the dashboard.</Form.Description>
+		<Form.Description>Persona para crear un docente.</Form.Description>
 		<Form.FieldErrors />
 	</Form.Field>
-	<Form.Button>Submit</Form.Button>
+	<Form.Field {form} name="career" class="flex flex-col">
+		<Popover.Root bind:open={openCareer} let:ids>
+			<Form.Control let:attrs>
+				<Form.Label>Carrera</Form.Label>
+				<Popover.Trigger
+					class={cn(
+						buttonVariants({ variant: 'outline' }),
+						'w-[200px] justify-between',
+						!$formData.career && 'text-muted-foreground'
+					)}
+					role="combobox"
+					{...attrs}
+				>
+					{careers.find((f) => f.value === $formData.career)?.label ?? 'Select language'}
+					<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
+				</Popover.Trigger>
+				<input hidden value={$formData.career} name={attrs.name} />
+			</Form.Control>
+			<Popover.Content class="w-[200px] p-0">
+				<Command.Root>
+					<Command.Input autofocus placeholder="Search language..." class="h-9" />
+					<Command.Empty>No se encontó la carrera.</Command.Empty>
+					<Command.Group>
+						{#each careers as career}
+							<Command.Item
+								value={career.value}
+								onSelect={() => {
+									$formData.career = career.value;
+									closeAndFocusTriggerCareer(ids.trigger);
+								}}
+							>
+								{career.label}
+								<Check
+									class={cn(
+										'ml-auto h-4 w-4',
+										career.value !== $formData.career && 'text-transparent'
+									)}
+								/>
+							</Command.Item>
+						{/each}
+					</Command.Group>
+				</Command.Root>
+			</Popover.Content>
+		</Popover.Root>
+		<Form.Description>Carrera asociada a la persona</Form.Description>
+		<Form.FieldErrors />
+	</Form.Field>
+	<Form.Button>Enviar</Form.Button>
 	{#if browser}
 		<SuperDebug data={$formData} />
 	{/if}

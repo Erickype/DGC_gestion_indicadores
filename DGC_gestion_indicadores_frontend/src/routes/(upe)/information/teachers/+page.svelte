@@ -11,6 +11,7 @@
 
 	const academicPeriodsData = data.academicPeriodsData;
 	const peopleData = data.peopleData;
+	const careersData = data.careersData;
 
 	let selectedAcademicPeriod: string;
 	let selectedPerson: string;
@@ -33,7 +34,11 @@
 </div>
 
 <div class="container h-1/3 max-w-full">
-	<AddTeacherForm data={data.addTeacherForm} people={data.peopleData.messages}></AddTeacherForm>
+	<AddTeacherForm
+		data={data.addTeacherForm}
+		people={peopleData.messages}
+		careers={careersData.messages}
+	></AddTeacherForm>
 </div>
 
 <div class="flex h-full w-full items-center justify-center space-x-4"></div>
