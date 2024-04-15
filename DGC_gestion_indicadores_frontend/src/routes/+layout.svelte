@@ -4,9 +4,11 @@
 	import '../app.pcss';
 	import MainMenu from '$lib/components/menu/mainMenu.svelte';
 	import Header from '$lib/components/menu/header.svelte';
+	import { Toaster } from "$lib/components/ui/sonner";
 </script>
 
 <ModeWatcher />
+<Toaster />
 
 {#if $page.data.user}
 	<div class="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
