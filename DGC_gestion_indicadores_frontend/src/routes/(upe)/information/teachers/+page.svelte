@@ -1,38 +1,33 @@
 <script lang="ts">
-	import AcademicPeriodAutocomplete from '$lib/components/autocomplete/academicPeriodAutocomplete.svelte';
+	import type { PageServerData } from './$types';
+	import AcademicPeriodCombo from '$lib/components/combobox/academicPeriodCombo.svelte';
+	import { Button } from '$lib/components/ui/button/index';
 
-	let selectedPeriod: number = 0;
+	import CirclePlus from 'lucide-svelte/icons/circle-plus';
 
-	$: if (selectedPeriod > 0) {
-		// todo: load data based on this selected period
-	}
+	export let data: PageServerData;
+
+	const academicPeriodsData = data.academicPeriodsData;
+
+	let selectedAcademicPeriod: string;
 </script>
 
 <svelte:head>
 	<title>Docentes</title>
 </svelte:head>
 
-<div id="headerSection" class="px-4 py-2 items-center">
-	<div class="flex-row h-full justify-around items-center card bg-base-300 rounded-box">
-		<h1 class="text-xl font-bold">Docentes</h1>
-		<AcademicPeriodAutocomplete id="period" name="period" bind:selected={selectedPeriod} />
-	</div>
-</div>
-<div id="formSection" class="overflow-auto flex-grow px-4 py-2 items-center">
-	<div class="flex h-full justify-center items-center bg-base-300 rounded-box"></div>
-</div>
-<div id="contentSection" class="flex-grow px-4 py-2 items-center">
-	<div class="overflow-x-auto h-full bg-base-300 px-6 py-2 rounded-box"></div>
+<div class="flex items-center justify-between">
+	<AcademicPeriodCombo
+		messages={academicPeriodsData.messages}
+		bind:selectedValue={selectedAcademicPeriod}
+	></AcademicPeriodCombo>
+
+	<Button size="sm" class="h-8 gap-1">
+		<CirclePlus class="h-3.5 w-3.5" />
+		<span class="sr-only sm:not-sr-only sm:whitespace-nowrap"> Agregar docente </span>
+	</Button>
 </div>
 
-<style>
-	#headerSection {
-		height: 10%;
-	}
-	#formSection {
-		height: 35%;
-	}
-	#contentSection {
-		height: 55%;
-	}
-</style>
+<div class="container h-1/3 max-w-full"></div>
+
+<div class="flex h-full w-full items-center justify-center space-x-4"></div>
