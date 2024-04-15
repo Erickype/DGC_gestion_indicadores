@@ -76,14 +76,14 @@
 					role="combobox"
 					{...attrs}
 				>
-					{people.find((f) => f.value === $formData.person)?.label ?? 'Select language'}
+					{people.find((f) => f.value === $formData.person)?.label ?? 'Seleccionar persona'}
 					<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
 				</Popover.Trigger>
 				<input hidden value={$formData.person} name={attrs.name} />
 			</Form.Control>
 			<Popover.Content class="w-[200px] p-0">
 				<Command.Root>
-					<Command.Input autofocus placeholder="Search language..." class="h-9" />
+					<Command.Input autofocus placeholder="Buscar persona..." class="h-9" />
 					<Command.Empty>No se encontró la cédula.</Command.Empty>
 					<Command.Group>
 						{#each people as person}
@@ -123,14 +123,14 @@
 					role="combobox"
 					{...attrs}
 				>
-					{careers.find((f) => f.value === $formData.career)?.label ?? 'Select language'}
+					{careers.find((f) => f.value === $formData.career)?.label ?? 'Seleccionar carrera'}
 					<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
 				</Popover.Trigger>
 				<input hidden value={$formData.career} name={attrs.name} />
 			</Form.Control>
 			<Popover.Content class="w-[200px] p-0">
 				<Command.Root>
-					<Command.Input autofocus placeholder="Search language..." class="h-9" />
+					<Command.Input autofocus placeholder="Buscar carrera..." class="h-9" />
 					<Command.Empty>No se encontó la carrera.</Command.Empty>
 					<Command.Group>
 						{#each careers as career}
