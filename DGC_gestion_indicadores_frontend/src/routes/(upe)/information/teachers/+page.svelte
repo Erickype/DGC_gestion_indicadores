@@ -5,6 +5,7 @@
 	import { Button } from '$lib/components/ui/button/index';
 
 	import CirclePlus from 'lucide-svelte/icons/circle-plus';
+	import AddTeacherForm from './addTeacherForm.svelte';
 
 	export let data: PageServerData;
 
@@ -13,7 +14,6 @@
 
 	let selectedAcademicPeriod: string;
 	let selectedPerson: string;
-
 </script>
 
 <svelte:head>
@@ -33,7 +33,7 @@
 </div>
 
 <div class="container h-1/3 max-w-full">
-	<PersonCombo messages={peopleData.messages} bind:selectedValue={selectedPerson}></PersonCombo>
+	<AddTeacherForm data={data.addTeacherForm} people={data.peopleData.messages}></AddTeacherForm>
 </div>
 
 <div class="flex h-full w-full items-center justify-center space-x-4"></div>
