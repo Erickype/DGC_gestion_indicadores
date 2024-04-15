@@ -4,6 +4,7 @@ import (
 	"fmt"
 	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/controller/academicPeriod"
 	controller "github.com/Erickype/DGC_gestion_indicadores_backend/controller/auth"
+	career "github.com/Erickype/DGC_gestion_indicadores_backend/controller/career"
 	faculty "github.com/Erickype/DGC_gestion_indicadores_backend/controller/faculty"
 	person "github.com/Erickype/DGC_gestion_indicadores_backend/controller/person"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/util"
@@ -64,12 +65,16 @@ func serveApplication() {
 
 	adminRoutes.POST("/faculty", faculty.CreateFaculty)
 
+	adminRoutes.POST("/career", career.CreateCareer)
+
 	// UPE routes
 	upeRoutes := router.Group("/api")
 	upeRoutes.Use(util.JWTAuth(), util.JWTAuthUPE())
 	upeRoutes.GET("/people", person.GetPersons)
 
 	upeRoutes.GET("/faculties", faculty.GetFaculties)
+
+	upeRoutes.GET("/careers", career.GetFaculties)
 
 	// Public view routes
 	academicPeriodRoutes := router.Group("/view")
