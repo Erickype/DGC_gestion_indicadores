@@ -1,11 +1,11 @@
 <script lang="ts">
 	import type { PageServerData } from './$types';
 	import AcademicPeriodCombo from '$lib/components/combobox/academicPeriodCombo.svelte';
-	import PersonCombo from '$lib/components/combobox/personCombo.svelte';
 	import { Button } from '$lib/components/ui/button/index';
 
 	import CirclePlus from 'lucide-svelte/icons/circle-plus';
 	import AddTeacherForm from './addTeacherForm.svelte';
+	import { onMount } from 'svelte';
 
 	export let data: PageServerData;
 
@@ -14,7 +14,12 @@
 	const careersData = data.careersData;
 
 	let selectedAcademicPeriod: string;
-	let selectedPerson: string;
+
+	onMount(() => {
+		selectedAcademicPeriod = academicPeriodsData.periods.at(
+			academicPeriodsData.periods.length - 1
+		)!.name;
+	});
 </script>
 
 <svelte:head>
@@ -33,9 +38,10 @@
 	</Button>
 </div>
 
-<div class="container h-1/3 max-w-full">
+<div class="min-h-1/3 container max-w-full">
 	<AddTeacherForm
 		data={data.addTeacherForm}
+		bind:academicPeriod={selectedAcademicPeriod}
 		people={peopleData.messages}
 		careers={careersData.messages}
 	></AddTeacherForm>

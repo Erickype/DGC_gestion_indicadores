@@ -16,6 +16,7 @@
 	import { browser } from '$app/environment';
 
 	export let data: SuperValidated<Infer<AddTeacherSchema>>;
+	export let academicPeriod: string
 	export let people: Message[];
 	export let careers: Message[];
 
@@ -31,6 +32,8 @@
 	});
 
 	const { form: formData, message, enhance } = form;
+
+	$: $formData.academicPeriod = academicPeriod
 
 	let open = false;
 	let openCareer = false;
@@ -50,6 +53,11 @@
 </script>
 
 <form action="?/addTeacher" method="post" use:enhance>
+	<Form.Field {form} name="academicPeriod">
+		<Form.Control let:attrs>
+			<input hidden value={$formData.academicPeriod} name={attrs.name} />
+		</Form.Control>
+	</Form.Field>
 	<Form.Field {form} name="person" class="flex flex-col">
 		<Popover.Root bind:open let:ids>
 			<Form.Control let:attrs>
