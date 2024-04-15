@@ -14,9 +14,10 @@
 	import { tick } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import { browser } from '$app/environment';
+	import { page } from '$app/stores';
 
 	export let data: SuperValidated<Infer<AddTeacherSchema>>;
-	export let academicPeriod: string
+	export let academicPeriod: string;
 	export let people: Message[];
 	export let careers: Message[];
 
@@ -33,7 +34,11 @@
 
 	const { form: formData, message, enhance } = form;
 
-	$: $formData.academicPeriod = academicPeriod
+	$: $formData.academicPeriod = academicPeriod;
+
+	$: if ($page.status == 200 || $page.status >= 400) {
+		$formData.academicPeriod = academicPeriod;
+	}
 
 	let open = false;
 	let openCareer = false;

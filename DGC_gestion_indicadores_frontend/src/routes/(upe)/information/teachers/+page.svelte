@@ -25,7 +25,6 @@
 <svelte:head>
 	<title>Docentes</title>
 </svelte:head>
-
 <div class="flex items-center justify-between">
 	<AcademicPeriodCombo
 		messages={academicPeriodsData.messages}
