@@ -4,6 +4,7 @@ import (
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicPeriod"
 	user "github.com/Erickype/DGC_gestion_indicadores_backend/model/auth"
+	faculty "github.com/Erickype/DGC_gestion_indicadores_backend/model/faculty"
 	person "github.com/Erickype/DGC_gestion_indicadores_backend/model/person"
 	"log"
 	"os"
@@ -24,6 +25,10 @@ func LoadDatabase() {
 		log.Fatal("Error while migrating: ", err.Error())
 	}
 	err = database.DB.AutoMigrate(&person.Person{})
+	if err != nil {
+		log.Fatal("Error while migrating: ", err.Error())
+	}
+	err = database.DB.AutoMigrate(&faculty.Faculty{})
 	if err != nil {
 		log.Fatal("Error while migrating: ", err.Error())
 	}
