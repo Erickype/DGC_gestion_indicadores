@@ -10,7 +10,7 @@ type Faculty struct {
 	ID           uint   `gorm:"primary_key"`
 	Name         string `gorm:"size:200;not null;unique" json:"name"`
 	Description  string `gorm:"size:50;" json:"description"`
-	Abbreviation string `gorm:"size:50;" json:"abbreviation"`
+	Abbreviation string `gorm:"size:50;not null;unique" json:"abbreviation"`
 }
 
 func CreateFaculty(faculty *Faculty) (err error) {
