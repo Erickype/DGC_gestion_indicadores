@@ -25,7 +25,6 @@ export async function LoadAcademicPeriodsWithComboMessages() {
             label: period.name,
         }))
     );
-    console.log(messages);
 
     return {
         periods,
