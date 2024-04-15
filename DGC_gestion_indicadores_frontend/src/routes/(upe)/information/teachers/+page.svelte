@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageServerData } from './$types';
 	import AcademicPeriodCombo from '$lib/components/combobox/academicPeriodCombo.svelte';
+	import PersonCombo from '$lib/components/combobox/personCombo.svelte';
 	import { Button } from '$lib/components/ui/button/index';
 
 	import CirclePlus from 'lucide-svelte/icons/circle-plus';
@@ -8,8 +9,11 @@
 	export let data: PageServerData;
 
 	const academicPeriodsData = data.academicPeriodsData;
+	const peopleData = data.peopleData;
 
 	let selectedAcademicPeriod: string;
+	let selectedPerson: string;
+
 </script>
 
 <svelte:head>
@@ -28,6 +32,8 @@
 	</Button>
 </div>
 
-<div class="container h-1/3 max-w-full"></div>
+<div class="container h-1/3 max-w-full">
+	<PersonCombo messages={peopleData.messages} bind:selectedValue={selectedPerson}></PersonCombo>
+</div>
 
 <div class="flex h-full w-full items-center justify-center space-x-4"></div>
