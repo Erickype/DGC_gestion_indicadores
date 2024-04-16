@@ -8,6 +8,7 @@ import (
 	dedication "github.com/Erickype/DGC_gestion_indicadores_backend/controller/dedication"
 	faculty "github.com/Erickype/DGC_gestion_indicadores_backend/controller/faculty"
 	person "github.com/Erickype/DGC_gestion_indicadores_backend/controller/person"
+	scaledGrade "github.com/Erickype/DGC_gestion_indicadores_backend/controller/scaledGrade"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/util"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -70,6 +71,8 @@ func serveApplication() {
 
 	adminRoutes.POST("/dedication", dedication.CreateDedication)
 
+	adminRoutes.POST("/scaledGrade", scaledGrade.CreateScaledGrade)
+
 	// UPE routes
 	upeRoutes := router.Group("/api")
 	upeRoutes.Use(util.JWTAuth(), util.JWTAuthUPE())
@@ -80,6 +83,8 @@ func serveApplication() {
 	upeRoutes.GET("/careers", career.GetFaculties)
 
 	upeRoutes.GET("/dedications", dedication.GetDedications)
+
+	upeRoutes.GET("/scaledGrades", scaledGrade.GetScaledGrades)
 
 	// Public view routes
 	academicPeriodRoutes := router.Group("/view")

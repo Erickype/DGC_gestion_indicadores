@@ -8,6 +8,7 @@ import (
 	dedication "github.com/Erickype/DGC_gestion_indicadores_backend/model/dedication"
 	faculty "github.com/Erickype/DGC_gestion_indicadores_backend/model/faculty"
 	person "github.com/Erickype/DGC_gestion_indicadores_backend/model/person"
+	scaledGrade "github.com/Erickype/DGC_gestion_indicadores_backend/model/scaledGrade"
 	"log"
 	"os"
 )
@@ -39,6 +40,10 @@ func LoadDatabase() {
 		log.Fatal("Error while migrating: ", err.Error())
 	}
 	err = database.DB.AutoMigrate(&dedication.Dedication{})
+	if err != nil {
+		log.Fatal("Error while migrating: ", err.Error())
+	}
+	err = database.DB.AutoMigrate(&scaledGrade.ScaledGrade{})
 	if err != nil {
 		log.Fatal("Error while migrating: ", err.Error())
 	}
