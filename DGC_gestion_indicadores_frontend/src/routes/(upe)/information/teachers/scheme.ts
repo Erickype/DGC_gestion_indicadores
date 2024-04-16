@@ -20,6 +20,11 @@ export const addTeacherSchema = z.object({
         required_error: "Dedicación requerida"
     }).gt(0, {
         message: "Ingrese una dedicación válida"
+    }),
+    scaledGrade: z.number({
+        required_error: "Grado escalafonado requerido"
+    }).gt(0, {
+        message: "Ingrese un grado escalafonado válido"
     })
 });
 

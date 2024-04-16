@@ -13,6 +13,7 @@
 	const peopleData = data.peopleData;
 	const careersData = data.careersData;
 	const dedicationData = data.dedicationsData;
+	const scaledGradesData = data.scaledGradesData;
 
 	let selectedAcademicPeriod: number;
 
@@ -26,6 +27,7 @@
 <svelte:head>
 	<title>Docentes</title>
 </svelte:head>
+
 <div class="flex items-center justify-between">
 	<AcademicPeriodCombo
 		messages={academicPeriodsData.messages}
@@ -45,6 +47,7 @@
 		people={peopleData.messages}
 		careers={careersData.messages}
 		dedications={dedicationData.messages}
+		scaledGrades={scaledGradesData.messages}
 	></AddTeacherForm>
 </div>
 

@@ -21,6 +21,7 @@
 	export let people: Message[];
 	export let careers: Message[];
 	export let dedications: Message[];
+	export let scaledGrades: Message[];
 
 	const form = superForm(data, {
 		validators: zodClient(addTeacherSchema),
@@ -44,6 +45,7 @@
 	let open = false;
 	let openCareer = false;
 	let openDedication = false;
+	let openScaledGrade = false;
 
 	function closeAndFocusTrigger(triggerId: string) {
 		open = false;
@@ -59,6 +61,12 @@
 	}
 	function closeAndFocusTriggerDedication(triggerId: string) {
 		openDedication = false;
+		tick().then(() => {
+			document.getElementById(triggerId)?.focus();
+		});
+	}
+	function closeAndFocusTriggerScaledGrade(triggerId: string) {
+		openScaledGrade = false;
 		tick().then(() => {
 			document.getElementById(triggerId)?.focus();
 		});
@@ -211,6 +219,54 @@
 			</Popover.Content>
 		</Popover.Root>
 		<Form.Description>Dedicación asociada a la persona</Form.Description>
+		<Form.FieldErrors />
+	</Form.Field>
+	<Form.Field {form} name="scaledGrade" class="flex flex-col">
+		<Popover.Root bind:open={openScaledGrade} let:ids>
+			<Form.Control let:attrs>
+				<Form.Label>Grado Escalafonado</Form.Label>
+				<Popover.Trigger
+					class={cn(
+						buttonVariants({ variant: 'outline' }),
+						'w-[200px] justify-between',
+						!$formData.scaledGrade && 'text-muted-foreground'
+					)}
+					role="combobox"
+					{...attrs}
+				>
+					{scaledGrades.find((f) => f.value === $formData.scaledGrade)?.label ??
+						'Seleccionar grado escalafonado'}
+					<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
+				</Popover.Trigger>
+				<input hidden value={$formData.scaledGrade} name={attrs.name} />
+			</Form.Control>
+			<Popover.Content class="w-[200px] p-0">
+				<Command.Root>
+					<Command.Input autofocus placeholder="Buscar grado escalafonado..." class="h-9" />
+					<Command.Empty>No se encontó el grado escalafonado.</Command.Empty>
+					<Command.Group>
+						{#each scaledGrades as scaledGrade}
+							<Command.Item
+								value={scaledGrade.label}
+								onSelect={() => {
+									$formData.scaledGrade = scaledGrade.value;
+									closeAndFocusTriggerScaledGrade(ids.trigger);
+								}}
+							>
+								{scaledGrade.label}
+								<Check
+									class={cn(
+										'ml-auto h-4 w-4',
+										scaledGrade.value !== $formData.scaledGrade && 'text-transparent'
+									)}
+								/>
+							</Command.Item>
+						{/each}
+					</Command.Group>
+				</Command.Root>
+			</Popover.Content>
+		</Popover.Root>
+		<Form.Description>Grado escalafonado asociado a la persona</Form.Description>
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Button>Enviar</Form.Button>
