@@ -3,7 +3,7 @@
 	import type { Message } from "./combobox";
 
     export let messages: Message[]
-    export let selectedValue: string
+    export let selectedValue: number
     export let pixelsWidth: string = "300"
     
 </script>

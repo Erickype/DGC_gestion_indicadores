@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Check from 'lucide-svelte/icons/check';
 	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
-	import { tick } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
@@ -11,14 +11,17 @@
 	export let data: Message[];
 	export let placeholder: string = 'Seleccionar...';
 	export let emptyMessage: string = 'No encontrado.';
-	export let selectedValue: string;
+	export let selectedValue: number;
 	export let pixelsWidth: string = '200';
 
 	let open = false;
-	let value = '';
+	let label: string;
 
-	$: selectedValue = data.find((f) => f.value === value)?.label ?? placeholder;
-
+	$: {
+		if (selectedValue) {
+			label = data.find((f) => f.value === selectedValue)!.label;
+		}
+	}
 	// We want to refocus the trigger button when the user selects
 	// an item from the list so users can continue navigating the
 	// rest of the form with the keyboard.
@@ -39,24 +42,30 @@
 			aria-expanded={open}
 			class="w-[{pixelsWidth}px] justify-between"
 		>
-			{selectedValue}
+			{label}
 			<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
 		</Button>
 	</Popover.Trigger>
-	<Popover.Content class="w-[{pixelsWidth}px] p-0" >
+	<Popover.Content class="w-[{pixelsWidth}px] p-0">
 		<Command.Root>
 			<Command.Input {placeholder} />
 			<Command.Empty>{emptyMessage}</Command.Empty>
 			<Command.Group>
 				{#each data as message}
 					<Command.Item
-						value={message.value}
-						onSelect={(currentValue) => {
-							value = currentValue;
+						value={message.label}
+						onSelect={() => {
+							selectedValue = message.value;
 							closeAndFocusTrigger(ids.trigger);
 						}}
 					>
-						<Check class={cn('mr-2 h-4 w-4', value !== message.value && 'text-transparent')} />
+						<Check
+							class={cn(
+								'mr-2 h-4 w-4',
+								message.value !== data.find((f) => f.value === selectedValue)?.value &&
+									'text-transparent'
+							)}
+						/>
 						{message.label}
 					</Command.Item>
 				{/each}

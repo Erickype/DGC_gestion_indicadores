@@ -1,19 +1,19 @@
 import { z } from "zod";
 
 export const addTeacherSchema = z.object({
-    academicPeriod: z.string({
+    academicPeriod: z.number({
         required_error: "Periodo académico requirido"
-    }).min(5, {
+    }).gt(0, {
         message: "Ingrese un periodo válido"
     }),
-    person: z.string({
+    person: z.number({
         required_error: "Persona requerida"
-    }).min(10, {
+    }).gt(0, {
         message: "Ingrese una cédula válida."
     }),
-    career: z.string({
+    career: z.number({
         required_error: "Carrera requerida"
-    }).min(2, {
+    }).gt(0, {
         message: "Ingrese una carrera válida"
     })
 });

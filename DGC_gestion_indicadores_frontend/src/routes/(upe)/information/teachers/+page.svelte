@@ -13,12 +13,12 @@
 	const peopleData = data.peopleData;
 	const careersData = data.careersData;
 
-	let selectedAcademicPeriod: string;
+	let selectedAcademicPeriod: number;
 
 	onMount(() => {
 		selectedAcademicPeriod = academicPeriodsData.periods.at(
 			academicPeriodsData.periods.length - 1
-		)!.name;
+		)!.ID;
 	});
 </script>
 

@@ -17,7 +17,7 @@
 	import { page } from '$app/stores';
 
 	export let data: SuperValidated<Infer<AddTeacherSchema>>;
-	export let academicPeriod: string;
+	export let academicPeriod: number;
 	export let people: Message[];
 	export let careers: Message[];
 
@@ -88,7 +88,7 @@
 					<Command.Group>
 						{#each people as person}
 							<Command.Item
-								value={person.value}
+								value={person.label}
 								onSelect={() => {
 									$formData.person = person.value;
 									closeAndFocusTrigger(ids.trigger);
@@ -135,7 +135,7 @@
 					<Command.Group>
 						{#each careers as career}
 							<Command.Item
-								value={career.value}
+								value={career.label}
 								onSelect={() => {
 									$formData.career = career.value;
 									closeAndFocusTriggerCareer(ids.trigger);
