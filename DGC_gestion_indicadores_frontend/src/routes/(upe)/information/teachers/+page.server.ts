@@ -4,11 +4,14 @@ import { mainDashboarRoute } from "$lib/api/util/paths";
 import { LoadAcademicPeriodsWithComboMessages } from "$lib/api/controller/view/academicPeriod";
 import { LoadPeopleWithComboMessages } from "$lib/api/controller/api/person";
 import { addTeacherSchema } from "./scheme";
-import { fail, superValidate } from "sveltekit-superforms";
+import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { LoadCareersWithComboMessages } from "$lib/api/controller/api/career";
 import { LoadDedicationsWithComboMessages } from "$lib/api/controller/api/dedication";
 import { LoadScaledGradesWithComboMessages } from "$lib/api/controller/api/scaledGrade";
+import type { LoginError, LoginRequest, LoginResponse } from '$lib/api/model/auth/login'
+
+import { Login } from "$lib/api/controller/auth/auth";
 
 export const load: PageServerLoad = async ({ locals, cookies }) => {
     const token = cookies.get("AuthorizationToken")
@@ -36,13 +39,22 @@ export const actions: Actions = {
         const form = await superValidate(event, zod(addTeacherSchema))
 
         if (!form.valid) {
-            return fail(400, {
-                form,
+            return message(form, { success: false, error: "Invalid form" }, {
+                status: 400
             })
         }
 
-        return {
-            form
+        const LoginRequest: LoginRequest = {
+            username: "Erickype",
+            password: "admin_password"
         }
+
+        const res = await Login(LoginRequest)
+        if (!res.ok) {
+            const err: LoginError = await res.json()
+            return message(form, { success: false, error: err.error })
+        }
+
+        return message(form, { success: true, error: "" })
     }
 };
