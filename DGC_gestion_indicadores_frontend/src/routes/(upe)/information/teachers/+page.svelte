@@ -12,6 +12,7 @@
 	const academicPeriodsData = data.academicPeriodsData;
 	const peopleData = data.peopleData;
 	const careersData = data.careersData;
+	const dedicationData = data.dedicationsData;
 
 	let selectedAcademicPeriod: number;
 
@@ -43,6 +44,7 @@
 		bind:academicPeriod={selectedAcademicPeriod}
 		people={peopleData.messages}
 		careers={careersData.messages}
+		dedications={dedicationData.messages}
 	></AddTeacherForm>
 </div>
 

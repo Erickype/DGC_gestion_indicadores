@@ -7,6 +7,7 @@ import { addTeacherSchema } from "./scheme";
 import { fail, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { LoadCareersWithComboMessages } from "$lib/api/controller/api/career";
+import { LoadDedicationsWithComboMessages } from "$lib/api/controller/api/dedication";
 
 export const load: PageServerLoad = async ({ locals, cookies }) => {
     const token = cookies.get("AuthorizationToken")
@@ -23,6 +24,7 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
         academicPeriodsData: await LoadAcademicPeriodsWithComboMessages(),
         peopleData: await LoadPeopleWithComboMessages(token!),
         careersData: await LoadCareersWithComboMessages(token!),
+        dedicationsData: await LoadDedicationsWithComboMessages(token!),
         addTeacherForm: await superValidate(zod(addTeacherSchema)),
     }
 };

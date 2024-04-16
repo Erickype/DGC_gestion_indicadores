@@ -15,6 +15,11 @@ export const addTeacherSchema = z.object({
         required_error: "Carrera requerida"
     }).gt(0, {
         message: "Ingrese una carrera válida"
+    }),
+    dedication: z.number({
+        required_error: "Dedicación requerida"
+    }).gt(0, {
+        message: "Ingrese una dedicación válida"
     })
 });
 
