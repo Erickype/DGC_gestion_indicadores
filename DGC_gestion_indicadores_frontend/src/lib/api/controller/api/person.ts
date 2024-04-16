@@ -22,7 +22,7 @@ export async function LoadPeopleWithComboMessages(token: string) {
     let messages: Message[] = []
     messages = messages.concat(
         people.map((person) => ({
-            value: person.identity,
+            value: person.ID,
             label: person.identity,
         }))
     );

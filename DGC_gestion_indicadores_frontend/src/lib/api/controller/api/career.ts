@@ -22,7 +22,7 @@ export async function LoadCareersWithComboMessages(token: string) {
     let messages: Message[] = []
     messages = messages.concat(
         careers.map((career) => ({
-            value: career.abbreviation,
+            value: career.ID,
             label: career.abbreviation,
         }))
     );

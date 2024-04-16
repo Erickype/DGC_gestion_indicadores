@@ -21,7 +21,7 @@ export async function LoadAcademicPeriodsWithComboMessages() {
     let messages: Message[] = []
     messages = messages.concat(
         periods.map((period) => ({
-            value: period.name,
+            value: period.ID,
             label: period.name,
         }))
     );
