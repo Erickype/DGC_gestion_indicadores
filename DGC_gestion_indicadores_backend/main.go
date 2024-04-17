@@ -9,6 +9,7 @@ import (
 	faculty "github.com/Erickype/DGC_gestion_indicadores_backend/controller/faculty"
 	person "github.com/Erickype/DGC_gestion_indicadores_backend/controller/person"
 	scaledGrade "github.com/Erickype/DGC_gestion_indicadores_backend/controller/scaledGrade"
+	teacher "github.com/Erickype/DGC_gestion_indicadores_backend/controller/teacher"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/util"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -85,6 +86,9 @@ func serveApplication() {
 	upeRoutes.GET("/dedications", dedication.GetDedications)
 
 	upeRoutes.GET("/scaledGrades", scaledGrade.GetScaledGrades)
+
+	upeRoutes.GET("/teachers/byAcademicPeriod/:academicPeriodID", teacher.GetTeachersByAcademicPeriod)
+	upeRoutes.POST("/teacher", teacher.CreateTeacher)
 
 	// Public view routes
 	academicPeriodRoutes := router.Group("/view")
