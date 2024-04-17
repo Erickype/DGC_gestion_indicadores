@@ -6,7 +6,7 @@
 	import CirclePlus from 'lucide-svelte/icons/circle-plus';
 	import CircleX from 'lucide-svelte/icons/circle-x';
 	import AddTeacherForm from './addTeacherForm.svelte';
-	import { onMount, tick } from 'svelte';
+	import { onMount } from 'svelte';
 
 	export let data: PageServerData;
 
@@ -18,6 +18,7 @@
 	const careersData = data.careersData;
 	const dedicationData = data.dedicationsData;
 	const scaledGradesData = data.scaledGradesData;
+	const teachersByAcademicPeriodID = data.teachersByAcademicPeriod;
 
 	let selectedAcademicPeriod: number;
 
@@ -84,9 +85,11 @@
 			careers={careersData.messages}
 			dedications={dedicationData.messages}
 			scaledGrades={scaledGradesData.messages}
-			bind:teacherHasBeenCreated={teacherHasBeenCreated}
+			bind:teacherHasBeenCreated
 		></AddTeacherForm>
 	</div>
 {/if}
 
-<div class="flex h-full w-full items-center justify-center space-x-4"></div>
+<div class="flex h-full w-full items-center justify-center space-x-4">
+	<pre>{JSON.stringify(teachersByAcademicPeriodID)}</pre>
+</div>
