@@ -14,4 +14,5 @@
 	bind:selectedValue
 	bind:pixelsWidth
 	emptyMessage="No se encontró un periodo"
+	on:message
 ></Combobox>

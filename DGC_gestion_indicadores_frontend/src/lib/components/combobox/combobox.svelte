@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Check from 'lucide-svelte/icons/check';
 	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
-	import { onMount, tick } from 'svelte';
+	import { createEventDispatcher, tick } from 'svelte';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
@@ -16,6 +16,14 @@
 
 	let open = false;
 	let label: string;
+
+	const dispatch = createEventDispatcher()
+
+	function dispatchSelected() {
+		dispatch("message",{
+			changed: true
+		})
+	}
 
 	$: {
 		if (selectedValue) {
@@ -57,6 +65,7 @@
 						onSelect={() => {
 							selectedValue = message.value;
 							closeAndFocusTrigger(ids.trigger);
+							dispatchSelected()
 						}}
 					>
 						<Check
