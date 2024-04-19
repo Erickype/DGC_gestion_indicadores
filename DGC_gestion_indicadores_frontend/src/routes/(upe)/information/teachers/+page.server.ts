@@ -12,7 +12,7 @@ import { LoadScaledGradesWithComboMessages } from "$lib/api/controller/api/scale
 import type { LoginError } from '$lib/api/model/auth/login'
 
 import { CreateTeacher, GetTeachersByAcademicPeriodID } from "$lib/api/controller/api/teacher";
-import type { CreateTeacherRequest } from "$lib/api/model/api/teacher";
+import type { CreateTeacherRequest, Teacher } from "$lib/api/model/api/teacher";
 
 export const load: PageServerLoad = async ({ locals, cookies }) => {
     const token = cookies.get("AuthorizationToken")
@@ -31,14 +31,14 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
         academicPeriods.length - 1
     )!.ID;
     const academicPeriodID = selectedAcademicPeriod.toString()
-    
+    const teachersByAcademicPeriod = await GetTeachersByAcademicPeriodID(token!, academicPeriodID)
     return {
         academicPeriodsData: academicPeriodsData,
+        teachersByAcademicPeriod: teachersByAcademicPeriod.json() as Promise<Teacher[]>,
         peopleData: await LoadPeopleWithComboMessages(token!),
         careersData: await LoadCareersWithComboMessages(token!),
         dedicationsData: await LoadDedicationsWithComboMessages(token!),
         scaledGradesData: await LoadScaledGradesWithComboMessages(token!),
-        teachersByAcademicPeriod: GetTeachersByAcademicPeriodID(token!, academicPeriodID),
         addTeacherForm: await superValidate(zod(addTeacherSchema)),
     }
 };
