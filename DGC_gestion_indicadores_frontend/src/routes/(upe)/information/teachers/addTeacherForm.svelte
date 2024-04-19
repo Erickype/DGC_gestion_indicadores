@@ -11,7 +11,7 @@
 	import { cn } from '$lib/utils.js';
 	import type { Message } from '$lib/components/combobox/combobox';
 	import Check from 'lucide-svelte/icons/check';
-	import { tick } from 'svelte';
+	import { createEventDispatcher, tick } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
@@ -34,11 +34,20 @@
 			if ($message.success) {
 				teacherHasBeenCreated = true;
 				toast.success('Registro de docente creado.');
+				dispatchTeacherCreated()
 			} else {
 				toast.error('Fallo creando docente.');
 			}
 		}
 	});
+
+	const dispatch = createEventDispatcher()
+
+	function dispatchTeacherCreated() {
+		dispatch("teacher-created",{
+			status: true
+		})
+	}
 
 	const { form: formData, message, enhance } = form;
 

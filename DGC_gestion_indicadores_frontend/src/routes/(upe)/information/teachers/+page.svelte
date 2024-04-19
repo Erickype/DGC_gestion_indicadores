@@ -7,6 +7,7 @@
 	import CircleX from 'lucide-svelte/icons/circle-x';
 	import AddTeacherForm from './addTeacherForm.svelte';
 	import { onMount } from 'svelte';
+	import TeachersTable from './teachersTable.svelte';
 
 	export let data: PageServerData;
 
@@ -18,7 +19,7 @@
 	const careersData = data.careersData;
 	const dedicationData = data.dedicationsData;
 	const scaledGradesData = data.scaledGradesData;
-	const teachersByAcademicPeriodID = data.teachersByAcademicPeriod;
+	let teachersPromise = data.teachersByAcademicPeriod;
 
 	let selectedAcademicPeriod: number;
 
@@ -38,6 +39,23 @@
 			teacherHasBeenCreated = false;
 		}
 	}
+
+	async function fetchTeachers() {
+		const url = `/api/teacher/byAcademicPeriodID/${selectedAcademicPeriod}`;
+		const response = await fetch(url, {
+			method: 'GET',
+			credentials: 'include'
+		});
+		if (response.ok) {
+			teachersPromise = response.json();
+		} else {
+			console.error('Failed to fetch teachers:', response.status);
+		}
+	}
+
+	async function updateTeachersTable() {
+		fetchTeachers();
+	}
 </script>
 
 <svelte:head>
@@ -48,6 +66,7 @@
 	<AcademicPeriodCombo
 		messages={academicPeriodsData.messages}
 		bind:selectedValue={selectedAcademicPeriod}
+		on:message={updateTeachersTable}
 	></AcademicPeriodCombo>
 
 	{#if !addTeacherAction}
@@ -86,10 +105,19 @@
 			dedications={dedicationData.messages}
 			scaledGrades={scaledGradesData.messages}
 			bind:teacherHasBeenCreated
+			on:teacher-created={updateTeachersTable}
 		></AddTeacherForm>
 	</div>
 {/if}
 
 <div class="flex h-full w-full items-center justify-center space-x-4">
-	<pre>{JSON.stringify(teachersByAcademicPeriodID)}</pre>
+	{#await teachersPromise}
+		loading...
+	{:then teachers}
+		{#if teachers.length > 0}
+			<TeachersTable {teachers}></TeachersTable>
+		{:else}
+			No users here.
+		{/if}
+	{/await}
 </div>
