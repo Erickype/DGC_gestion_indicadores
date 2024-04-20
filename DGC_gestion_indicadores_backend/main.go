@@ -91,6 +91,7 @@ func serveApplication() {
 	upeRoutes.GET("/teachers/byAcademicPeriod/:academicPeriodID", teacher.GetTeachersByAcademicPeriod)
 	upeRoutes.POST("/teacher", teacher.CreateTeacher)
 	upeRoutes.DELETE("/teacher/:id", teacher.DeleteTeacher)
+	upeRoutes.PUT("/teacher/:id", teacher.UpdateTeacher)
 
 	// Public view routes
 	academicPeriodRoutes := router.Group("/view")
