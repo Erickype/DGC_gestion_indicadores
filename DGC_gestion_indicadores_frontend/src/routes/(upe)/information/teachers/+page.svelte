@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ActionData, PageServerData } from './$types';
+	import type { PageServerData } from './$types';
 	import AcademicPeriodCombo from '$lib/components/combobox/academicPeriodCombo.svelte';
 	import { Button } from '$lib/components/ui/button/index';
 
@@ -13,9 +13,6 @@
 	import type { Teacher } from '$lib/api/model/api/teacher';
 
 	export let data: PageServerData;
-
-	export let actionData: ActionData;
-	let form = actionData?.form;
 
 	const academicPeriodsData = data.academicPeriodsData;
 	const peopleData = data.peopleData;
@@ -159,7 +156,14 @@
 		loading...
 	{:then teacher}
 		<div class="min-h-1/3 bg-muted/30 max-w-full rounded-md p-6">
-			<UpdateTeacherForm selectedTeacherToUpdate={teacher}></UpdateTeacherForm>
+			<UpdateTeacherForm
+				data={data.updateTeacherForm}
+				people={peopleData.messages}
+				careers={careersData.messages}
+				dedications={dedicationData.messages}
+				scaledGrades={scaledGradesData.messages}
+				selectedTeacherToUpdate={teacher}
+			></UpdateTeacherForm>
 		</div>
 	{/await}
 {/if}

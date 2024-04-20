@@ -3,7 +3,7 @@ import type { Actions, PageServerLoad } from "./$types";
 import { mainDashboarRoute } from "$lib/api/util/paths";
 import { LoadAcademicPeriodsWithComboMessages } from "$lib/api/controller/view/academicPeriod";
 import { LoadPeopleWithComboMessages } from "$lib/api/controller/api/person";
-import { addTeacherSchema } from "./scheme";
+import { addTeacherSchema, updateTeacherSchema } from "./scheme";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { LoadCareersWithComboMessages } from "$lib/api/controller/api/career";
@@ -40,6 +40,7 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
         dedicationsData: await LoadDedicationsWithComboMessages(token!),
         scaledGradesData: await LoadScaledGradesWithComboMessages(token!),
         addTeacherForm: await superValidate(zod(addTeacherSchema)),
+        updateTeacherForm: await superValidate(zod(updateTeacherSchema)),
     }
 };
 
