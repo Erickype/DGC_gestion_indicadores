@@ -50,8 +50,19 @@ func GetTeacher(Teacher *Teacher, id int) (err error) {
 	return nil
 }
 
-func GetTeachersByAcademicPeriod(Teachers *[]Teacher, academicPeriodID int) (err error) {
-	err = database.DB.Find(Teachers, "academic_period_id = ?", academicPeriodID).Error
+func GetTeachersByAcademicPeriod(Teachers *[]GetJoin, academicPeriodID int) (err error) {
+	err = database.DB.Table("teachers").Select(
+		"teachers.updated_at, teachers.id, teachers.academic_period_id,"+
+			"teachers.person_id, people.name || ' ' || people.lastname as person,"+
+			"teachers.career_id, careers.abbreviation as career, "+
+			"teachers.dedication_id, dedications.name as dedication, "+
+			"teachers.scaled_grade_id, scaled_grades.abbreviation as scaled_grade").Joins(
+		"join people on people.id = teachers.person_id "+
+			"join careers on careers.id = teachers.career_id "+
+			"join dedications on dedications.id = teachers.dedication_id "+
+			"join scaled_grades on scaled_grades.id = teachers.scaled_grade_id").Where(
+		"teachers.academic_period_id = ?", academicPeriodID).Order(
+		"teachers.updated_at desc").Scan(&Teachers).Error
 	if err != nil {
 		return err
 	}
