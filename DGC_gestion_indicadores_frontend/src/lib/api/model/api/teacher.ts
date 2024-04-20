@@ -17,3 +17,17 @@ export interface CreateTeacherRequest {
     dedication_id: number;
     scaled_grade_id: number;
 }
+
+export interface GetTeachersByAcademicPeriodResponse{
+    updated_at: string;
+    ID: number;
+    academic_period_id: number;
+    person_id: number;
+    person: string;
+    career_id: number;
+    career: string;
+    dedication_id: number;
+    dedication: string;
+    scaled_grade_id: number;
+    scaled_grade: string;
+}
