@@ -110,7 +110,7 @@
 	</div>
 {/if}
 
-<div class="flex h-full w-full items-center justify-center space-x-4">
+<div class="container mx-auto">
 	{#await teachersPromise}
 		loading...
 	{:then teachers}
