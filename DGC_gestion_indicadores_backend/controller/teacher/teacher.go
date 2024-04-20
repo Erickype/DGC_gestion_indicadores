@@ -29,7 +29,7 @@ func CreateTeacher(c *gin.Context) {
 }
 
 func GetTeachersByAcademicPeriod(context *gin.Context) {
-	var Teachers []model.GetJoin
+	var Teachers []model.GetJoin = []model.GetJoin{}
 
 	academicPeriodID, err := strconv.ParseInt(context.Param("academicPeriodID"), 10, 64)
 	if err != nil {

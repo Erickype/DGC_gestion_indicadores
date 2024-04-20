@@ -61,7 +61,7 @@ func GetTeachersByAcademicPeriod(Teachers *[]GetJoin, academicPeriodID int) (err
 			"join careers on careers.id = teachers.career_id "+
 			"join dedications on dedications.id = teachers.dedication_id "+
 			"join scaled_grades on scaled_grades.id = teachers.scaled_grade_id").Where(
-		"teachers.academic_period_id = ?", academicPeriodID).Order(
+		"teachers.academic_period_id = ? and teachers.deleted_at is null", academicPeriodID).Order(
 		"teachers.updated_at desc").Scan(&Teachers).Error
 	if err != nil {
 		return err
