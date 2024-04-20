@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ArrowUpDown from 'lucide-svelte/icons/arrow-up-down';
 
-	import type { Teacher } from '$lib/api/model/api/teacher';
+	import type { GetTeachersByAcademicPeriodResponse } from '$lib/api/model/api/teacher';
 	import DataTableActions from './teachers-data-table-actions.svelte';
 
 	import { addPagination, addSortBy, addTableFilter } from 'svelte-headless-table/plugins';
@@ -12,7 +12,7 @@
 	import * as Table from '$lib/components/ui/table';
 	import { Input } from '$lib/components/ui/input/index.js';
 
-	export let teachers: Teacher[];
+	export let teachers: GetTeachersByAcademicPeriodResponse[];
 
 	const table = createTable(readable(teachers), {
 		page: addPagination({
@@ -30,19 +30,32 @@
 			header: 'ID'
 		}),
 		table.column({
-			accessor: 'person_id',
+			accessor: 'updated_at',
+			header: 'Modificado',
+			cell: ({ value }) => {
+				const date = new Date(value);
+				const formattedDate = date.toLocaleDateString('es-EC', {
+					year: 'numeric',
+					month: '2-digit',
+					day: '2-digit'
+				});
+				return formattedDate;
+			}
+		}),
+		table.column({
+			accessor: 'person',
 			header: 'Nombre'
 		}),
 		table.column({
-			accessor: 'career_id',
+			accessor: 'career',
 			header: 'Carrera'
 		}),
 		table.column({
-			accessor: 'dedication_id',
+			accessor: 'dedication',
 			header: 'Dedicación'
 		}),
 		table.column({
-			accessor: 'scaled_grade_id',
+			accessor: 'scaled_grade',
 			header: 'Grado Esc.'
 		}),
 		table.column({
@@ -83,7 +96,7 @@
 							{#each headerRow.cells as cell (cell.id)}
 								<Subscribe attrs={cell.attrs()} let:attrs props={cell.props()} let:props>
 									<Table.Head {...attrs}>
-										{#if cell.id === 'person_id'}
+										{#if cell.id === 'person'}
 											<Button variant="ghost" on:click={props.sort.toggle}>
 												<Render of={cell.render()} />
 												<ArrowUpDown class={'ml-2 h-4 w-4'} />

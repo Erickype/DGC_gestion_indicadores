@@ -12,7 +12,7 @@ import { LoadScaledGradesWithComboMessages } from "$lib/api/controller/api/scale
 import type { LoginError } from '$lib/api/model/auth/login'
 
 import { CreateTeacher, GetTeachersByAcademicPeriodID } from "$lib/api/controller/api/teacher";
-import type { CreateTeacherRequest, Teacher } from "$lib/api/model/api/teacher";
+import type { CreateTeacherRequest, GetTeachersByAcademicPeriodResponse } from "$lib/api/model/api/teacher";
 
 export const load: PageServerLoad = async ({ locals, cookies }) => {
     const token = cookies.get("AuthorizationToken")
@@ -34,7 +34,7 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
     const teachersByAcademicPeriod = await GetTeachersByAcademicPeriodID(token!, academicPeriodID)
     return {
         academicPeriodsData: academicPeriodsData,
-        teachersByAcademicPeriod: teachersByAcademicPeriod.json() as Promise<Teacher[]>,
+        teachersByAcademicPeriod: teachersByAcademicPeriod.json() as Promise<GetTeachersByAcademicPeriodResponse[]>,
         peopleData: await LoadPeopleWithComboMessages(token!),
         careersData: await LoadCareersWithComboMessages(token!),
         dedicationsData: await LoadDedicationsWithComboMessages(token!),

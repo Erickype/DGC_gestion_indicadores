@@ -10,7 +10,7 @@
 	import TeachersTable from './teachersTable.svelte';
 	import { hasTeacherDeleted, updateTeacherAction } from '../../../../stores';
 	import UpdateTeacherForm from './updateTeacherForm.svelte';
-	import type { Teacher } from '$lib/api/model/api/teacher';
+	import type { GetTeachersByAcademicPeriodResponse } from '$lib/api/model/api/teacher';
 
 	export let data: PageServerData;
 
@@ -26,7 +26,7 @@
 	let addTeacherAction = false;
 	let updateTeacherActionValue: { status: boolean; teacherID: number };
 
-	let selectedTeacherToUpdate: Promise<Teacher>;
+	let selectedTeacherToUpdate: Promise<GetTeachersByAcademicPeriodResponse>;
 
 	let teacherHasBeenCreated = false;
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { updateTeacherAction } from '../../../../stores';
-	import type { Teacher } from '$lib/api/model/api/teacher';
+	import type { GetTeachersByAcademicPeriodResponse } from '$lib/api/model/api/teacher';
 	import type { Message } from '$lib/components/combobox/combobox';
 
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
@@ -25,7 +25,7 @@
 		updateTeacherActionValue = value;
 	});
 
-	export let selectedTeacherToUpdate: Teacher;
+	export let selectedTeacherToUpdate: GetTeachersByAcademicPeriodResponse;
 	export let data: SuperValidated<Infer<UpdateTeacherSchema>>;
 	export let people: Message[];
 	export let careers: Message[];
@@ -300,7 +300,7 @@
 			}}>Cancelar</Button
 		>
 	</div>
-	{#if browser}
+	<!-- {#if browser}
 		<SuperDebug data={$formData} />
-	{/if}
+	{/if} -->
 </form>
