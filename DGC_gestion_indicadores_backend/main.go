@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"log"
+
 	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/controller/academicPeriod"
 	controller "github.com/Erickype/DGC_gestion_indicadores_backend/controller/auth"
 	career "github.com/Erickype/DGC_gestion_indicadores_backend/controller/career"
@@ -14,7 +16,6 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"log"
 )
 
 func main() {
@@ -89,6 +90,7 @@ func serveApplication() {
 
 	upeRoutes.GET("/teachers/byAcademicPeriod/:academicPeriodID", teacher.GetTeachersByAcademicPeriod)
 	upeRoutes.POST("/teacher", teacher.CreateTeacher)
+	upeRoutes.DELETE("/teacher/:id", teacher.DeleteTeacher)
 
 	// Public view routes
 	academicPeriodRoutes := router.Group("/view")

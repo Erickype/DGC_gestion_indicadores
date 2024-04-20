@@ -65,3 +65,11 @@ func UpdateTeacher(Teacher *Teacher) (err error) {
 	}
 	return nil
 }
+
+func DeleteTeacher(id int) (err error) {
+	err = database.DB.Delete(&Teacher{}, id).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}

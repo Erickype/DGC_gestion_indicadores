@@ -1,11 +1,12 @@
 package controller
 
 import (
+	"net/http"
+	"strconv"
+
 	errors "github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	model "github.com/Erickype/DGC_gestion_indicadores_backend/model/teacher"
 	"github.com/gin-gonic/gin"
-	"net/http"
-	"strconv"
 )
 
 func CreateTeacher(c *gin.Context) {
@@ -44,4 +45,23 @@ func GetTeachersByAcademicPeriod(context *gin.Context) {
 		return
 	}
 	context.JSON(http.StatusOK, Teachers)
+}
+
+func DeleteTeacher(context *gin.Context) {
+	id, err := strconv.ParseInt(context.Param("id"), 10, 64)
+	if err != nil {
+		err := errors.CreateCommonError(http.StatusBadRequest,
+			"Error en parámetro teacher id.", err.Error())
+		context.AbortWithStatusJSON(http.StatusBadRequest, err)
+		return
+	}
+
+	err = model.DeleteTeacher(int(id))
+	if err != nil {
+		err := errors.CreateCommonError(http.StatusInternalServerError,
+			"Error eliminando docente", err.Error())
+		context.AbortWithStatusJSON(http.StatusInternalServerError, err)
+		return
+	}
+	context.JSON(http.StatusOK, gin.H{"status": "success"})
 }
