@@ -8,7 +8,9 @@
 	import AddTeacherForm from './addTeacherForm.svelte';
 	import { onMount } from 'svelte';
 	import TeachersTable from './teachersTable.svelte';
-	import { hasTeacherDeleted } from '../../../../stores';
+	import { hasTeacherDeleted, updateTeacherAction } from '../../../../stores';
+	import UpdateTeacherForm from './updateTeacherForm.svelte';
+	import type { Teacher } from '$lib/api/model/api/teacher';
 
 	export let data: PageServerData;
 
@@ -25,20 +27,41 @@
 	let selectedAcademicPeriod: number;
 
 	let addTeacherAction = false;
+	let updateTeacherActionValue: { status: boolean; teacherID: number };
+
+	let selectedTeacherToUpdate: Promise<Teacher>;
 
 	let teacherHasBeenCreated = false;
 
 	let hasTeacherDeletedValue: boolean;
 
-	const unsubscribe = hasTeacherDeleted.subscribe((value)=>{
-		hasTeacherDeletedValue = value
-	})
+	const unsubscribe = hasTeacherDeleted.subscribe((value) => {
+		hasTeacherDeletedValue = value;
+	});
 
-	$:{
-		if(hasTeacherDeletedValue){
-			console.log("Refreshing after delete");
-			fetchTeachers()
-			hasTeacherDeleted.set(false)
+	const unsubscribeUpdateTeacher = updateTeacherAction.subscribe((value) => {
+		updateTeacherActionValue = value;
+	});
+
+	$: {
+		if (hasTeacherDeletedValue) {
+			console.log('Refreshing after delete');
+			fetchTeachers();
+			hasTeacherDeleted.set(false);
+		}
+	}
+
+	$: {
+		if (updateTeacherActionValue.status) {
+			const ID = updateTeacherActionValue.teacherID;
+			selectedTeacherToUpdate = teachersPromise.then((teachers) => {
+				const foundTeacher = teachers.find((teacher) => teacher.ID === ID);
+				if (foundTeacher) {
+					return Promise.resolve(foundTeacher);
+				} else {
+					return Promise.reject(new Error('Teacher not found'));
+				}
+			});
 		}
 	}
 
@@ -69,6 +92,10 @@
 	}
 
 	async function updateTeachersTable() {
+		updateTeacherAction.set({
+			status: false,
+			teacherID: -1
+		});
 		fetchTeachers();
 	}
 </script>
@@ -90,6 +117,10 @@
 			class="h-8 gap-1"
 			on:click={() => {
 				addTeacherAction = !addTeacherAction;
+				updateTeacherAction.set({
+					status: false,
+					teacherID: -1
+				});
 			}}
 		>
 			<CirclePlus class="h-3.5 w-3.5" />
@@ -123,6 +154,14 @@
 			on:teacher-created={updateTeachersTable}
 		></AddTeacherForm>
 	</div>
+{:else if updateTeacherActionValue.status}
+	{#await selectedTeacherToUpdate}
+		loading...
+	{:then teacher}
+		<div class="min-h-1/3 bg-muted/30 max-w-full rounded-md p-6">
+			<UpdateTeacherForm selectedTeacherToUpdate={teacher}></UpdateTeacherForm>
+		</div>
+	{/await}
 {/if}
 
 <div class="container mx-auto">

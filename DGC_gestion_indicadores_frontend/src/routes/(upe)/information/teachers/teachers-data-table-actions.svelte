@@ -4,7 +4,7 @@
 
 	import { Button } from '$lib/components/ui/button';
 	import Dialog from '$lib/components/alert/dialog.svelte';
-	import { hasTeacherDeleted } from '../../../../stores';
+	import { hasTeacherDeleted, updateTeacherAction } from '../../../../stores';
 	import { error } from '@sveltejs/kit';
 
 	export let id: string;
@@ -33,14 +33,20 @@
 
         return await response.json()
 	}
+
+    function sendUpdateTeacherAction() {
+        updateTeacherAction.set({
+            status: true,
+            teacherID: parseInt(id)
+        })
+    }
 </script>
 
 <Dialog bind:dialogOpen={dialogOpen} on:dialog-continue={deleteTeacher}></Dialog>
 
 <div class="flex flex-auto">
     <Button variant="ghost" size="icon" on:click={()=>{
-		console.log("Update: "+id);
-		
+		sendUpdateTeacherAction()
 	}}>
         <Pencil class="h-4 w-4" />
     </Button>
