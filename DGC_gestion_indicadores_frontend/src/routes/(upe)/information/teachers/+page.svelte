@@ -8,6 +8,7 @@
 	import AddTeacherForm from './addTeacherForm.svelte';
 	import { onMount } from 'svelte';
 	import TeachersTable from './teachersTable.svelte';
+	import { hasTeacherDeleted } from '../../../../stores';
 
 	export let data: PageServerData;
 
@@ -26,6 +27,20 @@
 	let addTeacherAction = false;
 
 	let teacherHasBeenCreated = false;
+
+	let hasTeacherDeletedValue: boolean;
+
+	const unsubscribe = hasTeacherDeleted.subscribe((value)=>{
+		hasTeacherDeletedValue = value
+	})
+
+	$:{
+		if(hasTeacherDeletedValue){
+			console.log("Refreshing after delete");
+			fetchTeachers()
+			hasTeacherDeleted.set(false)
+		}
+	}
 
 	onMount(() => {
 		selectedAcademicPeriod = academicPeriodsData.periods.at(
