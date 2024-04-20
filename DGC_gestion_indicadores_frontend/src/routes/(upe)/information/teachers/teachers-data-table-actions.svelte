@@ -5,17 +5,34 @@
 	import { Button } from '$lib/components/ui/button';
 	import Dialog from '$lib/components/alert/dialog.svelte';
 	import { hasTeacherDeleted } from '../../../../stores';
+	import { error } from '@sveltejs/kit';
 
 	export let id: string;
 
     let dialogOpen = false
 
-    function deleteTeacher(event: CustomEvent) {                
+    async function deleteTeacher(event: CustomEvent) {                
         if(event.detail.status == true){
-            console.log("Deleting...");       
-            hasTeacherDeleted.set(true)     
+            console.log("Deleting...");
+            const res = await fetchDeleteTeacher(id)
+            if(res.status == "success"){
+                hasTeacherDeleted.set(true)
+            }
         }
     }
+
+    async function fetchDeleteTeacher(teacherID: string) {
+		const url = `/api/teacher/${teacherID}`;
+		const response = await fetch(url, {
+			method: 'DELETE',
+			credentials: 'include'
+		});
+		if (!response.ok) {
+            throw error(500, "Failed to delete teachers");            
+		}
+
+        return await response.json()
+	}
 </script>
 
 <Dialog bind:dialogOpen={dialogOpen} on:dialog-continue={deleteTeacher}></Dialog>
