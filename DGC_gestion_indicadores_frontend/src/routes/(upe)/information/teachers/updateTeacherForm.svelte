@@ -15,15 +15,9 @@
 	import { cn } from '$lib/utils.js';
 
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { tick } from 'svelte';
+	import { createEventDispatcher, tick } from 'svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { updateTeacherSchema, type UpdateTeacherSchema } from './scheme';
-
-	let updateTeacherActionValue: { status: boolean; teacherID: number };
-
-	const unsubscribe = updateTeacherAction.subscribe((value) => {
-		updateTeacherActionValue = value;
-	});
 
 	export let selectedTeacherToUpdate: GetTeachersByAcademicPeriodResponse;
 	export let data: SuperValidated<Infer<UpdateTeacherSchema>>;
@@ -39,14 +33,25 @@
 				toast.error('Por favor completa todos los campos.');
 			}
 			if ($message.success) {
-				//teacherHasBeenCreated = true;
+				updateTeacherAction.set({
+					status: false,
+					teacherID: -1
+				});
 				toast.success('Registro de docente actualizado.');
-				//dispatchTeacherCreated()
+				dispatchTeacherUpdated()
 			} else {
 				toast.error('Fallo actualizando docente.');
 			}
 		}
 	});
+
+	const dispatch = createEventDispatcher()
+
+	function dispatchTeacherUpdated() {
+		dispatch("teacher-updated",{
+			status: true
+		})
+	}
 
 	const { form: formData, message, enhance } = form;
 
@@ -86,12 +91,17 @@
 		openScaledGrade = false;
 		tick().then(() => {
 			document.getElementById(triggerId)?.focus();
-		});
+		}); 
 	}
 </script>
 
 <form action="?/updateTeacher" method="post" use:enhance>
 	<div class="flex w-full items-center justify-between">
+		<Form.Field {form} name="ID">
+			<Form.Control let:attrs>
+				<input hidden value={$formData.ID} name={attrs.name} />
+			</Form.Control>
+		</Form.Field>
 		<Form.Field {form} name="academicPeriod">
 			<Form.Control let:attrs>
 				<input hidden value={$formData.academicPeriod} name={attrs.name} />

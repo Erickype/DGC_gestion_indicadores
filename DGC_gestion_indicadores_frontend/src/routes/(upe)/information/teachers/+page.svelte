@@ -11,6 +11,7 @@
 	import { hasTeacherDeleted, updateTeacherAction } from '../../../../stores';
 	import UpdateTeacherForm from './updateTeacherForm.svelte';
 	import type { GetTeachersByAcademicPeriodResponse } from '$lib/api/model/api/teacher';
+	import { redirect } from '@sveltejs/kit';
 
 	export let data: PageServerData;
 
@@ -82,9 +83,12 @@
 			credentials: 'include'
 		});
 		if (response.ok) {
-			teachersPromise = response.json();
-		} else {
+			return teachersPromise = response.json();
+		} 
+		
+		if(response.status === 401){
 			console.error('Failed to fetch teachers:', response.status);
+			throw redirect(302, "/login")
 		}
 	}
 
@@ -163,6 +167,7 @@
 				dedications={dedicationData.messages}
 				scaledGrades={scaledGradesData.messages}
 				selectedTeacherToUpdate={teacher}
+				on:teacher-updated={updateTeachersTable}
 			></UpdateTeacherForm>
 		</div>
 	{/await}
