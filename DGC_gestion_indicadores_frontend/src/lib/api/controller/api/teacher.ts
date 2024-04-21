@@ -1,5 +1,5 @@
-import type { CreateTeacherRequest } from "$lib/api/model/api/teacher";
-import { deleteTeacherRoute, getTeachersByAcademicPeriodIDRoute, postTeacherRoute } from "$lib/api/routes/api/teacher";
+import type { CreateTeacherRequest, UpdateTeacherRequest } from "$lib/api/model/api/teacher";
+import { deleteTeacherRoute, getTeachersByAcademicPeriodIDRoute, postTeacherRoute, updateTeacherRoute } from "$lib/api/routes/api/teacher";
 
 export async function GetTeachersByAcademicPeriodID(token: string, academicPeriod: string) {
     return await fetch(getTeachersByAcademicPeriodIDRoute + academicPeriod, {
@@ -29,5 +29,17 @@ export async function DeleteTeacher(token: string, teacherID: string) {
             'Content-Type': 'application/json',
             'Authorization': token
         },
+    })
+}
+
+
+export async function UpdateTeacher(token: string, request: UpdateTeacherRequest, teacherID: string) {
+    return await fetch(updateTeacherRoute + teacherID, {
+        method: "PUT",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        },
+        body: JSON.stringify(request)
     })
 }

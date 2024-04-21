@@ -31,3 +31,12 @@ export interface GetTeachersByAcademicPeriodResponse{
     scaled_grade_id: number;
     scaled_grade: string;
 }
+
+export interface UpdateTeacherRequest {
+    ID: number;
+    academic_period_id: number;
+    person_id: number;
+    career_id: number;
+    dedication_id: number;
+    scaled_grade_id: number;
+}
