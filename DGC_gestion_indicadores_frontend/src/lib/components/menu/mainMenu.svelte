@@ -13,6 +13,24 @@
 			(menu) => $page.data.user.role && menu.roles.includes($page.data.user.role)
 		);
 	}
+
+	let previousLinkElement: HTMLLinkElement;
+
+	function manageItemSelected(event: any) {
+		const link = event.target as HTMLLinkElement;
+		if(!previousLinkElement){
+			link.classList.add('bg-muted');
+			link.classList.add('text-primary');
+			previousLinkElement = link;
+			return
+		}
+		previousLinkElement.classList.remove('bg-muted');
+		previousLinkElement.classList.remove('text-primary');
+		link.classList.add('bg-muted');
+		link.classList.add('text-primary');
+		previousLinkElement = link;
+		return
+	}
 </script>
 
 <div class="bg-muted/40 hidden border-r md:block">
@@ -35,10 +53,14 @@
 								</div>
 							</Accordion.Trigger>
 							<Accordion.Content>
-								{#each menu.links as link}
+								{#each menu.links as link, j}
 									<a
+										id={j.toString()}
 										href={link.route}
-										class="text-muted-foreground hover:text-primary mx-4 my-2 flex items-center gap-3 rounded-lg py-2 transition-all"
+										class="text-muted-foreground hover:text-primary mx-4 my-2 flex items-center gap-3 rounded-lg pl-4 py-2 transition-all"
+										on:click={() => {
+											manageItemSelected(event);
+										}}
 									>
 										{link.name}
 									</a>
