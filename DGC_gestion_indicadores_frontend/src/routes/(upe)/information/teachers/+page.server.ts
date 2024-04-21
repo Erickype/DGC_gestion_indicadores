@@ -13,6 +13,7 @@ import type { LoginError } from '$lib/api/model/auth/login'
 
 import { CreateTeacher, GetTeachersByAcademicPeriodID, UpdateTeacher } from "$lib/api/controller/api/teacher";
 import type { CreateTeacherRequest, GetTeachersByAcademicPeriodResponse, UpdateTeacherRequest } from "$lib/api/model/api/teacher";
+import { toast } from "svelte-sonner";
 
 export const load: PageServerLoad = async ({ locals, cookies }) => {
     const token = cookies.get("AuthorizationToken")
@@ -94,6 +95,10 @@ export const actions: Actions = {
         const res = await UpdateTeacher(token!, updateTeacherRequest, teacherID)
         
         if (!res.ok) {
+            if(res.status === 401){
+                toast.warning("No está autenticado.")
+                return redirect(302, "/login")
+            }
             return message(form, { success: false, error: "Error actualizando docente" })
         }
 

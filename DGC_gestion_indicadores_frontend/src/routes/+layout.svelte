@@ -5,6 +5,12 @@
 	import MainMenu from '$lib/components/menu/mainMenu.svelte';
 	import Header from '$lib/components/menu/header.svelte';
 	import { Toaster } from "$lib/components/ui/sonner";
+	import { onMount } from 'svelte';
+	import { invalidateAll } from '$app/navigation';
+
+	onMount(async ()=>{
+		await invalidateAll()
+	})
 </script>
 
 <ModeWatcher />
@@ -22,6 +28,6 @@
 	</div>
 {/if}
 
-{#if !$page.data.user}
+{#if !$page.data.$user}
 	<slot />
 {/if}

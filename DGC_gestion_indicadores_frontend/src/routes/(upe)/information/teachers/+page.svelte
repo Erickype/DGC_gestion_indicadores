@@ -11,7 +11,8 @@
 	import { hasTeacherDeleted, updateTeacherAction } from '../../../../stores';
 	import UpdateTeacherForm from './updateTeacherForm.svelte';
 	import type { GetTeachersByAcademicPeriodResponse } from '$lib/api/model/api/teacher';
-	import { redirect } from '@sveltejs/kit';
+	import { goto, invalidateAll } from '$app/navigation';
+	import { toast } from 'svelte-sonner';
 
 	export let data: PageServerData;
 
@@ -64,6 +65,7 @@
 	}
 
 	onMount(() => {
+		invalidateAll()
 		selectedAcademicPeriod = academicPeriodsData.periods.at(
 			academicPeriodsData.periods.length - 1
 		)!.ID;
@@ -87,8 +89,8 @@
 		} 
 		
 		if(response.status === 401){
-			console.error('Failed to fetch teachers:', response.status);
-			throw redirect(302, "/login")
+			toast.warning("No está autenticado.")
+			return goto("/login")
 		}
 	}
 

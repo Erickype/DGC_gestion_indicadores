@@ -1,11 +1,14 @@
 <script lang="ts">
 	import CircleX from 'lucide-svelte/icons/circle-x';
 	import Pencil from 'lucide-svelte/icons/pencil';
+	import ChevronRight from 'lucide-svelte/icons/chevron-right';
 
 	import { Button } from '$lib/components/ui/button';
 	import Dialog from '$lib/components/alert/dialog.svelte';
 	import { hasTeacherDeleted, updateTeacherAction } from '../../../../stores';
 	import { error } from '@sveltejs/kit';
+	import { goto } from '$app/navigation';
+	import { toast } from 'svelte-sonner';
 
 	export let id: string;
 
@@ -27,11 +30,14 @@
 			method: 'DELETE',
 			credentials: 'include'
 		});
-		if (!response.ok) {
-            throw error(500, "Failed to delete teachers");            
+		if (response.ok) {
+            return await response.json()
 		}
 
-        return await response.json()
+        if(response.status === 401){
+            toast.warning("No está autenticado.")
+            return goto("/login")
+        }
 	}
 
     function sendUpdateTeacherAction() {
@@ -49,6 +55,9 @@
 		sendUpdateTeacherAction()
 	}}>
         <Pencil class="h-4 w-4" />
+    </Button>
+    <Button variant="ghost" size="icon" href="/information/teachers/{id}">
+        <ChevronRight class="h-4 w-4" />
     </Button>
     <Button variant="ghost" size="icon" on:click={()=>{
         dialogOpen = !dialogOpen

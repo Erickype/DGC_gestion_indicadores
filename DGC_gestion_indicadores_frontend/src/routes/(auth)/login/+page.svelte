@@ -1,8 +1,15 @@
 <script lang="ts">
+	import { invalidateAll } from '$app/navigation';
 	import * as Card from '$lib/components/ui/card/index.js';
+	import { onMount } from 'svelte';
 	import type { PageData } from './$types.js';
 	import LoginForm from './loginForm.svelte';
 	export let data: PageData;
+
+	onMount(()=>{
+		invalidateAll()
+	})
+
 </script>
 
 <svelte:head>
