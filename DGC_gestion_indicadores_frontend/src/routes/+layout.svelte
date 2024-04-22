@@ -4,13 +4,13 @@
 	import '../app.pcss';
 	import MainMenu from '$lib/components/menu/mainMenu.svelte';
 	import Header from '$lib/components/menu/header.svelte';
-	import { Toaster } from "$lib/components/ui/sonner";
+	import { Toaster } from '$lib/components/ui/sonner';
 	import { onMount } from 'svelte';
 	import { invalidateAll } from '$app/navigation';
 
-	onMount(async ()=>{
-		await invalidateAll()
-	})
+	onMount(async () => {
+		await invalidateAll();
+	});
 </script>
 
 <ModeWatcher />
@@ -26,8 +26,6 @@
 			</main>
 		</div>
 	</div>
-{/if}
-
-{#if !$page.data.$user}
+{:else}
 	<slot />
 {/if}

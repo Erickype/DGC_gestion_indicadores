@@ -5,12 +5,10 @@ import { Login } from '$lib/api/controller/auth/auth'
 import { loginSchema } from './schema'
 import { message, superValidate } from 'sveltekit-superforms'
 import { zod } from 'sveltekit-superforms/adapters'
-import { mainDashboarRoute } from '$lib/api/util/paths.js'
-
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (locals.user) {
-        throw redirect(302, mainDashboarRoute)
+        throw redirect(302, "/")
     }
 
     return {
@@ -56,6 +54,6 @@ export const actions: Actions = {
             maxAge: 60 * 30 // 30 minutes
         });
 
-        redirect(302, mainDashboarRoute)
+        redirect(302, "/")
     }
 };
