@@ -18,12 +18,12 @@
 
 <div class="flex h-screen w-screen">
 	<div
-		class="bg-muted flex h-full w-2/5 flex-col items-center justify-center p-5 text-center"
+		class="bg-primary flex h-full w-2/5 flex-col items-center justify-center p-5 text-center"
 	>
-		<h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-muted-foreground">
+		<h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-primary-foreground">
 			Gestión de indicadores
 		</h1>
-		<p class="text-muted-foreground text-sm">Dirección de Gestión de Calidad</p>
+		<p class="text-primary-foreground text-sm">Dirección de Gestión de Calidad</p>
 	</div>
 	<div class="flex h-full w-3/5 items-center justify-center">
 		<Card.Root class="w-full max-w-sm">
