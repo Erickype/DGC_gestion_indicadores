@@ -2,14 +2,17 @@ package model
 
 import (
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
+	period "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationPeriod"
 	"gorm.io/gorm"
 )
 
 type AcademicPeriod struct {
 	gorm.Model
-	ID          uint   `gorm:"primary_key"`
-	Name        string `gorm:"size:50;not null;unique" json:"name"`
-	Description string `gorm:"size:255;not null" json:"description"`
+	ID                 uint                    `gorm:"primary_key"`
+	EvaluationPeriodID uint                    `gorm:"not null;" json:"evaluation_period_id"`
+	Name               string                  `gorm:"size:50;not null;unique" json:"name"`
+	Description        string                  `gorm:"size:255;not null" json:"description"`
+	EvaluationPeriod   period.EvaluationPeriod `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"-"`
 }
 
 func CreateAcademicPeriod(period *AcademicPeriod) (err error) {

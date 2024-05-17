@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	evaluationPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/controller/evaluationPeriod"
 	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/controller/academicPeriod"
 	controller "github.com/Erickype/DGC_gestion_indicadores_backend/controller/auth"
 	career "github.com/Erickype/DGC_gestion_indicadores_backend/controller/career"
@@ -74,6 +75,8 @@ func serveApplication() {
 	adminRoutes.POST("/dedication", dedication.CreateDedication)
 
 	adminRoutes.POST("/scaledGrade", scaledGrade.CreateScaledGrade)
+
+	adminRoutes.POST("/evaluationPeriod", evaluationPeriod.CreateEvaluationPeriod)
 
 	// UPE routes
 	upeRoutes := router.Group("/api")
