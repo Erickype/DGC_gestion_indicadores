@@ -39,7 +39,9 @@ export const menus: Menu[] = [
         name: 'Administrador',
         icon: Settings,
         links: [
+            { name: 'Periodos Evaluación', route: '/admin/evaluation-periods' },
             { name: 'Usuarios', route: '/admin/users' },
+            { name: 'Admin', route: '/admin' },
         ],
         roles: [1]
     }
