@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"log"
 
-	evaluationPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/controller/evaluationPeriod"
 	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/controller/academicPeriod"
 	controller "github.com/Erickype/DGC_gestion_indicadores_backend/controller/auth"
 	career "github.com/Erickype/DGC_gestion_indicadores_backend/controller/career"
 	dedication "github.com/Erickype/DGC_gestion_indicadores_backend/controller/dedication"
+	evaluationPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/controller/evaluationPeriod"
 	faculty "github.com/Erickype/DGC_gestion_indicadores_backend/controller/faculty"
 	person "github.com/Erickype/DGC_gestion_indicadores_backend/controller/person"
 	scaledGrade "github.com/Erickype/DGC_gestion_indicadores_backend/controller/scaledGrade"
@@ -99,6 +99,8 @@ func serveApplication() {
 	// Public view routes
 	academicPeriodRoutes := router.Group("/view")
 	academicPeriodRoutes.GET("/academicPeriods", academicPeriod.GetAcademicPeriods)
+
+	academicPeriodRoutes.GET("/evaluationPeriods", evaluationPeriod.GetEvaluationPeriods)
 
 	err := router.Run(":8000")
 	if err != nil {

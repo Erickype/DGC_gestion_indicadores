@@ -25,7 +25,7 @@ func CreateEvaluationPeriod(period *EvaluationPeriod) (err error) {
 }
 
 func GetEvaluationPeriods(periods *[]EvaluationPeriod) (err error) {
-	err = database.DB.Find(periods).Error
+	err = database.DB.Order("start_year desc").Find(periods).Error
 	if err != nil {
 		return err
 	}
