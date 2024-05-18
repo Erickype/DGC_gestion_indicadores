@@ -1,16 +1,17 @@
-import { redirect, type Actions } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
-import { addEvaluationPeriodSchema } from "./schema";
-import { message, superValidate, type ErrorStatus } from "sveltekit-superforms";
-import { zod } from "sveltekit-superforms/adapters";
 import type { PostEvaluationPeriodRequest } from "$lib/api/model/view/evaluationPeriod";
 import { PostEvaluationPeriod } from "$lib/api/controller/admin/evaluationPeriod";
+
+import { message, superValidate, type ErrorStatus } from "sveltekit-superforms";
+import { addEvaluationPeriodSchema } from "./schema";
+import { zod } from "sveltekit-superforms/adapters";
+
+import { redirect, type Actions } from "@sveltejs/kit";
+import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (!locals.user) {
         throw redirect(302, "/")
     }
-
     return {
         addEvaluationPeriodForm: await superValidate(zod(addEvaluationPeriodSchema)),
     }
