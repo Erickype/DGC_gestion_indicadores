@@ -30,13 +30,13 @@
 	import { createEventDispatcher } from 'svelte';
 
 	export let data: SuperValidated<Infer<AddEvaluationPeriodSchema>>;
-	
-	const dispatch = createEventDispatcher()
+
+	const dispatch = createEventDispatcher();
 
 	function EvaluationPeriodCreated() {
 		dispatch('message', {
 			created: true
-		})
+		});
 	}
 
 	const form = superForm(data, {
@@ -44,7 +44,7 @@
 		taintedMessage: null,
 		onUpdated: ({ form: f }) => {
 			if (f.valid) {
-				EvaluationPeriodCreated()
+				EvaluationPeriodCreated();
 				toast.success(`Periodo de evaluación creado.`);
 			} else {
 				toast.error('Solucionar los errores del formulario.');
@@ -126,8 +126,6 @@
 						<Popover.Content class="w-auto p-0" side="top">
 							<Calendar
 								{value}
-								minValue={new CalendarDate(2020, 1, 1)}
-								maxValue={today(getLocalTimeZone())}
 								calendarLabel="Fecha inicio periodo"
 								initialFocus
 								onValueChange={(v) => {
@@ -164,8 +162,6 @@
 						<Popover.Content class="w-auto p-0" side="top">
 							<Calendar
 								{value}
-								minValue={new CalendarDate(2020, 1, 1)}
-								maxValue={today(getLocalTimeZone())}
 								calendarLabel="Fecha fin periodo"
 								initialFocus
 								onValueChange={(v) => {
