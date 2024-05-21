@@ -1,8 +1,18 @@
 <script lang="ts">
+	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
+	import { addEvaluationPeriodSchema, type AddEvaluationPeriodSchema } from './schema';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+
+	import { browser } from '$app/environment';
+	import { cn } from '$lib/utils';
+	import { toast } from 'svelte-sonner';
+	import { createEventDispatcher } from 'svelte';
+
 	import CalendarIcon from 'lucide-svelte/icons/calendar';
 
+	import CalendarMY from '$lib/components/calendar/month-year.svelte';
+
 	import {
-		CalendarDate,
 		DateFormatter,
 		type DateValue,
 		getLocalTimeZone,
@@ -11,23 +21,9 @@
 	} from '@internationalized/date';
 
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
-	import { Calendar } from '$lib/components/ui/calendar/index.js';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import { Input } from '$lib/components/ui/input';
 	import * as Form from '$lib/components/ui/form';
-
-	import {
-		/* SuperDebug, */ superForm,
-		type Infer,
-		type SuperValidated
-	} from 'sveltekit-superforms';
-	import { addEvaluationPeriodSchema, type AddEvaluationPeriodSchema } from './schema';
-	import { zodClient } from 'sveltekit-superforms/adapters';
-
-	/* 	import { browser } from '$app/environment';*/
-	import { cn } from '$lib/utils';
-	import { toast } from 'svelte-sonner';
-	import { createEventDispatcher } from 'svelte';
 
 	export let data: SuperValidated<Infer<AddEvaluationPeriodSchema>>;
 
@@ -54,15 +50,32 @@
 
 	const { form: formData, message, enhance } = form;
 
-	const df = new DateFormatter('en-US', {
+	const df = new DateFormatter('ec-EC', {
 		dateStyle: 'long'
 	});
 
-	let value: DateValue | undefined;
+	let months = ['enero', 'diciembre'];
+	let placeholderStart = today(getLocalTimeZone()).set({ day: 1, month: 1 });
+	let placeholderEnd = today(getLocalTimeZone()).set({ day: 31, month: 12 });
+	let startDateValue: DateValue | undefined;
 	let endDateValue: DateValue | undefined;
 
 	$: startDateValue = $formData.startDate ? parseDate($formData.startDate) : undefined;
 	$: endDateValue = $formData.endDate ? parseDate($formData.endDate) : undefined;
+
+	type yearType = 'start' | 'end';
+	function manageDateChanged(event: any, yearType: yearType) {
+		const data: { date: string } = event.detail;
+		const date = data.date;
+		switch (yearType) {
+			case 'start':
+				$formData.startDate = date;
+				break;
+			case 'end':
+				$formData.endDate = date;
+				break;
+		}
+	}
 </script>
 
 <form action="?/addEvaluationPeriod" use:enhance>
@@ -124,16 +137,14 @@
 							<CalendarIcon class="ml-auto h-4 w-4 opacity-50" />
 						</Popover.Trigger>
 						<Popover.Content class="w-auto p-0" side="top">
-							<Calendar
-								{value}
-								calendarLabel="Fecha inicio periodo"
-								initialFocus
-								onValueChange={(v) => {
-									if (v) {
-										$formData.startDate = v.toString();
-									} else {
-										$formData.startDate = '';
-									}
+							<CalendarMY
+								monthLabels={months}
+								placeholder={placeholderStart}
+								on:date-selected={(v) => {
+									manageDateChanged(v, 'start');
+								}}
+								on:keydown={(v) => {
+									console.log(v);
 								}}
 							/>
 						</Popover.Content>
@@ -160,16 +171,11 @@
 							<CalendarIcon class="ml-auto h-4 w-4 opacity-50" />
 						</Popover.Trigger>
 						<Popover.Content class="w-auto p-0" side="top">
-							<Calendar
-								{value}
-								calendarLabel="Fecha fin periodo"
-								initialFocus
-								onValueChange={(v) => {
-									if (v) {
-										$formData.endDate = v.toString();
-									} else {
-										$formData.endDate = '';
-									}
+							<CalendarMY
+								monthLabels={months}
+								placeholder={placeholderEnd}
+								on:date-selected={(v) => {
+									manageDateChanged(v, 'end');
 								}}
 							/>
 						</Popover.Content>
