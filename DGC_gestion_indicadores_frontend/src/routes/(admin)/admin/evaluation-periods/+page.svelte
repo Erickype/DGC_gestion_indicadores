@@ -21,6 +21,13 @@
 		}
 		return (evaluationPeriodsPromise = response.json());
 	}
+
+	function handleCreated(event: any) {
+		const data:{status:boolean} = event.detail
+		if(data.status){
+			fetchEvaluationPeriods()
+		}
+	}
 </script>
 
 <svelte:head>
@@ -29,7 +36,7 @@
 
 <div class="mx-auto flex w-full place-content-center justify-between px-8">
 	<h2 class="text-2xl font-bold">Periodos de Evaluación</h2>
-	<AddModal {formData} />
+	<AddModal {formData} on:created={handleCreated}/>
 </div>
 <div class="mx-auto flex w-full place-content-center px-8">
 	{#await evaluationPeriodsPromise}

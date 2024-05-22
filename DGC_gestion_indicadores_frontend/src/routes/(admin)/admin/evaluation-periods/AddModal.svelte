@@ -4,15 +4,21 @@
 	import Plus from 'lucide-svelte/icons/plus';
 
 	import AddForm from './AddForm.svelte';
+	import { createEventDispatcher } from 'svelte';
 
 	export let formData;
 
 	let open: boolean
+	const dispatch = createEventDispatcher()
 
 	function handleCreated(event: any) {
-		if(event.detail.created){
+		const data:{created:boolean} = event.detail
+		if(data.created){
 			open = false
 		}
+		dispatch('created',{
+			status: true
+		})
 	}
 </script>
 

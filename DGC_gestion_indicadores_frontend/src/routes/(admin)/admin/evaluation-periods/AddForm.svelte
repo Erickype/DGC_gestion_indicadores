@@ -143,9 +143,6 @@
 								on:date-selected={(v) => {
 									manageDateChanged(v, 'start');
 								}}
-								on:keydown={(v) => {
-									console.log(v);
-								}}
 							/>
 						</Popover.Content>
 					</Popover.Root>
