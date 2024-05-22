@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
 
 	errors "github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	model "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationPeriod"
@@ -35,4 +36,23 @@ func GetEvaluationPeriods(context *gin.Context) {
 		return
 	}
 	context.JSON(http.StatusOK, EvaluationPeriods)
+}
+
+func DeleteEvaluationPeriod(context *gin.Context) {
+	id, err := strconv.ParseInt(context.Param("id"), 10, 64)
+	if err != nil {
+		err := errors.CreateCommonError(http.StatusBadRequest,
+			"Error en parámetro id.", err.Error())
+		context.AbortWithStatusJSON(http.StatusBadRequest, err)
+		return
+	}
+
+	err = model.DeleteEvaluationPeriod(int(id))
+	if err != nil {
+		err := errors.CreateCommonError(http.StatusInternalServerError,
+			"Error eliminando periodo evaluación", err.Error())
+		context.AbortWithStatusJSON(http.StatusInternalServerError, err)
+		return
+	}
+	context.JSON(http.StatusOK, gin.H{"status": "success"})
 }

@@ -77,6 +77,7 @@ func serveApplication() {
 	adminRoutes.POST("/scaledGrade", scaledGrade.CreateScaledGrade)
 
 	adminRoutes.POST("/evaluationPeriod", evaluationPeriod.CreateEvaluationPeriod)
+	adminRoutes.DELETE("/evaluationPeriod/:id", evaluationPeriod.DeleteEvaluationPeriod)
 
 	// UPE routes
 	upeRoutes := router.Group("/api")

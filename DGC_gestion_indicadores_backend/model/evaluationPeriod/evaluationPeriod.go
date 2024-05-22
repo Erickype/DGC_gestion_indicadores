@@ -47,3 +47,11 @@ func UpdateEvaluationPeriod(period *EvaluationPeriod) (err error) {
 	}
 	return nil
 }
+
+func DeleteEvaluationPeriod(id int) (err error) {
+	err = database.DB.Delete(&EvaluationPeriod{}, id).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
