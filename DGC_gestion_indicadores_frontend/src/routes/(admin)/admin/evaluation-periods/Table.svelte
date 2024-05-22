@@ -8,6 +8,8 @@
 	import Table from '$lib/components/table/table.svelte';
 
 	import type { EvaluationPeriod } from '$lib/api/model/view/evaluationPeriod';
+	import { createEventDispatcher } from 'svelte';
+	import { toast } from 'svelte-sonner';
 
 	export let periods: EvaluationPeriod[];
 
@@ -77,14 +79,32 @@
 		})
 	]);
 
-	function handleDeleteConfirmation(event: any) {
+	const dispatch = createEventDispatcher();
+	async function handleDeleteConfirmation(event: any) {
 		const detail: { status: boolean; id: number } = event.detail;
-		console.log(detail);
+		if (detail.status) {
+			const res = await deleteEvaluationPeriod(detail.id.toString());
+			if (!res.ok) {
+				return toast.error('Error eliminando el registro');
+			}
+			toast.success('Se eliminó el registro');
+			return dispatch('deleted', {
+				status: true
+			});
+		}
 	}
 
 	function handleUpdateAction(event: any) {
 		const detail: { status: boolean; id: number } = event.detail;
 		console.log(detail);
+	}
+
+	async function deleteEvaluationPeriod(id: string) {
+		const url = `/api/evaluationPeriod/` + id;
+		const response = await fetch(url, {
+			method: 'DELETE'
+		});
+		return response;
 	}
 </script>
 
