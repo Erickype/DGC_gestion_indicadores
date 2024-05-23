@@ -6,12 +6,14 @@
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
 
 	import Table from '$lib/components/table/table.svelte';
+	import UpdateModal from './UpdateModal.svelte';
 
 	import type { EvaluationPeriod } from '$lib/api/model/view/evaluationPeriod';
 	import { createEventDispatcher } from 'svelte';
 	import { toast } from 'svelte-sonner';
 
 	export let periods: EvaluationPeriod[];
+	export let formData;
 
 	const filterFields = ['name', 'abbreviation'];
 
@@ -94,9 +96,15 @@
 		}
 	}
 
+	let updateFormOpen = false;
 	function handleUpdateAction(event: any) {
 		const detail: { status: boolean; id: number } = event.detail;
 		console.log(detail);
+		if (detail.status) {
+			updateFormOpen = true;
+		} else {
+			updateFormOpen = false;
+		}
 	}
 
 	async function deleteEvaluationPeriod(id: string) {
@@ -107,6 +115,8 @@
 		return response;
 	}
 </script>
+
+<UpdateModal {formData} bind:open={updateFormOpen} />
 
 <div class="w-full">
 	<Table {table} {columns} {filterFields} />

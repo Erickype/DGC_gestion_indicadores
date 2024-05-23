@@ -23,16 +23,16 @@
 	}
 
 	function handleCreated(event: any) {
-		const data:{status:boolean} = event.detail
-		if(data.status){
-			fetchEvaluationPeriods()
+		const data: { status: boolean } = event.detail;
+		if (data.status) {
+			fetchEvaluationPeriods();
 		}
 	}
 
 	function handleDeleted(event: any) {
-		const data:{status:boolean} = event.detail
-		if(data.status){
-			fetchEvaluationPeriods()
+		const data: { status: boolean } = event.detail;
+		if (data.status) {
+			fetchEvaluationPeriods();
 		}
 	}
 </script>
@@ -43,14 +43,14 @@
 
 <div class="mx-auto flex w-full place-content-center justify-between px-8">
 	<h2 class="text-2xl font-bold">Periodos de Evaluación</h2>
-	<AddModal {formData} on:created={handleCreated}/>
+	<AddModal {formData} on:created={handleCreated} />
 </div>
 <div class="mx-auto flex w-full place-content-center px-8">
 	{#await evaluationPeriodsPromise}
 		cargando...
 	{:then periods}
 		{#if periods.length > 0}
-			<PeriodsTable {periods} on:deleted={handleDeleted}></PeriodsTable>
+			<PeriodsTable {formData} {periods} on:deleted={handleDeleted}></PeriodsTable>
 		{:else}
 			<Alert title="Sin registros" description={'Ups, no hay periodos de evaluación'} />
 		{/if}
