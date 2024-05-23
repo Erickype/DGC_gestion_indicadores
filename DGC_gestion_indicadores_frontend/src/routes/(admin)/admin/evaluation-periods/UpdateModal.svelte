@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { EvaluationPeriod } from '$lib/api/model/view/evaluationPeriod';
 	import * as Dialog from '$lib/components/ui/dialog';
 
 	import UpdateForm from './UpdateForm.svelte';
@@ -7,6 +8,7 @@
 	export let formData;
 
 	export let open: boolean;
+	export let evaluationPeriod: EvaluationPeriod;
 	const dispatch = createEventDispatcher();
 
 	function handleCreated(event: any) {
@@ -26,6 +28,6 @@
 			<Dialog.Title>Actualizar periodo de evaluación</Dialog.Title>
 			<Dialog.Description>Actualizar la información luego click en Guardar.</Dialog.Description>
 		</Dialog.Header>
-		<UpdateForm data={formData} on:message={handleCreated} />
+		<UpdateForm data={formData} {evaluationPeriod} on:message={handleCreated} />
 	</Dialog.Content>
 </Dialog.Root>

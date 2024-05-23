@@ -11,9 +11,12 @@
 	import type { EvaluationPeriod } from '$lib/api/model/view/evaluationPeriod';
 	import { createEventDispatcher } from 'svelte';
 	import { toast } from 'svelte-sonner';
+	import type { Infer, SuperValidated } from 'sveltekit-superforms';
+	import type { UpdateEvaluationPeriodSchema } from './schema';
 
 	export let periods: EvaluationPeriod[];
-	export let formData;
+	export let formData: SuperValidated<Infer<UpdateEvaluationPeriodSchema>>;
+	let evaluationPeriod: EvaluationPeriod;
 
 	const filterFields = ['name', 'abbreviation'];
 
@@ -99,8 +102,8 @@
 	let updateFormOpen = false;
 	function handleUpdateAction(event: any) {
 		const detail: { status: boolean; id: number } = event.detail;
-		console.log(detail);
 		if (detail.status) {
+			evaluationPeriod = periods.find((period) => period.ID === detail.id)!;
 			updateFormOpen = true;
 		} else {
 			updateFormOpen = false;
@@ -116,7 +119,7 @@
 	}
 </script>
 
-<UpdateModal {formData} bind:open={updateFormOpen} />
+<UpdateModal {formData} bind:evaluationPeriod bind:open={updateFormOpen} />
 
 <div class="w-full">
 	<Table {table} {columns} {filterFields} />

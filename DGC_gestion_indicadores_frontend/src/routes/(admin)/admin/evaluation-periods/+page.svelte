@@ -7,7 +7,8 @@
 
 	export let data: PageData;
 
-	const formData = data.addEvaluationPeriodForm;
+	const addEvaluationPeriodFormData = data.addEvaluationPeriodForm;
+	const updateEvaluationPeriodFormData = data.updateEvaluationPeriodForm;
 
 	let evaluationPeriodsPromise: Promise<EvaluationPeriod[]> = fetchEvaluationPeriods();
 
@@ -43,14 +44,15 @@
 
 <div class="mx-auto flex w-full place-content-center justify-between px-8">
 	<h2 class="text-2xl font-bold">Periodos de Evaluación</h2>
-	<AddModal {formData} on:created={handleCreated} />
+	<AddModal formData={addEvaluationPeriodFormData} on:created={handleCreated} />
 </div>
 <div class="mx-auto flex w-full place-content-center px-8">
 	{#await evaluationPeriodsPromise}
 		cargando...
 	{:then periods}
 		{#if periods.length > 0}
-			<PeriodsTable {formData} {periods} on:deleted={handleDeleted}></PeriodsTable>
+			<PeriodsTable formData={updateEvaluationPeriodFormData} {periods} on:deleted={handleDeleted}
+			></PeriodsTable>
 		{:else}
 			<Alert title="Sin registros" description={'Ups, no hay periodos de evaluación'} />
 		{/if}
