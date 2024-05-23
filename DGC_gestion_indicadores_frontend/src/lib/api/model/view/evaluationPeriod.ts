@@ -6,8 +6,8 @@ export interface EvaluationPeriod {
     name: string;
     description: string;
     abbreviation: string;
-    start_year: Date;
-    end_year: Date;
+    start_year: string;
+    end_year: string;
 }
 
 export interface PostEvaluationPeriodRequest {

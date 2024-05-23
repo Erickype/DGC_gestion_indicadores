@@ -2,7 +2,7 @@ import type { PostEvaluationPeriodRequest } from "$lib/api/model/view/evaluation
 import { PostEvaluationPeriod } from "$lib/api/controller/admin/evaluationPeriod";
 
 import { message, superValidate, type ErrorStatus } from "sveltekit-superforms";
-import { addEvaluationPeriodSchema } from "./schema";
+import { addEvaluationPeriodSchema, updateEvaluationPeriodSchema } from "./schema";
 import { zod } from "sveltekit-superforms/adapters";
 
 import { redirect, type Actions } from "@sveltejs/kit";
@@ -14,6 +14,7 @@ export const load: PageServerLoad = async ({ locals }) => {
     }
     return {
         addEvaluationPeriodForm: await superValidate(zod(addEvaluationPeriodSchema)),
+        updateEvaluationPeriodForm: await superValidate(zod(updateEvaluationPeriodSchema))
     }
 };
 
@@ -46,6 +47,17 @@ export const actions: Actions = {
                 { success: false, error: message },
                 { status: status })
         }
+        return message(form, { success: true, error: "" })
+    },
+    updateEvaluationPeriod: async (event) => {
+        const form = await superValidate(event, zod(updateEvaluationPeriodSchema))
+        if (!form.valid) {
+            return message(form,
+                { success: false, error: "Invalid form" },
+                { status: 400 })
+        }
+        console.log("Updating...");
+
         return message(form, { success: true, error: "" })
     }
 };
