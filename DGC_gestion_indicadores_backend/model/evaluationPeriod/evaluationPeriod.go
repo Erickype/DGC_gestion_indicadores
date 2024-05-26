@@ -9,9 +9,9 @@ import (
 type EvaluationPeriod struct {
 	gorm.Model
 	ID           uint           `gorm:"primary_key"`
-	Name         string         `gorm:"size:50;not null;unique" json:"name"`
+	Name         string         `gorm:"size:50;not null" json:"name"`
+	Abbreviation string         `gorm:"size:50;unique" json:"abbreviation"`
 	Description  string         `gorm:"size:255;not null" json:"description"`
-	Abbreviation string         `gorm:"size:50;" json:"abbreviation"`
 	StartYear    datatypes.Date `gorm:"not null" json:"start_year"`
 	EndYear      datatypes.Date `gorm:"not null" json:"end_year"`
 }
