@@ -1,5 +1,5 @@
-import type { PostEvaluationPeriodRequest } from "$lib/api/model/view/evaluationPeriod";
-import { PostEvaluationPeriod } from "$lib/api/controller/admin/evaluationPeriod";
+import type { PostEvaluationPeriodRequest, UpdateEvaluationPeriodRequest } from "$lib/api/model/view/evaluationPeriod";
+import { PostEvaluationPeriod, UpdateEvaluationPeriod } from "$lib/api/controller/admin/evaluationPeriod";
 
 import { message, superValidate, type ErrorStatus } from "sveltekit-superforms";
 import { addEvaluationPeriodSchema, updateEvaluationPeriodSchema } from "./schema";
@@ -49,6 +49,7 @@ export const actions: Actions = {
         }
         return message(form, { success: true, error: "" })
     },
+    
     updateEvaluationPeriod: async (event) => {
         const form = await superValidate(event, zod(updateEvaluationPeriodSchema))
         if (!form.valid) {
@@ -56,7 +57,26 @@ export const actions: Actions = {
                 { success: false, error: "Invalid form" },
                 { status: 400 })
         }
-        console.log("Updating...");
+
+        const token = event.cookies.get("AuthorizationToken")
+        const data = form.data
+        const evaluationPeriod: UpdateEvaluationPeriodRequest = {
+            ID: data.ID,
+            name: data.name,
+            abbreviation: data.abbreviation,
+            description: data.description,
+            start_year: new Date(data.startDate).toISOString(),
+            end_year: new Date(data.endDate).toISOString()
+        }
+
+        const res = await UpdateEvaluationPeriod(evaluationPeriod, token!)
+        if (!res.ok) {
+            const status = res.status as unknown as ErrorStatus
+            const message = await res.json()
+            return message(form,
+                { success: false, error: message },
+                { status: status })
+        }
 
         return message(form, { success: true, error: "" })
     }

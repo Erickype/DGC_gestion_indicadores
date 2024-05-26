@@ -17,3 +17,12 @@ export interface PostEvaluationPeriodRequest {
     start_year: string;
     end_year: string;
 }
+
+export interface UpdateEvaluationPeriodRequest {
+    ID: number;
+    name: string;
+    description: string;
+    abbreviation: string;
+    start_year: string;
+    end_year: string;
+}

@@ -1,9 +1,20 @@
-import type { PostEvaluationPeriodRequest } from "$lib/api/model/view/evaluationPeriod";
-import { deleteEvaluationPeriod, postEvaluationPeriod } from "$lib/api/routes/admin/evaluationPeriod";
+import type { PostEvaluationPeriodRequest, UpdateEvaluationPeriodRequest } from "$lib/api/model/view/evaluationPeriod";
+import { deleteEvaluationPeriod, postEvaluationPeriod, updateEvaluationPeriod } from "$lib/api/routes/admin/evaluationPeriod";
 
 export async function PostEvaluationPeriod(period: PostEvaluationPeriodRequest, token: string) {
     return await fetch(postEvaluationPeriod, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        },
+        body: JSON.stringify(period)
+    });
+}
+
+export async function UpdateEvaluationPeriod(period: UpdateEvaluationPeriodRequest, token: string) {
+    return await fetch(updateEvaluationPeriod + period.ID.toString(), {
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': token
