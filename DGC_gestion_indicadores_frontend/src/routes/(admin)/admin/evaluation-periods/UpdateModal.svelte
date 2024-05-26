@@ -11,12 +11,12 @@
 	export let evaluationPeriod: EvaluationPeriod;
 	const dispatch = createEventDispatcher();
 
-	function handleCreated(event: any) {
-		const data: { created: boolean } = event.detail;
-		if (data.created) {
+	function handleUpdated(event: any) {
+		const data: { updated: boolean } = event.detail;
+		if (data.updated) {
 			open = false;
 		}
-		dispatch('created', {
+		dispatch('updated', {
 			status: true
 		});
 	}
@@ -28,6 +28,6 @@
 			<Dialog.Title>Actualizar periodo de evaluación</Dialog.Title>
 			<Dialog.Description>Actualizar la información luego click en Guardar.</Dialog.Description>
 		</Dialog.Header>
-		<UpdateForm data={formData} {evaluationPeriod} on:message={handleCreated} />
+		<UpdateForm data={formData} {evaluationPeriod} on:updated={handleUpdated} />
 	</Dialog.Content>
 </Dialog.Root>

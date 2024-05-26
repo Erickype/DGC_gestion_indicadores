@@ -99,6 +99,11 @@
 
 <form action="?/updateEvaluationPeriod" use:enhance>
 	<div class="flex flex-col gap-2">
+		<Form.Field {form} name="ID">
+			<Form.Control let:attrs>
+				<input hidden value={$formData.ID} name={attrs.name} />
+			</Form.Control>
+		</Form.Field>
 		<div class="grid grid-cols-2 justify-between gap-4">
 			<Form.Field {form} name="name">
 				<Form.Control let:attrs>
@@ -203,7 +208,7 @@
 		</div>
 	</div>
 	<Form.Button class="my-2 w-full">Guardar</Form.Button>
-	{#if browser}
+	<!-- {#if browser}
 		<SuperDebug data={$formData} />
-	{/if}
+	{/if} -->
 </form>
