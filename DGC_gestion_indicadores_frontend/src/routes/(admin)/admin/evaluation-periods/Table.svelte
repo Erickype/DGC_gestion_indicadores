@@ -13,6 +13,7 @@
 	import { toast } from 'svelte-sonner';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import type { UpdateEvaluationPeriodSchema } from './schema';
+	import { updated } from '$app/stores';
 
 	export let periods: EvaluationPeriod[];
 	export let formData: SuperValidated<Infer<UpdateEvaluationPeriodSchema>>;
@@ -117,9 +118,23 @@
 		});
 		return response;
 	}
+
+	function handleUpdated(event: any) {
+		const detail: { status: boolean } = event.detail;
+		if (detail.status) {
+			dispatch('updated', {
+				status: true
+			});
+		}
+	}
 </script>
 
-<UpdateModal {formData} bind:evaluationPeriod bind:open={updateFormOpen} />
+<UpdateModal
+	{formData}
+	bind:evaluationPeriod
+	bind:open={updateFormOpen}
+	on:updated={handleUpdated}
+/>
 
 <div class="w-full">
 	<Table {table} {columns} {filterFields} />

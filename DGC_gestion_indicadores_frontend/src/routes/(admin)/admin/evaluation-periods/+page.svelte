@@ -36,6 +36,13 @@
 			fetchEvaluationPeriods();
 		}
 	}
+
+	function handleUpdated(event: any) {
+		const detail: { status: boolean } = event.detail;
+		if (detail.status) {
+			fetchEvaluationPeriods();
+		}
+	}
 </script>
 
 <svelte:head>
@@ -51,7 +58,11 @@
 		cargando...
 	{:then periods}
 		{#if periods.length > 0}
-			<PeriodsTable formData={updateEvaluationPeriodFormData} {periods} on:deleted={handleDeleted}
+			<PeriodsTable
+				formData={updateEvaluationPeriodFormData}
+				{periods}
+				on:updated={handleUpdated}
+				on:deleted={handleDeleted}
 			></PeriodsTable>
 		{:else}
 			<Alert title="Sin registros" description={'Ups, no hay periodos de evaluación'} />
