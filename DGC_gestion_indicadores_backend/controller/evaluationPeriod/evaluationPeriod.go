@@ -1,12 +1,14 @@
 package controller
 
 import (
+	errorsS "errors"
 	"net/http"
 	"strconv"
 
 	errors "github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	model "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationPeriod"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func CreateEvaluationPeriod(c *gin.Context) {
@@ -36,6 +38,33 @@ func GetEvaluationPeriods(context *gin.Context) {
 		return
 	}
 	context.JSON(http.StatusOK, EvaluationPeriods)
+}
+
+func UpdateEvaluationPeriod(c *gin.Context) {
+	var EvaluationPeriod model.EvaluationPeriod
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	err := model.GetEvaluationPeriod(&EvaluationPeriod, id)
+	if err != nil {
+		if errorsS.Is(err, gorm.ErrRecordNotFound) {
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	err = c.BindJSON(&EvaluationPeriod)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = model.UpdateEvaluationPeriod(&EvaluationPeriod)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 
 func DeleteEvaluationPeriod(context *gin.Context) {
