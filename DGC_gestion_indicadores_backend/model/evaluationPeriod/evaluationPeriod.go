@@ -32,6 +32,17 @@ func GetEvaluationPeriods(periods *[]EvaluationPeriod) (err error) {
 	return nil
 }
 
+func GetEvaluationPeriodsByDateRange(periods *[]EvaluationPeriod, startDate datatypes.Date, endDate datatypes.Date) (err error) {
+    err = database.DB.
+        Where("start_year <= ? AND end_year >= ?", endDate, startDate).
+        Order("start_year desc").
+        Find(periods).Error
+    if err != nil {
+        return err
+    }
+    return nil
+}
+
 func GetEvaluationPeriod(period *EvaluationPeriod, id int) (err error) {
 	err = database.DB.Where("id = ?", id).First(period).Error
 	if err != nil {
