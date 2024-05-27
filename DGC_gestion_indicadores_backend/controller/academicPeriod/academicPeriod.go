@@ -3,6 +3,7 @@ package controller
 import (
 	errors "github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	model "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicPeriod"
+	common "github.com/Erickype/DGC_gestion_indicadores_backend/model/common"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -15,7 +16,7 @@ func CreateAcademicPeriod(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, err)
 		return
 	}
-	err = model.CreateAcademicPeriod(&period)
+	err = common.CreateAcademicPeriod(&period)
 	if err != nil {
 		err := errors.CreateCommonError(http.StatusInternalServerError, "Error creando periodo", err.Error())
 		c.AbortWithStatusJSON(http.StatusInternalServerError, err)
