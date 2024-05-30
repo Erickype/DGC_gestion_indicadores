@@ -2,7 +2,15 @@
 	import type { CommonError } from '$lib/api/model/errors';
 	import type { AcademicPeriod } from '$lib/api/model/view/academicPeriod';
 
+	import PeriodsTable from './Table.svelte';
+
 	import Alert from '$lib/components/alert/alert.svelte';
+	import type { PageData } from './$types';
+
+	export let data: PageData;
+
+	const addAcademicPeriodFormData = data.addAcademiPeriodForm;
+	const updateAcademicPeriodFormData = data.updateAcademicPeriodForm;
 
 	let academicPeriodsPromise: Promise<AcademicPeriod[]> = fetchAcademicPeriods();
 
@@ -12,10 +20,24 @@
 			method: 'GET'
 		});
 		if (!response.ok) {
-			const errorData = await response.json() as CommonError
-			throw errorData
+			const errorData = (await response.json()) as CommonError;
+			throw errorData;
 		}
 		return (academicPeriodsPromise = response.json());
+	}
+
+	function handleDeleted(event: any) {
+		const data: { status: boolean } = event.detail;
+		if (data.status) {
+			fetchAcademicPeriods();
+		}
+	}
+
+	function handleUpdated(event: any) {
+		const detail: { status: boolean } = event.detail;
+		if (detail.status) {
+			fetchAcademicPeriods();
+		}
 	}
 </script>
 
@@ -31,9 +53,12 @@
 	cargando...
 {:then periods}
 	{#if periods.length > 0}
-		{#each periods as period}
-			{period.name}
-		{/each}
+		<PeriodsTable
+			formData={updateAcademicPeriodFormData}
+			{periods}
+			on:updated={handleUpdated}
+			on:deleted={handleDeleted}
+		></PeriodsTable>
 	{:else}
 		<Alert title="Sin registros" description={'Ups, no hay periodos académicos'} />
 	{/if}
