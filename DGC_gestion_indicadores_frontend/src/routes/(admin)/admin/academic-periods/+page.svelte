@@ -6,6 +6,7 @@
 
 	import Alert from '$lib/components/alert/alert.svelte';
 	import type { PageData } from './$types';
+	import AddModal from './AddModal.svelte';
 
 	export let data: PageData;
 
@@ -24,6 +25,13 @@
 			throw errorData;
 		}
 		return (academicPeriodsPromise = response.json());
+	}
+
+	function handleCreated(event: any) {
+		const data: { status: boolean } = event.detail;
+		if (data.status) {
+			fetchAcademicPeriods();
+		}
 	}
 
 	function handleDeleted(event: any) {
@@ -47,21 +55,24 @@
 
 <div class="mx-auto flex w-full place-content-center justify-between px-8">
 	<h2 class="text-2xl font-bold">Periodos Académicos</h2>
+	<AddModal formData={addAcademicPeriodFormData} on:created={handleCreated} />
 </div>
 
-{#await academicPeriodsPromise}
-	cargando...
-{:then periods}
-	{#if periods.length > 0}
-		<PeriodsTable
-			formData={updateAcademicPeriodFormData}
-			{periods}
-			on:updated={handleUpdated}
-			on:deleted={handleDeleted}
-		></PeriodsTable>
-	{:else}
-		<Alert title="Sin registros" description={'Ups, no hay periodos académicos'} />
-	{/if}
-{:catch error}
-	<Alert variant="destructive" description={`${error.Detail}: ${error.Message}`} />
-{/await}
+<div class="mx-auto flex w-full place-content-center px-8">
+	{#await academicPeriodsPromise}
+		cargando...
+	{:then periods}
+		{#if periods.length > 0}
+			<PeriodsTable
+				formData={updateAcademicPeriodFormData}
+				{periods}
+				on:updated={handleUpdated}
+				on:deleted={handleDeleted}
+			></PeriodsTable>
+		{:else}
+			<Alert title="Sin registros" description={'Ups, no hay periodos académicos'} />
+		{/if}
+	{:catch error}
+		<Alert variant="destructive" description={`${error.Detail}: ${error.Message}`} />
+	{/await}
+</div>
