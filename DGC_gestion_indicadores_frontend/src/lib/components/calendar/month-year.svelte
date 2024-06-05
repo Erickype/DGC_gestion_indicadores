@@ -64,7 +64,7 @@
 		} else {
 			date = '';
 		}
-		dispatcher('date-selected', {
+		dispatcher('keydown', {
 			date: date
 		});
 	}

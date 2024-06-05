@@ -40,11 +40,13 @@ export const actions: Actions = {
 
         if (!res.ok) {
             const status = res.status as unknown as ErrorStatus
-            const message = await res.json()
+            const data = await res.json()
             return message(form,
-                { success: false, error: message },
+                { success: false, error: data },
                 { status: status })
         }
-        return message(form, { success: true, error: "" })
+        return message(form, {
+            success: true
+        })
     },
 };
