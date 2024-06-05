@@ -140,7 +140,7 @@
 							<CalendarMY
 								monthLabels={months}
 								placeholder={placeholderStart}
-								on:date-selected={(v) => {
+								on:keydown={(v) => {
 									manageDateChanged(v, 'start');
 								}}
 							/>
@@ -171,7 +171,7 @@
 							<CalendarMY
 								monthLabels={months}
 								placeholder={placeholderEnd}
-								on:date-selected={(v) => {
+								on:keydown={(v) => {
 									manageDateChanged(v, 'end');
 								}}
 							/>

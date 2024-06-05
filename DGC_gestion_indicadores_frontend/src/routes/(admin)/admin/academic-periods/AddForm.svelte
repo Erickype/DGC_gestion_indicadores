@@ -24,8 +24,9 @@
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import { Input } from '$lib/components/ui/input';
 	import * as Form from '$lib/components/ui/form';
+	import type { CommonError } from '$lib/api/model/errors';
 
-	export let data: SuperValidated<Infer<AddAcademicPeriodSchema>>;
+	export let data: SuperValidated<Infer<AddAcademicPeriodSchema>, App.Superforms.Message>;
 
 	const dispatch = createEventDispatcher();
 
@@ -39,17 +40,17 @@
 		validators: zodClient(addAcademicPeriodSchema),
 		taintedMessage: null,
 		onUpdated: ({ form: f }) => {
-			if (f.valid) {
+			const message = f.message!;
+			if (message.success) {
 				EvaluationPeriodCreated();
-				toast.success(`Periodo académico creado.`);
+				return toast.success(`Periodo académico creado.`);
+			}
+			if (message.error as CommonError) {
+				const commonError = message!.error as CommonError;
+				return toast.error(`${commonError.message}: ${commonError.detail}`);
 			} else {
-				if($message){
-					console.log($message);
-					
-					toast.error($message)
-				}else{
-					toast.error('Solucionar los errores del formulario.');
-				}
+				const error = message.error as string;
+				return toast.error(error);
 			}
 		}
 	});
@@ -60,8 +61,6 @@
 		dateStyle: 'long'
 	});
 
-	let placeholderStart = today(getLocalTimeZone()).set({ day: 1, month: 1 });
-	let placeholderEnd = today(getLocalTimeZone()).set({ day: 31, month: 12 });
 	let startDateValue: DateValue | undefined;
 	let endDateValue: DateValue | undefined;
 
@@ -143,8 +142,7 @@
 						</Popover.Trigger>
 						<Popover.Content class="w-auto p-0" side="top">
 							<CalendarMY
-								placeholder={placeholderStart}
-								on:date-selected={(v) => {
+								on:keydown={(v) => {
 									manageDateChanged(v, 'start');
 								}}
 							/>
@@ -173,8 +171,7 @@
 						</Popover.Trigger>
 						<Popover.Content class="w-auto p-0" side="top">
 							<CalendarMY
-								placeholder={placeholderEnd}
-								on:date-selected={(v) => {
+								on:keydown={(v) => {
 									manageDateChanged(v, 'end');
 								}}
 							/>
@@ -187,7 +184,7 @@
 		</div>
 	</div>
 	<Form.Button class="my-2 w-full">Guardar</Form.Button>
-	{#if browser}
+<!-- 	{#if browser}
 		<SuperDebug data={$formData} />
-	{/if}
+	{/if} -->
 </form>
