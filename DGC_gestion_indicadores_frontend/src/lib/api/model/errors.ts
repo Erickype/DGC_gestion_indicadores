@@ -1,16 +1,16 @@
 import { error } from "@sveltejs/kit";
 
 export interface CommonError {
-    StatusCode: number
-    Status: string
-    Message: string
-    Detail: string
+    status_code: number
+    status: string
+    message: string
+    detail: string
 }
 
 export function generateErrorFromCommonError(err: CommonError) {
-    const errorObject = new Error(err.Message);
-    (errorObject as any).Message = err.Message;
-    (errorObject as any).StatusCode = err.StatusCode;
-    (errorObject as any).Detail = err.Detail;
-    return error(err.StatusCode, errorObject);
+    const errorObject = new Error(err.message);
+    (errorObject as any).message = err.message;
+    (errorObject as any).status_code = err.status_code;
+    (errorObject as any).detail = err.detail;
+    return error(err.status_code, errorObject);
 }

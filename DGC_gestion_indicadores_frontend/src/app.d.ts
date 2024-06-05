@@ -1,10 +1,13 @@
 // See https://kit.svelte.dev/docs/types#app
+
+import type { CommonError } from "$lib/api/model/errors";
+
 // for information about these interfaces
 declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			user:{
+			user: {
 				id: number,
 				name?: string,
 				role: number
@@ -13,7 +16,13 @@ declare global {
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}
+		namespace Superforms {
+			export type Message = {
+				success: boolean,
+				error?: CommonError | string
+			}
+		}
 	}
 }
 
-export {};
+export { };
