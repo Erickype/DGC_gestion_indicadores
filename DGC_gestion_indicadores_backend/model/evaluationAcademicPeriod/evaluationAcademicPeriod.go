@@ -24,7 +24,7 @@ func CreateEvaluationAcademicPeriod(period *EvaluationAcademicPeriod) (err error
 }
 
 func GetEvaluationAcademicPeriodByAcademicPeriod(evaAcaPeriods *[]EvaluationAcademicPeriod, idAcademicPeriod int) (err error) {
-	err = database.DB.Where("academic_period_id = ?", idAcademicPeriod).First(evaAcaPeriods).Error
+	err = database.DB.Where("academic_period_id = ?", idAcademicPeriod).Find(evaAcaPeriods).Error
 	if err != nil {
 		return err
 	}
