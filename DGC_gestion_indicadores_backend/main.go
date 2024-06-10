@@ -65,6 +65,8 @@ func serveApplication() {
 	adminRoutes.PUT("/user/role/:id", controller.UpdateRole)
 
 	adminRoutes.POST("/academicPeriod", academicPeriod.CreateAcademicPeriod)
+	adminRoutes.PUT("/academicPeriod/:id", academicPeriod.UpdateAcademicPeriod)
+	adminRoutes.DELETE("/academicPeriod/:id", academicPeriod.DeleteAcademicPeriod)
 
 	adminRoutes.POST("/person", person.CreatePerson)
 
