@@ -42,3 +42,48 @@ func CreateAcademicPeriod(acaPeriod *acaP.AcademicPeriod) (err error) {
 	}
 	return nil
 }
+
+func UpdateAcademicPeriod(acaPeriod *acaP.AcademicPeriod) (err error) {
+	err = database.DB.Transaction(func(tx *gorm.DB) error {
+		var evalPeriods []evaP.EvaluationPeriod
+		err = evaP.GetEvaluationPeriodsByDateRange(&evalPeriods, acaPeriod.StartDate, acaPeriod.EndDate)
+		if err != nil {
+			return err
+		}
+		if len(evalPeriods) == 0 {
+			return errors.New("incorrect time period")
+		}
+
+		var evaAcaPeriodsByAcademicPeriod []evaAcaP.EvaluationAcademicPeriod
+		err = evaAcaP.GetEvaluationAcademicPeriodByAcademicPeriod(&evaAcaPeriodsByAcademicPeriod, int(acaPeriod.ID))
+		if err != nil {
+			return err
+		}
+		for _, evalPeriod := range evaAcaPeriodsByAcademicPeriod {
+			err = tx.Delete(&evalPeriod, "academic_period_id = ?", acaPeriod.ID).Error
+			if err != nil {
+				return err
+			}
+		}
+
+		err = tx.Updates(&acaPeriod).Error
+		if err != nil {
+			return err
+		}
+
+		for _, evalPeriod := range evalPeriods {
+			var evaluationAcademicPeriod evaAcaP.EvaluationAcademicPeriod
+			evaluationAcademicPeriod.AcademicPeriodID = acaPeriod.ID
+			evaluationAcademicPeriod.EvaluationPeriodID = evalPeriod.ID
+			err = tx.Create(&evaluationAcademicPeriod).Error
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}
