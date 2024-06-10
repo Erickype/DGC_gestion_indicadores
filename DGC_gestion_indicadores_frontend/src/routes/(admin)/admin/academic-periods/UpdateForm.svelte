@@ -25,6 +25,7 @@
 	import * as Form from '$lib/components/ui/form';
 	import { updateAcademicPeriodSchema, type UpdateAcademicPeriodSchema } from './schema';
 	import type { AcademicPeriod } from '$lib/api/model/view/academicPeriod';
+	import type { CommonError } from '$lib/api/model/errors';
 
 	export let data: SuperValidated<Infer<UpdateAcademicPeriodSchema>>;
 	export let academicPeriod: AcademicPeriod;
@@ -41,11 +42,17 @@
 		validators: zodClient(updateAcademicPeriodSchema),
 		taintedMessage: null,
 		onUpdated: ({ form: f }) => {
-			if (f.valid) {
+			const message = f.message!;
+			if (message.success) {
 				AcademicPeriodUpdated();
-				toast.success(`Periodo de evaluación actualizado.`);
+				return toast.success(`Periodo académico actualizado.`);
+			}
+			if (message.error as CommonError) {
+				const commonError = message!.error as CommonError;
+				return toast.error(`${commonError.message}: ${commonError.detail}`);
 			} else {
-				toast.error('Solucionar los errores del formulario.');
+				const error = message.error as string;
+				return toast.error(error);
 			}
 		}
 	});
@@ -73,9 +80,8 @@
 		dateStyle: 'long'
 	});
 
-	let months = ['enero', 'diciembre'];
-	let placeholderStart = today(getLocalTimeZone()).set({ day: 1, month: 1 });
-	let placeholderEnd = today(getLocalTimeZone()).set({ day: 31, month: 12 });
+	let placeholderStart = parseDate(toISO8601(academicPeriod!.start_date));
+	let placeholderEnd = parseDate(toISO8601(academicPeriod!.end_date));
 	let startDateValue: DateValue | undefined;
 	let endDateValue: DateValue | undefined;
 
@@ -162,9 +168,8 @@
 						</Popover.Trigger>
 						<Popover.Content class="w-auto p-0" side="top">
 							<CalendarMY
-								monthLabels={months}
 								placeholder={placeholderStart}
-								on:date-selected={(v) => {
+								on:keydown={(v) => {
 									manageDateChanged(v, 'start');
 								}}
 							/>
@@ -193,9 +198,8 @@
 						</Popover.Trigger>
 						<Popover.Content class="w-auto p-0" side="top">
 							<CalendarMY
-								monthLabels={months}
 								placeholder={placeholderEnd}
-								on:date-selected={(v) => {
+								on:keydown={(v) => {
 									manageDateChanged(v, 'end');
 								}}
 							/>
