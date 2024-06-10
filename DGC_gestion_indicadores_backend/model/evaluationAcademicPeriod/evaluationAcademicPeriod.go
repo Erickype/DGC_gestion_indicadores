@@ -9,14 +9,22 @@ import (
 
 type EvaluationAcademicPeriod struct {
 	gorm.Model
-	EvaluationPeriodID uint `gorm:"primary_key;not null" json:"evaluation_period_id"`
-	AcademicPeriodID   uint `gorm:"primary_key;not null" json:"academic_period_id"`
-	EvaluationPeriod   evaluationPeriod.EvaluationPeriod
-	AcademicPeriod     academicPeriod.AcademicPeriod
+	EvaluationPeriodID uint                              `gorm:"primary_key;not null" json:"evaluation_period_id"`
+	AcademicPeriodID   uint                              `gorm:"primary_key;not null" json:"academic_period_id"`
+	EvaluationPeriod   evaluationPeriod.EvaluationPeriod `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"-"`
+	AcademicPeriod     academicPeriod.AcademicPeriod     `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"-"`
 }
 
 func CreateEvaluationAcademicPeriod(period *EvaluationAcademicPeriod) (err error) {
 	err = database.DB.Create(period).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func GetEvaluationAcademicPeriodByAcademicPeriod(evaAcaPeriods *[]EvaluationAcademicPeriod, idAcademicPeriod int) (err error) {
+	err = database.DB.Where("academic_period_id = ?", idAcademicPeriod).First(evaAcaPeriods).Error
 	if err != nil {
 		return err
 	}
