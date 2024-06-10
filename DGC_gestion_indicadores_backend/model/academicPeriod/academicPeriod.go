@@ -47,3 +47,11 @@ func UpdateAcademicPeriod(period *AcademicPeriod) (err error) {
 	}
 	return nil
 }
+
+func DeleteAcademicPeriod(id int) (err error) {
+	err = database.DB.Delete(&AcademicPeriod{}, id).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
