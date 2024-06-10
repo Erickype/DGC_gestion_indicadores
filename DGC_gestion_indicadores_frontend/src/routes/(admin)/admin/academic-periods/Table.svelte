@@ -111,7 +111,7 @@
 	}
 
 	async function deleteAcademicPeriod(id: string) {
-		const url = `/api/evaluationPeriod/` + id;
+		const url = `/api/academicPeriod/` + id;
 		const response = await fetch(url, {
 			method: 'DELETE'
 		});
