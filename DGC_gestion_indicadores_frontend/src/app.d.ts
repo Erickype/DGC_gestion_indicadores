@@ -10,7 +10,9 @@ declare global {
 			user: {
 				id: number,
 				name?: string,
-				role: number
+				role: number,
+				iat: number,
+				eat: number
 			}
 		}
 		// interface PageData {}

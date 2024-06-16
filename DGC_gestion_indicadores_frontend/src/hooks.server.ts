@@ -14,7 +14,8 @@ export const handle: Handle = async ({event, resolve})=>{
     event.locals.user = {
         id: decodedToken.id,
         role: decodedToken.role,
+        iat: decodedToken.iat,
+        eat: decodedToken.eat
     }
-    
     return await resolve(event)
 }
