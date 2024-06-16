@@ -41,6 +41,7 @@ export const menus: Menu[] = [
         links: [
             { name: 'Periodos Evaluación', route: '/admin/evaluation-periods' },
             { name: 'Periodos Académicos', route: '/admin/academic-periods' },
+            { name: 'Personas', route: '/admin/people' },
             { name: 'Usuarios', route: '/admin/users' },
             { name: 'Admin', route: '/admin' },
         ],
