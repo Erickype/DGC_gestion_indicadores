@@ -5,6 +5,8 @@ import { Login } from '$lib/api/controller/auth/auth'
 import { loginSchema } from './schema'
 import { message, superValidate } from 'sveltekit-superforms'
 import { zod } from 'sveltekit-superforms/adapters'
+import type { Token } from '$lib/api/model/auth/token.js'
+import { jwtDecode } from 'jwt-decode'
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (locals.user) {
@@ -39,19 +41,20 @@ export const actions: Actions = {
 
         if (!res.ok) {
             const err: LoginError = await res.json()
-            return message(form, "Error login " + err, {
+            return message(form, { success: false, error: err.error }, {
                 status: 400
             })
         }
 
         const authenticatedUser: LoginResponse = await res.json()
+        const tokenDecoded: Token = jwtDecode(authenticatedUser.token)
 
         event.cookies.set('AuthorizationToken', `Bearer ${authenticatedUser.token}`, {
             httpOnly: true,
             path: '/',
             secure: true,
             sameSite: 'strict',
-            maxAge: 60 * 30 // 30 minutes
+            maxAge: tokenDecoded.eat - tokenDecoded.iat
         });
 
         redirect(302, "/")
