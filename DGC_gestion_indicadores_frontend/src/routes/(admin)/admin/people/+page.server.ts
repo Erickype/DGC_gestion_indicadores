@@ -2,7 +2,7 @@ import { superValidate } from "sveltekit-superforms";
 import type { PageServerLoad } from "./$types";
 import { redirect, type Actions } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
-import { addPersonSchema } from "./schema";
+import { addPersonSchema, updatePersonSchema } from "./schema";
 
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -11,6 +11,7 @@ export const load: PageServerLoad = async ({ locals }) => {
     }
 
     return {
-        addPersonForm: await superValidate(zod(addPersonSchema))
+        addPersonForm: await superValidate(zod(addPersonSchema)),
+        updatePersonForm: await superValidate(zod(updatePersonSchema)) 
     }
 };
