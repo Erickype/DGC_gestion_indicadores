@@ -19,10 +19,10 @@ export async function GetAcademicPeriods(): Promise<AcademicPeriod[] | CommonErr
         return periods
     } catch (error) {
         const errorMessage: CommonError = {
-            Status: "500",
-            StatusCode: 500,
-            Detail: "Error al solicitar datos",
-            Message: (error as Error).message
+            status: "500",
+            status_code: 500,
+            detail: "Error al solicitar datos",
+            message: (error as Error).message
         }
         return errorMessage
     }
@@ -31,7 +31,7 @@ export async function GetAcademicPeriods(): Promise<AcademicPeriod[] | CommonErr
 
 export async function LoadAcademicPeriodsWithComboMessages() {
     const response = await GetAcademicPeriods();
-    if ((response as CommonError).Status) {
+    if ((response as CommonError).status) {
         throw generateErrorFromCommonError(response as CommonError)
     }
     const periods = response as AcademicPeriod[]
