@@ -1,24 +1,42 @@
 import type { Person } from "$lib/api/model/api/person";
+import { generateErrorFromCommonError, type CommonError } from "$lib/api/model/errors";
 import { getPeopleRoute } from "$lib/api/routes/api/person";
 import type { Message } from "$lib/components/combobox/combobox";
 
-export async function GetPeople(token: string) {
-    return await fetch(getPeopleRoute, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
+export async function GetPeople(token: string): Promise<Person[] | CommonError> {
+    try {
+        const response = await fetch(getPeopleRoute, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            }
+        })
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
         }
-    });
+        const periods: Person[] = await response.json()
+        return periods
+
+    } catch (error) {
+        const errorMessage: CommonError = {
+            status: "500",
+            status_code: 500,
+            detail: "Error al solicitar datos",
+            message: (error as Error).message
+        }
+        return errorMessage
+    }
 }
 
 
 export async function LoadPeopleWithComboMessages(token: string) {
-    const res = await GetPeople(token);
-    if (!res.ok) {
-        throw new Error('Fallo cargando personas.');
+    const response = await GetPeople(token);
+    if ((response as CommonError).status) {
+        throw generateErrorFromCommonError(response as CommonError)
     }
-    const people: Person[] = await res.json();
+    const people = response as Person[]
     let messages: Message[] = []
     messages = messages.concat(
         people.map((person) => ({
