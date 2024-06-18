@@ -11,7 +11,7 @@
 	const addPersonFormData = data.addPersonForm;
 	const updatePersonFormData = data.updatePersonForm;
 
-	const peoplePromise: Promise<Person[]> = fetchPeople();
+	let peoplePromise: Promise<Person[]> = fetchPeople();
 
 	async function fetchPeople() {
 		const url = `/api/person`;
@@ -22,7 +22,7 @@
 			const errorData = (await response.json()) as CommonError;
 			throw errorData;
 		}
-		return response.json();
+		return (peoplePromise = response.json());
 	}
 
 	function handleCreated(event: any) {
