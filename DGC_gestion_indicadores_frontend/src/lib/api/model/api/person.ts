@@ -8,3 +8,10 @@ export interface Person {
     lastname: string;
     email: string;
 }
+
+export interface PostPersonRequest{
+    identity: string;
+    name: string;
+    lastname: string;
+    email: string;
+}
