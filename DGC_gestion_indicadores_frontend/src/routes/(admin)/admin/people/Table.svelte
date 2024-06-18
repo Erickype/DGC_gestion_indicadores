@@ -6,8 +6,8 @@
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
 
 	import Table from '$lib/components/table/table.svelte';
-/* 	import UpdateModal from './UpdateModal.svelte';
- */
+	import UpdateModal from './UpdateModal.svelte';
+
 	import { createEventDispatcher } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
@@ -103,12 +103,12 @@
 	}
 </script>
 
-<!-- <UpdateModal
+<UpdateModal
 	{formData}
-	bind:academicPeriod
+	bind:person
 	bind:open={updateFormOpen}
 	on:updated={handleUpdated}
-/> -->
+/>
 
 <div class="w-full">
 	<Table {table} {columns} {filterFields} />
