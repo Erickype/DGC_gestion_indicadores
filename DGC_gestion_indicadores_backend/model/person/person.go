@@ -45,3 +45,11 @@ func UpdatePerson(person *Person) (err error) {
 	}
 	return nil
 }
+
+func DeletePerson(id int) (err error) {
+	err = database.DB.Delete(&Person{}, id).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}

@@ -69,6 +69,8 @@ func serveApplication() {
 	adminRoutes.DELETE("/academicPeriod/:id", academicPeriod.DeleteAcademicPeriod)
 
 	adminRoutes.POST("/person", person.CreatePerson)
+	adminRoutes.PUT("/person/:id", person.UpdatePerson)
+	adminRoutes.DELETE("/person/:id", person.DeletePerson)
 
 	adminRoutes.POST("/faculty", faculty.CreateFaculty)
 
