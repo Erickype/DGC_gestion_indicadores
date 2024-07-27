@@ -3,9 +3,13 @@
 	import type { CommonError } from '$lib/api/model/errors';
 	import Alert from '$lib/components/alert/alert.svelte';
 	import type { PageData } from './$types';
+
+	import AddModal from '$lib/components/modal/AddModal.svelte';
+	import AddForm from './AddForm.svelte';
 	import FacultiesTable from './Table.svelte';
 
 	export let data: PageData;
+	const addFacultyForm = data.addFacultyForm;
 	const updateFacultyFormData = data.updateFacultyForm;
 
 	let facultiesPromise: Promise<Faculty[]> = fetchFaculties();
@@ -49,8 +53,12 @@
 
 <div class="mx-auto flex w-full place-content-center justify-between px-8">
 	<h2 class="text-2xl font-bold">Facultades</h2>
-	<!-- 	<AddModal formData={addPersonFormData} on:created={handleCreated} />
- -->
+	<AddModal
+		formComponent={AddForm}
+		modalTitle="Crear facultad"
+		formData={addFacultyForm}
+		on:created={handleCreated}
+	/>
 </div>
 
 <div class="mx-auto flex w-full place-content-center px-8">
