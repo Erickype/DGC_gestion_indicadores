@@ -2,6 +2,11 @@
 	import type { Faculty } from '$lib/api/model/api/faculty';
 	import type { CommonError } from '$lib/api/model/errors';
 	import Alert from '$lib/components/alert/alert.svelte';
+	import type { PageData } from './$types';
+	import FacultiesTable from './Table.svelte';
+
+	export let data: PageData;
+	const updateFacultyFormData = data.updateFacultyForm;
 
 	let facultiesPromise: Promise<Faculty[]> = fetchFaculties();
 
@@ -23,6 +28,19 @@
 			fetchFaculties();
 		}
 	}
+	function handleDeleted(event: any) {
+		const data: { status: boolean } = event.detail;
+		if (data.status) {
+			fetchFaculties();
+		}
+	}
+
+	function handleUpdated(event: any) {
+		const detail: { status: boolean } = event.detail;
+		if (detail.status) {
+			fetchFaculties();
+		}
+	}
 </script>
 
 <svelte:head>
@@ -40,12 +58,12 @@
 		cargando...
 	{:then faculties}
 		{#if faculties.length > 0}
-			<!-- <PeopleTable
-				formData={updatePersonFormData}
-				{people}
+			<FacultiesTable
+				formData={updateFacultyFormData}
+				{faculties}
 				on:updated={handleUpdated}
 				on:deleted={handleDeleted}
-			></PeopleTable> -->
+			></FacultiesTable>
 		{:else}
 			<Alert title="Sin registros" description={'Ups, no hay facultades registradas.'} />
 		{/if}
