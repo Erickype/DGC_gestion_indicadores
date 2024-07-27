@@ -1,6 +1,7 @@
 import CircleGauge from "lucide-svelte/icons/circle-gauge"
 import FileText from "lucide-svelte/icons/file-text"
 import Settings from "lucide-svelte/icons/settings"
+import School from "lucide-svelte/icons/school";
 
 export interface Menu {
     name: string,
@@ -34,6 +35,14 @@ export const menus: Menu[] = [
             { name: 'Libros', route: '/information/books' }
         ],
         roles: [1, 2]
+    },
+    {
+        name: "Institución",
+        icon: School,
+        links: [
+            { name: "Facultades", route: "/institution/faculties" }
+        ],
+        roles: [1]
     },
     {
         name: 'Administrador',
