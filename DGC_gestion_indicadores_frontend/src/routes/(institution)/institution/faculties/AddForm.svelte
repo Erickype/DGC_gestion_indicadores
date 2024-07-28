@@ -9,15 +9,15 @@
 	import { addFacultySchema, type AddFacultySchema } from './schema';
 	import { Input } from '$lib/components/ui/input';
 	import * as Form from '$lib/components/ui/form';
-	
-	import type { CommonError } from '$lib/api/model/errors';
+
 	import type { Faculty } from '$lib/api/model/api/faculty';
+	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
 
 	export let data: SuperValidated<Infer<AddFacultySchema>, App.Superforms.Message>;
 
 	const dispatch = createEventDispatcher();
 
-	function EvaluationPeriodCreated() {
+	function FacultyCreated() {
 		dispatch('message', {
 			created: true
 		});
@@ -27,23 +27,20 @@
 		validators: zodClient(addFacultySchema),
 		taintedMessage: null,
 		onUpdated: ({ form: f }) => {
-			const message = f.message!;
+			const message = f.message;
+			if (!message) {
+				return manageToastFromInvalidAddForm();
+			}
 			if (message.success) {
-				const faculty = message.data as Faculty
-				EvaluationPeriodCreated();
+				const faculty = message.data as Faculty;
+				FacultyCreated();
 				return toast.success(`Facultad creada: ${faculty.abbreviation}`);
 			}
-			if (message.error as CommonError) {
-				const commonError = message!.error as CommonError;
-				return toast.error(`${commonError.message}: ${commonError.detail}`);
-			} else {
-				const error = message.error as string;
-				return toast.error(error);
-			}
+			return manageToastFromErrorMessageOnAddForm(message);
 		}
 	});
 
-	const { form: formData, message, enhance } = form;
+	const { form: formData, enhance } = form;
 </script>
 
 <form action="?/addFaculty" use:enhance>
@@ -76,7 +73,7 @@
 		</Form.Field>
 	</div>
 	<Form.Button class="my-2 w-full">Guardar</Form.Button>
-<!-- 	{#if browser}
+	<!-- 	{#if browser}
 		<SuperDebug data={$formData} />
 	{/if} -->
 </form>

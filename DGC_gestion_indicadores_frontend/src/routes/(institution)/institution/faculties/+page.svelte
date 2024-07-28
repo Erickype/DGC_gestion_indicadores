@@ -5,8 +5,9 @@
 	import type { PageData } from './$types';
 
 	import AddModal from '$lib/components/modal/AddModal.svelte';
-	import AddForm from './AddForm.svelte';
 	import FacultiesTable from './Table.svelte';
+	import AddForm from './AddForm.svelte';
+	import { goto } from '$app/navigation';
 
 	export let data: PageData;
 	const addFacultyForm = data.addFacultyForm;
@@ -21,25 +22,15 @@
 		});
 		if (!response.ok) {
 			const errorData = (await response.json()) as CommonError;
-			throw errorData;
+			if (response.status === 401) {
+				throw goto('/');
+			}
+			throw errorData
 		}
 		return (facultiesPromise = response.json());
 	}
 
-	function handleCreated(event: any) {
-		const data: { status: boolean } = event.detail;
-		if (data.status) {
-			fetchFaculties();
-		}
-	}
-	function handleDeleted(event: any) {
-		const data: { status: boolean } = event.detail;
-		if (data.status) {
-			fetchFaculties();
-		}
-	}
-
-	function handleUpdated(event: any) {
+	function fetchOnSuccess(event: CustomEvent) {
 		const detail: { status: boolean } = event.detail;
 		if (detail.status) {
 			fetchFaculties();
@@ -57,7 +48,7 @@
 		formComponent={AddForm}
 		modalTitle="Crear facultad"
 		formData={addFacultyForm}
-		on:created={handleCreated}
+		on:created={fetchOnSuccess}
 	/>
 </div>
 
@@ -69,13 +60,13 @@
 			<FacultiesTable
 				formData={updateFacultyFormData}
 				{faculties}
-				on:updated={handleUpdated}
-				on:deleted={handleDeleted}
+				on:updated={fetchOnSuccess}
+				on:deleted={fetchOnSuccess}
 			></FacultiesTable>
 		{:else}
 			<Alert title="Sin registros" description={'Ups, no hay facultades registradas.'} />
 		{/if}
 	{:catch error}
-		<Alert variant="destructive" description={`${error.Detail}: ${error.Message}`} />
+		<Alert variant="destructive" description={error.message} />
 	{/await}
 </div>
