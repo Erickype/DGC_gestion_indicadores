@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"gorm.io/gorm"
 )
@@ -16,13 +17,16 @@ type Faculty struct {
 func CreateFaculty(faculty *Faculty) (err error) {
 	err = database.DB.Create(faculty).Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("facultad ya existe")
+		}
 		return err
 	}
 	return nil
 }
 
 func GetFaculties(faculties *[]Faculty) (err error) {
-	err = database.DB.Find(faculties).Error
+	err = database.DB.Order("created_at desc").Find(faculties).Error
 	if err != nil {
 		return err
 	}
