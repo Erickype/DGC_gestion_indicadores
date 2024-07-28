@@ -2,6 +2,7 @@ import type { Person } from "$lib/api/model/api/person";
 import { generateErrorFromCommonError, type CommonError } from "$lib/api/model/errors";
 import { getPeopleRoute } from "$lib/api/routes/api/person";
 import type { Message } from "$lib/components/combobox/combobox";
+import { generateCommonErrorFromFetchError } from "$lib/utils";
 
 export async function GetPeople(token: string): Promise<Person[] | CommonError> {
     try {
@@ -20,13 +21,7 @@ export async function GetPeople(token: string): Promise<Person[] | CommonError> 
         return periods
 
     } catch (error) {
-        const errorMessage: CommonError = {
-            status: "500",
-            status_code: 500,
-            detail: "Error al solicitar datos",
-            message: (error as Error).message
-        }
-        return errorMessage
+        return generateCommonErrorFromFetchError(error)
     }
 }
 

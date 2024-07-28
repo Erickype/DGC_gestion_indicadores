@@ -2,6 +2,9 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { cubicOut } from "svelte/easing";
 import type { TransitionConfig } from "svelte/transition";
+import type { CommonError } from "./api/model/errors";
+import { toast } from "svelte-sonner";
+import { message, type ErrorStatus, type SuperValidated } from "sveltekit-superforms";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -60,3 +63,51 @@ export const flyAndScale = (
 		easing: cubicOut
 	};
 };
+
+// Toast errors shown from message of superforms
+export function manageToastFromInvalidAddForm() {
+	const error = "Formulario inválido"
+	const detail = "llenar todos los campos!"
+	return toast.error(`${error}: ${detail}`);
+}
+
+export function manageToastFromErrorMessageOnAddForm(message: App.Superforms.Message) {
+	if (message.error as CommonError) {
+		const commonError = message!.error as CommonError;
+		return toast.error(`${commonError.message}: ${commonError.detail}`);
+	} else {
+		const error = message.error as string;
+		return toast.error(error);
+	}
+}
+
+// Superfrom message error generation
+export function generateFormMessageFromHttpResponse(form: SuperValidated<Record<string, unknown>>, response: unknown) {
+	if ((response as CommonError).status) {
+		const error = response as CommonError
+		const status = error.status as unknown as ErrorStatus
+		return message(form,
+			{ success: false, error: error },
+			{ status: status })
+	}
+	return message(form,
+		{ success: true, data: response },
+	)
+}
+
+export function generateFormMessageFromInvalidForm(form: SuperValidated<Record<string, unknown>>) {
+	return message(form,
+		{ success: false, error: "Invalid form" },
+		{ status: 400 })
+}
+
+// Common error type generation
+export function generateCommonErrorFromFetchError(error: unknown | any): CommonError {
+	const errorMessage: CommonError = {
+		status: "500",
+		status_code: 500,
+		detail: (error as Error).message,
+		message: "Error al solicitar datos"
+	}
+	return errorMessage
+}

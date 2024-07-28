@@ -21,6 +21,7 @@ declare global {
 		namespace Superforms {
 			export type Message = {
 				success: boolean,
+				data?: unknown
 				error?: CommonError | string
 			}
 		}

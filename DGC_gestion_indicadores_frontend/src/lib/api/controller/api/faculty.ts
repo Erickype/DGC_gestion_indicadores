@@ -2,6 +2,7 @@ import { getFacultiesRoute } from "$lib/api/routes/api/faculty";
 import type { Message } from "$lib/components/combobox/combobox";
 import type { Faculty } from "$lib/api/model/api/faculty";
 import { generateErrorFromCommonError, type CommonError } from "$lib/api/model/errors";
+import { generateCommonErrorFromFetchError } from "$lib/utils";
 
 export async function GetFaculties(token: string) {
     try {
@@ -14,19 +15,13 @@ export async function GetFaculties(token: string) {
         });
 
         if (!response.ok) {
-            const error: CommonError = await response.json()
+            const error: CommonError = await response.json()            
             return error
         }
         const faculties: Faculty[] = await response.json()
         return faculties
     } catch (error) {
-        const errorMessage: CommonError = {
-            status: "500",
-            status_code: 500,
-            detail: "Error al solicitar datos",
-            message: (error as Error).message
-        }
-        return errorMessage
+        return generateCommonErrorFromFetchError(error)
     }
 }
 
