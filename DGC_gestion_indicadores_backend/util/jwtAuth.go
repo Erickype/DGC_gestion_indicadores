@@ -1,6 +1,7 @@
 package util
 
 import (
+	errors "github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,13 +12,15 @@ func JWTAuth() gin.HandlerFunc {
 	return func(context *gin.Context) {
 		err := ValidateJWT(context)
 		if err != nil {
-			context.JSON(http.StatusUnauthorized, gin.H{"error": "Authentication required"})
+			err := errors.CreateCommonError(http.StatusUnauthorized, "Autenticación requerida", err.Error())
+			context.JSON(http.StatusUnauthorized, err)
 			context.Abort()
 			return
 		}
 		err = ValidateAdminRoleJWT(context)
 		if err != nil {
-			context.JSON(http.StatusUnauthorized, gin.H{"error": "Only Administrator is allowed to perform this action"})
+			err := errors.CreateCommonError(http.StatusUnauthorized, "Autenticación admistrador requerida", err.Error())
+			context.JSON(http.StatusUnauthorized, err)
 			context.Abort()
 			return
 		}
@@ -30,13 +33,15 @@ func JWTAuthUPE() gin.HandlerFunc {
 	return func(context *gin.Context) {
 		err := ValidateJWT(context)
 		if err != nil {
-			context.JSON(http.StatusUnauthorized, gin.H{"error": "Authentication required"})
+			err := errors.CreateCommonError(http.StatusUnauthorized, "Autenticación requerida", err.Error())
+			context.JSON(http.StatusUnauthorized, err)
 			context.Abort()
 			return
 		}
 		err = ValidateUPERoleJWT(context)
 		if err != nil {
-			context.JSON(http.StatusUnauthorized, gin.H{"error": "Only registered Customers are allowed to perform this action"})
+			err := errors.CreateCommonError(http.StatusUnauthorized, "Autenticación UPE requerida", err.Error())
+			context.JSON(http.StatusUnauthorized, err)
 			context.Abort()
 			return
 		}
