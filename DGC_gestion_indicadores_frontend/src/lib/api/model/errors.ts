@@ -8,9 +8,8 @@ export interface CommonError {
 }
 
 export function generateErrorFromCommonError(err: CommonError) {
-    const errorObject = new Error(err.message);
-    (errorObject as any).message = err.message;
-    (errorObject as any).status_code = err.status_code;
-    (errorObject as any).detail = err.detail;
-    return error(err.status_code, errorObject);
+    const body: App.Error = {
+        message: `${err.detail}: ${err.message}`
+    }
+    return error(err.status_code, body);
 }
