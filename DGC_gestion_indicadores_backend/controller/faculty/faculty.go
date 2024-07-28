@@ -8,20 +8,20 @@ import (
 )
 
 func CreateFaculty(c *gin.Context) {
-	var period model.Faculty
-	err := c.BindJSON(&period)
+	var faculty model.Faculty
+	err := c.BindJSON(&faculty)
 	if err != nil {
 		err := errors.CreateCommonError(http.StatusBadRequest, "Error en la solicitud", err.Error())
 		c.AbortWithStatusJSON(http.StatusBadRequest, err)
 		return
 	}
-	err = model.CreateFaculty(&period)
+	err = model.CreateFaculty(&faculty)
 	if err != nil {
 		err := errors.CreateCommonError(http.StatusInternalServerError, "Error creando facultad", err.Error())
 		c.AbortWithStatusJSON(http.StatusInternalServerError, err)
 		return
 	}
-	c.JSON(http.StatusOK, period)
+	c.JSON(http.StatusCreated, faculty)
 }
 
 func GetFaculties(context *gin.Context) {
