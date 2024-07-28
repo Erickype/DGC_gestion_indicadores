@@ -9,7 +9,7 @@ export interface CommonError {
 
 export function generateErrorFromCommonError(err: CommonError) {
     const body: App.Error = {
-        message: `${err.detail}: ${err.message}`
+        message: `${err.message}: ${err.detail}`
     }
     return error(err.status_code, body);
 }
