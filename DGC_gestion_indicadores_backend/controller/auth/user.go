@@ -3,6 +3,7 @@ package controller
 import (
 	"errors"
 	"fmt"
+	commonErrors "github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	model "github.com/Erickype/DGC_gestion_indicadores_backend/model/auth"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/util"
 	"github.com/gin-gonic/gin"
@@ -52,27 +53,31 @@ func Login(context *gin.Context) {
 				errorMessage = fmt.Sprintf("%s not provided", validationError.Field())
 			}
 		}
-		context.JSON(http.StatusBadRequest, gin.H{"error": errorMessage})
+		err := commonErrors.CreateCommonError(http.StatusBadRequest, "Error en la solicitud", errorMessage)
+		context.JSON(http.StatusBadRequest, err)
 		return
 	}
 
 	user, err := model.GetUserByUsername(input.Username)
 
 	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		err := commonErrors.CreateCommonError(http.StatusBadRequest, "Error en la solicitud", err.Error())
+		context.JSON(http.StatusBadRequest, err)
 		return
 	}
 
 	err = user.ValidateUserPassword(input.Password)
 
 	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		err := commonErrors.CreateCommonError(http.StatusBadRequest, "Error ingresando", "credenciales incorrectas")
+		context.JSON(http.StatusBadRequest, err)
 		return
 	}
 
 	jwt, err := util.GenerateJWT(user)
 	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		err := commonErrors.CreateCommonError(http.StatusBadRequest, "Error interno", "error generando token")
+		context.JSON(http.StatusBadRequest, err)
 		return
 	}
 
