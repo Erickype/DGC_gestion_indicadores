@@ -6,14 +6,16 @@
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
 
 	import Table from '$lib/components/table/table.svelte';
-	/* 	import UpdateModal from './UpdateModal.svelte';
-	 */
+	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
+
+	import UpdateForm from './UpdateForm.svelte';
+
 	import { createEventDispatcher } from 'svelte';
 	import { toast } from 'svelte-sonner';
 
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import type { UpdateFacultySchema } from './schema';
-	
+
 	import type { Faculty } from '$lib/api/model/api/faculty';
 
 	export let faculties: Faculty[];
@@ -101,12 +103,14 @@
 	}
 </script>
 
-<!-- <UpdateModal
+<UpdateModal
+	modalTitle="Actualizar información facultad"
 	{formData}
-	bind:person
+	formComponent={UpdateForm}
+	bind:updateEntity={faculty}
 	bind:open={updateFormOpen}
 	on:updated={handleUpdated}
-/> -->
+/>
 
 <div class="w-full">
 	<Table {table} {columns} {filterFields} />
