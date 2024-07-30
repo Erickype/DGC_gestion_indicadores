@@ -7,6 +7,7 @@ import { message, superValidate } from 'sveltekit-superforms'
 import { zod } from 'sveltekit-superforms/adapters'
 import type { Token } from '$lib/api/model/auth/token.js'
 import { jwtDecode } from 'jwt-decode'
+import { generateFormMessageFromHttpResponse, generateFormMessageFromInvalidForm } from '$lib/utils.js'
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (locals.user) {
@@ -23,9 +24,7 @@ export const actions: Actions = {
         const form = await superValidate(event, zod(loginSchema));
 
         if (!form.valid) {
-            return fail(400, {
-                form,
-            });
+            return generateFormMessageFromInvalidForm(form)
         };
 
         const data = form.data
@@ -37,26 +36,23 @@ export const actions: Actions = {
             password: password
         }
 
-        const res = await Login(LoginRequest)
+        const response = await Login(LoginRequest)
 
-        if (!res.ok) {
-            const err: LoginError = await res.json()
-            return message(form, { success: false, error: err.error }, {
-                status: 400
-            })
+        if ((response as LoginResponse).token) {
+            const authenticatedUser = response as LoginResponse
+
+            const tokenDecoded: Token = jwtDecode(authenticatedUser.token)
+            event.cookies.set('AuthorizationToken', `Bearer ${authenticatedUser.token}`, {
+                httpOnly: true,
+                path: '/',
+                secure: true,
+                sameSite: 'strict',
+                maxAge: tokenDecoded.eat - tokenDecoded.iat
+            });
+
+            redirect(302, "/")
         }
 
-        const authenticatedUser: LoginResponse = await res.json()
-        const tokenDecoded: Token = jwtDecode(authenticatedUser.token)
-
-        event.cookies.set('AuthorizationToken', `Bearer ${authenticatedUser.token}`, {
-            httpOnly: true,
-            path: '/',
-            secure: true,
-            sameSite: 'strict',
-            maxAge: tokenDecoded.eat - tokenDecoded.iat
-        });
-
-        redirect(302, "/")
+        return generateFormMessageFromHttpResponse(form, response)
     }
 };

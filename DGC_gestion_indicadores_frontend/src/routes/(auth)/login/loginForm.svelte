@@ -7,11 +7,27 @@
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { page } from '$app/stores';
+	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
+	import { toast } from 'svelte-sonner';
+	import type { LoginResponse } from '$lib/api/model/auth/login';
 
 	export let data: SuperValidated<Infer<LoginSchema>>;
 
 	const form = superForm(data, {
-		validators: zodClient(loginSchema)
+		validators: zodClient(loginSchema),
+		taintedMessage: null,
+		onUpdated: ({ form: f }) => {
+			const message = f.message;
+			console.log(message);
+			if (!message) {
+				return manageToastFromInvalidAddForm();
+			}
+			if (message.success) {
+				const loginResponse = message.data as LoginResponse;
+				return toast.success(`Ingreso exitoso, bienvenido ${loginResponse.username}!`);
+			}
+			return manageToastFromErrorMessageOnAddForm(message);
+		}
 	});
 
 	const { form: formData, message, enhance } = form;
