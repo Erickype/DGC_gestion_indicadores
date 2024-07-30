@@ -5,7 +5,7 @@
 
 	import { Button } from '$lib/components/ui/button';
 	import Dialog from '$lib/components/alert/dialog.svelte';
-	import { hasTeacherDeleted, updateTeacherAction } from '../../../../stores';
+	import { hasTeacherDeleted, updateTeacherAction } from '../../../../../stores';
 	import { goto } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
 

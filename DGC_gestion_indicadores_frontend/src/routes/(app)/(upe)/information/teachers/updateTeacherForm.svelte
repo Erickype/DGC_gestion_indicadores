@@ -1,6 +1,6 @@
 <script lang="ts">
 	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
-	import { updateTeacherAction } from '../../../../stores';
+	import { updateTeacherAction } from '../../../../../stores';
 	import type { GetTeachersByAcademicPeriodResponse } from '$lib/api/model/api/teacher';
 	import type { Message } from '$lib/components/combobox/combobox';
 
@@ -32,7 +32,7 @@
 			if (!f.valid) {
 				toast.error('Por favor completa todos los campos.');
 			}
-			if ($message.success) {
+			if ($message!.success) {
 				updateTeacherAction.set({
 					status: false,
 					teacherID: -1

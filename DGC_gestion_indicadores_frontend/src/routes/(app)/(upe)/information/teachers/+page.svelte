@@ -8,7 +8,7 @@
 	import AddTeacherForm from './addTeacherForm.svelte';
 	import { onMount } from 'svelte';
 	import TeachersTable from './teachersTable.svelte';
-	import { hasTeacherDeleted, updateTeacherAction } from '../../../../stores';
+	import { hasTeacherDeleted, updateTeacherAction } from '../../../../../stores';
 	import UpdateTeacherForm from './updateTeacherForm.svelte';
 	import type { GetTeachersByAcademicPeriodResponse } from '$lib/api/model/api/teacher';
 	import { goto, invalidateAll } from '$app/navigation';

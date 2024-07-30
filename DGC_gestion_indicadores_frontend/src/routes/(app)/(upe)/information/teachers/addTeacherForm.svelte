@@ -31,7 +31,7 @@
 			if (!f.valid) {
 				toast.error('Por favor completa todos los campos.');
 			}
-			if ($message.success) {
+			if ($message!.success) {
 				teacherHasBeenCreated = true;
 				toast.success('Registro de docente creado.');
 				dispatchTeacherCreated()
