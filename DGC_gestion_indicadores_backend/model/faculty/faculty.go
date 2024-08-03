@@ -36,6 +36,9 @@ func GetFaculties(faculties *[]Faculty) (err error) {
 func GetFaculty(faculty *Faculty, id int) (err error) {
 	err = database.DB.Where("id = ?", id).First(faculty).Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("facultad no encontrada")
+		}
 		return err
 	}
 	return nil
