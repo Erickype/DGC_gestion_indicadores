@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	faculty "github.com/Erickype/DGC_gestion_indicadores_backend/model/faculty"
 	"gorm.io/gorm"
@@ -19,6 +20,9 @@ type Career struct {
 func CreateCareer(Career *Career) (err error) {
 	err = database.DB.Create(Career).Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("carrera ya existe")
+		}
 		return err
 	}
 	return nil
