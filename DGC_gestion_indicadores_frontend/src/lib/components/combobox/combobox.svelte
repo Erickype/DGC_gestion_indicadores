@@ -12,7 +12,8 @@
 	export let placeholder: string = 'Seleccionar...';
 	export let emptyMessage: string = 'No encontrado.';
 	export let selectedValue: number | undefined = undefined;
-	export let pixelsWidth: string = '200';
+	export let buttonClass: string = 'w-[300px]';
+	export let popoverClass: string = 'w-[300px]';
 
 	let open = false;
 	let label: string;
@@ -50,13 +51,13 @@
 			variant="outline"
 			role="combobox"
 			aria-expanded={open}
-			class="w-[{pixelsWidth}px] justify-between"
+			class="{buttonClass} justify-between"
 		>
 			{label}
 			<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
 		</Button>
 	</Popover.Trigger>
-	<Popover.Content class="w-[{pixelsWidth}px] p-0">
+	<Popover.Content class="{popoverClass} p-0">
 		<Command.Root>
 			<Command.Input {placeholder} />
 			<Command.Empty>{emptyMessage}</Command.Empty>
