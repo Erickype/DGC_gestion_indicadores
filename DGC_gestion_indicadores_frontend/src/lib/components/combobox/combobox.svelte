@@ -11,7 +11,7 @@
 	export let data: Message[];
 	export let placeholder: string = 'Seleccionar...';
 	export let emptyMessage: string = 'No encontrado.';
-	export let selectedValue: number;
+	export let selectedValue: number | undefined = undefined;
 	export let pixelsWidth: string = '200';
 
 	let open = false;
@@ -26,8 +26,10 @@
 	}
 
 	$: {
-		if (selectedValue) {
+		if (selectedValue) {			
 			label = data.find((f) => f.value === selectedValue)!.label;
+		}else{
+			label = "Seleccionar una opción"
 		}
 	}
 	// We want to refocus the trigger button when the user selects
