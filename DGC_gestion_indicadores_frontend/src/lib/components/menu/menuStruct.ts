@@ -40,7 +40,8 @@ export const menus: Menu[] = [
         name: "Institución",
         icon: School,
         links: [
-            { name: "Facultades", route: "/institution/faculties" }
+            { name: "Facultades", route: "/institution/faculties" },
+            { name: "Carreras", route: "/institution/careers" },
         ],
         roles: [1]
     },
