@@ -8,8 +8,8 @@
 	import Table from '$lib/components/table/table.svelte';
 	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
 
-/* 	import UpdateForm from './UpdateForm.svelte';
- */
+	import UpdateForm from './UpdateForm.svelte';
+
 	import { createEventDispatcher } from 'svelte';
 	import { toast } from 'svelte-sonner';
 
@@ -17,8 +17,10 @@
 
 	import type { UpdateCarrerSchema } from './schema';
 	import type { Career } from '$lib/api/model/api/career';
+	import type { Message } from '$lib/components/combobox/combobox';
 
 	export let careers: Career[];
+	export let comboMessages: Message[];
 	export let formData: SuperValidated<Infer<UpdateCarrerSchema>>;
 	let career: Career;
 
@@ -103,14 +105,15 @@
 	}
 </script>
 
-<!-- <UpdateModal
-	modalTitle="Actualizar información facultad"
+<UpdateModal
+	modalTitle="Actualizar información carrera"
 	{formData}
 	formComponent={UpdateForm}
 	bind:updateEntity={career}
+	comboMessages={[comboMessages]}
 	bind:open={updateFormOpen}
 	on:updated={handleUpdated}
-/> -->
+/>
 
 <div class="w-full">
 	<Table {table} {columns} {filterFields} />

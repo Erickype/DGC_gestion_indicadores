@@ -49,7 +49,7 @@
 	<h2 class="text-2xl font-bold">Carreras</h2>
 	<AddModal
 		formComponent={AddForm}
-		modalTitle="Crear facultad"
+		modalTitle="Crear carrera"
 		formData={addCareerForm}
 		comboMessages={[facultiesComboData]}
 		on:created={fetchOnSuccess}
@@ -64,6 +64,7 @@
 			<CareersTable
 				formData={updateCareersForm}
 				{careers}
+				comboMessages={facultiesComboData}
 				on:updated={fetchOnSuccess}
 				on:deleted={fetchOnSuccess}
 			></CareersTable>
