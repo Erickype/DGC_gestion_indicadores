@@ -47,6 +47,15 @@ func GetCareer(Career *Career, id int) (err error) {
 func UpdateCareer(Career *Career) (err error) {
 	err = database.DB.Save(Career).Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("carrera no existe")
+		}
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("carrera ya existe")
+		}
+		if errors.Is(err, gorm.ErrForeignKeyViolated) {
+			return errors.New("facultad no existe")
+		}
 		return err
 	}
 	return nil
