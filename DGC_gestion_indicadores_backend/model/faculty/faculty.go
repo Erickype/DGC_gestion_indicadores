@@ -47,6 +47,12 @@ func GetFaculty(faculty *Faculty, id int) (err error) {
 func UpdateFaculty(faculty *Faculty) (err error) {
 	err = database.DB.Save(faculty).Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("facultad no existe")
+		}
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("facultad ya existe")
+		}
 		return err
 	}
 	return nil
