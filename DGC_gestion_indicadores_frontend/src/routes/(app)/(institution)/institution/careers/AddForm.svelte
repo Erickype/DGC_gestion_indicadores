@@ -18,10 +18,10 @@
 	import Check from 'lucide-svelte/icons/check';
 	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
 
-	import type { Faculty } from '$lib/api/model/api/faculty';
 	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
 
 	import type { Message } from '$lib/components/combobox/combobox';
+	import type { Career } from '$lib/api/model/api/career';
 	
 	export let data: SuperValidated<Infer<AddCarrerSchema>, App.Superforms.Message>;
 	export let comboMessages: [Message[]];
@@ -31,7 +31,7 @@
 
 	const dispatch = createEventDispatcher();
 
-	function FacultyCreated() {
+	function CareerCreated() {
 		dispatch('message', {
 			created: true
 		});
@@ -46,9 +46,9 @@
 				return manageToastFromInvalidAddForm();
 			}
 			if (message.success) {
-				const faculty = message.data as Faculty;
-				FacultyCreated();
-				return toast.success(`Carrera creada: ${faculty.abbreviation}`);
+				const career = message.data as Career;
+				CareerCreated();
+				return toast.success(`Carrera creada: ${career.abbreviation}`);
 			}
 			return manageToastFromErrorMessageOnAddForm(message);
 		}
