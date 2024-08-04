@@ -8,8 +8,8 @@ import { generateFormMessageFromHttpResponse, generateFormMessageFromInvalidForm
 import { addCarrerSchema, updateCarrerSchema } from "./schema";
 
 import { LoadFacultiesWithComboMessages } from "$lib/api/controller/api/faculty";
-import type { PostCareerRequest } from "$lib/api/model/admin/career";
-import { PostCareer } from "$lib/api/controller/admin/career";
+import type { PostCareerRequest, PutCareerRequest } from "$lib/api/model/admin/career";
+import { PostCareer, PutCareer } from "$lib/api/controller/admin/career";
 
 export const load: PageServerLoad = async ({ locals, cookies }) => {
     if (!locals.user) {
@@ -46,4 +46,25 @@ export const actions: Actions = {
 
         return generateFormMessageFromHttpResponse(form, response)
     },
+
+    updateCareer: async (event) => {
+        const form = await superValidate(event, zod(updateCarrerSchema))
+        if (!form.valid) {
+            return generateFormMessageFromInvalidForm(form)
+        }
+
+        const token = event.cookies.get("AuthorizationToken")
+        const data = form.data
+        const career: PutCareerRequest = {
+            ID: data.ID,
+            faculty_id: data.facultyID,
+            name: data.name,
+            abbreviation: data.abbreviation,
+            description: data.description
+        }
+
+        const response = await PutCareer(career, token!)
+
+        return generateFormMessageFromHttpResponse(form, response)
+    }
 };
