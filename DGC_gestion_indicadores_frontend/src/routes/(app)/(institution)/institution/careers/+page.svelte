@@ -1,15 +1,20 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import type { Career } from '$lib/api/model/api/career';
-	import type { CommonError } from '$lib/api/model/errors';
-	import Alert from '$lib/components/alert/alert.svelte';
-	import AddModal from '$lib/components/modal/AddModal.svelte';
 	import type { PageServerData } from './$types';
+	import { goto } from '$app/navigation';
+
+	import AddModal from '$lib/components/modal/AddModal.svelte';
+	import type { CommonError } from '$lib/api/model/errors';
+	import type { Career } from '$lib/api/model/api/career';
+	import Alert from '$lib/components/alert/alert.svelte';
+
+	import CareersTable from './Table.svelte';
 	import AddForm from './AddForm.svelte';
 
 	export let data: PageServerData;
 	const addCareerForm = data.addCarrerForm;
-	const facultiesComboData = data.facultiesData.messages
+	const facultiesComboData = data.facultiesData.messages;
+
+	const updateCareersForm = data.updateCarrerForm;
 
 	let careersPromise: Promise<Career[]> = fetchCareers();
 
@@ -56,12 +61,12 @@
 		cargando...
 	{:then careers}
 		{#if careers.length > 0}
-			<!-- <FacultiesTable
-				formData={updateFacultyFormData}
-				{faculties}
+			<CareersTable
+				formData={updateCareersForm}
+				{careers}
 				on:updated={fetchOnSuccess}
 				on:deleted={fetchOnSuccess}
-			></FacultiesTable> -->
+			></CareersTable>
 		{:else}
 			<Alert title="Sin registros" description={'Ups, no hay carreras registradas.'} />
 		{/if}
