@@ -31,7 +31,7 @@
 		bind:value={$pageSize}
 	/>
 </div>
-<div class="rounded-md border">
+<div class="flex rounded-md border h-[60vh] overflow-auto">
 	<Table.Root {...$tableAttrs}>
 		<Table.Header>
 			{#each $headerRows as headerRow}

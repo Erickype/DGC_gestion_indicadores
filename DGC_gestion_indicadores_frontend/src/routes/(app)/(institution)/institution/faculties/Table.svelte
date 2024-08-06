@@ -17,6 +17,8 @@
 	import type { UpdateFacultySchema } from './schema';
 
 	import type { Faculty } from '$lib/api/model/api/faculty';
+	import type { CommonDeleteResponse } from '$lib/api/model/common';
+	import { goto } from '$app/navigation';
 
 	export let faculties: Faculty[];
 	export let formData: SuperValidated<Infer<UpdateFacultySchema>>;
@@ -26,7 +28,7 @@
 
 	const table = createTable(readable(faculties), {
 		page: addPagination({
-			initialPageSize: 4
+			initialPageSize: 10
 		}),
 		sort: addSortBy(),
 		filter: addTableFilter({
@@ -63,11 +65,17 @@
 	async function handleDeleteConfirmation(event: any) {
 		const detail: { status: boolean; id: number } = event.detail;
 		if (detail.status) {
-			const res = await deleteFaculty(detail.id.toString());
-			if (!res.ok) {
-				return toast.error('Error eliminando el registro');
+			const response = await deleteFaculty(detail.id.toString());
+			if (!response.ok) {
+				const error: App.Error = await response.json();
+				toast.error(error.message);
+				if (response.status === 401) {
+					throw goto('/login');
+				}
+				return;
 			}
-			toast.success('Se eliminó el registro');
+			const deleteResponse: CommonDeleteResponse = await response.json();
+			toast.success(`Facultad eliminada: ${deleteResponse.id_deleted}`);
 			return dispatch('deleted', {
 				status: true
 			});
@@ -112,6 +120,6 @@
 	on:updated={handleUpdated}
 />
 
-<div class="w-full">
+<div class="w-full max-h-[50%]">
 	<Table {table} {columns} {filterFields} />
 </div>
