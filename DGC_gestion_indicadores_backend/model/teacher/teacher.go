@@ -19,11 +19,11 @@ type Teacher struct {
 	DedicationID     uint `gorm:"not null;" json:"dedication_id"`
 	ScaledGradeID    uint `gorm:"not null;" json:"scaled_grade_id"`
 
-	AcademicPeriod academicPeriod.AcademicPeriod `gorm:"constraint:OnUpdate:CASCADE" json:"-"`
-	Person         person.Person                 `gorm:"constraint:OnUpdate:CASCADE" json:"-"`
-	Career         career.Career                 `gorm:"constraint:OnUpdate:CASCADE;" json:"-"`
-	Dedication     dedication.Dedication         `gorm:"constraint:OnUpdate:CASCADE" json:"-"`
-	ScaledGrade    scaledGrade.ScaledGrade       `gorm:"constraint:OnUpdate:CASCADE" json:"-"`
+	AcademicPeriod academicPeriod.AcademicPeriod `json:"-"`
+	Person         person.Person                 `json:"-"`
+	Career         career.Career                 `json:"-"`
+	Dedication     dedication.Dedication         `json:"-"`
+	ScaledGrade    scaledGrade.ScaledGrade       `json:"-"`
 }
 
 func CreateTeacher(Teacher *Teacher) (err error) {
