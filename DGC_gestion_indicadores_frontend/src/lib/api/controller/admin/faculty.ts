@@ -4,6 +4,7 @@ import type { PostFacultyRequest, PutFacultyRequest } from "$lib/api/model/admin
 import type { Faculty } from "$lib/api/model/api/faculty";
 import type { CommonError } from "$lib/api/model/errors";
 import { generateCommonErrorFromFetchError } from "$lib/utils";
+import type { CommonDeleteResponse } from "$lib/api/model/common";
 
 export async function PostFaculty(faculty: PostFacultyRequest, token: string): Promise<Faculty | CommonError> {
     try {
@@ -26,7 +27,7 @@ export async function PostFaculty(faculty: PostFacultyRequest, token: string): P
     }
 }
 
-export async function PutFaculty(faculty: PutFacultyRequest, token: string) {
+export async function PutFaculty(faculty: PutFacultyRequest, token: string): Promise<Faculty | CommonError> {
     try {
         const response = await fetch(putFacultyRoute + faculty.ID.toString(), {
             method: 'PUT',
@@ -47,12 +48,22 @@ export async function PutFaculty(faculty: PutFacultyRequest, token: string) {
     }
 }
 
-export async function DeleteFaculty(id: string, token: string) {
-    return await fetch(deleteFacultyRoute + id, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
+export async function DeleteFaculty(id: string, token: string): Promise<CommonDeleteResponse | CommonError> {
+    try {
+        const response = await fetch(deleteFacultyRoute + id, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            }
+        })
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
         }
-    })
+        const commonDeleteResponse: CommonDeleteResponse = await response.json()        
+        return commonDeleteResponse
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
 }
