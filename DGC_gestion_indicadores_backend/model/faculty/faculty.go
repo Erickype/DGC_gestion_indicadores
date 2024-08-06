@@ -57,3 +57,16 @@ func UpdateFaculty(faculty *Faculty) (err error) {
 	}
 	return nil
 }
+
+func DeleteFaculty(id int) (err error) {
+	err = database.DB.Unscoped().Delete(&Faculty{}, id).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("facultad no existe")
+		}
+		if errors.Is(err, gorm.ErrForeignKeyViolated) {
+			return errors.New("facultad en uso")
+		}
+	}
+	return nil
+}
