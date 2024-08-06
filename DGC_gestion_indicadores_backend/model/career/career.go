@@ -14,7 +14,7 @@ type Career struct {
 	Name         string          `gorm:"size:200;not null;unique" json:"name"`
 	Abbreviation string          `gorm:"size:50;not null;unique" json:"abbreviation"`
 	Description  string          `gorm:"size:200;" json:"description"`
-	Faculty      faculty.Faculty `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"-"`
+	Faculty      faculty.Faculty `json:"-"`
 }
 
 func CreateCareer(Career *Career) (err error) {
