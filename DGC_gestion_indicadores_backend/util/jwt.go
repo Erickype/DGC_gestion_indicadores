@@ -33,7 +33,7 @@ func GenerateJWT(user model.User) (string, error) {
 func ValidateJWT(context *gin.Context) error {
 	token, err := getToken(context)
 	if err != nil {
-		return err
+		return errors.New("token inválido")
 	}
 	_, ok := token.Claims.(jwt.MapClaims)
 	if ok && token.Valid {
