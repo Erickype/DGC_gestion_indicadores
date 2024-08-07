@@ -26,6 +26,7 @@
 	const careersComboData = comboMessages.at(1)!;
 	const dedicationsComboData = comboMessages.at(2)!;
 	const scaledGradesComboData = comboMessages.at(3)!;
+	const contractTypesComboData = comboMessages.at(4)!;
 
 	const dispatch = createEventDispatcher();
 
@@ -58,6 +59,7 @@
 	let openCareer = false;
 	let openDedication = false;
 	let openScaledGrade = false;
+	let openContractType = false;
 
 	function closeAndFocusTriggerPerson(triggerId: string) {
 		openPerson = false;
@@ -83,6 +85,12 @@
 			document.getElementById(triggerId)?.focus();
 		});
 	}
+	function closeAndFocusTriggerContractType(triggerId: string) {
+		openContractType = false;
+		tick().then(() => {
+			document.getElementById(triggerId)?.focus();
+		});
+	}
 </script>
 
 <form action="?/addTeacher" use:enhance>
@@ -99,7 +107,7 @@
 					<Popover.Trigger
 						class={cn(
 							buttonVariants({ variant: 'outline' }),
-							'w-[200px] justify-between',
+							'w-full justify-between',
 							!$formData.person && 'text-muted-foreground'
 						)}
 						role="combobox"
@@ -111,7 +119,7 @@
 					</Popover.Trigger>
 					<input hidden value={$formData.person} name={attrs.name} />
 				</Form.Control>
-				<Popover.Content class="w-[200px] p-0">
+				<Popover.Content class="w-full p-0">
 					<Command.Root>
 						<Command.Input autofocus placeholder="Buscar persona..." class="h-9" />
 						<Command.Empty>No se encontró la cédula.</Command.Empty>
@@ -146,7 +154,7 @@
 					<Popover.Trigger
 						class={cn(
 							buttonVariants({ variant: 'outline' }),
-							'w-[200px] justify-between',
+							'w-full justify-between',
 							!$formData.career && 'text-muted-foreground'
 						)}
 						role="combobox"
@@ -158,7 +166,7 @@
 					</Popover.Trigger>
 					<input hidden value={$formData.career} name={attrs.name} />
 				</Form.Control>
-				<Popover.Content class="w-[200px] p-0">
+				<Popover.Content class="w-full p-0">
 					<Command.Root>
 						<Command.Input autofocus placeholder="Buscar carrera..." class="h-9" />
 						<Command.Empty>No se encontó la carrera.</Command.Empty>
@@ -193,7 +201,7 @@
 					<Popover.Trigger
 						class={cn(
 							buttonVariants({ variant: 'outline' }),
-							'w-[200px] justify-between',
+							'w-full justify-between',
 							!$formData.dedication && 'text-muted-foreground'
 						)}
 						role="combobox"
@@ -205,7 +213,7 @@
 					</Popover.Trigger>
 					<input hidden value={$formData.dedication} name={attrs.name} />
 				</Form.Control>
-				<Popover.Content class="w-[200px] p-0">
+				<Popover.Content class="w-full p-0">
 					<Command.Root>
 						<Command.Input autofocus placeholder="Buscar dedicación..." class="h-9" />
 						<Command.Empty>No se encontó la dedicación.</Command.Empty>
@@ -240,7 +248,7 @@
 					<Popover.Trigger
 						class={cn(
 							buttonVariants({ variant: 'outline' }),
-							'w-[250px] justify-between',
+							'w-full justify-between',
 							!$formData.scaledGrade && 'text-muted-foreground'
 						)}
 						role="combobox"
@@ -252,7 +260,7 @@
 					</Popover.Trigger>
 					<input hidden value={$formData.scaledGrade} name={attrs.name} />
 				</Form.Control>
-				<Popover.Content class="w-[250px] p-0">
+				<Popover.Content class="w-[90%] p-0">
 					<Command.Root>
 						<Command.Input autofocus placeholder="Buscar grado escalafonado..." class="h-9" />
 						<Command.Empty>No se encontó el grado escalafonado.</Command.Empty>
@@ -270,6 +278,53 @@
 										class={cn(
 											'ml-auto h-4 w-4',
 											scaledGrade.value !== $formData.scaledGrade && 'text-transparent'
+										)}
+									/>
+								</Command.Item>
+							{/each}
+						</Command.Group>
+					</Command.Root>
+				</Popover.Content>
+			</Popover.Root>
+			<Form.FieldErrors />
+		</Form.Field>
+		<Form.Field {form} name="contractType" class="flex flex-col">
+			<Popover.Root bind:open={openContractType} let:ids>
+				<Form.Control let:attrs>
+					<Form.Label>Tipo contrato</Form.Label>
+					<Popover.Trigger
+						class={cn(
+							buttonVariants({ variant: 'outline' }),
+							'w-full justify-between',
+							!$formData.contractType && 'text-muted-foreground'
+						)}
+						role="combobox"
+						{...attrs}
+					>
+						{contractTypesComboData.find((f) => f.value === $formData.contractType)?.label ??
+							'Seleccionar grado escalafonado'}
+						<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
+					</Popover.Trigger>
+					<input hidden value={$formData.contractType} name={attrs.name} />
+				</Form.Control>
+				<Popover.Content class="w-[90%] p-0">
+					<Command.Root>
+						<Command.Input autofocus placeholder="Buscar grado tipo contrato..." class="h-9" />
+						<Command.Empty>No se encontó el tipo contrato.</Command.Empty>
+						<Command.Group>
+							{#each contractTypesComboData as contractType}
+								<Command.Item
+									value={contractType.label}
+									onSelect={() => {
+										$formData.contractType = contractType.value;
+										closeAndFocusTriggerContractType(ids.trigger);
+									}}
+								>
+									{contractType.label}
+									<Check
+										class={cn(
+											'ml-auto h-4 w-4',
+											contractType.value !== $formData.contractType && 'text-transparent'
 										)}
 									/>
 								</Command.Item>
