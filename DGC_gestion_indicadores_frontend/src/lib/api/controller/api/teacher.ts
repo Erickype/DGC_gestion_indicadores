@@ -5,13 +5,24 @@ import { generateCommonErrorFromFetchError } from "$lib/utils";
 import type { CommonError } from "$lib/api/model/errors";
 
 export async function GetTeachersByAcademicPeriodID(token: string, academicPeriod: string) {
-    return await fetch(getTeachersByAcademicPeriodIDRoute + academicPeriod, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
+    try {
+        const response = await fetch(getTeachersByAcademicPeriodIDRoute + academicPeriod, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+        });
+
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
         }
-    });
+        const teachers: Teacher[] = await response.json()
+        return teachers
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
 }
 
 export async function CreateTeacher(token: string, request: CreateTeacherRequest) {
