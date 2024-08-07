@@ -9,6 +9,9 @@
 	import AddForm from './AddForm.svelte';
 
 	import type { Message } from '$lib/components/combobox/combobox';
+	import type { Teacher } from '$lib/api/model/api/teacher';
+	import type { CommonError } from '$lib/api/model/errors';
+	import Alert from '$lib/components/alert/alert.svelte';
 
 	export let data: PageServerData;
 	const addTeacherForm = data.addTeacherForm;
@@ -19,30 +22,31 @@
 		data.peopleData.messages,
 		data.careersData.messages,
 		data.dedicationsData.messages,
-		data.scaledGradesData.messages
+		data.scaledGradesData.messages,
+		data.contractTypesData.messages
 	];
-
-	let teachersPromise = data.teachersByAcademicPeriod;
-
+	
 	let selectedAcademicPeriod: number = academicPeriodsData.periods.at(
 		academicPeriodsData.periods.length - 1
 	)!.ID;
-
+	
 	$: addTeacherForm.data.academicPeriod = selectedAcademicPeriod;
+	
+	let teachersPromise: Promise<Teacher[]> = fetchTeachers();
 
 	async function fetchTeachers() {
 		const url = `/api/teacher/byAcademicPeriodID/${selectedAcademicPeriod}`;
 		const response = await fetch(url, {
 			method: 'GET'
 		});
-		if (response.ok) {
-			return (teachersPromise = response.json());
+		if (!response.ok) {
+			const errorData = (await response.json()) as CommonError;
+			if (response.status === 401) {
+				throw goto('/');
+			}
+			throw errorData;
 		}
-
-		if (response.status === 401) {
-			toast.warning('No está autenticado.');
-			return goto('/login');
-		}
+		return (teachersPromise = response.json());
 	}
 
 	function fetchOnSuccess(event: CustomEvent) {
@@ -61,7 +65,7 @@
 	<h2 class="text-2xl font-bold">Docentes</h2>
 </div>
 
-<div class="flex items-center justify-between px-8">
+<div class="mx-auto flex w-full place-content-center justify-between px-8">
 	<AcademicPeriodCombo
 		messages={academicPeriodsData.messages}
 		bind:selectedValue={selectedAcademicPeriod}
@@ -75,4 +79,23 @@
 		{comboMessages}
 		on:created={fetchOnSuccess}
 	/>
+</div>
+
+<div class="mx-auto flex w-full place-content-center px-8">
+	{#await teachersPromise}
+		cargando...
+	{:then teachers}
+		{#if teachers.length > 0}
+			<!-- <FacultiesTable
+				formData={updateFacultyFormData}
+				{faculties}
+				on:updated={fetchOnSuccess}
+				on:deleted={fetchOnSuccess}
+			></FacultiesTable> -->
+		{:else}
+			<Alert title="Sin registros" description={'Ups, no hay docentes registrados.'} />
+		{/if}
+	{:catch error}
+		<Alert variant="destructive" description={error.message} />
+	{/await}
 </div>
