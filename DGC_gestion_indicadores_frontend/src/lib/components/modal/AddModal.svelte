@@ -8,7 +8,7 @@
 
 	export let formData;
 	export let formComponent;
-	export let comboMessages: [Message[]] | undefined = undefined;
+	export let comboMessages: Message[][] | undefined = undefined;
 	export let modalTitle = 'Crear';
 	export let modalDescription = 'Resgistrar la información luego click en Guardar.';
 

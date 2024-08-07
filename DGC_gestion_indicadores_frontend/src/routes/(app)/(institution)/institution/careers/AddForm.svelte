@@ -24,7 +24,7 @@
 	import type { Career } from '$lib/api/model/api/career';
 	
 	export let data: SuperValidated<Infer<AddCarrerSchema>, App.Superforms.Message>;
-	export let comboMessages: [Message[]];
+	export let comboMessages: Message[][];
 
 	const facultiesComboData = comboMessages.at(0) as Message[];
 	let openFaculty = false;
