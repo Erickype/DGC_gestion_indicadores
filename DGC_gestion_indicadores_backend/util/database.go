@@ -5,6 +5,7 @@ import (
 	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicPeriod"
 	user "github.com/Erickype/DGC_gestion_indicadores_backend/model/auth"
 	career "github.com/Erickype/DGC_gestion_indicadores_backend/model/career"
+	contractType "github.com/Erickype/DGC_gestion_indicadores_backend/model/contractType"
 	dedication "github.com/Erickype/DGC_gestion_indicadores_backend/model/dedication"
 	evaluationAcademicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationAcademicPeriod"
 	evaluationPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationPeriod"
@@ -54,6 +55,10 @@ func LoadDatabase() {
 	if err != nil {
 		log.Fatal("Error while migrating: ", err.Error())
 	}
+	err = database.DB.AutoMigrate(&contractType.ContractType{})
+	if err != nil {
+		log.Fatal("Error while migrating: ", err.Error())
+	}
 	err = database.DB.AutoMigrate(&scaledGrade.ScaledGrade{})
 	if err != nil {
 		log.Fatal("Error while migrating: ", err.Error())
@@ -91,6 +96,12 @@ func seedData() {
 		{Name: "Profesor titular auxiliar 1", Abbreviation: "Titular auxiliar 1", Description: "Profesor auxiliar"},
 		{Name: "Profesor titular auxiliar 2", Abbreviation: "Titular auxiliar 2", Description: "Profesor auxiliar"},
 	}
+	var contractTypes = []contractType.ContractType{
+		{Name: "Docente a nombramiento", Abbreviation: "Nombramiento", Description: "Docente nombramiento"},
+		{Name: "Docente a contrato ocasional", Abbreviation: "Contrato ocasional", Description: "Docente contrato ocasional"},
+		{Name: "Docente de apoyo académico", Abbreviation: "Apoyo académico", Description: "Docente de apoyo académico"},
+	}
+	database.DB.Save(&contractTypes)
 	database.DB.Save(&scaledGrades)
 	database.DB.Save(&dedications)
 	database.DB.Save(&roles)
