@@ -1,18 +1,21 @@
-import { redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { mainDashboarRoute } from "$lib/api/util/paths";
-import { LoadAcademicPeriodsWithComboMessages } from "$lib/api/controller/view/academicPeriod";
-import { LoadPeopleWithComboMessages } from "$lib/api/controller/api/person";
+import { redirect } from "@sveltejs/kit";
+
 import { addTeacherSchema, updateTeacherSchema } from "./scheme";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { LoadCareersWithComboMessages } from "$lib/api/controller/api/career";
-import { LoadDedicationsWithComboMessages } from "$lib/api/controller/api/dedication";
-import { LoadScaledGradesWithComboMessages } from "$lib/api/controller/api/scaledGrade";
-import type { LoginError } from '$lib/api/model/auth/login'
 
-import { CreateTeacher, GetTeachersByAcademicPeriodID, UpdateTeacher } from "$lib/api/controller/api/teacher";
+import { LoadAcademicPeriodsWithComboMessages } from "$lib/api/controller/view/academicPeriod";
+import { LoadScaledGradesWithComboMessages } from "$lib/api/controller/api/scaledGrade";
+import { LoadDedicationsWithComboMessages } from "$lib/api/controller/api/dedication";
+import { LoadCareersWithComboMessages } from "$lib/api/controller/api/career";
+import { LoadPeopleWithComboMessages } from "$lib/api/controller/api/person";
+
 import type { CreateTeacherRequest, GetTeachersByAcademicPeriodResponse, UpdateTeacherRequest } from "$lib/api/model/api/teacher";
+import { CreateTeacher, GetTeachersByAcademicPeriodID, UpdateTeacher } from "$lib/api/controller/api/teacher";
+
+import { generateFormMessageFromHttpResponse, generateFormMessageFromInvalidForm } from "$lib/utils";
 import { toast } from "svelte-sonner";
 
 export const load: PageServerLoad = async ({ locals, cookies }) => {
@@ -48,14 +51,12 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
 export const actions: Actions = {
     addTeacher: async (event) => {
         const form = await superValidate(event, zod(addTeacherSchema))
-        const token = event.cookies.get("AuthorizationToken")
 
         if (!form.valid) {
-            return message(form, { success: false, error: "Invalid form" }, {
-                status: 400
-            })
+            return generateFormMessageFromInvalidForm(form)
         }
 
+        const token = event.cookies.get("AuthorizationToken")
         const data = form.data
         const createTeacherRequest: CreateTeacherRequest = {
             academic_period_id: data.academicPeriod,
@@ -64,14 +65,12 @@ export const actions: Actions = {
             person_id: data.person,
             scaled_grade_id: data.scaledGrade
         }
-        const res = await CreateTeacher(token!, createTeacherRequest)
-        if (!res.ok) {
-            const err: LoginError = await res.json()
-            return message(form, { success: false, error: err.error })
-        }
 
-        return message(form, { success: true, error: "" })
+        const response = await CreateTeacher(token!, createTeacherRequest)
+
+        return generateFormMessageFromHttpResponse(form, response)
     },
+
     updateTeacher: async (event) => {
         const form = await superValidate(event, zod(updateTeacherSchema))
         const token = event.cookies.get("AuthorizationToken")
@@ -93,9 +92,9 @@ export const actions: Actions = {
         }
         const teacherID = data.ID.toString()
         const res = await UpdateTeacher(token!, updateTeacherRequest, teacherID)
-        
+
         if (!res.ok) {
-            if(res.status === 401){
+            if (res.status === 401) {
                 toast.warning("No está autenticado.")
                 return redirect(302, "/login")
             }
