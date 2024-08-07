@@ -26,23 +26,6 @@
 
 	const columns = table.createColumns([
 		table.column({
-			accessor: 'ID',
-			header: 'ID'
-		}),
-		table.column({
-			accessor: 'updated_at',
-			header: 'Modificado',
-			cell: ({ value }) => {
-				const date = new Date(value);
-				const formattedDate = date.toLocaleDateString('es-EC', {
-					year: 'numeric',
-					month: '2-digit',
-					day: '2-digit'
-				});
-				return formattedDate;
-			}
-		}),
-		table.column({
 			accessor: 'person',
 			header: 'Nombre'
 		}),
@@ -56,7 +39,7 @@
 		}),
 		table.column({
 			accessor: 'scaled_grade',
-			header: 'Grado Esc.'
+			header: 'Grado Escalafonado'
 		}),
 		table.column({
 			accessor: ({ ID }) => ID,

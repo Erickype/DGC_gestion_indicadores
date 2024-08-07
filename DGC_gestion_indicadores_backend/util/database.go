@@ -78,6 +78,21 @@ func seedData() {
 			Password: os.Getenv("ADMIN_PASSWORD"),
 			RoleID:   1},
 	}
+	var dedications = []dedication.Dedication{
+		{Name: "Tiempo completo", Abbreviation: "TC", Description: "Personal 8 horas diarias"},
+		{Name: "Medio tiempo", Abbreviation: "MT", Description: "Personal 4 horas diarias"},
+		{Name: "Tiempo parcial", Abbreviation: "TP", Description: "Personal horas variadas"},
+		{Name: "Tiempo completo 10 horas permiso", Abbreviation: "TCP", Description: "Personal 8 horas diarias y horas de permiso"},
+	}
+	var scaledGrades = []scaledGrade.ScaledGrade{
+		{Name: "Profesor titular agregado 1", Abbreviation: "Titular agregado 1", Description: "Profesor agregado"},
+		{Name: "Profesor titular agregado 2", Abbreviation: "Titular agregado 2", Description: "Profesor agregado"},
+		{Name: "Profesor titular agregado 3", Abbreviation: "Titular agregado 3", Description: "Profesor agregado"},
+		{Name: "Profesor titular auxiliar 1", Abbreviation: "Titular auxiliar 1", Description: "Profesor auxiliar"},
+		{Name: "Profesor titular auxiliar 2", Abbreviation: "Titular auxiliar 2", Description: "Profesor auxiliar"},
+	}
+	database.DB.Save(&scaledGrades)
+	database.DB.Save(&dedications)
 	database.DB.Save(&roles)
 	database.DB.Save(&adminUser)
 }
