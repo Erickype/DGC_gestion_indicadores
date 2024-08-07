@@ -7,6 +7,7 @@ import (
 	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/controller/academicPeriod"
 	controller "github.com/Erickype/DGC_gestion_indicadores_backend/controller/auth"
 	career "github.com/Erickype/DGC_gestion_indicadores_backend/controller/career"
+	contractTypes "github.com/Erickype/DGC_gestion_indicadores_backend/controller/contractType"
 	dedication "github.com/Erickype/DGC_gestion_indicadores_backend/controller/dedication"
 	evaluationPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/controller/evaluationPeriod"
 	faculty "github.com/Erickype/DGC_gestion_indicadores_backend/controller/faculty"
@@ -97,6 +98,8 @@ func serveApplication() {
 	upeRoutes.GET("/careers", career.GetFaculties)
 
 	upeRoutes.GET("/dedications", dedication.GetDedications)
+
+	upeRoutes.GET("/contractTypes", contractTypes.GetContractTypes)
 
 	upeRoutes.GET("/scaledGrades", scaledGrade.GetScaledGrades)
 

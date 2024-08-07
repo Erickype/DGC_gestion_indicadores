@@ -14,7 +14,7 @@ type ContractType struct {
 	Description  string    `gorm:"size:200;" json:"description,omitempty"`
 }
 
-func GetDedications(contractTypes *[]ContractType) (err error) {
+func GetContractTypes(contractTypes *[]ContractType) (err error) {
 	err = database.DB.Find(contractTypes).Error
 	if err != nil {
 		return err
