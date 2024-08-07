@@ -1,5 +1,8 @@
-import type { CreateTeacherRequest, UpdateTeacherRequest } from "$lib/api/model/api/teacher";
 import { deleteTeacherRoute, getTeachersByAcademicPeriodIDRoute, postTeacherRoute, updateTeacherRoute } from "$lib/api/routes/api/teacher";
+import type { CreateTeacherRequest, Teacher, UpdateTeacherRequest } from "$lib/api/model/api/teacher";
+
+import { generateCommonErrorFromFetchError } from "$lib/utils";
+import type { CommonError } from "$lib/api/model/errors";
 
 export async function GetTeachersByAcademicPeriodID(token: string, academicPeriod: string) {
     return await fetch(getTeachersByAcademicPeriodIDRoute + academicPeriod, {
@@ -12,14 +15,24 @@ export async function GetTeachersByAcademicPeriodID(token: string, academicPerio
 }
 
 export async function CreateTeacher(token: string, request: CreateTeacherRequest) {
-    return await fetch(postTeacherRoute, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
-        },
-        body: JSON.stringify(request)
-    })
+    try {
+        const response = await fetch(postTeacherRoute, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify(request)
+        })
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
+        }
+        const teacherCreated: Teacher = await response.json()
+        return teacherCreated;
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
 }
 
 export async function DeleteTeacher(token: string, teacherID: string) {
