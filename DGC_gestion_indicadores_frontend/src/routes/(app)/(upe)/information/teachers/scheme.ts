@@ -25,6 +25,11 @@ export const addTeacherSchema = z.object({
         required_error: "Grado escalafonado requerido"
     }).gt(0, {
         message: "Ingrese un grado escalafonado válido"
+    }),
+    contractType: z.number({
+        required_error: "Tipo contrato requerido"
+    }).gt(0, {
+        message: "Ingrese un tipo contrato válido"
     })
 });
 
@@ -52,6 +57,11 @@ export const updateTeacherSchema = z.object({
         required_error: "Grado escalafonado requerido"
     }).gt(0, {
         message: "Ingrese un grado escalafonado válido"
+    }),
+    contractType: z.number({
+        required_error: "Tipo contrato requerido"
+    }).gt(0, {
+        message: "Ingrese un tipo contrato válido"
     })
 });
 

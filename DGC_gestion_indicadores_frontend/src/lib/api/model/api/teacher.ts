@@ -16,6 +16,7 @@ export interface CreateTeacherRequest {
     career_id: number;
     dedication_id: number;
     scaled_grade_id: number;
+    contract_type_id: number;
 }
 
 export interface GetTeachersByAcademicPeriodResponse{

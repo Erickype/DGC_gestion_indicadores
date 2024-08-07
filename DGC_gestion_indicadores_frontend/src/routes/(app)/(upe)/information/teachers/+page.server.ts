@@ -7,13 +7,14 @@ import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 
 import { LoadAcademicPeriodsWithComboMessages } from "$lib/api/controller/view/academicPeriod";
+import { LoadContractTypesWithComboMessages } from "$lib/api/controller/api/contractTypes";
 import { LoadScaledGradesWithComboMessages } from "$lib/api/controller/api/scaledGrade";
 import { LoadDedicationsWithComboMessages } from "$lib/api/controller/api/dedication";
 import { LoadCareersWithComboMessages } from "$lib/api/controller/api/career";
 import { LoadPeopleWithComboMessages } from "$lib/api/controller/api/person";
 
-import type { CreateTeacherRequest, GetTeachersByAcademicPeriodResponse, UpdateTeacherRequest } from "$lib/api/model/api/teacher";
-import { CreateTeacher, GetTeachersByAcademicPeriodID, UpdateTeacher } from "$lib/api/controller/api/teacher";
+import type { CreateTeacherRequest, UpdateTeacherRequest } from "$lib/api/model/api/teacher";
+import { CreateTeacher, UpdateTeacher } from "$lib/api/controller/api/teacher";
 
 import { generateFormMessageFromHttpResponse, generateFormMessageFromInvalidForm } from "$lib/utils";
 import { toast } from "svelte-sonner";
@@ -29,19 +30,12 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
         throw redirect(302, mainDashboarRoute)
     }
 
-    const academicPeriodsData = await LoadAcademicPeriodsWithComboMessages()
-    const academicPeriods = academicPeriodsData.periods
-    const selectedAcademicPeriod = academicPeriods.at(
-        academicPeriods.length - 1
-    )!.ID;
-    const academicPeriodID = selectedAcademicPeriod.toString()
-    const teachersByAcademicPeriod = await GetTeachersByAcademicPeriodID(token!, academicPeriodID)
     return {
-        academicPeriodsData: academicPeriodsData,
-        teachersByAcademicPeriod: teachersByAcademicPeriod.json() as Promise<GetTeachersByAcademicPeriodResponse[]>,
+        academicPeriodsData: await LoadAcademicPeriodsWithComboMessages(),
         peopleData: await LoadPeopleWithComboMessages(token!),
         careersData: await LoadCareersWithComboMessages(token!),
         dedicationsData: await LoadDedicationsWithComboMessages(token!),
+        contractTypesData: await LoadContractTypesWithComboMessages(token!),
         scaledGradesData: await LoadScaledGradesWithComboMessages(token!),
         addTeacherForm: await superValidate(zod(addTeacherSchema)),
         updateTeacherForm: await superValidate(zod(updateTeacherSchema)),
@@ -63,7 +57,8 @@ export const actions: Actions = {
             career_id: data.career,
             dedication_id: data.dedication,
             person_id: data.person,
-            scaled_grade_id: data.scaledGrade
+            scaled_grade_id: data.scaledGrade,
+            contract_type_id: data.contractType
         }
 
         const response = await CreateTeacher(token!, createTeacherRequest)
