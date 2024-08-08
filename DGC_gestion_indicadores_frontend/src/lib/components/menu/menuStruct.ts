@@ -27,7 +27,7 @@ export const menus: Menu[] = [
         roles: [1, 2, 3]
     },
     {
-        name: 'Información',
+        name: 'Información indicadores',
         icon: FileText,
         links: [
             { name: 'Docentes', route: '/information/teachers' },
