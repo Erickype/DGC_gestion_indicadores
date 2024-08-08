@@ -2,19 +2,19 @@
 	import type { PageServerData } from './$types';
 	import { goto } from '$app/navigation';
 
-	import { toast } from 'svelte-sonner';
-
 	import AcademicPeriodCombo from '$lib/components/combobox/academicPeriodCombo.svelte';
+	import TeachersTable from './Table.svelte';
 	import AddModal from '$lib/components/modal/AddModal.svelte';
 	import AddForm from './AddForm.svelte';
 
+	import type { GetTeachersByAcademicPeriodResponse } from '$lib/api/model/api/teacher';
 	import type { Message } from '$lib/components/combobox/combobox';
-	import type { Teacher } from '$lib/api/model/api/teacher';
 	import type { CommonError } from '$lib/api/model/errors';
 	import Alert from '$lib/components/alert/alert.svelte';
 
 	export let data: PageServerData;
 	const addTeacherForm = data.addTeacherForm;
+	const updateTeacherForm = data.updateTeacherForm;
 
 	const academicPeriodsData = data.academicPeriodsData;
 
@@ -25,14 +25,15 @@
 		data.scaledGradesData.messages,
 		data.contractTypesData.messages
 	];
-	
+
 	let selectedAcademicPeriod: number = academicPeriodsData.periods.at(
 		academicPeriodsData.periods.length - 1
 	)!.ID;
-	
+
 	$: addTeacherForm.data.academicPeriod = selectedAcademicPeriod;
-	
-	let teachersPromise: Promise<Teacher[]> = fetchTeachers();
+	$: updateTeacherForm.data.academicPeriod = selectedAcademicPeriod;
+
+	let teachersPromise: Promise<GetTeachersByAcademicPeriodResponse[]> = fetchTeachers();
 
 	async function fetchTeachers() {
 		const url = `/api/teacher/byAcademicPeriodID/${selectedAcademicPeriod}`;
@@ -86,12 +87,12 @@
 		cargando...
 	{:then teachers}
 		{#if teachers.length > 0}
-			<!-- <FacultiesTable
-				formData={updateFacultyFormData}
-				{faculties}
+			<TeachersTable
+				formData={updateTeacherForm}
+				{teachers}
 				on:updated={fetchOnSuccess}
 				on:deleted={fetchOnSuccess}
-			></FacultiesTable> -->
+			></TeachersTable>
 		{:else}
 			<Alert title="Sin registros" description={'Ups, no hay docentes registrados.'} />
 		{/if}
