@@ -21,7 +21,6 @@ export interface CreateTeacherRequest {
 
 export interface GetTeachersByAcademicPeriodResponse{
     updated_at: string;
-    ID: number;
     academic_period_id: number;
     person_id: number;
     person: string;
@@ -31,6 +30,8 @@ export interface GetTeachersByAcademicPeriodResponse{
     dedication: string;
     scaled_grade_id: number;
     scaled_grade: string;
+    contract_type_id: number;
+    contract_type: string;
 }
 
 export interface UpdateTeacherRequest {
