@@ -3,32 +3,18 @@ package model
 import (
 	"errors"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
-	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicPeriod"
-	career "github.com/Erickype/DGC_gestion_indicadores_backend/model/career"
-	contractType "github.com/Erickype/DGC_gestion_indicadores_backend/model/contractType"
-	dedication "github.com/Erickype/DGC_gestion_indicadores_backend/model/dedication"
 	person "github.com/Erickype/DGC_gestion_indicadores_backend/model/person"
-	scaledGrade "github.com/Erickype/DGC_gestion_indicadores_backend/model/scaledGrade"
 	"gorm.io/gorm"
 	"time"
 )
 
 type Teacher struct {
-	CreatedAt        time.Time `json:"created_at"`
-	UpdatedAt        time.Time `json:"updated_at"`
-	AcademicPeriodID uint      `gorm:"primary_key;" json:"academic_period_id"`
-	PersonID         uint      `gorm:"primary_key;" json:"person_id"`
-	CareerID         uint      `gorm:"not null;" json:"career_id"`
-	DedicationID     uint      `gorm:"not null;" json:"dedication_id"`
-	ScaledGradeID    uint      `gorm:"not null;" json:"scaled_grade_id"`
-	ContractTypeID   uint      `gorm:"not null;" json:"contract_type_id"`
+	ID        uint      `gorm:"primary_key"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	PersonID  uint      `gorm:"not null;" json:"person_id"`
 
-	AcademicPeriod academicPeriod.AcademicPeriod `json:"-"`
-	Person         person.Person                 `json:"-"`
-	Career         career.Career                 `json:"-"`
-	Dedication     dedication.Dedication         `json:"-"`
-	ScaledGrade    scaledGrade.ScaledGrade       `json:"-"`
-	ContractType   contractType.ContractType     `json:"-"`
+	Person person.Person `json:"-"`
 }
 
 func CreateTeacher(Teacher *Teacher) (err error) {

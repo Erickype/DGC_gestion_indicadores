@@ -69,11 +69,7 @@ func UpdateTeacher(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	Teacher.AcademicPeriodID = Update.AcademicPeriodID
 	Teacher.PersonID = Update.PersonID
-	Teacher.CareerID = Update.CareerID
-	Teacher.DedicationID = Update.DedicationID
-	Teacher.ScaledGradeID = Update.ScaledGradeID
 
 	err = model.UpdateTeacher(&Teacher)
 	if err != nil {
