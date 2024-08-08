@@ -24,7 +24,7 @@ import (
 func LoadDatabase() {
 	database.InitDb()
 
-	database.DB.Exec("CREATE SCHEMA IF NOT EXISTS " + modelConsts.INDICATORS_INFORMATION_SCHEMA)
+	database.DB.Exec("CREATE SCHEMA IF NOT EXISTS " + modelConsts.IndicatorsInformationSchema)
 
 	err := database.DB.AutoMigrate(
 		&user.Role{},
