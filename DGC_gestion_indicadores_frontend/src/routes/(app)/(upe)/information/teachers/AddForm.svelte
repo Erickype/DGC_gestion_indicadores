@@ -119,7 +119,7 @@
 					</Popover.Trigger>
 					<input hidden value={$formData.person} name={attrs.name} />
 				</Form.Control>
-				<Popover.Content class="w-full p-0">
+				<Popover.Content class="w-[90%] p-0">
 					<Command.Root>
 						<Command.Input autofocus placeholder="Buscar persona..." class="h-9" />
 						<Command.Empty>No se encontró la cédula.</Command.Empty>
@@ -166,7 +166,7 @@
 					</Popover.Trigger>
 					<input hidden value={$formData.career} name={attrs.name} />
 				</Form.Control>
-				<Popover.Content class="w-full p-0">
+				<Popover.Content class="w-[90%] p-0">
 					<Command.Root>
 						<Command.Input autofocus placeholder="Buscar carrera..." class="h-9" />
 						<Command.Empty>No se encontó la carrera.</Command.Empty>
@@ -213,7 +213,7 @@
 					</Popover.Trigger>
 					<input hidden value={$formData.dedication} name={attrs.name} />
 				</Form.Control>
-				<Popover.Content class="w-full p-0">
+				<Popover.Content class="w-[90%] p-0">
 					<Command.Root>
 						<Command.Input autofocus placeholder="Buscar dedicación..." class="h-9" />
 						<Command.Empty>No se encontó la dedicación.</Command.Empty>
