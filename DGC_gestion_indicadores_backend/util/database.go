@@ -44,6 +44,9 @@ func LoadDatabase() {
 		&teacher.Teacher{},
 		&indicatorsInformation.TeachersList{},
 		&academicProduction.AcademicDatabase{},
+		&academicProduction.ScienceMagazine{},
+		&academicProduction.CompensationFactor{},
+		&academicProduction.ImpactCoefficient{},
 	)
 	if err != nil {
 		log.Fatal("Error while migrating: ", err.Error())
