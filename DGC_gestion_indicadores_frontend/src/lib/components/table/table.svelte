@@ -11,6 +11,7 @@
 	export let table: HeadlessTable<any, any>;
 	export let columns: Column<any, any>[];
 	export let filterFields: string[];
+	export let tableHeightClass = "h-[60vh]"
 
 	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates } =
 		table.createViewModel(columns);
@@ -31,7 +32,7 @@
 		bind:value={$pageSize}
 	/>
 </div>
-<div class="flex rounded-md border h-[60vh] overflow-auto">
+<div class="flex rounded-md border {tableHeightClass} overflow-auto">
 	<Table.Root {...$tableAttrs}>
 		<Table.Header>
 			{#each $headerRows as headerRow}
