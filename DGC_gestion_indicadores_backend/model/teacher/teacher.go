@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicPeriod"
 	career "github.com/Erickype/DGC_gestion_indicadores_backend/model/career"
@@ -9,17 +10,18 @@ import (
 	person "github.com/Erickype/DGC_gestion_indicadores_backend/model/person"
 	scaledGrade "github.com/Erickype/DGC_gestion_indicadores_backend/model/scaledGrade"
 	"gorm.io/gorm"
+	"time"
 )
 
 type Teacher struct {
-	gorm.Model
-	ID               uint `gorm:"primary_key;"`
-	AcademicPeriodID uint `gorm:"primary_key;" json:"academic_period_id"`
-	PersonID         uint `gorm:"primary_key;" json:"person_id"`
-	CareerID         uint `gorm:"not null;" json:"career_id"`
-	DedicationID     uint `gorm:"not null;" json:"dedication_id"`
-	ScaledGradeID    uint `gorm:"not null;" json:"scaled_grade_id"`
-	ContractTypeID   uint `gorm:"not null;" json:"contract_type_id"`
+	CreatedAt        time.Time `json:"created_at"`
+	UpdatedAt        time.Time `json:"updated_at"`
+	AcademicPeriodID uint      `gorm:"primary_key;" json:"academic_period_id"`
+	PersonID         uint      `gorm:"primary_key;" json:"person_id"`
+	CareerID         uint      `gorm:"not null;" json:"career_id"`
+	DedicationID     uint      `gorm:"not null;" json:"dedication_id"`
+	ScaledGradeID    uint      `gorm:"not null;" json:"scaled_grade_id"`
+	ContractTypeID   uint      `gorm:"not null;" json:"contract_type_id"`
 
 	AcademicPeriod academicPeriod.AcademicPeriod `json:"-"`
 	Person         person.Person                 `json:"-"`
@@ -32,6 +34,9 @@ type Teacher struct {
 func CreateTeacher(Teacher *Teacher) (err error) {
 	err = database.DB.Create(Teacher).Error
 	if err != nil {
+		if errors.Is(gorm.ErrDuplicatedKey, err) {
+			return errors.New("docente ya registrado en el periodo")
+		}
 		return err
 	}
 	return nil
@@ -53,19 +58,32 @@ func GetTeacher(Teacher *Teacher, id int) (err error) {
 	return nil
 }
 
-func GetTeachersByAcademicPeriod(Teachers *[]GetJoin, academicPeriodID int) (err error) {
-	err = database.DB.Table("teachers").Select(
-		"teachers.updated_at, teachers.id, teachers.academic_period_id,"+
-			"teachers.person_id, people.name || ' ' || people.lastname as person,"+
-			"teachers.career_id, careers.abbreviation as career, "+
-			"teachers.dedication_id, dedications.name as dedication, "+
-			"teachers.scaled_grade_id, scaled_grades.abbreviation as scaled_grade").Joins(
-		"join people on people.id = teachers.person_id "+
-			"join careers on careers.id = teachers.career_id "+
-			"join dedications on dedications.id = teachers.dedication_id "+
-			"join scaled_grades on scaled_grades.id = teachers.scaled_grade_id").Where(
-		"teachers.academic_period_id = ? and teachers.deleted_at is null", academicPeriodID).Order(
-		"teachers.updated_at desc").Scan(&Teachers).Error
+func GetTeachersByAcademicPeriod(teachers *[]GetByAcademicPeriodResponse, academicPeriodID int) error {
+	err := database.DB.Table("teachers").Select(
+		`teachers.updated_at, 
+		teachers.academic_period_id,
+		teachers.person_id, 
+		people.name || ' ' || people.lastname as person,
+		teachers.career_id, 
+		careers.abbreviation as career, 
+		teachers.dedication_id, 
+		dedications.name as dedication, 
+		teachers.scaled_grade_id, 
+		scaled_grades.abbreviation as scaled_grade,
+		teachers.contract_type_id,
+		contract_types.abbreviation as contract_type`,
+	).Joins(
+		`JOIN people ON people.id = teachers.person_id
+		JOIN careers ON careers.id = teachers.career_id
+		JOIN dedications ON dedications.id = teachers.dedication_id
+		JOIN scaled_grades ON scaled_grades.id = teachers.scaled_grade_id	
+		JOIN contract_types ON contract_types.id = teachers.contract_type_id`,
+	).Where(
+		"teachers.academic_period_id = ?", academicPeriodID,
+	).Order(
+		"teachers.updated_at DESC",
+	).Scan(&teachers).Error
+
 	if err != nil {
 		return err
 	}

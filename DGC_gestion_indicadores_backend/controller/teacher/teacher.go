@@ -29,7 +29,7 @@ func CreateTeacher(c *gin.Context) {
 }
 
 func GetTeachersByAcademicPeriod(context *gin.Context) {
-	var Teachers []model.GetJoin = []model.GetJoin{}
+	var Teachers []model.GetByAcademicPeriodResponse = []model.GetByAcademicPeriodResponse{}
 
 	academicPeriodID, err := strconv.ParseInt(context.Param("academicPeriodID"), 10, 64)
 	if err != nil {
@@ -69,7 +69,6 @@ func UpdateTeacher(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	Teacher.ID = Update.ID
 	Teacher.AcademicPeriodID = Update.AcademicPeriodID
 	Teacher.PersonID = Update.PersonID
 	Teacher.CareerID = Update.CareerID
