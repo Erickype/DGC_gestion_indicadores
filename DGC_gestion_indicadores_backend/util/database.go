@@ -13,6 +13,7 @@ import (
 	evaluationAcademicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationAcademicPeriod"
 	evaluationPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationPeriod"
 	faculty "github.com/Erickype/DGC_gestion_indicadores_backend/model/faculty"
+	indicators "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicators"
 	indicatorsInformation "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation"
 	person "github.com/Erickype/DGC_gestion_indicadores_backend/model/person"
 	scaledGrade "github.com/Erickype/DGC_gestion_indicadores_backend/model/scaledGrade"
@@ -25,6 +26,7 @@ func LoadDatabase() {
 	database.InitDb()
 
 	database.DB.Exec("CREATE SCHEMA IF NOT EXISTS " + modelConsts.IndicatorsInformationSchema)
+	database.DB.Exec("CREATE SCHEMA IF NOT EXISTS " + modelConsts.IndicatorsSchema)
 
 	err := database.DB.AutoMigrate(
 		&user.Role{},
@@ -51,6 +53,9 @@ func LoadDatabase() {
 		&academicProduction.PublicationType{},
 		&indicatorsInformation.AcademicProductionList{},
 		&indicatorsInformation.AcademicProductionListsAuthor{},
+		&indicators.IndicatorType{},
+		&indicators.IndicatorsEvaluationPeriod{},
+		&indicators.IndicatorsAcademicPeriod{},
 	)
 	if err != nil {
 		log.Fatal("Error while migrating: ", err.Error())
