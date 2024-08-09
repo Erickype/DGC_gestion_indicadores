@@ -40,13 +40,17 @@ func LoadDatabase() {
 		&scaledGrade.ScaledGrade{},
 		&degree.DegreeLevel{},
 		&degree.TeachersDegree{},
-		&degree.TeachersDegreesAcademicPeriod{},
+		&indicatorsInformation.TeachersListsDegree{},
 		&teacher.Teacher{},
 		&indicatorsInformation.TeachersList{},
 		&academicProduction.AcademicDatabase{},
 		&academicProduction.ScienceMagazine{},
 		&academicProduction.CompensationFactor{},
 		&academicProduction.ImpactCoefficient{},
+		&academicProduction.Author{},
+		&academicProduction.PublicationType{},
+		&indicatorsInformation.AcademicProductionList{},
+		&indicatorsInformation.AcademicProductionListsAuthor{},
 	)
 	if err != nil {
 		log.Fatal("Error while migrating: ", err.Error())
