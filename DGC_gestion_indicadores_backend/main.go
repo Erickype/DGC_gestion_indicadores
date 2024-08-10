@@ -92,6 +92,7 @@ func serveApplication() {
 	upeRoutes := router.Group("/api")
 	upeRoutes.Use(util.JWTAuth(), util.JWTAuthUPE())
 	upeRoutes.GET("/people", person.GetPersons)
+	upeRoutes.POST("/people/filter", person.FilterPeople)
 
 	upeRoutes.GET("/faculties", faculty.GetFaculties)
 
