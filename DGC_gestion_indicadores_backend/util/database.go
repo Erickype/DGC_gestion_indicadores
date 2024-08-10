@@ -53,6 +53,8 @@ func LoadDatabase() {
 		&academicProduction.PublicationType{},
 		&indicatorsInformation.AcademicProductionList{},
 		&indicatorsInformation.AcademicProductionListsAuthor{},
+		&indicatorsInformation.BooksOrChaptersProductionList{},
+		&indicatorsInformation.BooksOrChaptersProductionListAuthor{},
 		&indicators.IndicatorType{},
 		&indicators.IndicatorsEvaluationPeriod{},
 		&indicators.IndicatorsAcademicPeriod{},
