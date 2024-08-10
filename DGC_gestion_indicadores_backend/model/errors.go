@@ -1,6 +1,9 @@
 package model
 
-import "net/http"
+import (
+	"github.com/gin-gonic/gin"
+	"net/http"
+)
 
 type CommonError struct {
 	StatusCode int    `json:"status_code,omitempty"`
@@ -17,4 +20,16 @@ func CreateCommonError(statusCode int, message string, detail string) *CommonErr
 		Detail:     detail,
 	}
 	return commonError
+}
+
+func BadRequestResponse(context *gin.Context, err error) {
+	commonError := CreateCommonError(http.StatusBadRequest, "Error en la petición", err.Error())
+	context.AbortWithStatusJSON(http.StatusBadRequest, commonError)
+	return
+}
+
+func InternalServerErrorResponse(context *gin.Context, message string, err error) {
+	commonError := CreateCommonError(http.StatusInternalServerError, message, err.Error())
+	context.AbortWithStatusJSON(http.StatusInternalServerError, commonError)
+	return
 }
