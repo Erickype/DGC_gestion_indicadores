@@ -2,16 +2,17 @@ package model
 
 import (
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
-	"gorm.io/gorm"
+	"time"
 )
 
 type Person struct {
-	gorm.Model
-	ID       uint   `gorm:"primary_key"`
-	Identity string `gorm:"size:13;not null;unique" json:"identity"`
-	Name     string `gorm:"size:50;not null;" json:"name"`
-	Lastname string `gorm:"size:50;not null;" json:"lastname"`
-	Email    string `gorm:"size:50;not null;" json:"email"`
+	ID        uint      `gorm:"primary_key"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Identity  string    `gorm:"size:13;not null;unique" json:"identity" json:"identity,omitempty"`
+	Name      string    `gorm:"size:50;not null;" json:"name" json:"name,omitempty"`
+	Lastname  string    `gorm:"size:50;not null;" json:"lastname" json:"lastname,omitempty"`
+	Email     string    `gorm:"size:50;not null;" json:"email" json:"email,omitempty"`
 }
 
 func CreatePerson(person *Person) (err error) {
