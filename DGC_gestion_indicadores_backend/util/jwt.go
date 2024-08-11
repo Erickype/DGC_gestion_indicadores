@@ -42,6 +42,26 @@ func ValidateJWT(context *gin.Context) error {
 	return errors.New("invalid token provided")
 }
 
+// ValidateJWTExpiration checks if the JWT token is expired
+func ValidateJWTExpiration(context *gin.Context) error {
+	token, err := getToken(context)
+	if err != nil {
+		return errors.New("token inválido")
+	}
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return errors.New("invalid token claims")
+	}
+	expiration, ok := claims["eat"].(float64)
+	if !ok {
+		return errors.New("invalid expiration time in token")
+	}
+	if time.Now().Unix() > int64(expiration) {
+		return errors.New("token has expired")
+	}
+	return nil
+}
+
 // ValidateAdminRoleJWT validates Admin role token
 func ValidateAdminRoleJWT(context *gin.Context) error {
 	token, err := getToken(context)

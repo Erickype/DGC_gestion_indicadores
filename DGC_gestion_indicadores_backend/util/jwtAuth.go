@@ -17,6 +17,13 @@ func JWTAuth() gin.HandlerFunc {
 			context.Abort()
 			return
 		}
+		err = ValidateJWTExpiration(context)
+		if err != nil {
+			err := errors.CreateCommonError(http.StatusUnauthorized, "Token caducado", err.Error())
+			context.JSON(http.StatusUnauthorized, err)
+			context.Abort()
+			return
+		}
 		err = ValidateAdminRoleJWT(context)
 		if err != nil {
 			err := errors.CreateCommonError(http.StatusUnauthorized, "Autenticación admistrador requerida", err.Error())
@@ -34,6 +41,13 @@ func JWTAuthUPE() gin.HandlerFunc {
 		err := ValidateJWT(context)
 		if err != nil {
 			err := errors.CreateCommonError(http.StatusUnauthorized, "Autenticación requerida", err.Error())
+			context.JSON(http.StatusUnauthorized, err)
+			context.Abort()
+			return
+		}
+		err = ValidateJWTExpiration(context)
+		if err != nil {
+			err := errors.CreateCommonError(http.StatusUnauthorized, "Token caducado", err.Error())
 			context.JSON(http.StatusUnauthorized, err)
 			context.Abort()
 			return
