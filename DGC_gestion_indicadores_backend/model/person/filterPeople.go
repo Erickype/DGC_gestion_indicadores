@@ -7,21 +7,28 @@ import (
 	"strings"
 )
 
+type FilterPeopleResponse struct {
+	Count    int64    `json:"count"`
+	PageSize int      `json:"page_size"`
+	Page     int      `json:"page"`
+	People   []Person `json:"people"`
+}
+
 type FilterPeopleRequest struct {
 	Identity string `json:"identity,omitempty"`
 	Name     string `json:"name,omitempty"`
 	Lastname string `json:"lastname,omitempty"`
 	Email    string `json:"email,omitempty"`
+	PageSize int    `json:"page_size"`
+	Page     int    `json:"page"`
 }
 
-func FilterPeople(people *[]Person, filterPeopleRequest *FilterPeopleRequest) (err error) {
+func FilterPeople(filterPeopleResponse *FilterPeopleResponse, filterPeopleRequest *FilterPeopleRequest) (err error) {
 	query := database.DB
 
-	// Lista de condiciones OR
 	var conditions []string
 	var values []interface{}
 
-	// Agrega las condiciones de búsqueda "LIKE" para cada campo que no esté vacío
 	if filterPeopleRequest.Identity != "" {
 		conditions = append(conditions, "LOWER(identity) LIKE ?")
 		values = append(values, fmt.Sprintf("%%%s%%", strings.ToLower(filterPeopleRequest.Identity)))
@@ -39,15 +46,31 @@ func FilterPeople(people *[]Person, filterPeopleRequest *FilterPeopleRequest) (e
 		values = append(values, fmt.Sprintf("%%%s%%", strings.ToLower(filterPeopleRequest.Email)))
 	}
 
-	// Si hay condiciones, se unen con OR
 	if len(conditions) > 0 {
 		query = query.Where(strings.Join(conditions, " OR "), values...)
 	}
 
-	// Ejecuta la consulta final
-	err = query.Limit(model.FilterSize).Find(people).Error
+	var totalCount int64
+	err = query.Model(&Person{}).Count(&totalCount).Error
 	if err != nil {
 		return err
+	}
+
+	pageSize := filterPeopleRequest.PageSize
+	page := filterPeopleRequest.Page
+	err = query.
+		Scopes(model.Paginate(pageSize, page)).
+		Find(&filterPeopleResponse.People).Error
+	if err != nil {
+		return err
+	}
+
+	filterPeopleResponse.Count = totalCount
+	filterPeopleResponse.PageSize = pageSize
+	if page <= 0 {
+		filterPeopleResponse.Page = 1
+	} else {
+		filterPeopleResponse.Page = page
 	}
 	return nil
 }

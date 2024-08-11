@@ -14,11 +14,11 @@ func FilterPeople(context *gin.Context) {
 		errors.BadRequestResponse(context, err)
 		return
 	}
-	var people []model.Person
-	err = model.FilterPeople(&people, &filter)
+	var filterPeopleResponse model.FilterPeopleResponse
+	err = model.FilterPeople(&filterPeopleResponse, &filter)
 	if err != nil {
 		errors.InternalServerErrorResponse(context, "Error retornando personas", err)
 		return
 	}
-	context.JSON(http.StatusOK, people)
+	context.JSON(http.StatusOK, filterPeopleResponse)
 }
