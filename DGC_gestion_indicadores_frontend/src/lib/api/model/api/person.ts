@@ -1,7 +1,6 @@
 export interface Person {
     CreatedAt: string;
     UpdatedAt: string;
-    DeletedAt: string | null;
     ID: number;
     identity: string;
     name: string;
@@ -22,4 +21,20 @@ export interface PutPersonRequest {
     name: string;
     lastname: string;
     email: string;
+}
+
+export interface FilterPeopleRequest {
+    identity?: string,
+    name?: string,
+    lastname?: string,
+    email?: string,
+    page_size: number,
+    page: number
+}
+
+export interface FilterPeopleResponse {
+    count: number,
+    page_size: number,
+    page: number,
+    people: Person[]
 }
