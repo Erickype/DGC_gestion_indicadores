@@ -1,6 +1,6 @@
-import type { Person } from "$lib/api/model/api/person";
+import type { FilterPeopleRequest, FilterPeopleResponse, Person } from "$lib/api/model/api/person";
 import { generateErrorFromCommonError, type CommonError } from "$lib/api/model/errors";
-import { getPeopleRoute } from "$lib/api/routes/api/person";
+import { getPeopleRoute, postFilterPeopleRoute } from "$lib/api/routes/api/person";
 import type { Message } from "$lib/components/combobox/combobox";
 import { generateCommonErrorFromFetchError } from "$lib/utils";
 
@@ -19,6 +19,28 @@ export async function GetPeople(token: string): Promise<Person[] | CommonError> 
         }
         const periods: Person[] = await response.json()
         return periods
+
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
+}
+
+export async function PostFilterPeople(token: string, filterPeopleRequest: FilterPeopleRequest): Promise<FilterPeopleResponse[] | CommonError> {
+    try {
+        const response = await fetch(postFilterPeopleRoute, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify(filterPeopleRequest)
+        })
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
+        }
+        const filterPeopleResponse: FilterPeopleResponse[] = await response.json()
+        return filterPeopleResponse
 
     } catch (error) {
         return generateCommonErrorFromFetchError(error)
