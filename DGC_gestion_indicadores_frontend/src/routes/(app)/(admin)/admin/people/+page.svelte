@@ -14,6 +14,7 @@
 	import type { DragableFilterFields } from '$lib/utils';
 
 	import PeopleTable from './Table.svelte';
+	import { goto } from '$app/navigation';
 
 	export let data: PageData;
 	const addPersonFormData = data.addPersonForm;
@@ -68,6 +69,9 @@
 		});
 		if (!response.ok) {
 			const errorData = (await response.json()) as CommonError;
+			if (response.status === 401) {
+				throw goto('/');
+			}
 			throw errorData;
 		}
 		return (filterPeopleResponsePromise = response.json());
