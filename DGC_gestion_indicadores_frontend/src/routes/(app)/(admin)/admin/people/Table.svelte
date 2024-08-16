@@ -5,28 +5,53 @@
 
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
 
-	import Table from '$lib/components/table/table.svelte';
+	import Table from '$lib/components/table/tablePaginated.svelte';
 	import UpdateModal from './UpdateModal.svelte';
 
 	import { createEventDispatcher } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
-	import type { Person } from '$lib/api/model/api/person';
+	import type {
+		FilterPeopleRequest,
+		FilterPeopleResponse,
+		Person
+	} from '$lib/api/model/api/person';
 	import type { UpdatePersonSchema } from './schema';
 
-	export let people: Person[];
+	export let filterPeopleResponse: FilterPeopleResponse;
+	let people: Person[] = filterPeopleResponse.people;
+
 	export let formData: SuperValidated<Infer<UpdatePersonSchema>>;
 	let person: Person;
+
+	let filterValue = '';
+	let pageIndex: number = 0;
+	let pageSize: number = 0;
+	export let filterPeopleRequest: FilterPeopleRequest = {
+		identity: '',
+		name: '',
+		lastname: '',
+		email: '',
+		page_size: pageSize,
+		page: pageIndex
+	};
+
+	filterValue = filterPeopleRequest.identity!;
+	let initialFilterValue = '';
 
 	const filterFields = ['name', 'abbreviation'];
 
 	const table = createTable(readable(people), {
 		page: addPagination({
-			initialPageSize: 4
+			initialPageSize: filterPeopleResponse.page_size,
+			initialPageIndex: filterPeopleResponse.page - 1,
+			serverSide: true,
+			serverItemCount: readable(filterPeopleResponse.count)
 		}),
 		sort: addSortBy(),
 		filter: addTableFilter({
-			fn: ({ filterValue, value }) => value.toLowerCase().includes(filterValue.toLowerCase())
+			initialFilterValue: initialFilterValue.trim(),
+			serverSide: true
 		})
 	});
 
@@ -101,15 +126,61 @@
 			});
 		}
 	}
+
+	function handleOnFilterChanged() {
+		/* 	const queries = filterValue.split(' ');
+		filterPeopleRequest.identity = '';
+		filterPeopleRequest.name = '';
+		filterPeopleRequest.lastname = '';
+		filterPeopleRequest.email = '';
+
+		queries.forEach((querie) => {
+			const numberPattern = /^[0-9]+$/;
+
+			if (numberPattern.test(querie)) {
+				return (filterPeopleRequest.identity = querie);
+			}
+			if (querie.includes('@')) {
+				return (filterPeopleRequest.email = querie);
+			}
+			if (filterPeopleRequest.name === '') {
+				filterPeopleRequest.name = querie;
+			} else if (filterPeopleRequest.lastname === '') {
+				filterPeopleRequest.lastname = querie;
+			} else {
+				filterPeopleRequest.email = querie;
+			}
+		}); */
+
+		dispatch('filterChanged', {
+			filter: filterValue
+		});
+	}
+	function handleOnPageChanged() {
+		filterPeopleRequest.page = pageIndex + 1;
+		dispatch('paginationChanged');
+	}
+	function handleOnPageSizeChanged() {
+		filterPeopleRequest.page_size = pageSize;
+		filterPeopleRequest.page = 1;
+		dispatch('paginationChanged');
+	}
 </script>
 
-<UpdateModal
-	{formData}
-	bind:person
-	bind:open={updateFormOpen}
-	on:updated={handleUpdated}
-/>
+<UpdateModal {formData} bind:person bind:open={updateFormOpen} on:updated={handleUpdated} />
 
 <div class="w-full">
-	<Table {table} {columns} {filterFields} />
+	<Table
+		tableHeightClass="h-[55vh]"
+		{table}
+		{columns}
+		serverItemCount={filterPeopleResponse.count}
+		{filterFields}
+		bind:filter_value={filterValue}
+		bind:page_index={pageIndex}
+		bind:page_size={pageSize}
+		on:filterChanged={handleOnFilterChanged}
+		on:pageChanged={handleOnPageChanged}
+		on:pageSizeChanged={handleOnPageSizeChanged}
+	/>
 </div>
