@@ -111,3 +111,12 @@ export function generateCommonErrorFromFetchError(error: unknown | any): CommonE
 	}
 	return errorMessage
 }
+
+
+// DraggableFilterStructure
+export interface DragableFilterFields {
+	id: number;
+	key: string;
+	name: string;
+	label: string;
+}
