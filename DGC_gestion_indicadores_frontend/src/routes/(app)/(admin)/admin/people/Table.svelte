@@ -39,7 +39,7 @@
 	filterValue = filterPeopleRequest.identity!;
 	let initialFilterValue = '';
 
-	const filterFields = ['name', 'abbreviation'];
+	const filterFields = ['identity', 'name', 'lastname', 'email'];
 
 	const table = createTable(readable(people), {
 		page: addPagination({
@@ -128,30 +128,6 @@
 	}
 
 	function handleOnFilterChanged() {
-		/* 	const queries = filterValue.split(' ');
-		filterPeopleRequest.identity = '';
-		filterPeopleRequest.name = '';
-		filterPeopleRequest.lastname = '';
-		filterPeopleRequest.email = '';
-
-		queries.forEach((querie) => {
-			const numberPattern = /^[0-9]+$/;
-
-			if (numberPattern.test(querie)) {
-				return (filterPeopleRequest.identity = querie);
-			}
-			if (querie.includes('@')) {
-				return (filterPeopleRequest.email = querie);
-			}
-			if (filterPeopleRequest.name === '') {
-				filterPeopleRequest.name = querie;
-			} else if (filterPeopleRequest.lastname === '') {
-				filterPeopleRequest.lastname = querie;
-			} else {
-				filterPeopleRequest.email = querie;
-			}
-		}); */
-
 		dispatch('filterChanged', {
 			filter: filterValue
 		});
