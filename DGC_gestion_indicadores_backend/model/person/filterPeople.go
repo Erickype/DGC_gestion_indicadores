@@ -59,6 +59,7 @@ func FilterPeople(filterPeopleResponse *FilterPeopleResponse, filterPeopleReques
 	pageSize := filterPeopleRequest.PageSize
 	page := filterPeopleRequest.Page
 	err = query.
+		Order("updated_at DESC").
 		Scopes(model.Paginate(pageSize, page)).
 		Find(&filterPeopleResponse.People).Error
 	if err != nil {
