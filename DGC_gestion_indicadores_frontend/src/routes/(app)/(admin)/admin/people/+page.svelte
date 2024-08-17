@@ -40,23 +40,9 @@
 
 	const flipDurationMs = 300;
 
-	function handleCreated(event: any) {
+	function fetchOnSuccess(event: any) {
 		const data: { status: boolean } = event.detail;
 		if (data.status) {
-			fetchFilterPeople();
-		}
-	}
-
-	function handleDeleted(event: any) {
-		const data: { status: boolean } = event.detail;
-		if (data.status) {
-			fetchFilterPeople();
-		}
-	}
-
-	function handleUpdated(event: any) {
-		const detail: { status: boolean } = event.detail;
-		if (detail.status) {
 			fetchFilterPeople();
 		}
 	}
@@ -161,7 +147,7 @@
 
 <div class="mx-auto flex w-full place-content-center justify-between px-8">
 	<h2 class="text-2xl font-bold">Personas</h2>
-	<AddModal formData={addPersonFormData} on:created={handleCreated} />
+	<AddModal formData={addPersonFormData} on:created={fetchOnSuccess} />
 </div>
 
 <div class="mx-auto flex w-full flex-col place-content-center px-8">
@@ -205,8 +191,8 @@
 				bind:filterPeopleRequest
 				formData={updatePersonFormData}
 				{filterPeopleResponse}
-				on:updated={handleUpdated}
-				on:deleted={handleDeleted}
+				on:updated={fetchOnSuccess}
+				on:deleted={fetchOnSuccess}
 				on:filterChanged={handleOnFilterChanged}
 				on:paginationChanged={handlePaginationChanged}
 			></PeopleTable>
