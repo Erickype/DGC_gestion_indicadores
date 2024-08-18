@@ -8,14 +8,15 @@
 	import Table from '$lib/components/table/tablePaginated.svelte';
 	import UpdateModal from './UpdateModal.svelte';
 
+	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import { createEventDispatcher } from 'svelte';
 	import { toast } from 'svelte-sonner';
-	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import type {
 		FilterPeopleRequest,
 		FilterPeopleResponse,
 		Person
 	} from '$lib/api/model/api/person';
+	import type { PopoverFilterDataMap } from '$lib/components/table/types';
 	import type { UpdatePersonSchema } from './schema';
 
 	export let filterPeopleResponse: FilterPeopleResponse;
@@ -36,8 +37,19 @@
 		page: pageIndex
 	};
 
-	filterValue = filterPeopleRequest.identity!;
-	let initialFilterValue = '';
+	let values = [
+		filterPeopleRequest.identity,
+		filterPeopleRequest.name,
+		filterPeopleRequest.lastname,
+		filterPeopleRequest.email
+	];
+
+	let uniqueValues = [...new Set(values.filter(value => value !== ""))];
+
+	let initialFilterValue: string | undefined = 
+		uniqueValues.length === 1 ? uniqueValues[0] : uniqueValues.join(" ");
+
+	export let popoverFilterDataMap: PopoverFilterDataMap = new Map();
 
 	const filterFields = ['identity', 'name', 'lastname', 'email'];
 
@@ -50,7 +62,7 @@
 		}),
 		sort: addSortBy(),
 		filter: addTableFilter({
-			initialFilterValue: initialFilterValue.trim(),
+			initialFilterValue: initialFilterValue?.trim(),
 			serverSide: true
 		})
 	});
@@ -132,6 +144,9 @@
 			filter: filterValue
 		});
 	}
+	function handleOnDetailedFilter() {
+		dispatch('detailedFilter');
+	}
 	function handleOnPageChanged() {
 		filterPeopleRequest.page = pageIndex + 1;
 		dispatch('paginationChanged');
@@ -152,10 +167,12 @@
 		{columns}
 		serverItemCount={filterPeopleResponse.count}
 		{filterFields}
+		bind:popoverFilterDataMap
 		bind:filter_value={filterValue}
 		bind:page_index={pageIndex}
 		bind:page_size={pageSize}
 		on:filterChanged={handleOnFilterChanged}
+		on:detailedFilter={handleOnDetailedFilter}
 		on:pageChanged={handleOnPageChanged}
 		on:pageSizeChanged={handleOnPageSizeChanged}
 	/>
