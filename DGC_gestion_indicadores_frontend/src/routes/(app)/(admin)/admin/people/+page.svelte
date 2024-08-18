@@ -8,6 +8,8 @@
 
 	import PeopleTable from './Table.svelte';
 	import { goto } from '$app/navigation';
+	import type { PopoverFilterDataMap } from '$lib/components/table/types';
+	import { toast } from 'svelte-sonner';
 
 	export let data: PageData;
 	const addPersonFormData = data.addPersonForm;
@@ -22,6 +24,13 @@
 		page: 1
 	};
 	let filterPeopleResponsePromise: Promise<FilterPeopleResponse> = fetchFilterPeople();
+
+	export let popoverFilterDataMap: PopoverFilterDataMap = new Map();
+
+	popoverFilterDataMap.set('identity', { label: 'Identificación', value: '' });
+	popoverFilterDataMap.set('name', { label: 'Nombre', value: '' });
+	popoverFilterDataMap.set('lastname', { label: 'Apellido', value: '' });
+	popoverFilterDataMap.set('email', { label: 'Email', value: '' });
 
 	function fetchOnSuccess(event: any) {
 		const data: { status: boolean } = event.detail;
@@ -50,12 +59,49 @@
 		const data: { filter: string } = event.detail;
 
 		const filter = data.filter.trim();
-		filterPeopleRequest.identity = filter;
-		filterPeopleRequest.name = filter;
-		filterPeopleRequest.lastname = filter;
-		filterPeopleRequest.email = filter;
+		popoverFilterDataMap.forEach((_, key) => {
+			(filterPeopleRequest as any)[key] = filter;
+		});
 
-		fetchFilterPeople();
+		fetchFilterPeople().then((response: FilterPeopleResponse) => {
+			if (response.count === 0) {
+				toast.warning(`No hay datos para el filtro: ${filter}`);
+				popoverFilterDataMap.forEach((_, key) => {
+					(filterPeopleRequest as any)[key] = '';
+				});
+				fetchFilterPeople();
+			}
+		});
+	}
+
+	function handleOnDetailedFilter() {
+		let request: FilterPeopleRequest = {
+			page: filterPeopleRequest.page,
+			page_size: filterPeopleRequest.page_size
+		};
+		popoverFilterDataMap.forEach((item, key) => {
+			if (item.value !== '') {
+				(request as any)[key] = item.value;
+			}
+		});
+		filterPeopleRequest = request;
+
+		fetchFilterPeople().then((response: FilterPeopleResponse) => {
+			if (response.count === 0) {
+				let message = 'No hay datos para el filtro\n';
+				popoverFilterDataMap.forEach((item, _) => {
+					if (item.value !== '') {
+						message += `${item.label}: ${item.value}; `;
+					}
+				});
+				message = message.slice(0, message.length - 2);
+				toast.warning(message);
+				popoverFilterDataMap.forEach((_, key) => {
+					(filterPeopleRequest as any)[key] = '';
+				});
+				fetchFilterPeople();
+			}
+		});
 	}
 
 	function handlePaginationChanged() {
@@ -81,9 +127,11 @@
 				bind:filterPeopleRequest
 				formData={updatePersonFormData}
 				{filterPeopleResponse}
+				bind:popoverFilterDataMap
 				on:updated={fetchOnSuccess}
 				on:deleted={fetchOnSuccess}
 				on:filterChanged={handleOnFilterChanged}
+				on:detailedFilter={handleOnDetailedFilter}
 				on:paginationChanged={handlePaginationChanged}
 			></PeopleTable>
 		{:else}
