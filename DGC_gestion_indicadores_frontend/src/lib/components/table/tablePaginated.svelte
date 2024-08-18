@@ -3,12 +3,18 @@
 	import { Render, Subscribe } from 'svelte-headless-table';
 
 	import ArrowUpDown from 'lucide-svelte/icons/arrow-up-down';
+	import Search from 'lucide-svelte/icons/search';
+	import X from 'lucide-svelte/icons/x';
+
+	import PopoverFilter from './popoverFilter.svelte';
 
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Button } from '$lib/components/ui/button';
 	import * as Table from '$lib/components/ui/table';
 	import { createEventDispatcher } from 'svelte';
+
+	import type { PopoverFilterDataMap } from './types';
 
 	export let table: HeadlessTable<any, any>;
 	export let columns: Column<any, any>[];
@@ -22,6 +28,8 @@
 	const { hasNextPage, hasPreviousPage, pageIndex, pageSize } = pluginStates.page;
 
 	const { filterValue } = pluginStates.filter;
+
+	export let popoverFilterDataMap: PopoverFilterDataMap = new Map();
 
 	export let page_index = $pageIndex;
 	export let filter_value = $filterValue;
@@ -38,9 +46,29 @@
 		page_size = $pageSize;
 	}
 
+	let isFocused = false;
+
+	function handleFocus() {
+		isFocused = true;
+	}
+
+	function handleBlur() {
+		isFocused = false;
+	}
+
+	function handleDeleteFilter() {
+		if (filter_value !== '') {
+			filter_value = '';
+			return handleFilterChanged();
+		}
+	}
+
 	const dispatch = createEventDispatcher();
 	function handleFilterChanged() {
 		return dispatch('filterChanged');
+	}
+	function handleOnDetailedFilter() {
+		return dispatch('detailedFilter');
 	}
 	function handlePageChanged() {
 		return dispatch('pageChanged');
@@ -50,14 +78,30 @@
 	}
 </script>
 
-<div class="flex items-center gap-2 py-4">
-	<Input
-		class="w-3/4"
-		placeholder="Filtrar..."
-		type="text"
-		bind:value={$filterValue}
-		on:change={handleFilterChanged}
-	/>
+<div class="flex items-center justify-between gap-2 py-4">
+	<div
+		class="flex w-3/4 items-center rounded-sm border px-3 pr-2 {isFocused
+			? 'border-bg ring-2 ring-ring ring-offset-2 ring-offset-2-primary ring-offset-background'
+			: 'border-bg'}"
+	>
+		<Search class={'mr-2 h-4 w-4'} />
+		<input
+			class="placeholder:text-muted-foreground flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-none disabled:cursor-not-allowed disabled:opacity-50"
+			placeholder="Filtrar..."
+			type="text"
+			bind:value={$filterValue}
+			on:change={handleFilterChanged}
+			on:focus={handleFocus}
+			on:blur={handleBlur}
+		/>
+		<Button class="h-min p-1" variant="ghost" on:click={handleDeleteFilter}>
+			<X class={'h-4 w-4'} />
+		</Button>
+	</div>
+
+	<PopoverFilter bind:popoverFilterDataMap on:detailedFilter={handleOnDetailedFilter}
+	></PopoverFilter>
+
 	<Input
 		type="number"
 		placeholder="Tamaño página"
@@ -81,7 +125,7 @@
 										{#if filterFields.find((field) => cell.id === field)}
 											<Button variant="ghost" on:click={props.sort.toggle}>
 												<Render of={cell.render()} />
-												<ArrowUpDown class={'ml-2 h-4 w-4 stroke-primary'} />
+												<ArrowUpDown class={'stroke-primary ml-2 h-4 w-4'} />
 											</Button>
 										{:else}
 											<Render of={cell.render()} />
