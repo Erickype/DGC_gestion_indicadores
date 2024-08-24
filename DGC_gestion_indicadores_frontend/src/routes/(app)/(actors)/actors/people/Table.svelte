@@ -6,7 +6,7 @@
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
 
 	import Table from '$lib/components/table/tablePaginated.svelte';
-	import UpdateModal from './UpdateModal.svelte';
+	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
 
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import { createEventDispatcher } from 'svelte';
@@ -18,6 +18,7 @@
 	} from '$lib/api/model/api/person';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
 	import type { UpdatePersonSchema } from './schema';
+	import UpdateForm from './UpdateForm.svelte';
 
 	export let filterPeopleResponse: FilterPeopleResponse;
 	let people: Person[] = filterPeopleResponse.people;
@@ -44,10 +45,10 @@
 		filterPeopleRequest.email
 	];
 
-	let uniqueValues = [...new Set(values.filter(value => value !== ""))];
+	let uniqueValues = [...new Set(values.filter((value) => value !== ''))];
 
-	let initialFilterValue: string | undefined = 
-		uniqueValues.length === 1 ? uniqueValues[0] : uniqueValues.join(" ");
+	let initialFilterValue: string | undefined =
+		uniqueValues.length === 1 ? uniqueValues[0] : uniqueValues.join(' ');
 
 	export let popoverFilterDataMap: PopoverFilterDataMap = new Map();
 
@@ -158,7 +159,14 @@
 	}
 </script>
 
-<UpdateModal {formData} bind:person bind:open={updateFormOpen} on:updated={handleUpdated} />
+<UpdateModal
+	modalTitle="Actualizar información de persona"
+	{formData}
+	formComponent={UpdateForm}
+	bind:updateEntity={person}
+	bind:open={updateFormOpen}
+	on:updated={handleUpdated}
+/>
 
 <div class="w-full">
 	<Table
