@@ -28,7 +28,7 @@
 
 	const table = createTable(readable(careers), {
 		page: addPagination({
-			initialPageSize: 4
+			initialPageSize: 5
 		}),
 		sort: addSortBy(),
 		filter: addTableFilter({
