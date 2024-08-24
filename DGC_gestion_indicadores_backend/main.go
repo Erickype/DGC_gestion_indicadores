@@ -69,10 +69,6 @@ func serveApplication() {
 	adminRoutes.PUT("/academicPeriod/:id", academicPeriod.UpdateAcademicPeriod)
 	adminRoutes.DELETE("/academicPeriod/:id", academicPeriod.DeleteAcademicPeriod)
 
-	adminRoutes.POST("/person", person.CreatePerson)
-	adminRoutes.PUT("/person/:id", person.UpdatePerson)
-	adminRoutes.DELETE("/person/:id", person.DeletePerson)
-
 	adminRoutes.POST("/faculty", faculty.CreateFaculty)
 	adminRoutes.PUT("/faculty/:id", faculty.UpdateFaculty)
 	adminRoutes.DELETE("/faculty/:id", faculty.DeleteFaculty)
@@ -93,6 +89,9 @@ func serveApplication() {
 	upeRoutes.Use(util.JWTAuth(), util.JWTAuthUPE())
 	upeRoutes.GET("/people", person.GetPersons)
 	upeRoutes.POST("/people/filter", person.FilterPeople)
+	upeRoutes.POST("/person", person.CreatePerson)
+	upeRoutes.PUT("/person/:id", person.UpdatePerson)
+	upeRoutes.DELETE("/person/:id", person.DeletePerson)
 
 	upeRoutes.GET("/faculties", faculty.GetFaculties)
 
