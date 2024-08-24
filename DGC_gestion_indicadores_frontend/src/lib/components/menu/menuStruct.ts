@@ -2,6 +2,7 @@ import CircleGauge from "lucide-svelte/icons/circle-gauge"
 import FileText from "lucide-svelte/icons/file-text"
 import Settings from "lucide-svelte/icons/settings"
 import School from "lucide-svelte/icons/school";
+import BookUser from "lucide-svelte/icons/book-user";
 
 export interface Menu {
     name: string,
@@ -46,12 +47,21 @@ export const menus: Menu[] = [
         roles: [1]
     },
     {
+        name: "Actores",
+        icon: BookUser,
+        links: [
+            { name: "Personas", route: "/actors/people" },
+            { name: "Profesores", route: "/actors/teachers" },
+            { name: "Autores", route: "/actors/authors" },
+        ],
+        roles: [1, 2]
+    },
+    {
         name: 'Administrador',
         icon: Settings,
         links: [
             { name: 'Periodos Evaluación', route: '/admin/evaluation-periods' },
             { name: 'Periodos Académicos', route: '/admin/academic-periods' },
-            { name: 'Personas', route: '/admin/people' },
             { name: 'Usuarios', route: '/admin/users' },
             { name: 'Admin', route: '/admin' },
         ],
