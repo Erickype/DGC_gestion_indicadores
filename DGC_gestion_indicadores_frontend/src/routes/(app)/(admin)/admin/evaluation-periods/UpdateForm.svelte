@@ -27,7 +27,7 @@
 	import type { EvaluationPeriod } from '$lib/api/model/view/evaluationPeriod';
 
 	export let data: SuperValidated<Infer<UpdateEvaluationPeriodSchema>>;
-	export let evaluationPeriod: EvaluationPeriod;
+	export let updateEntity: EvaluationPeriod;
 
 	const dispatch = createEventDispatcher();
 
@@ -53,12 +53,12 @@
 	const { form: formData, message, enhance } = form;
 
 	$: {
-		$formData.ID = evaluationPeriod!.ID;
-		$formData.name = evaluationPeriod!.name;
-		$formData.abbreviation = evaluationPeriod!.abbreviation;
-		$formData.description = evaluationPeriod!.description;
-		$formData.startDate = toISO8601(evaluationPeriod!.start_year);
-		$formData.endDate = toISO8601(evaluationPeriod!.end_year);
+		$formData.ID = updateEntity!.ID;
+		$formData.name = updateEntity!.name;
+		$formData.abbreviation = updateEntity!.abbreviation;
+		$formData.description = updateEntity!.description;
+		$formData.startDate = toISO8601(updateEntity!.start_year);
+		$formData.endDate = toISO8601(updateEntity!.end_year);
 	}
 
 	function toISO8601(dateString: string): string {
@@ -164,7 +164,7 @@
 							<CalendarMY
 								monthLabels={months}
 								placeholder={placeholderStart}
-								on:date-selected={(v) => {
+								on:keydown={(v) => {
 									manageDateChanged(v, 'start');
 								}}
 							/>
@@ -195,7 +195,7 @@
 							<CalendarMY
 								monthLabels={months}
 								placeholder={placeholderEnd}
-								on:date-selected={(v) => {
+								on:keydown={(v) => {
 									manageDateChanged(v, 'end');
 								}}
 							/>

@@ -6,14 +6,16 @@
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
 
 	import Table from '$lib/components/table/table.svelte';
-	import UpdateModal from './UpdateModal.svelte';
+	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
 
 	import type { EvaluationPeriod } from '$lib/api/model/view/evaluationPeriod';
-	import { createEventDispatcher } from 'svelte';
-	import { toast } from 'svelte-sonner';
+
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import type { UpdateEvaluationPeriodSchema } from './schema';
-	import { updated } from '$app/stores';
+	import { createEventDispatcher } from 'svelte';
+	import { toast } from 'svelte-sonner';
+	
+	import UpdateForm from './UpdateForm.svelte';
 
 	export let periods: EvaluationPeriod[];
 	export let formData: SuperValidated<Infer<UpdateEvaluationPeriodSchema>>;
@@ -130,8 +132,10 @@
 </script>
 
 <UpdateModal
+	modalTitle="Actualizar periodo de evaluación"
 	{formData}
-	bind:evaluationPeriod
+	formComponent={UpdateForm}
+	bind:updateEntity={evaluationPeriod}
 	bind:open={updateFormOpen}
 	on:updated={handleUpdated}
 />
