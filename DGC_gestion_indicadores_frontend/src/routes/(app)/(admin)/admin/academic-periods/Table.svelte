@@ -6,8 +6,6 @@
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
 
 	import Table from '$lib/components/table/table.svelte';
-	/* 	import UpdateModal from './UpdateModal.svelte';
-	 */
 	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
 
 	import { createEventDispatcher } from 'svelte';
@@ -131,7 +129,7 @@
 </script>
 
 <UpdateModal
-	modalTitle="Actualizar información de persona"
+	modalTitle="Actualizar información de periodo académico"
 	{formData}
 	formComponent={UpdateForm}
 	bind:updateEntity={academicPeriod}
