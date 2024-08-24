@@ -6,13 +6,16 @@
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
 
 	import Table from '$lib/components/table/table.svelte';
-	import UpdateModal from './UpdateModal.svelte';
+	/* 	import UpdateModal from './UpdateModal.svelte';
+	 */
+	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
 
 	import { createEventDispatcher } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import type { AcademicPeriod } from '$lib/api/model/view/academicPeriod';
 	import type { UpdateAcademicPeriodSchema } from './schema';
+	import UpdateForm from './UpdateForm.svelte';
 
 	export let periods: AcademicPeriod[];
 	export let formData: SuperValidated<Infer<UpdateAcademicPeriodSchema>>;
@@ -127,8 +130,15 @@
 	}
 </script>
 
-<UpdateModal {formData} bind:academicPeriod bind:open={updateFormOpen} on:updated={handleUpdated} />
+<UpdateModal
+	modalTitle="Actualizar información de persona"
+	{formData}
+	formComponent={UpdateForm}
+	bind:updateEntity={academicPeriod}
+	bind:open={updateFormOpen}
+	on:updated={handleUpdated}
+/>
 
 <div class="w-full">
-	<Table {table} {columns} {filterFields} itemCount={periods.length}/>
+	<Table {table} {columns} {filterFields} itemCount={periods.length} />
 </div>

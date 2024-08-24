@@ -116,5 +116,5 @@
 />
 
 <div class="w-full">
-	<Table {table} {columns} {filterFields} />
+	<Table {table} {columns} {filterFields} itemCount={careers.length} />
 </div>

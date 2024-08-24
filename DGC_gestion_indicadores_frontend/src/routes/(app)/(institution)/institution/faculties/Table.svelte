@@ -120,6 +120,6 @@
 	on:updated={handleUpdated}
 />
 
-<div class="w-full max-h-[50%]">
-	<Table {table} {columns} {filterFields} />
+<div class="max-h-[50%] w-full">
+	<Table {table} {columns} {filterFields} itemCount={faculties.length} />
 </div>
