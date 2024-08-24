@@ -25,7 +25,7 @@ func CreateAcademicPeriod(period *AcademicPeriod) (err error) {
 }
 
 func GetAcademicPeriods(periods *[]AcademicPeriod) (err error) {
-	err = database.DB.Find(periods).Error
+	err = database.DB.Order("start_date desc").Find(periods).Error
 	if err != nil {
 		return err
 	}
