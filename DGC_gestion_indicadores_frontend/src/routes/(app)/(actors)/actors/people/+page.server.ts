@@ -4,7 +4,7 @@ import { redirect, type Actions } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
 import { addPersonSchema, updatePersonSchema } from "./schema";
 import type { PostPersonRequest, PutPersonRequest } from "$lib/api/model/api/person";
-import { PostPerson, PutPerson } from "$lib/api/controller/admin/person";
+import { PostPerson, PutPerson } from "$lib/api/controller/api/person";
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (!locals.user) {

@@ -1,4 +1,4 @@
-import { DeletePerson } from "$lib/api/controller/admin/person";
+import { DeletePerson } from "$lib/api/controller/api/person";
 import { error, json, type RequestHandler } from "@sveltejs/kit";
 
 export const DELETE: RequestHandler = async ({ cookies, params }) => {

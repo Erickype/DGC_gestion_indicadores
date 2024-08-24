@@ -1,6 +1,6 @@
-import type { FilterPeopleRequest, FilterPeopleResponse, Person } from "$lib/api/model/api/person";
+import type { FilterPeopleRequest, FilterPeopleResponse, Person, PostPersonRequest, PutPersonRequest } from "$lib/api/model/api/person";
 import { generateErrorFromCommonError, type CommonError } from "$lib/api/model/errors";
-import { getPeopleRoute, postFilterPeopleRoute } from "$lib/api/routes/api/person";
+import { deletePersonRoute, getPeopleRoute, postFilterPeopleRoute, postPersonRoute, putPersonRoute } from "$lib/api/routes/api/person";
 import type { Message } from "$lib/components/combobox/combobox";
 import { generateCommonErrorFromFetchError } from "$lib/utils";
 
@@ -47,6 +47,37 @@ export async function PostFilterPeople(token: string, filterPeopleRequest: Filte
     }
 }
 
+export async function PostPerson(person: PostPersonRequest, token: string) {
+    return await fetch(postPersonRoute, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        },
+        body: JSON.stringify(person)
+    });
+}
+
+export async function PutPerson(person: PutPersonRequest, token: string) {
+    return await fetch(putPersonRoute + person.ID.toString(), {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        },
+        body: JSON.stringify(person)
+    });
+}
+
+export async function DeletePerson(id: string, token: string) {
+    return await fetch(deletePersonRoute + id, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }
+    })
+}
 
 export async function LoadPeopleWithComboMessages(token: string) {
     const response = await GetPeople(token);
