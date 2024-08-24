@@ -18,11 +18,11 @@
 	export let formData: SuperValidated<Infer<UpdateAcademicPeriodSchema>>;
 	let academicPeriod: AcademicPeriod;
 
-	const filterFields = ['name', 'abbreviation'];
+	const filterFields = ['name', 'abbreviation', 'description', 'start_date', 'end_date'];
 
 	const table = createTable(readable(periods), {
 		page: addPagination({
-			initialPageSize: 4
+			initialPageSize: 5
 		}),
 		sort: addSortBy(),
 		filter: addTableFilter({
@@ -62,7 +62,6 @@
 			header: 'Fecha fin',
 			cell: ({ value }) => {
 				const date = new Date(value);
-				date.setHours(1);
 				const formattedDate = date.toLocaleDateString('es-EC', {
 					year: 'numeric',
 					month: 'numeric',
@@ -128,13 +127,8 @@
 	}
 </script>
 
-<UpdateModal
-	{formData}
-	bind:academicPeriod
-	bind:open={updateFormOpen}
-	on:updated={handleUpdated}
-/>
+<UpdateModal {formData} bind:academicPeriod bind:open={updateFormOpen} on:updated={handleUpdated} />
 
 <div class="w-full">
-	<Table {table} {columns} {filterFields} />
+	<Table {table} {columns} {filterFields} itemCount={periods.length}/>
 </div>
