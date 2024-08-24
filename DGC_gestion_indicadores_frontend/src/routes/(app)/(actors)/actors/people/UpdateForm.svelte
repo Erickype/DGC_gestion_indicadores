@@ -13,7 +13,7 @@
 	import { toast } from 'svelte-sonner';
 
 	export let data: SuperValidated<Infer<UpdatePersonSchema>>;
-	export let person: Person;
+	export let updateEntity: Person;
 
 	const dispatch = createEventDispatcher();
 
@@ -45,11 +45,11 @@
 	const { form: formData, enhance } = form;
 
 	$: {
-		$formData.ID = person!.ID;
-		$formData.identity = person!.identity;
-		$formData.name = person!.name;
-		$formData.lastname = person!.lastname;
-		$formData.email = person!.email;
+		$formData.ID = updateEntity!.ID;
+		$formData.identity = updateEntity!.identity;
+		$formData.name = updateEntity!.name;
+		$formData.lastname = updateEntity!.lastname;
+		$formData.email = updateEntity!.email;
 	}
 </script>
 

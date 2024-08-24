@@ -15,8 +15,7 @@
 		DateFormatter,
 		type DateValue,
 		getLocalTimeZone,
-		parseDate,
-		today
+		parseDate
 	} from '@internationalized/date';
 
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
@@ -28,7 +27,7 @@
 	import type { CommonError } from '$lib/api/model/errors';
 
 	export let data: SuperValidated<Infer<UpdateAcademicPeriodSchema>>;
-	export let academicPeriod: AcademicPeriod;
+	export let updateEntity: AcademicPeriod;
 
 	const dispatch = createEventDispatcher();
 
@@ -60,12 +59,12 @@
 	const { form: formData, message, enhance } = form;
 
 	$: {
-		$formData.ID = academicPeriod!.ID;
-		$formData.name = academicPeriod!.name;
-		$formData.abbreviation = academicPeriod!.abbreviation;
-		$formData.description = academicPeriod!.description;
-		$formData.startDate = toISO8601(academicPeriod!.start_date);
-		$formData.endDate = toISO8601(academicPeriod!.end_date);
+		$formData.ID = updateEntity!.ID;
+		$formData.name = updateEntity!.name;
+		$formData.abbreviation = updateEntity!.abbreviation;
+		$formData.description = updateEntity!.description;
+		$formData.startDate = toISO8601(updateEntity!.start_date);
+		$formData.endDate = toISO8601(updateEntity!.end_date);
 	}
 
 	function toISO8601(dateString: string): string {
@@ -80,8 +79,8 @@
 		dateStyle: 'long'
 	});
 
-	let placeholderStart = parseDate(toISO8601(academicPeriod!.start_date));
-	let placeholderEnd = parseDate(toISO8601(academicPeriod!.end_date));
+	let placeholderStart = parseDate(toISO8601(updateEntity!.start_date));
+	let placeholderEnd = parseDate(toISO8601(updateEntity!.end_date));
 	let startDateValue: DateValue | undefined;
 	let endDateValue: DateValue | undefined;
 
