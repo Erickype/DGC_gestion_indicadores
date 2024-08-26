@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
-	import { updatePersonSchema, type UpdatePersonSchema } from './schema';
+	import { updateTeacherSchema, type UpdateTeacherSchema } from './schema';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	import type { CommonError } from '$lib/api/model/errors';
@@ -12,7 +12,7 @@
 	import * as Form from '$lib/components/ui/form';
 	import { toast } from 'svelte-sonner';
 
-	export let data: SuperValidated<Infer<UpdatePersonSchema>>;
+	export let data: SuperValidated<Infer<UpdateTeacherSchema>>;
 	export let updateEntity: Person;
 
 	const dispatch = createEventDispatcher();
@@ -24,7 +24,7 @@
 	}
 
 	const form = superForm(data, {
-		validators: zodClient(updatePersonSchema),
+		validators: zodClient(updateTeacherSchema),
 		taintedMessage: null,
 		onUpdated: ({ form: f }) => {
 			const message = f.message!;
