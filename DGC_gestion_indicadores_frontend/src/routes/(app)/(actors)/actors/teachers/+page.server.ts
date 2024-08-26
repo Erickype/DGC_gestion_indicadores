@@ -2,9 +2,12 @@ import { message, superValidate, type ErrorStatus } from "sveltekit-superforms";
 import type { PageServerLoad } from "./$types";
 import { redirect, type Actions } from "@sveltejs/kit";
 import { zod } from "sveltekit-superforms/adapters";
-import { addPersonSchema, updatePersonSchema } from "./schema";
+import { addTeacherSchema, updateTeacherSchema } from "./schema";
 import type { PostPersonRequest, PutPersonRequest } from "$lib/api/model/api/person";
 import { PostPerson, PutPerson } from "$lib/api/controller/api/person";
+import type { AddTeacherRequest } from "$lib/api/model/api/teacher";
+import { CreateTeacher } from "$lib/api/controller/api/teacher";
+import { generateFormMessageFromHttpResponse } from "$lib/utils";
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (!locals.user) {
@@ -12,14 +15,14 @@ export const load: PageServerLoad = async ({ locals }) => {
     }
 
     return {
-        addPersonForm: await superValidate(zod(addPersonSchema)),
-        updatePersonForm: await superValidate(zod(updatePersonSchema))
+        addPersonForm: await superValidate(zod(addTeacherSchema)),
+        updatePersonForm: await superValidate(zod(updateTeacherSchema))
     }
 };
 
 export const actions: Actions = {
-    addPerson: async (event) => {
-        const form = await superValidate(event, zod(addPersonSchema))
+    addTeacher: async (event) => {
+        const form = await superValidate(event, zod(addTeacherSchema))
 
         if (!form.valid) {
             return message(form,
@@ -29,29 +32,17 @@ export const actions: Actions = {
 
         const token = event.cookies.get("AuthorizationToken")
         const data = form.data
-        const person: PostPersonRequest = {
-            identity: data.identity,
-            name: data.name,
-            lastname: data.lastname,
-            email: data.email
+        const addTeacherRequest: AddTeacherRequest = {
+            person_id: data.person_id
         }
 
-        const res = await PostPerson(person, token!)
+        const response = await CreateTeacher(token!, addTeacherRequest)
 
-        if (!res.ok) {
-            const status = res.status as unknown as ErrorStatus
-            const data = await res.json()
-            return message(form,
-                { success: false, error: data },
-                { status: status })
-        }
-        return message(form, {
-            success: true
-        })
+        return generateFormMessageFromHttpResponse(form, response)
     },
 
     updatePerson: async (event) => {
-        const form = await superValidate(event, zod(updatePersonSchema))
+        const form = await superValidate(event, zod(updateTeacherSchema))
         if (!form.valid) {
             return message(form,
                 { success: false, error: "Invalid form" },
