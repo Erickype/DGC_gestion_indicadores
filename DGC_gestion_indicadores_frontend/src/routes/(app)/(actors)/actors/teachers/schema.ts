@@ -1,32 +1,14 @@
 import { z } from "zod";
 
-export const addPersonSchema = z.object({
-  identity: z.string({
-    required_error: "Cédula requerida"
-  }).length(10, {
-    message: "Ingrese 10 dígitos"
-  }).regex(/^\d+$/, {
-    message: "Solo se permiten dígitos"
-  }),
-
-  name: z.string({
-    required_error: "Nombre requerido",
-  }).min(5, {
-    message: "Nombre mínimo 5 caracteres."
-  }).max(50),
-
-  lastname: z.string({
-    required_error: "Apellido requerida"
-  }).min(5, {
-    message: "Apellido mínimo 5 caracteres."
-  }).max(50),
-
-  email: z.string({
-    required_error: "Abreviación requerida"
-  }).email({ message: "Formato: user@mail.com" }),
+export const addTeacherSchema = z.object({
+  person_id: z.number({
+    required_error: "Persona requerida"
+  }).gt(0, {
+    message: "No existe la persona"
+  })
 });
 
-export const updatePersonSchema = z.object({
+export const updateTeacherSchema = z.object({
   ID: z.number().gt(0),
 
   identity: z.string({
@@ -54,5 +36,5 @@ export const updatePersonSchema = z.object({
   }).email({ message: "Formato: user@mail.com" }),
 });
 
-export type AddPersonSchema = typeof addPersonSchema;
-export type UpdatePersonSchema = typeof updatePersonSchema;
+export type AddTeacherSchema = typeof addTeacherSchema;
+export type UpdateTeacherSchema = typeof updateTeacherSchema;
