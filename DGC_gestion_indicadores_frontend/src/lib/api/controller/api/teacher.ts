@@ -1,5 +1,5 @@
 import { deleteTeacherRoute, getTeachersByAcademicPeriodIDRoute, postTeacherRoute, updateTeacherRoute } from "$lib/api/routes/api/teacher";
-import type { CreateTeacherRequest, Teacher, UpdateTeacherRequest } from "$lib/api/model/api/teacher";
+import type { AddTeacherRequest, CreateTeacherRequest, Teacher, UpdateTeacherRequest } from "$lib/api/model/api/teacher";
 
 import { generateCommonErrorFromFetchError } from "$lib/utils";
 import type { CommonError } from "$lib/api/model/errors";
@@ -25,7 +25,7 @@ export async function GetTeachersByAcademicPeriodID(token: string, academicPerio
     }
 }
 
-export async function CreateTeacher(token: string, request: CreateTeacherRequest) {
+export async function CreateTeacher(token: string, request: AddTeacherRequest) {
     try {
         const response = await fetch(postTeacherRoute, {
             method: "POST",
