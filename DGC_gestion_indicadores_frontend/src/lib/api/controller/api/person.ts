@@ -98,3 +98,14 @@ export async function LoadPeopleWithComboMessages(token: string) {
         messages
     }
 }
+
+export function GenerateComboMessagesFromPeople(people: Person[]): Message[] {
+    let messages: Message[] = []
+    messages = messages.concat(
+        people.map((person) => ({
+            value: person.ID,
+            label: person.identity + " " + person.name + " " + person.lastname,
+        }))
+    );
+    return messages
+}
