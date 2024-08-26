@@ -4,12 +4,13 @@
 
 	import Alert from '$lib/components/alert/alert.svelte';
 	import type { PageData } from './$types';
-	import AddModal from './AddModal.svelte';
+	import AddModal from '$lib/components/modal/AddModal.svelte';
 
 	import PeopleTable from './Table.svelte';
 	import { goto } from '$app/navigation';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
 	import { toast } from 'svelte-sonner';
+	import AddForm from './AddForm.svelte';
 
 	export let data: PageData;
 	const addPersonFormData = data.addPersonForm;
@@ -110,12 +111,17 @@
 </script>
 
 <svelte:head>
-	<title>Personas</title>
+	<title>Profesores</title>
 </svelte:head>
 
 <div class="mx-auto flex w-full place-content-center justify-between px-8">
-	<h2 class="text-2xl font-bold">Personas</h2>
-	<AddModal formData={addPersonFormData} on:created={fetchOnSuccess} />
+	<h2 class="text-2xl font-bold">Profesores</h2>
+	<AddModal
+		modalTitle="Seleccionar a una persona para profesor"
+		formComponent={AddForm}
+		formData={addPersonFormData}
+		on:created={fetchOnSuccess}
+	/>
 </div>
 
 <div class="mx-auto flex w-full flex-col place-content-center px-8">
