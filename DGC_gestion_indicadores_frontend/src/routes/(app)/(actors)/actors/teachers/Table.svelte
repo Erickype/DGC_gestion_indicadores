@@ -17,13 +17,13 @@
 		Person
 	} from '$lib/api/model/api/person';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
-	import type { UpdatePersonSchema } from './schema';
+	import type { UpdateTeacherSchema } from './schema';
 	import UpdateForm from './UpdateForm.svelte';
 
 	export let filterPeopleResponse: FilterPeopleResponse;
 	let people: Person[] = filterPeopleResponse.people;
 
-	export let formData: SuperValidated<Infer<UpdatePersonSchema>>;
+	export let formData: SuperValidated<Infer<UpdateTeacherSchema>>;
 	let person: Person;
 
 	let filterValue = '';
