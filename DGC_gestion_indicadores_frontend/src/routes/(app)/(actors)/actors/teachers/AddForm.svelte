@@ -2,56 +2,42 @@
 	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { addTeacherSchema, type AddTeacherSchema } from './schema';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import type { CommonError } from '$lib/api/model/errors';
 
+	import { createEventDispatcher } from 'svelte';
+	import { browser } from '$app/environment';
+	import { writable } from 'svelte/store';
+	import { toast } from 'svelte-sonner';
+
+	import ServerFormSelect from '$lib/components/combobox/serverFormSelect.svelte';
+	import FormFieldSkeleton from '$lib/components/skeleton/formField.svelte';
 	import * as Form from '$lib/components/ui/form';
+
+	import type { FilterPeopleRequest, FilterPeopleResponse } from '$lib/api/model/api/person';
+	import { GenerateComboMessagesFromPeople } from '$lib/api/controller/api/person';
+	import type { PopoverFilterDataMap } from '$lib/components/table/types';
+	import type { Teacher } from '$lib/api/model/api/teacher';
+	import {
+		fetchFilterPeople,
+		fetchOnDetailedFilter,
+		fetchOnFilterChanged,
+		generateInitialFilterValue,
+		newFilterPeopleRequest,
+		newPopoverFilterDataMap
+	} from '$lib/components/filters/people';
 	import {
 		manageToastFromErrorMessageOnAddForm,
 		manageToastFromInvalidAddForm
 	} from '$lib/utils.js';
 
-	import { createEventDispatcher } from 'svelte';
-	import { browser } from '$app/environment';
-	import { toast } from 'svelte-sonner';
-
-	import FormFieldSkeleton from '$lib/components/skeleton/formField.svelte';
-
-	import ServerFormSelect from '$lib/components/combobox/serverFormSelect.svelte';
-	import type { Teacher } from '$lib/api/model/api/teacher';
-	import { goto } from '$app/navigation';
-	import type { FilterPeopleRequest, FilterPeopleResponse } from '$lib/api/model/api/person';
-	import Alert from '$lib/components/alert/alert.svelte';
-	import { GenerateComboMessagesFromPeople } from '$lib/api/controller/api/person';
-	import { writable } from 'svelte/store';
-	import type { PopoverFilterDataMap } from '$lib/components/table/types';
-
 	export let data: SuperValidated<Infer<AddTeacherSchema>, App.Superforms.Message>;
 
-	let filterPeopleRequest: FilterPeopleRequest = {
-		identity: '',
-		name: '',
-		lastname: '',
-		email: '',
-		page_size: 5,
-		page: 1
-	};
-	let filterPeopleResponsePromise: Promise<FilterPeopleResponse> = fetchFilterPeople();
+	let openPeople = false;
 
-	async function fetchFilterPeople() {
-		const url = `/api/people/filter`;
-		const response = await fetch(url, {
-			method: 'POST',
-			body: JSON.stringify(filterPeopleRequest)
-		});
-		if (!response.ok) {
-			const errorData = (await response.json()) as CommonError;
-			if (response.status === 401) {
-				throw goto('/');
-			}
-			throw errorData;
-		}
-		return (filterPeopleResponsePromise = response.json());
-	}
+	let filterPeopleRequest: FilterPeopleRequest = newFilterPeopleRequest(5, 1);
+	let filterPeopleResponsePromise: Promise<FilterPeopleResponse> =
+		fetchFilterPeople(filterPeopleRequest);
+	let filterValue: string = '';
+	let popoverFilterDataMap: PopoverFilterDataMap = newPopoverFilterDataMap();
 
 	const dispatch = createEventDispatcher();
 
@@ -80,64 +66,25 @@
 
 	const { form: formData, enhance } = form;
 
-	let openPeople = false;
-
 	let formDataPersonID = writable($formData.person_id);
 	formDataPersonID.subscribe((value) => ($formData.person_id = value));
 
-	let filterValue: string = '';
-
-	let popoverFilterDataMap: PopoverFilterDataMap = new Map();
-
-	popoverFilterDataMap.set('identity', { label: 'Identificación', value: '' });
-	popoverFilterDataMap.set('name', { label: 'Nombre', value: '' });
-	popoverFilterDataMap.set('lastname', { label: 'Apellido', value: '' });
-	popoverFilterDataMap.set('email', { label: 'Email', value: '' });
-
 	function handleOnFilterChanged() {
-		const filter = filterValue.trim();
-		popoverFilterDataMap.forEach((_, key) => {
-			(filterPeopleRequest as any)[key] = filter;
-		});
-
-		fetchFilterPeople().then((response: FilterPeopleResponse) => {
-			if (response.count === 0) {
-				toast.warning(`No hay datos para el filtro: ${filter}`);
-				popoverFilterDataMap.forEach((_, key) => {
-					(filterPeopleRequest as any)[key] = '';
-				});
-				fetchFilterPeople();
-			}
-		});
+		filterPeopleResponsePromise = fetchOnFilterChanged(
+			filterValue.trim(),
+			filterPeopleRequest,
+			popoverFilterDataMap
+		);
 	}
 
-	function handleOnDetailedFilter() {
-		let request: FilterPeopleRequest = {
-			page: filterPeopleRequest.page,
-			page_size: filterPeopleRequest.page_size
-		};
-		popoverFilterDataMap.forEach((item, key) => {
-			if (item.value !== '') {
-				(request as any)[key] = item.value;
-			}
-		});
-		filterPeopleRequest = request;
-
-		fetchFilterPeople().then((response: FilterPeopleResponse) => {
-			if (response.count === 0) {
-				let message = 'No hay datos para el filtro\n';
-				popoverFilterDataMap.forEach((item, _) => {
-					if (item.value !== '') {
-						message += `${item.label}: ${item.value}; `;
-					}
-				});
-				message = message.slice(0, message.length - 2);
-				toast.warning(message);
-				popoverFilterDataMap.forEach((_, key) => {
-					(filterPeopleRequest as any)[key] = '';
-				});
-				fetchFilterPeople();
-			}
+	async function handleOnDetailedFilter() {
+		filterPeopleResponsePromise = fetchOnDetailedFilter(
+			filterPeopleRequest,
+			popoverFilterDataMap
+		).then(({ request, response }) => {
+			filterPeopleRequest = request;
+			filterValue = generateInitialFilterValue(filterPeopleRequest)!;
+			return response;
 		});
 	}
 </script>
@@ -150,6 +97,7 @@
 			{:then filterPeopleResponse}
 				<ServerFormSelect
 					bind:filterValue
+					formLabel="Persona"
 					bind:popoverFilterDataMap
 					comboData={GenerateComboMessagesFromPeople(filterPeopleResponse.people)}
 					bind:openCombo={openPeople}
