@@ -23,7 +23,8 @@
 	export let formDataID = writable();
 	export let emptyLabel: string = 'Seleccionar';
 	export let popoverFilterDataMap: PopoverFilterDataMap = new Map();
-    export let filterValue: string
+	export let filterValue: string;
+	export let formLabel: string = 'Object';
 
 	let isFocused = false;
 
@@ -37,20 +38,27 @@
 
 	const dispatch = createEventDispatcher();
 
-    function handleFilterChanged() {
+	function handleFilterChanged() {
 		return dispatch('filterChanged');
 	}
 	function handleOnDetailedFilter() {
 		return dispatch('detailedFilter');
 	}
 
-    let typingTimeout:number
-    function handleInput() {
-        clearTimeout(typingTimeout);
-        typingTimeout = window.setTimeout(() => {
-            handleFilterChanged();
-        }, 500);
-    }
+	let typingTimeout: number;
+	function handleInput() {
+		clearTimeout(typingTimeout);
+		typingTimeout = window.setTimeout(() => {
+			handleFilterChanged();
+		}, 500);
+	}
+
+	function handleDeleteFilter() {
+		if (filterValue !== '') {
+			filterValue = '';
+			return handleFilterChanged();
+		}
+	}
 
 	function closeAndFocusTrigger(triggerId: string) {
 		openCombo = false;
@@ -62,7 +70,7 @@
 
 <Popover.Root bind:open={openCombo} let:ids>
 	<Form.Control let:attrs>
-		<Form.Label>Persona</Form.Label>
+		<Form.Label>{formLabel}</Form.Label>
 		<Popover.Trigger
 			class={cn(
 				buttonVariants({ variant: 'outline' }),
@@ -79,21 +87,23 @@
 	</Form.Control>
 	<Popover.Content class="w-[90%] p-0">
 		<Command.Root loop>
-			<div class="flex items-center">
+			<div class="flex items-center gap-1 p-1">
 				<div
-					class="flex w-full items-center rounded-sm border px-3 pr-2 "
+					class="flex w-full items-center rounded-sm border px-3 pr-2 {isFocused
+						? 'border-bg ring-ring ring-offset-2-primary ring-offset-background ring-2 ring-offset-2'
+						: 'border-bg'}"
 				>
 					<Search class={'mr-2 h-4 w-4'} />
 					<input
 						class="placeholder:text-muted-foreground flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-none disabled:cursor-not-allowed disabled:opacity-50"
 						placeholder="Filtrar..."
 						type="text"
-                        bind:value={filterValue}
-                        on:input={handleInput}
+						bind:value={filterValue}
+						on:input={handleInput}
 						on:focus={handleFocus}
 						on:blur={handleBlur}
 					/>
-					<Button class="h-min p-1" variant="ghost">
+					<Button class="h-min p-1" variant="ghost" on:click={handleDeleteFilter}>
 						<X class={'h-4 w-4'} />
 					</Button>
 				</div>
