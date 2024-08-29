@@ -1,112 +1,57 @@
 <script lang="ts">
-	import type { FilterPeopleRequest, FilterPeopleResponse } from '$lib/api/model/api/person';
-	import type { CommonError } from '$lib/api/model/errors';
-
+	import AddModal from '$lib/components/modal/AddModal.svelte';
 	import Alert from '$lib/components/alert/alert.svelte';
 	import type { PageData } from './$types';
-	import AddModal from '$lib/components/modal/AddModal.svelte';
 
-	import PeopleTable from './Table.svelte';
-	import { goto } from '$app/navigation';
+	import type { FilterPeopleRequest, FilterPeopleResponse } from '$lib/api/model/api/person';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
-	import { toast } from 'svelte-sonner';
+	import PeopleTable from './Table.svelte';
 	import AddForm from './AddForm.svelte';
+	import {
+		fetchFilterPeople,
+		fetchOnDetailedFilter,
+		fetchOnFilterChanged,
+		newFilterPeopleRequest,
+		newPopoverFilterDataMap
+	} from '$lib/components/filters/people';
 
 	export let data: PageData;
 	const addPersonFormData = data.addPersonForm;
 	const updatePersonFormData = data.updatePersonForm;
 
-	let filterPeopleRequest: FilterPeopleRequest = {
-		identity: '',
-		name: '',
-		lastname: '',
-		email: '',
-		page_size: 5,
-		page: 1
-	};
-	let filterPeopleResponsePromise: Promise<FilterPeopleResponse> = fetchFilterPeople();
-
-	export let popoverFilterDataMap: PopoverFilterDataMap = new Map();
-
-	popoverFilterDataMap.set('identity', { label: 'Identificación', value: '' });
-	popoverFilterDataMap.set('name', { label: 'Nombre', value: '' });
-	popoverFilterDataMap.set('lastname', { label: 'Apellido', value: '' });
-	popoverFilterDataMap.set('email', { label: 'Email', value: '' });
+	let filterPeopleRequest: FilterPeopleRequest = newFilterPeopleRequest(5, 1);
+	let filterPeopleResponsePromise: Promise<FilterPeopleResponse> =
+		fetchFilterPeople(filterPeopleRequest);
+	let popoverFilterDataMap: PopoverFilterDataMap = newPopoverFilterDataMap();
 
 	function fetchOnSuccess(event: any) {
 		const data: { status: boolean } = event.detail;
 		if (data.status) {
-			fetchFilterPeople();
+			filterPeopleResponsePromise = fetchFilterPeople(filterPeopleRequest);
 		}
-	}
-
-	async function fetchFilterPeople() {
-		const url = `/api/people/filter`;
-		const response = await fetch(url, {
-			method: 'POST',
-			body: JSON.stringify(filterPeopleRequest)
-		});
-		if (!response.ok) {
-			const errorData = (await response.json()) as CommonError;
-			if (response.status === 401) {
-				throw goto('/');
-			}
-			throw errorData;
-		}
-		return (filterPeopleResponsePromise = response.json());
 	}
 
 	function handleOnFilterChanged(event: CustomEvent) {
 		const data: { filter: string } = event.detail;
-
-		const filter = data.filter.trim();
-		popoverFilterDataMap.forEach((_, key) => {
-			(filterPeopleRequest as any)[key] = filter;
-		});
-
-		fetchFilterPeople().then((response: FilterPeopleResponse) => {
-			if (response.count === 0) {
-				toast.warning(`No hay datos para el filtro: ${filter}`);
-				popoverFilterDataMap.forEach((_, key) => {
-					(filterPeopleRequest as any)[key] = '';
-				});
-				fetchFilterPeople();
-			}
-		});
+		filterPeopleResponsePromise = fetchOnFilterChanged(
+			data.filter.trim(),
+			filterPeopleRequest,
+			popoverFilterDataMap
+		);
 	}
 
 	function handleOnDetailedFilter() {
-		let request: FilterPeopleRequest = {
-			page: filterPeopleRequest.page,
-			page_size: filterPeopleRequest.page_size
-		};
-		popoverFilterDataMap.forEach((item, key) => {
-			if (item.value !== '') {
-				(request as any)[key] = item.value;
-			}
-		});
-		filterPeopleRequest = request;
-
-		fetchFilterPeople().then((response: FilterPeopleResponse) => {
-			if (response.count === 0) {
-				let message = 'No hay datos para el filtro\n';
-				popoverFilterDataMap.forEach((item, _) => {
-					if (item.value !== '') {
-						message += `${item.label}: ${item.value}; `;
-					}
-				});
-				message = message.slice(0, message.length - 2);
-				toast.warning(message);
-				popoverFilterDataMap.forEach((_, key) => {
-					(filterPeopleRequest as any)[key] = '';
-				});
-				fetchFilterPeople();
-			}
+		filterPeopleResponsePromise = fetchOnDetailedFilter(
+			filterPeopleRequest,
+			popoverFilterDataMap
+		).then(({ request, response }) => {
+			filterPeopleRequest = request;
+			return response;
 		});
 	}
 
 	function handlePaginationChanged() {
-		fetchFilterPeople();
+		filterPeopleResponsePromise = fetchFilterPeople(filterPeopleRequest);
 	}
 </script>
 
