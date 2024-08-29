@@ -48,6 +48,12 @@
 
 	let isFocused = false;
 
+	function initSearchBar(input: HTMLInputElement) {
+		isFocused = true;
+		input.focus();
+		input.select();
+	}
+
 	function handleFocus() {
 		isFocused = true;
 	}
@@ -61,6 +67,14 @@
 			filter_value = '';
 			return handleFilterChanged();
 		}
+	}
+
+	let typingTimeout: number;
+	function handleInput() {
+		clearTimeout(typingTimeout);
+		typingTimeout = window.setTimeout(() => {
+			handleFilterChanged();
+		}, 500);
 	}
 
 	const dispatch = createEventDispatcher();
@@ -81,16 +95,17 @@
 <div class="flex items-center justify-between gap-2 py-4">
 	<div
 		class="flex w-3/4 items-center rounded-sm border px-3 pr-2 {isFocused
-			? 'border-bg ring-2 ring-ring ring-offset-2 ring-offset-2-primary ring-offset-background'
+			? 'border-bg ring-ring ring-offset-2-primary ring-offset-background ring-2 ring-offset-2'
 			: 'border-bg'}"
 	>
 		<Search class={'mr-2 h-4 w-4'} />
 		<input
+			use:initSearchBar
 			class="placeholder:text-muted-foreground flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-none disabled:cursor-not-allowed disabled:opacity-50"
 			placeholder="Filtrar..."
 			type="text"
 			bind:value={$filterValue}
-			on:change={handleFilterChanged}
+			on:input={handleInput}
 			on:focus={handleFocus}
 			on:blur={handleBlur}
 		/>
