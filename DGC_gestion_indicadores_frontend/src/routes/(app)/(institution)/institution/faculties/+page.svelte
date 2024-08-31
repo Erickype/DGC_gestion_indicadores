@@ -4,6 +4,8 @@
 	import Alert from '$lib/components/alert/alert.svelte';
 	import type { PageData } from './$types';
 
+	import Icon from "lucide-svelte/icons/rows-3";
+
 	import AddModal from '$lib/components/modal/AddModal.svelte';
 	import FacultiesTable from './Table.svelte';
 	import AddForm from './AddForm.svelte';
@@ -43,7 +45,10 @@
 </svelte:head>
 
 <div class="mx-auto flex w-full place-content-center justify-between px-8">
-	<h2 class="text-2xl font-bold">Facultades</h2>
+	<div class="flex items-center gap-1">
+		<Icon class="h-8 w-8" />
+		<h2 class="text-2xl font-bold">Facultades</h2>
+	</div>
 	<AddModal
 		formComponent={AddForm}
 		modalTitle="Crear facultad"
