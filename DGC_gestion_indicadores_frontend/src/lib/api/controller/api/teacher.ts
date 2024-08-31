@@ -1,5 +1,5 @@
-import { deleteTeacherRoute, getTeachersByAcademicPeriodIDRoute, postTeacherRoute, updateTeacherRoute } from "$lib/api/routes/api/teacher";
-import type { AddTeacherRequest, CreateTeacherRequest, Teacher, UpdateTeacherRequest } from "$lib/api/model/api/teacher";
+import { deleteTeacherRoute, getTeachersByAcademicPeriodIDRoute, postFilterTeachersRoute, postTeacherRoute, updateTeacherRoute } from "$lib/api/routes/api/teacher";
+import type { AddTeacherRequest, CreateTeacherRequest, FilterTeachersRequest, FilterTeachersResponse, Teacher, UpdateTeacherRequest } from "$lib/api/model/api/teacher";
 
 import { generateCommonErrorFromFetchError } from "$lib/utils";
 import type { CommonError } from "$lib/api/model/errors";
@@ -20,6 +20,28 @@ export async function GetTeachersByAcademicPeriodID(token: string, academicPerio
         }
         const teachers: Teacher[] = await response.json()
         return teachers
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
+}
+
+export async function PostFilterTeachers(token: string, filterTeachersRequest: FilterTeachersRequest): Promise<FilterTeachersResponse | CommonError> {
+    try {
+        const response = await fetch(postFilterTeachersRoute, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify(filterTeachersRequest)
+        })
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
+        }
+        const filterPeopleResponse: FilterTeachersResponse = await response.json()
+        return filterPeopleResponse
+
     } catch (error) {
         return generateCommonErrorFromFetchError(error)
     }
