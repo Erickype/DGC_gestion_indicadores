@@ -41,3 +41,28 @@ export interface UpdateTeacherRequest {
     dedication_id: number;
     scaled_grade_id: number;
 }
+
+export interface FilterTeachersRequest {
+    identity?: string,
+    name?: string,
+    lastname?: string,
+    email?: string,
+    page_size: number,
+    page: number
+}
+
+export interface FilterTeachersResponse {
+    count: number,
+    page_size: number,
+    page: number,
+    teachers: TeacherPerson[]
+}
+
+export interface TeacherPerson {
+    ID: number,
+    person_id: number,
+    identity: number,
+    name: string,
+    lastname: string,
+    email: string
+}
