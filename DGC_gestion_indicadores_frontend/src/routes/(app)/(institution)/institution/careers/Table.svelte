@@ -17,10 +17,8 @@
 
 	import type { UpdateCarrerSchema } from './schema';
 	import type { Career } from '$lib/api/model/api/career';
-	import type { Message } from '$lib/components/combobox/combobox';
 
 	export let careers: Career[];
-	export let comboMessages: Message[];
 	export let formData: SuperValidated<Infer<UpdateCarrerSchema>>;
 	let career: Career;
 
@@ -28,7 +26,7 @@
 
 	const table = createTable(readable(careers), {
 		page: addPagination({
-			initialPageSize: 5
+			initialPageSize: 30
 		}),
 		sort: addSortBy(),
 		filter: addTableFilter({
@@ -110,7 +108,6 @@
 	{formData}
 	formComponent={UpdateForm}
 	bind:updateEntity={career}
-	comboMessages={[comboMessages]}
 	bind:open={updateFormOpen}
 	on:updated={handleUpdated}
 />

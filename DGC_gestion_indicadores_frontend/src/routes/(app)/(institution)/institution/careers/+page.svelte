@@ -14,8 +14,6 @@
 
 	export let data: PageServerData;
 	const addCareerForm = data.addCarrerForm;
-	const facultiesComboData = data.facultiesData.messages;
-
 	const updateCareersForm = data.updateCarrerForm;
 
 	let careersPromise: Promise<Career[]> = fetchCareers();
@@ -56,7 +54,6 @@
 		formComponent={AddForm}
 		modalTitle="Crear carrera"
 		formData={addCareerForm}
-		comboMessages={[facultiesComboData]}
 		on:created={fetchOnSuccess}
 	/>
 </div>
@@ -69,7 +66,6 @@
 			<CareersTable
 				formData={updateCareersForm}
 				{careers}
-				comboMessages={facultiesComboData}
 				on:updated={fetchOnSuccess}
 				on:deleted={fetchOnSuccess}
 			></CareersTable>
