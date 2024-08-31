@@ -2,12 +2,9 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 
 	import { createEventDispatcher } from 'svelte';
-	
-	import type { Message } from '../combobox/combobox';
 
 	export let formData;
 	export let formComponent;
-	export let comboMessages: [Message[]] | undefined = undefined;
 	export let updateEntity;
 	export let modalTitle = 'Actualizar';
 	export let modalDescription = 'Actualizar la información luego click en Guardar.';
@@ -32,12 +29,7 @@
 			<Dialog.Title>{modalTitle}</Dialog.Title>
 			<Dialog.Description>{modalDescription}</Dialog.Description>
 		</Dialog.Header>
-		<svelte:component
-			this={formComponent}
-			data={formData}
-			{updateEntity}
-			{comboMessages}
-			on:updated={handleUpdated}
+		<svelte:component this={formComponent} data={formData} {updateEntity} on:updated={handleUpdated}
 		></svelte:component>
 	</Dialog.Content>
 </Dialog.Root>
