@@ -12,7 +12,7 @@ type Teacher struct {
 	ID        uint      `gorm:"primary_key"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
-	PersonID  uint      `gorm:"not null;" json:"person_id"`
+	PersonID  uint      `gorm:"not null;unique" json:"person_id"`
 
 	Person person.Person `json:"-"`
 }
