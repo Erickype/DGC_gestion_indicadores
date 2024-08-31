@@ -3,55 +3,57 @@
 	import Alert from '$lib/components/alert/alert.svelte';
 	import type { PageData } from './$types';
 
-	import type { FilterPeopleRequest, FilterPeopleResponse } from '$lib/api/model/api/person';
+	import Presentation from 'lucide-svelte/icons/presentation';
+
+	import type { FilterTeachersRequest, FilterTeachersResponse } from '$lib/api/model/api/teacher';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
 	import PeopleTable from './Table.svelte';
 	import AddForm from './AddForm.svelte';
 	import {
-		fetchFilterPeople,
+		fetchFilterTeachers,
 		fetchOnDetailedFilter,
 		fetchOnFilterChanged,
-		newFilterPeopleRequest,
+		newFilterTeachersRequest,
 		newPopoverFilterDataMap
-	} from '$lib/components/filters/people';
+	} from '$lib/components/filters/teachers';
 
 	export let data: PageData;
 	const addPersonFormData = data.addPersonForm;
 	const updatePersonFormData = data.updatePersonForm;
 
-	let filterPeopleRequest: FilterPeopleRequest = newFilterPeopleRequest(5, 1);
-	let filterPeopleResponsePromise: Promise<FilterPeopleResponse> =
-		fetchFilterPeople(filterPeopleRequest);
+	let filterTeachersRequest: FilterTeachersRequest = newFilterTeachersRequest(5, 1);
+	let filterTeachersResponsePromise: Promise<FilterTeachersResponse> =
+		fetchFilterTeachers(filterTeachersRequest);
 	let popoverFilterDataMap: PopoverFilterDataMap = newPopoverFilterDataMap();
 
 	function fetchOnSuccess(event: any) {
 		const data: { status: boolean } = event.detail;
 		if (data.status) {
-			filterPeopleResponsePromise = fetchFilterPeople(filterPeopleRequest);
+			filterTeachersResponsePromise = fetchFilterTeachers(filterTeachersRequest);
 		}
 	}
 
 	function handleOnFilterChanged(event: CustomEvent) {
 		const data: { filter: string } = event.detail;
-		filterPeopleResponsePromise = fetchOnFilterChanged(
+		filterTeachersResponsePromise = fetchOnFilterChanged(
 			data.filter.trim(),
-			filterPeopleRequest,
+			filterTeachersRequest,
 			popoverFilterDataMap
 		);
 	}
 
 	function handleOnDetailedFilter() {
-		filterPeopleResponsePromise = fetchOnDetailedFilter(
-			filterPeopleRequest,
+		filterTeachersResponsePromise = fetchOnDetailedFilter(
+			filterTeachersRequest,
 			popoverFilterDataMap
 		).then(({ request, response }) => {
-			filterPeopleRequest = request;
+			filterTeachersRequest = request;
 			return response;
 		});
 	}
 
 	function handlePaginationChanged() {
-		filterPeopleResponsePromise = fetchFilterPeople(filterPeopleRequest);
+		filterTeachersResponsePromise = fetchFilterTeachers(filterTeachersRequest);
 	}
 </script>
 
@@ -60,7 +62,10 @@
 </svelte:head>
 
 <div class="mx-auto flex w-full place-content-center justify-between px-8">
+	<div class="flex gap-1 items-center">
+		<Presentation class="h-8 w-8" />
 	<h2 class="text-2xl font-bold">Profesores</h2>
+	</div>
 	<AddModal
 		modalTitle="Seleccionar a una persona para profesor"
 		formComponent={AddForm}
@@ -70,14 +75,14 @@
 </div>
 
 <div class="mx-auto flex w-full flex-col place-content-center px-8">
-	{#await filterPeopleResponsePromise}
+	{#await filterTeachersResponsePromise}
 		cargando...
-	{:then filterPeopleResponse}
-		{#if filterPeopleResponse.people.length > 0}
+	{:then filterTeachersResponse}
+		{#if filterTeachersResponse.teachers.length > 0}
 			<PeopleTable
-				bind:filterPeopleRequest
+				bind:filterTeachersRequest
 				formData={updatePersonFormData}
-				{filterPeopleResponse}
+				{filterTeachersResponse}
 				bind:popoverFilterDataMap
 				on:updated={fetchOnSuccess}
 				on:deleted={fetchOnSuccess}
