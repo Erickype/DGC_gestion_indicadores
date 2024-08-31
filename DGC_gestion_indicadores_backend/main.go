@@ -104,6 +104,7 @@ func serveApplication() {
 	upeRoutes.GET("/scaledGrades", scaledGrade.GetScaledGrades)
 
 	upeRoutes.GET("/teachers/byAcademicPeriod/:academicPeriodID", teacher.GetTeachersByAcademicPeriod)
+	upeRoutes.POST("/teachers/filter", teacher.FilterTeachers)
 	upeRoutes.POST("/teacher", teacher.CreateTeacher)
 	upeRoutes.DELETE("/teacher/:id", teacher.DeleteTeacher)
 	upeRoutes.PUT("/teacher/:id", teacher.UpdateTeacher)
