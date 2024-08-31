@@ -1,7 +1,9 @@
 package model
 
 import (
+	"errors"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -18,6 +20,9 @@ type Person struct {
 func CreatePerson(person *Person) (err error) {
 	err = database.DB.Create(person).Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("persona ya existe")
+		}
 		return err
 	}
 	return nil
