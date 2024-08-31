@@ -4,51 +4,39 @@
 	import { readable } from 'svelte/store';
 
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
-
-	import Table from '$lib/components/table/tablePaginated.svelte';
 	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
+	import Table from '$lib/components/table/tablePaginated.svelte';
 
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import { createEventDispatcher } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import type {
-		FilterPeopleRequest,
-		FilterPeopleResponse,
-		Person
-	} from '$lib/api/model/api/person';
+		FilterTeachersRequest,
+		FilterTeachersResponse,
+		TeacherPerson
+	} from '$lib/api/model/api/teacher';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
 	import type { UpdateTeacherSchema } from './schema';
 	import UpdateForm from './UpdateForm.svelte';
+	import {
+		generateInitialFilterValue,
+		newFilterTeachersRequest
+	} from '$lib/components/filters/teachers';
 
-	export let filterPeopleResponse: FilterPeopleResponse;
-	let people: Person[] = filterPeopleResponse.people;
+	export let filterTeachersResponse: FilterTeachersResponse;
+	let people: TeacherPerson[] = filterTeachersResponse.teachers;
 
 	export let formData: SuperValidated<Infer<UpdateTeacherSchema>>;
-	let person: Person;
+	let person: TeacherPerson;
 
 	let filterValue = '';
 	let pageIndex: number = 0;
 	let pageSize: number = 0;
-	export let filterPeopleRequest: FilterPeopleRequest = {
-		identity: '',
-		name: '',
-		lastname: '',
-		email: '',
-		page_size: pageSize,
-		page: pageIndex
-	};
-
-	let values = [
-		filterPeopleRequest.identity,
-		filterPeopleRequest.name,
-		filterPeopleRequest.lastname,
-		filterPeopleRequest.email
-	];
-
-	let uniqueValues = [...new Set(values.filter((value) => value !== ''))];
-
-	let initialFilterValue: string | undefined =
-		uniqueValues.length === 1 ? uniqueValues[0] : uniqueValues.join(' ');
+	export let filterTeachersRequest: FilterTeachersRequest = newFilterTeachersRequest(
+		pageSize,
+		pageIndex
+	);
+	let initialFilterValue: string | undefined = generateInitialFilterValue(filterTeachersRequest);
 
 	export let popoverFilterDataMap: PopoverFilterDataMap = new Map();
 
@@ -56,10 +44,10 @@
 
 	const table = createTable(readable(people), {
 		page: addPagination({
-			initialPageSize: filterPeopleResponse.page_size,
-			initialPageIndex: filterPeopleResponse.page - 1,
+			initialPageSize: filterTeachersResponse.page_size,
+			initialPageIndex: filterTeachersResponse.page - 1,
 			serverSide: true,
-			serverItemCount: readable(filterPeopleResponse.count)
+			serverItemCount: readable(filterTeachersResponse.count)
 		}),
 		sort: addSortBy(),
 		filter: addTableFilter({
@@ -149,12 +137,12 @@
 		dispatch('detailedFilter');
 	}
 	function handleOnPageChanged() {
-		filterPeopleRequest.page = pageIndex + 1;
+		filterTeachersRequest.page = pageIndex + 1;
 		dispatch('paginationChanged');
 	}
 	function handleOnPageSizeChanged() {
-		filterPeopleRequest.page_size = pageSize;
-		filterPeopleRequest.page = 1;
+		filterTeachersRequest.page_size = pageSize;
+		filterTeachersRequest.page = 1;
 		dispatch('paginationChanged');
 	}
 </script>
@@ -173,7 +161,7 @@
 		tableHeightClass="h-[55vh]"
 		{table}
 		{columns}
-		serverItemCount={filterPeopleResponse.count}
+		serverItemCount={filterTeachersResponse.count}
 		{filterFields}
 		bind:popoverFilterDataMap
 		bind:filter_value={filterValue}
