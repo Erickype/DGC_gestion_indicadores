@@ -53,6 +53,7 @@
 		onUpdated: ({ form: f }) => {
 			const message = f.message!;
 			if (!message) {
+				formDataPersonID.subscribe((value) => ($formData.person_id = value));
 				return manageToastFromInvalidAddForm();
 			}
 			if (message.success) {
@@ -60,6 +61,7 @@
 				TeacherCreated();
 				return toast.success(`Profesor creado: ${teacher.ID}`);
 			}
+			formDataPersonID.subscribe((value) => ($formData.person_id = value));
 			return manageToastFromErrorMessageOnAddForm(message);
 		}
 	});
