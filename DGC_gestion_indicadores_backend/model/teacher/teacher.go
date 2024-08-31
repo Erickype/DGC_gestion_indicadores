@@ -21,7 +21,7 @@ func CreateTeacher(Teacher *Teacher) (err error) {
 	err = database.DB.Create(Teacher).Error
 	if err != nil {
 		if errors.Is(gorm.ErrDuplicatedKey, err) {
-			return errors.New("docente ya registrado en el periodo")
+			return errors.New("docente ya registrado")
 		}
 		return err
 	}
