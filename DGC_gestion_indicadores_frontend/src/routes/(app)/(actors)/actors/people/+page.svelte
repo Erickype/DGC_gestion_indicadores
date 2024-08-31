@@ -6,6 +6,8 @@
 	import type { PageData } from './$types';
 	import AddModal from './AddModal.svelte';
 
+	import Users from 'lucide-svelte/icons/users';
+
 	import PeopleTable from './Table.svelte';
 	import { goto } from '$app/navigation';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
@@ -114,7 +116,10 @@
 </svelte:head>
 
 <div class="mx-auto flex w-full place-content-center justify-between px-8">
-	<h2 class="text-2xl font-bold">Personas</h2>
+	<div class="flex items-center gap-1">
+		<Users class="h-8 w-8" />
+		<h2 class="text-2xl font-bold">Personas</h2>
+	</div>
 	<AddModal formData={addPersonFormData} on:created={fetchOnSuccess} />
 </div>
 
