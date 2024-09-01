@@ -6,10 +6,10 @@ export const addTeacherSchema = z.object({
     }).gt(0, {
         message: "Ingrese un periodo válido"
     }),
-    person: z.number({
-        required_error: "Persona requerida"
+    teacher: z.number({
+        required_error: "Profesor requerido"
     }).gt(0, {
-        message: "Ingrese una cédula válida."
+        message: "No existe el profesor."
     }),
     career: z.number({
         required_error: "Carrera requerida"
@@ -38,10 +38,10 @@ export type AddTeacherSchema = typeof addTeacherSchema;
 export const updateTeacherSchema = z.object({
     ID: z.number().gt(0),
     academicPeriod: z.number().gt(0),
-    person: z.number({
-        required_error: "Persona requerida"
+    teacher: z.number({
+        required_error: "Profesor requerido"
     }).gt(0, {
-        message: "Ingrese una cédula válida."
+        message: "No existe el profesor."
     }),
     career: z.number({
         required_error: "Carrera requerida"
