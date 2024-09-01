@@ -15,7 +15,7 @@
 		fetchOnFilterChanged,
 		newFilterTeachersRequest,
 		newPopoverFilterDataMap
-	} from '$lib/components/filters/teachers';
+	} from '$lib/components/filters/teachers/teachers';
 
 	export let data: PageData;
 	const addPersonFormData = data.addPersonForm;

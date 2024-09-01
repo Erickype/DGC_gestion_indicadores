@@ -21,7 +21,7 @@
 	import {
 		generateInitialFilterValue,
 		newFilterTeachersRequest
-	} from '$lib/components/filters/teachers';
+	} from '$lib/components/filters/teachers/teachers';
 
 	export let filterTeachersResponse: FilterTeachersResponse;
 	let people: TeacherPerson[] = filterTeachersResponse.teachers;
