@@ -31,7 +31,7 @@ export const menus: Menu[] = [
         name: 'Información indicadores',
         icon: FileText,
         links: [
-            { name: 'Docentes', route: '/information/teachers' },
+            { name: 'Listas Docentes', route: '/information/teachers' },
             { name: 'Publicaciones Académicas', route: '/information/academic-publications' },
             { name: 'Libros', route: '/information/books' }
         ],

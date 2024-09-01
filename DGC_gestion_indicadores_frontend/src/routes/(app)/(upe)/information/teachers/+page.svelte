@@ -7,6 +7,8 @@
 	import AddModal from '$lib/components/modal/AddModal.svelte';
 	import AddForm from './AddForm.svelte';
 
+	import Icon from 'lucide-svelte/icons/list';
+
 	import type { GetTeachersByAcademicPeriodResponse } from '$lib/api/model/api/teacher';
 	import type { Message } from '$lib/components/combobox/combobox';
 	import type { CommonError } from '$lib/api/model/errors';
@@ -59,11 +61,14 @@
 </script>
 
 <svelte:head>
-	<title>Docentes</title>
+	<title>Listas Docentes</title>
 </svelte:head>
 
 <div class="mx-auto flex w-full place-content-center justify-between px-8">
-	<h2 class="text-2xl font-bold">Docentes</h2>
+	<div class="flex items-center gap-1">
+		<Icon class="h-8 w-8" />
+		<h2 class="text-2xl font-bold">Listas Docentes</h2>
+	</div>
 </div>
 
 <div class="mx-auto flex w-full place-content-center justify-between px-8">
@@ -77,7 +82,6 @@
 		formComponent={AddForm}
 		modalTitle="Crear docente"
 		formData={addTeacherForm}
-		{comboMessages}
 		on:created={fetchOnSuccess}
 	/>
 </div>
