@@ -15,6 +15,7 @@ import (
 	faculty "github.com/Erickype/DGC_gestion_indicadores_backend/model/faculty"
 	indicators "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicators"
 	indicatorsInformation "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation"
+	"github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/teachers"
 	person "github.com/Erickype/DGC_gestion_indicadores_backend/model/person"
 	scaledGrade "github.com/Erickype/DGC_gestion_indicadores_backend/model/scaledGrade"
 	teacher "github.com/Erickype/DGC_gestion_indicadores_backend/model/teacher"
@@ -42,9 +43,9 @@ func LoadDatabase() {
 		&scaledGrade.ScaledGrade{},
 		&degree.DegreeLevel{},
 		&degree.TeachersDegree{},
-		&indicatorsInformation.TeachersListsDegree{},
+		&teachers.TeachersListsDegree{},
 		&teacher.Teacher{},
-		&indicatorsInformation.TeachersList{},
+		&teachers.TeachersList{},
 		&academicProduction.AcademicDatabase{},
 		&academicProduction.ScienceMagazine{},
 		&academicProduction.CompensationFactor{},
