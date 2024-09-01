@@ -27,9 +27,7 @@
 		data.contractTypesData.messages
 	];
 
-	let selectedAcademicPeriod: number = academicPeriodsData.periods.at(
-		academicPeriodsData.periods.length - 1
-	)!.ID;
+	let selectedAcademicPeriod: number = academicPeriodsData.periods.at(0)!.ID;
 
 	$: addTeacherForm.data.academicPeriod = selectedAcademicPeriod;
 	$: updateTeacherForm.data.academicPeriod = selectedAcademicPeriod;
