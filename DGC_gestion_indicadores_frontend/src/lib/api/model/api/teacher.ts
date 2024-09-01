@@ -5,15 +5,6 @@ export interface Teacher {
     person_id: number;
 }
 
-export interface CreateTeacherRequest {
-    academic_period_id: number;
-    person_id: number;
-    career_id: number;
-    dedication_id: number;
-    scaled_grade_id: number;
-    contract_type_id: number;
-}
-
 export interface GetTeachersByAcademicPeriodResponse {
     updated_at: string;
     academic_period_id: number;
