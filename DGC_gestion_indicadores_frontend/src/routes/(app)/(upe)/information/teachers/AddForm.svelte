@@ -1,7 +1,7 @@
 <script lang="ts">
 	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { addTeacherSchema, type AddTeacherSchema } from './scheme';
+	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	import { createEventDispatcher } from 'svelte';
 	import { browser } from '$app/environment';
@@ -11,6 +11,7 @@
 	import { toast } from 'svelte-sonner';
 
 	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
+	import TeachersServerFormSelect from '$lib/components/filters/teachers/teachersServer.svelte';
 	import FormSelect from '$lib/components/combobox/formSelect.svelte';
 	import type { Message } from '$lib/components/combobox/combobox';
 	import type { Teacher } from '$lib/api/model/api/teacher';
@@ -48,6 +49,8 @@
 
 	const { form: formData, enhance } = form;
 
+	let formDataTeacherID = writable($formData.teacher);
+	formDataTeacherID.subscribe((value) => ($formData.teacher = value));
 	let formDataDedicationID = writable($formData.dedication);
 	formDataDedicationID.subscribe((value) => ($formData.dedication = value));
 	let formDataScaledGradeID = writable($formData.scaledGrade);
@@ -63,54 +66,11 @@
 				<input hidden value={$formData.academicPeriod} name={attrs.name} />
 			</Form.Control>
 		</Form.Field>
-		<!-- <Form.Field {form} name="person" class="flex flex-col">
-			<Popover.Root bind:open={openPerson} let:ids>
-				<Form.Control let:attrs>
-					<Form.Label>Persona</Form.Label>
-					<Popover.Trigger
-						class={cn(
-							buttonVariants({ variant: 'outline' }),
-							'w-full justify-between',
-							!$formData.person && 'text-muted-foreground'
-						)}
-						role="combobox"
-						{...attrs}
-					>
-						{peopleComboData.find((f) => f.value === $formData.person)?.label ??
-							'Seleccionar persona'}
-						<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
-					</Popover.Trigger>
-					<input hidden value={$formData.person} name={attrs.name} />
-				</Form.Control>
-				<Popover.Content class="w-[90%] p-0">
-					<Command.Root>
-						<Command.Input autofocus placeholder="Buscar persona..." class="h-9" />
-						<Command.Empty>No se encontró la cédula.</Command.Empty>
-						<Command.Group>
-							{#each peopleComboData as person}
-								<Command.Item
-									value={person.label}
-									onSelect={() => {
-										$formData.person = person.value;
-										closeAndFocusTriggerPerson(ids.trigger);
-									}}
-								>
-									{person.label}
-									<Check
-										class={cn(
-											'ml-auto h-4 w-4',
-											person.value !== $formData.person && 'text-transparent'
-										)}
-									/>
-								</Command.Item>
-							{/each}
-						</Command.Group>
-					</Command.Root>
-				</Popover.Content>
-			</Popover.Root>
+		<Form.Field {form} name="teacher" class="flex flex-col">
+			<TeachersServerFormSelect bind:formDataTeacherID />
 			<Form.FieldErrors />
 		</Form.Field>
-		<Form.Field {form} name="career" class="flex flex-col">
+		<!-- <Form.Field {form} name="career" class="flex flex-col">
 			<Popover.Root bind:open={openCareer} let:ids>
 				<Form.Control let:attrs>
 					<Form.Label>Carrera</Form.Label>
@@ -183,7 +143,7 @@
 		</Form.Field>
 	</div>
 	<Form.Button class="my-2 w-full">Guardar</Form.Button>
-	<!-- {#if browser}
+	{#if browser}
 		<SuperDebug data={$formData} />
-	{/if} -->
+	{/if}
 </form>
