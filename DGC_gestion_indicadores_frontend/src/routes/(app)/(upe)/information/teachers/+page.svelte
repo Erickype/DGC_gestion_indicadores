@@ -21,8 +21,6 @@
 	const academicPeriodsData = data.academicPeriodsData;
 
 	const comboMessages: Message[][] = [
-		data.peopleData.messages,
-		data.careersData.messages,
 		data.dedicationsData.messages,
 		data.scaledGradesData.messages,
 		data.contractTypesData.messages
@@ -82,6 +80,7 @@
 		formComponent={AddForm}
 		modalTitle="Crear docente"
 		formData={addTeacherForm}
+		comboMessages={comboMessages}
 		on:created={fetchOnSuccess}
 	/>
 </div>
