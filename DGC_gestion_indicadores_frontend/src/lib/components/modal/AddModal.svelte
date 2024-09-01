@@ -3,12 +3,14 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import Plus from 'lucide-svelte/icons/plus';
 
+	import type { Message } from '../combobox/combobox';
 	import { createEventDispatcher } from 'svelte';
 
 	export let formData;
 	export let formComponent;
 	export let modalTitle = 'Crear';
 	export let modalDescription = 'Resgistrar la información luego click en Guardar.';
+	export let comboMessages: Message[][] | undefined = undefined;
 
 	let open: boolean;
 	const dispatch = createEventDispatcher();
@@ -35,7 +37,11 @@
 			<Dialog.Title>{modalTitle}</Dialog.Title>
 			<Dialog.Description>{modalDescription}</Dialog.Description>
 		</Dialog.Header>
-		<svelte:component this={formComponent} data={formData} on:message={handleCreated}
+		<svelte:component
+			this={formComponent}
+			data={formData}
+			on:message={handleCreated}
+			{comboMessages}
 		></svelte:component>
 	</Dialog.Content>
 </Dialog.Root>
