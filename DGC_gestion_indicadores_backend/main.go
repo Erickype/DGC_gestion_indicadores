@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
-
 	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/controller/academicPeriod"
 	controller "github.com/Erickype/DGC_gestion_indicadores_backend/controller/auth"
 	career "github.com/Erickype/DGC_gestion_indicadores_backend/controller/career"
@@ -11,6 +9,7 @@ import (
 	dedication "github.com/Erickype/DGC_gestion_indicadores_backend/controller/dedication"
 	evaluationPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/controller/evaluationPeriod"
 	faculty "github.com/Erickype/DGC_gestion_indicadores_backend/controller/faculty"
+	indicatorsInformationTeachers "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation/teachers"
 	person "github.com/Erickype/DGC_gestion_indicadores_backend/controller/person"
 	scaledGrade "github.com/Erickype/DGC_gestion_indicadores_backend/controller/scaledGrade"
 	teacher "github.com/Erickype/DGC_gestion_indicadores_backend/controller/teacher"
@@ -18,6 +17,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"log"
 )
 
 func main() {
@@ -108,6 +108,12 @@ func serveApplication() {
 	upeRoutes.POST("/teacher", teacher.CreateTeacher)
 	upeRoutes.DELETE("/teacher/:id", teacher.DeleteTeacher)
 	upeRoutes.PUT("/teacher/:id", teacher.UpdateTeacher)
+
+	// Indicators information routes
+	indicatorsRoutes := router.Group("/api/indicators/information")
+	indicatorsRoutes.Use(util.JWTAuth(), util.JWTAuthUPE())
+
+	indicatorsRoutes.POST("/teachersList", indicatorsInformationTeachers.CreateTeachersList)
 
 	// Public view routes
 	academicPeriodRoutes := router.Group("/view")
