@@ -1,32 +1,25 @@
 <script lang="ts">
 	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { addTeacherSchema, type AddTeacherSchema } from './scheme';
 
-	import { createEventDispatcher, tick } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 	import { browser } from '$app/environment';
-	import { cn } from '$lib/utils.js';
+	import { writable } from 'svelte/store';
 
-	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
-	import Check from 'lucide-svelte/icons/check';
-
-	import { buttonVariants } from '$lib/components/ui/button/index.js';
-	import * as Popover from '$lib/components/ui/popover/index.js';
-	import * as Command from '$lib/components/ui/command/index.js';
 	import * as Form from '$lib/components/ui/form';
 	import { toast } from 'svelte-sonner';
 
 	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
-	import { addTeacherSchema, type AddTeacherSchema } from './scheme';
+	import FormSelect from '$lib/components/combobox/formSelect.svelte';
 	import type { Message } from '$lib/components/combobox/combobox';
 	import type { Teacher } from '$lib/api/model/api/teacher';
 
 	export let data: SuperValidated<Infer<AddTeacherSchema>, App.Superforms.Message>;
 	export let comboMessages: Message[][];
-	const peopleComboData = comboMessages.at(0)!;
-	const careersComboData = comboMessages.at(1)!;
-	const dedicationsComboData = comboMessages.at(2)!;
-	const scaledGradesComboData = comboMessages.at(3)!;
-	const contractTypesComboData = comboMessages.at(4)!;
+	const dedicationsComboData = comboMessages.at(0)!;
+	const scaledGradesComboData = comboMessages.at(1)!;
+	const contractTypesComboData = comboMessages.at(2)!;
 
 	const dispatch = createEventDispatcher();
 
@@ -55,42 +48,12 @@
 
 	const { form: formData, enhance } = form;
 
-	let openPerson = false;
-	let openCareer = false;
-	let openDedication = false;
-	let openScaledGrade = false;
-	let openContractType = false;
-
-	function closeAndFocusTriggerPerson(triggerId: string) {
-		openPerson = false;
-		tick().then(() => {
-			document.getElementById(triggerId)?.focus();
-		});
-	}
-	function closeAndFocusTriggerCareer(triggerId: string) {
-		openCareer = false;
-		tick().then(() => {
-			document.getElementById(triggerId)?.focus();
-		});
-	}
-	function closeAndFocusTriggerDedication(triggerId: string) {
-		openDedication = false;
-		tick().then(() => {
-			document.getElementById(triggerId)?.focus();
-		});
-	}
-	function closeAndFocusTriggerScaledGrade(triggerId: string) {
-		openScaledGrade = false;
-		tick().then(() => {
-			document.getElementById(triggerId)?.focus();
-		});
-	}
-	function closeAndFocusTriggerContractType(triggerId: string) {
-		openContractType = false;
-		tick().then(() => {
-			document.getElementById(triggerId)?.focus();
-		});
-	}
+	let formDataDedicationID = writable($formData.dedication);
+	formDataDedicationID.subscribe((value) => ($formData.dedication = value));
+	let formDataScaledGradeID = writable($formData.scaledGrade);
+	formDataScaledGradeID.subscribe((value) => ($formData.scaledGrade = value));
+	let formDataContractTypeID = writable($formData.contractType);
+	formDataContractTypeID.subscribe((value) => ($formData.contractType = value));
 </script>
 
 <form action="?/addTeacher" use:enhance>
@@ -100,7 +63,7 @@
 				<input hidden value={$formData.academicPeriod} name={attrs.name} />
 			</Form.Control>
 		</Form.Field>
-		<Form.Field {form} name="person" class="flex flex-col">
+		<!-- <Form.Field {form} name="person" class="flex flex-col">
 			<Popover.Root bind:open={openPerson} let:ids>
 				<Form.Control let:attrs>
 					<Form.Label>Persona</Form.Label>
@@ -193,146 +156,29 @@
 				</Popover.Content>
 			</Popover.Root>
 			<Form.FieldErrors />
-		</Form.Field>
+		</Form.Field> -->
 		<Form.Field {form} name="dedication" class="flex flex-col">
-			<Popover.Root bind:open={openDedication} let:ids>
-				<Form.Control let:attrs>
-					<Form.Label>Dedicación</Form.Label>
-					<Popover.Trigger
-						class={cn(
-							buttonVariants({ variant: 'outline' }),
-							'w-full justify-between',
-							!$formData.dedication && 'text-muted-foreground'
-						)}
-						role="combobox"
-						{...attrs}
-					>
-						{dedicationsComboData.find((f) => f.value === $formData.dedication)?.label ??
-							'Seleccionar dedicación'}
-						<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
-					</Popover.Trigger>
-					<input hidden value={$formData.dedication} name={attrs.name} />
-				</Form.Control>
-				<Popover.Content class="w-[90%] p-0">
-					<Command.Root>
-						<Command.Input autofocus placeholder="Buscar dedicación..." class="h-9" />
-						<Command.Empty>No se encontó la dedicación.</Command.Empty>
-						<Command.Group>
-							{#each dedicationsComboData as dedication}
-								<Command.Item
-									value={dedication.label}
-									onSelect={() => {
-										$formData.dedication = dedication.value;
-										closeAndFocusTriggerDedication(ids.trigger);
-									}}
-								>
-									{dedication.label}
-									<Check
-										class={cn(
-											'ml-auto h-4 w-4',
-											dedication.value !== $formData.dedication && 'text-transparent'
-										)}
-									/>
-								</Command.Item>
-							{/each}
-						</Command.Group>
-					</Command.Root>
-				</Popover.Content>
-			</Popover.Root>
+			<FormSelect
+				formLabel="Dedicación"
+				comboData={dedicationsComboData}
+				bind:formDataID={formDataDedicationID}
+			/>
 			<Form.FieldErrors />
 		</Form.Field>
 		<Form.Field {form} name="scaledGrade" class="flex flex-col">
-			<Popover.Root bind:open={openScaledGrade} let:ids>
-				<Form.Control let:attrs>
-					<Form.Label>Grado Escalafonado</Form.Label>
-					<Popover.Trigger
-						class={cn(
-							buttonVariants({ variant: 'outline' }),
-							'w-full justify-between',
-							!$formData.scaledGrade && 'text-muted-foreground'
-						)}
-						role="combobox"
-						{...attrs}
-					>
-						{scaledGradesComboData.find((f) => f.value === $formData.scaledGrade)?.label ??
-							'Seleccionar grado escalafonado'}
-						<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
-					</Popover.Trigger>
-					<input hidden value={$formData.scaledGrade} name={attrs.name} />
-				</Form.Control>
-				<Popover.Content class="w-[90%] p-0">
-					<Command.Root>
-						<Command.Input autofocus placeholder="Buscar grado escalafonado..." class="h-9" />
-						<Command.Empty>No se encontó el grado escalafonado.</Command.Empty>
-						<Command.Group>
-							{#each scaledGradesComboData as scaledGrade}
-								<Command.Item
-									value={scaledGrade.label}
-									onSelect={() => {
-										$formData.scaledGrade = scaledGrade.value;
-										closeAndFocusTriggerScaledGrade(ids.trigger);
-									}}
-								>
-									{scaledGrade.label}
-									<Check
-										class={cn(
-											'ml-auto h-4 w-4',
-											scaledGrade.value !== $formData.scaledGrade && 'text-transparent'
-										)}
-									/>
-								</Command.Item>
-							{/each}
-						</Command.Group>
-					</Command.Root>
-				</Popover.Content>
-			</Popover.Root>
+			<FormSelect
+				formLabel="Grado escalafonado"
+				comboData={scaledGradesComboData}
+				bind:formDataID={formDataScaledGradeID}
+			/>
 			<Form.FieldErrors />
 		</Form.Field>
 		<Form.Field {form} name="contractType" class="flex flex-col">
-			<Popover.Root bind:open={openContractType} let:ids>
-				<Form.Control let:attrs>
-					<Form.Label>Tipo contrato</Form.Label>
-					<Popover.Trigger
-						class={cn(
-							buttonVariants({ variant: 'outline' }),
-							'w-full justify-between',
-							!$formData.contractType && 'text-muted-foreground'
-						)}
-						role="combobox"
-						{...attrs}
-					>
-						{contractTypesComboData.find((f) => f.value === $formData.contractType)?.label ??
-							'Seleccionar grado escalafonado'}
-						<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
-					</Popover.Trigger>
-					<input hidden value={$formData.contractType} name={attrs.name} />
-				</Form.Control>
-				<Popover.Content class="w-[90%] p-0">
-					<Command.Root>
-						<Command.Input autofocus placeholder="Buscar grado tipo contrato..." class="h-9" />
-						<Command.Empty>No se encontó el tipo contrato.</Command.Empty>
-						<Command.Group>
-							{#each contractTypesComboData as contractType}
-								<Command.Item
-									value={contractType.label}
-									onSelect={() => {
-										$formData.contractType = contractType.value;
-										closeAndFocusTriggerContractType(ids.trigger);
-									}}
-								>
-									{contractType.label}
-									<Check
-										class={cn(
-											'ml-auto h-4 w-4',
-											contractType.value !== $formData.contractType && 'text-transparent'
-										)}
-									/>
-								</Command.Item>
-							{/each}
-						</Command.Group>
-					</Command.Root>
-				</Popover.Content>
-			</Popover.Root>
+			<FormSelect
+				formLabel="Tipo contrato"
+				comboData={contractTypesComboData}
+				bind:formDataID={formDataContractTypeID}
+			/>
 			<Form.FieldErrors />
 		</Form.Field>
 	</div>
