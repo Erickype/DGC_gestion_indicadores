@@ -1,8 +1,9 @@
 import { deleteTeacherRoute, getTeachersByAcademicPeriodIDRoute, postFilterTeachersRoute, postTeacherRoute, updateTeacherRoute } from "$lib/api/routes/api/teacher";
-import type { AddTeacherRequest, CreateTeacherRequest, FilterTeachersRequest, FilterTeachersResponse, Teacher, UpdateTeacherRequest } from "$lib/api/model/api/teacher";
+import type { AddTeacherRequest, CreateTeacherRequest, FilterTeachersRequest, FilterTeachersResponse, Teacher, TeacherPerson, UpdateTeacherRequest } from "$lib/api/model/api/teacher";
 
 import { generateCommonErrorFromFetchError } from "$lib/utils";
 import type { CommonError } from "$lib/api/model/errors";
+import type { Message } from "$lib/components/combobox/combobox";
 
 export async function GetTeachersByAcademicPeriodID(token: string, academicPeriod: string) {
     try {
@@ -88,4 +89,15 @@ export async function UpdateTeacher(token: string, request: UpdateTeacherRequest
         },
         body: JSON.stringify(request)
     })
+}
+
+export function GenerateComboMessagesFromTeachers(teachers: TeacherPerson[]): Message[] {
+    let messages: Message[] = []
+    messages = messages.concat(
+        teachers.map((person) => ({
+            value: person.ID,
+            label: person.identity + " " + person.name + " " + person.lastname,
+        }))
+    );
+    return messages
 }
