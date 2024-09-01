@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import { buttonVariants } from '$lib/components/ui/button';
@@ -16,6 +17,7 @@
 	export let formDataID = writable();
 	export let emptyLabel: string = 'Seleccionar';
 	export let formLabel: string = 'Object';
+	export let scrollAreaHeight: string = '';
 
 	function closeAndFocusTrigger(triggerId: string) {
 		openCombo = false;
@@ -44,26 +46,28 @@
 	</Form.Control>
 	<Popover.Content class="w-[90%] p-0">
 		<Command.Root loop>
-            <Command.Input autofocus placeholder="Filtrar..." class="h-9" />
+			<Command.Input autofocus placeholder="Filtrar..." class="h-9" />
 			<Command.Empty>Sin coincidencias!</Command.Empty>
 			<Command.Group>
-				{#each comboData as comboMessage}
-					<Command.Item
-						value={comboMessage.label}
-						onSelect={() => {
-							$formDataID = comboMessage.value;
-							closeAndFocusTrigger(ids.trigger);
-						}}
-					>
-						{comboMessage.label}
-						<Check
-							class={cn(
-								'ml-auto h-4 w-4',
-								comboMessage.value !== $formDataID && 'text-transparent'
-							)}
-						/>
-					</Command.Item>
-				{/each}
+				<ScrollArea class="{scrollAreaHeight} w-full">
+					{#each comboData as comboMessage}
+						<Command.Item
+							value={comboMessage.label}
+							onSelect={() => {
+								$formDataID = comboMessage.value;
+								closeAndFocusTrigger(ids.trigger);
+							}}
+						>
+							{comboMessage.label}
+							<Check
+								class={cn(
+									'ml-auto h-4 w-4',
+									comboMessage.value !== $formDataID && 'text-transparent'
+								)}
+							/>
+						</Command.Item>
+					{/each}
+				</ScrollArea>
 			</Command.Group>
 		</Command.Root>
 	</Popover.Content>
