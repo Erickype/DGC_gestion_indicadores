@@ -1,5 +1,5 @@
 import type { FilterTeachersRequest, FilterTeachersResponse } from "$lib/api/model/api/teacher";
-import type { PopoverFilterDataMap } from "../table/types";
+import type { PopoverFilterDataMap } from "../../table/types";
 import type { CommonError } from "$lib/api/model/errors";
 
 import { goto } from "$app/navigation";
