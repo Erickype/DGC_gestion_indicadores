@@ -10,6 +10,7 @@ import { LoadAcademicPeriodsWithComboMessages } from "$lib/api/controller/view/a
 import { LoadContractTypesWithComboMessages } from "$lib/api/controller/api/contractTypes";
 import { LoadScaledGradesWithComboMessages } from "$lib/api/controller/api/scaledGrade";
 import { LoadDedicationsWithComboMessages } from "$lib/api/controller/api/dedication";
+import { LoadCareersWithComboMessages } from "$lib/api/controller/api/career";
 
 import type { CreateTeacherRequest, UpdateTeacherRequest } from "$lib/api/model/api/teacher";
 import { CreateTeacher, UpdateTeacher } from "$lib/api/controller/api/teacher";
@@ -30,6 +31,7 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
 
     return {
         academicPeriodsData: await LoadAcademicPeriodsWithComboMessages(),
+        careersData: await LoadCareersWithComboMessages(token!),
         dedicationsData: await LoadDedicationsWithComboMessages(token!),
         contractTypesData: await LoadContractTypesWithComboMessages(token!),
         scaledGradesData: await LoadScaledGradesWithComboMessages(token!),

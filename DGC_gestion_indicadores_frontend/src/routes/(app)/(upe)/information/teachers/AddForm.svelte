@@ -18,9 +18,10 @@
 
 	export let data: SuperValidated<Infer<AddTeacherSchema>, App.Superforms.Message>;
 	export let comboMessages: Message[][];
-	const dedicationsComboData = comboMessages.at(0)!;
-	const scaledGradesComboData = comboMessages.at(1)!;
-	const contractTypesComboData = comboMessages.at(2)!;
+	const careersComboData = comboMessages.at(0)!;
+	const dedicationsComboData = comboMessages.at(1)!;
+	const scaledGradesComboData = comboMessages.at(2)!;
+	const contractTypesComboData = comboMessages.at(3)!;
 
 	const dispatch = createEventDispatcher();
 
@@ -51,6 +52,8 @@
 
 	let formDataTeacherID = writable($formData.teacher);
 	formDataTeacherID.subscribe((value) => ($formData.teacher = value));
+	let formDataCareerID = writable($formData.career);
+	formDataCareerID.subscribe((value) => ($formData.career = value));
 	let formDataDedicationID = writable($formData.dedication);
 	formDataDedicationID.subscribe((value) => ($formData.dedication = value));
 	let formDataScaledGradeID = writable($formData.scaledGrade);
@@ -70,53 +73,14 @@
 			<TeachersServerFormSelect bind:formDataTeacherID />
 			<Form.FieldErrors />
 		</Form.Field>
-		<!-- <Form.Field {form} name="career" class="flex flex-col">
-			<Popover.Root bind:open={openCareer} let:ids>
-				<Form.Control let:attrs>
-					<Form.Label>Carrera</Form.Label>
-					<Popover.Trigger
-						class={cn(
-							buttonVariants({ variant: 'outline' }),
-							'w-full justify-between',
-							!$formData.career && 'text-muted-foreground'
-						)}
-						role="combobox"
-						{...attrs}
-					>
-						{careersComboData.find((f) => f.value === $formData.career)?.label ??
-							'Seleccionar carrera'}
-						<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
-					</Popover.Trigger>
-					<input hidden value={$formData.career} name={attrs.name} />
-				</Form.Control>
-				<Popover.Content class="w-[90%] p-0">
-					<Command.Root>
-						<Command.Input autofocus placeholder="Buscar carrera..." class="h-9" />
-						<Command.Empty>No se encontó la carrera.</Command.Empty>
-						<Command.Group>
-							{#each careersComboData as career}
-								<Command.Item
-									value={career.label}
-									onSelect={() => {
-										$formData.career = career.value;
-										closeAndFocusTriggerCareer(ids.trigger);
-									}}
-								>
-									{career.label}
-									<Check
-										class={cn(
-											'ml-auto h-4 w-4',
-											career.value !== $formData.career && 'text-transparent'
-										)}
-									/>
-								</Command.Item>
-							{/each}
-						</Command.Group>
-					</Command.Root>
-				</Popover.Content>
-			</Popover.Root>
-			<Form.FieldErrors />
-		</Form.Field> -->
+		<Form.Field {form} name="career" class="flex flex-col">
+			<FormSelect
+				formLabel="Carreras"
+				comboData={careersComboData}
+				bind:formDataID={formDataCareerID}
+				scrollAreaHeight="h-72"
+			/>
+		</Form.Field>
 		<Form.Field {form} name="dedication" class="flex flex-col">
 			<FormSelect
 				formLabel="Dedicación"

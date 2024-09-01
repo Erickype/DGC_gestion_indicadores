@@ -21,6 +21,7 @@
 	const academicPeriodsData = data.academicPeriodsData;
 
 	const comboMessages: Message[][] = [
+		data.careersData.messages,
 		data.dedicationsData.messages,
 		data.scaledGradesData.messages,
 		data.contractTypesData.messages
