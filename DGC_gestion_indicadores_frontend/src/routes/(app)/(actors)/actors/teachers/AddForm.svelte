@@ -15,6 +15,7 @@
 	import type { FilterPeopleRequest, FilterPeopleResponse } from '$lib/api/model/api/person';
 	import { GenerateComboMessagesFromPeople } from '$lib/api/controller/api/person';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
+	import type { Message } from '$lib/components/combobox/combobox';
 	import type { Teacher } from '$lib/api/model/api/teacher';
 	import {
 		fetchFilterPeople,
@@ -28,6 +29,9 @@
 		manageToastFromErrorMessageOnAddForm,
 		manageToastFromInvalidAddForm
 	} from '$lib/utils.js';
+
+	export let comboMessages: Message[][] | undefined = undefined;
+	comboMessages = undefined
 
 	export let data: SuperValidated<Infer<AddTeacherSchema>, App.Superforms.Message>;
 

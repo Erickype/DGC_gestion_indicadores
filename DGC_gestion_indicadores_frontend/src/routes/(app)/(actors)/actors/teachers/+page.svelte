@@ -70,6 +70,7 @@
 		modalTitle="Seleccionar a una persona para profesor"
 		formComponent={AddForm}
 		formData={addPersonFormData}
+		comboMessages={undefined}
 		on:created={fetchOnSuccess}
 	/>
 </div>
