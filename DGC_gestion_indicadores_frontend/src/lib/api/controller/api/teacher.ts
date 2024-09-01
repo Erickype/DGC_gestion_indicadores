@@ -1,5 +1,5 @@
 import { deleteTeacherRoute, getTeachersByAcademicPeriodIDRoute, postFilterTeachersRoute, postTeacherRoute, updateTeacherRoute } from "$lib/api/routes/api/teacher";
-import type { AddTeacherRequest, CreateTeacherRequest, FilterTeachersRequest, FilterTeachersResponse, Teacher, TeacherPerson, UpdateTeacherRequest } from "$lib/api/model/api/teacher";
+import type { AddTeacherRequest, FilterTeachersRequest, FilterTeachersResponse, Teacher, TeacherPerson, UpdateTeacherRequest } from "$lib/api/model/api/teacher";
 
 import { generateCommonErrorFromFetchError } from "$lib/utils";
 import type { CommonError } from "$lib/api/model/errors";
