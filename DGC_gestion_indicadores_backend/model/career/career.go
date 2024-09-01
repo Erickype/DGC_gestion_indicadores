@@ -29,7 +29,7 @@ func CreateCareer(Career *Career) (err error) {
 }
 
 func GetCareers(careers *[]Career) (err error) {
-	err = database.DB.Find(careers).Error
+	err = database.DB.Order("updated_at desc").Find(careers).Error
 	if err != nil {
 		return err
 	}
