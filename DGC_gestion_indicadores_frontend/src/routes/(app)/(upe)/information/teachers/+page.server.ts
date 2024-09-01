@@ -12,11 +12,13 @@ import { LoadScaledGradesWithComboMessages } from "$lib/api/controller/api/scale
 import { LoadDedicationsWithComboMessages } from "$lib/api/controller/api/dedication";
 import { LoadCareersWithComboMessages } from "$lib/api/controller/api/career";
 
-import type { CreateTeacherRequest, UpdateTeacherRequest } from "$lib/api/model/api/teacher";
-import { CreateTeacher, UpdateTeacher } from "$lib/api/controller/api/teacher";
+import type { UpdateTeacherRequest } from "$lib/api/model/api/teacher";
+import { UpdateTeacher } from "$lib/api/controller/api/teacher";
 
 import { generateFormMessageFromHttpResponse, generateFormMessageFromInvalidForm } from "$lib/utils";
 import { toast } from "svelte-sonner";
+import { CreateTeachersList } from "$lib/api/controller/api/indicatorsInformation/teachersList";
+import type { CreateTeachersListsRequest } from "$lib/api/model/api/indicatorsInformation/teachersLists";
 
 export const load: PageServerLoad = async ({ locals, cookies }) => {
     const token = cookies.get("AuthorizationToken")
@@ -50,16 +52,16 @@ export const actions: Actions = {
 
         const token = event.cookies.get("AuthorizationToken")
         const data = form.data
-        const createTeacherRequest: CreateTeacherRequest = {
+        const createTeachersListRequest: CreateTeachersListsRequest = {
             academic_period_id: data.academicPeriod,
             career_id: data.career,
             dedication_id: data.dedication,
-            person_id: data.person,
+            teacher_id: data.teacher,
             scaled_grade_id: data.scaledGrade,
             contract_type_id: data.contractType
         }
 
-        const response = await CreateTeacher(token!, createTeacherRequest)
+        const response = await CreateTeachersList(token!, createTeachersListRequest)
 
         return generateFormMessageFromHttpResponse(form, response)
     },
