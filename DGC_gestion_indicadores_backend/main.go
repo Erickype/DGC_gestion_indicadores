@@ -103,7 +103,6 @@ func serveApplication() {
 
 	upeRoutes.GET("/scaledGrades", scaledGrade.GetScaledGrades)
 
-	upeRoutes.GET("/teachers/byAcademicPeriod/:academicPeriodID", teacher.GetTeachersByAcademicPeriod)
 	upeRoutes.POST("/teachers/filter", teacher.FilterTeachers)
 	upeRoutes.POST("/teacher", teacher.CreateTeacher)
 	upeRoutes.DELETE("/teacher/:id", teacher.DeleteTeacher)
@@ -113,6 +112,7 @@ func serveApplication() {
 	indicatorsRoutes := router.Group("/api/indicators/information")
 	indicatorsRoutes.Use(util.JWTAuth(), util.JWTAuthUPE())
 
+	indicatorsRoutes.POST("/teachersLists/filter", indicatorsInformationTeachers.FilterTeachersLists)
 	indicatorsRoutes.POST("/teachersList", indicatorsInformationTeachers.CreateTeachersList)
 
 	// Public view routes
