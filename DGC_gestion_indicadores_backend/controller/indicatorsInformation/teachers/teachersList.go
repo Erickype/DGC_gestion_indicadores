@@ -1,4 +1,4 @@
-package teachers
+package controller
 
 import (
 	errors "github.com/Erickype/DGC_gestion_indicadores_backend/model"

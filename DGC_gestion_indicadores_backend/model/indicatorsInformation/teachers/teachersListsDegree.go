@@ -1,4 +1,4 @@
-package teachers
+package model
 
 import (
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"

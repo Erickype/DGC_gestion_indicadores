@@ -1,4 +1,4 @@
-package teachers
+package model
 
 import (
 	"errors"
