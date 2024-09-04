@@ -28,27 +28,6 @@ func CreateTeacher(c *gin.Context) {
 	c.JSON(http.StatusOK, Teacher)
 }
 
-func GetTeachersByAcademicPeriod(context *gin.Context) {
-	var Teachers []model.GetByAcademicPeriodResponse = []model.GetByAcademicPeriodResponse{}
-
-	academicPeriodID, err := strconv.ParseInt(context.Param("academicPeriodID"), 10, 64)
-	if err != nil {
-		err := errors.CreateCommonError(http.StatusBadRequest,
-			"Error en parámetro academicPeriodID", err.Error())
-		context.AbortWithStatusJSON(http.StatusBadRequest, err)
-		return
-	}
-
-	err = model.GetTeachersByAcademicPeriod(&Teachers, int(academicPeriodID))
-	if err != nil {
-		err := errors.CreateCommonError(http.StatusInternalServerError,
-			"Error retornando docentes en el periodo especificado", err.Error())
-		context.AbortWithStatusJSON(http.StatusInternalServerError, err)
-		return
-	}
-	context.JSON(http.StatusOK, Teachers)
-}
-
 func UpdateTeacher(c *gin.Context) {
 	var Update model.Update
 	var Teacher model.Teacher
