@@ -1,5 +1,4 @@
 import { PostFilterTeachersListsByAcademicPeriodID } from "$lib/api/controller/api/indicatorsInformation/teachersList";
-import { PostFilterPeople } from "$lib/api/controller/api/person";
 import { generateErrorFromCommonError, type CommonError } from "$lib/api/model/errors";
 import { json, type RequestHandler } from "@sveltejs/kit";
 
