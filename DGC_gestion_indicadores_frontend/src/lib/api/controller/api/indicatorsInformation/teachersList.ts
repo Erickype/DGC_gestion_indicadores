@@ -27,7 +27,7 @@ export async function CreateTeachersList(token: string, request: CreateTeachersL
 export async function PostFilterTeachersListsByAcademicPeriodID(token: string, request: FilterTeachersListsByAcademicPeriodRequest) {
     try {
         const response = await fetch(postFilterTeachersListByAcademicPeriodIDRoute, {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': token
