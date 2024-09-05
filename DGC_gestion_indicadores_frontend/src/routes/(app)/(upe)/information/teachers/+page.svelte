@@ -1,18 +1,27 @@
 <script lang="ts">
 	import type { PageServerData } from './$types';
-	import { goto } from '$app/navigation';
-
+	
 	import AcademicPeriodCombo from '$lib/components/combobox/academicPeriodCombo.svelte';
-	import TeachersTable from './Table.svelte';
 	import AddModal from '$lib/components/modal/AddModal.svelte';
+	import TeachersListsTable from './Table.svelte';
 	import AddForm from './AddForm.svelte';
 
 	import Icon from 'lucide-svelte/icons/list';
 
-	import type { GetTeachersByAcademicPeriodResponse } from '$lib/api/model/api/teacher';
 	import type { Message } from '$lib/components/combobox/combobox';
-	import type { CommonError } from '$lib/api/model/errors';
 	import Alert from '$lib/components/alert/alert.svelte';
+	import type {
+		FilterTeachersListsByAcademicPeriodRequest,
+		FilterTeachersListsByAcademicPeriodResponse
+	} from '$lib/api/model/api/indicatorsInformation/teachersLists';
+	import {
+		fetchFilterTeachersLists,
+		fetchOnDetailedFilter,
+		fetchOnFilterChanged,
+		newFilterTeachersListsByAcademiPeriodRequest,
+		newPopoverFilterDataMap
+	} from '$lib/components/filters/indicatorsInformation/teachersLists';
+	import type { PopoverFilterDataMap } from '$lib/components/table/types';
 
 	export let data: PageServerData;
 	const addTeacherForm = data.addTeacherForm;
@@ -29,31 +38,56 @@
 
 	let selectedAcademicPeriod: number = academicPeriodsData.periods.at(0)!.ID;
 
-	$: addTeacherForm.data.academicPeriod = selectedAcademicPeriod;
-	$: updateTeacherForm.data.academicPeriod = selectedAcademicPeriod;
+	$: {
+		addTeacherForm.data.academicPeriod = selectedAcademicPeriod;
+		updateTeacherForm.data.academicPeriod = selectedAcademicPeriod;
+	}
 
-	let teachersPromise: Promise<GetTeachersByAcademicPeriodResponse[]> = fetchTeachers();
+	let filterTeachersListsByAcademicPeriodRequest: FilterTeachersListsByAcademicPeriodRequest =
+		newFilterTeachersListsByAcademiPeriodRequest(5, 1, selectedAcademicPeriod);
+	let filterTeachersListsByAcademicPeriodPromise: Promise<FilterTeachersListsByAcademicPeriodResponse> =
+		fetchFilterTeachersLists(filterTeachersListsByAcademicPeriodRequest);
+	let popoverFilterDataMap: PopoverFilterDataMap = newPopoverFilterDataMap();
 
-	async function fetchTeachers() {
-		const url = `/api/teacher/byAcademicPeriodID/${selectedAcademicPeriod}`;
-		const response = await fetch(url, {
-			method: 'GET'
-		});
-		if (!response.ok) {
-			const errorData = (await response.json()) as CommonError;
-			if (response.status === 401) {
-				throw goto('/');
-			}
-			throw errorData;
-		}
-		return (teachersPromise = response.json());
+	function fetchOnAcademicPeriodChange() {
+		filterTeachersListsByAcademicPeriodRequest.academic_period_id = selectedAcademicPeriod;
+		filterTeachersListsByAcademicPeriodPromise = fetchFilterTeachersLists(
+			filterTeachersListsByAcademicPeriodRequest
+		);
 	}
 
 	function fetchOnSuccess(event: CustomEvent) {
 		const detail: { status: boolean } = event.detail;
 		if (detail.status) {
-			fetchTeachers();
+			filterTeachersListsByAcademicPeriodPromise = fetchFilterTeachersLists(
+				filterTeachersListsByAcademicPeriodRequest
+			);
 		}
+	}
+
+	function handleOnFilterChanged(event: CustomEvent) {
+		const data: { filter: string } = event.detail;
+		filterTeachersListsByAcademicPeriodPromise = fetchOnFilterChanged(
+			data.filter.trim(),
+			filterTeachersListsByAcademicPeriodRequest,
+			popoverFilterDataMap
+		);
+	}
+
+	function handleOnDetailedFilter() {
+		filterTeachersListsByAcademicPeriodPromise = fetchOnDetailedFilter(
+			filterTeachersListsByAcademicPeriodRequest,
+			popoverFilterDataMap
+		).then(({ request, response }) => {
+			filterTeachersListsByAcademicPeriodRequest = request;
+			return response;
+		});
+	}
+
+	function handlePaginationChanged() {
+		filterTeachersListsByAcademicPeriodPromise = fetchFilterTeachersLists(
+			filterTeachersListsByAcademicPeriodRequest
+		);
 	}
 </script>
 
@@ -72,29 +106,34 @@
 	<AcademicPeriodCombo
 		messages={academicPeriodsData.messages}
 		bind:selectedValue={selectedAcademicPeriod}
-		on:message={fetchTeachers}
+		on:message={fetchOnAcademicPeriodChange}
 	></AcademicPeriodCombo>
 
 	<AddModal
 		formComponent={AddForm}
 		modalTitle="Crear docente"
 		formData={addTeacherForm}
-		comboMessages={comboMessages}
+		{comboMessages}
 		on:created={fetchOnSuccess}
 	/>
 </div>
 
 <div class="mx-auto flex w-full place-content-center px-8">
-	{#await teachersPromise}
+	{#await filterTeachersListsByAcademicPeriodPromise}
 		cargando...
-	{:then teachers}
-		{#if teachers.length > 0}
-			<TeachersTable
+	{:then filterTeachersListsByAcademicPeriodResponse}
+		{#if filterTeachersListsByAcademicPeriodResponse.teachers_lists}
+			<TeachersListsTable
+				bind:filterTeachersListsByAcademicPeriodRequest
 				formData={updateTeacherForm}
-				{teachers}
+				{filterTeachersListsByAcademicPeriodResponse}
+				bind:popoverFilterDataMap
 				on:updated={fetchOnSuccess}
 				on:deleted={fetchOnSuccess}
-			></TeachersTable>
+				on:filterChanged={handleOnFilterChanged}
+				on:detailedFilter={handleOnDetailedFilter}
+				on:paginationChanged={handlePaginationChanged}
+			></TeachersListsTable>
 		{:else}
 			<Alert title="Sin registros" description={'Ups, no hay docentes registrados.'} />
 		{/if}

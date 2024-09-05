@@ -4,41 +4,57 @@
 	import { readable } from 'svelte/store';
 
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
+	import Table from '$lib/components/table/tablePaginated.svelte';
 
-	import Table from '$lib/components/table/table.svelte';
-	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
-
-	/* 	import UpdateForm from './UpdateForm.svelte';
-	 */
 	import { createEventDispatcher } from 'svelte';
-	import { toast } from 'svelte-sonner';
 
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import type { UpdateTeacherSchema } from './scheme';
 
-	import type { GetTeachersByAcademicPeriodResponse, Teacher } from '$lib/api/model/api/teacher';
-	import type { CommonDeleteResponse } from '$lib/api/model/common';
-	import { goto } from '$app/navigation';
+	import { generateInitialFilterValue } from '$lib/components/filters/indicatorsInformation/teachersLists';
+	import type { PopoverFilterDataMap } from '$lib/components/table/types';
+	import type {
+		FilterTeachersListsByAcademicPeriodRequest,
+		FilterTeachersListsByAcademicPeriodResponse,
+		TeachersListByAcademicPeriodJoined
+	} from '$lib/api/model/api/indicatorsInformation/teachersLists';
 
-	export let teachers: GetTeachersByAcademicPeriodResponse[];
+	export let filterTeachersListsByAcademicPeriodResponse: FilterTeachersListsByAcademicPeriodResponse;
+	let filterTeachersListsResponse: TeachersListByAcademicPeriodJoined[] =
+		filterTeachersListsByAcademicPeriodResponse.teachers_lists;
+
 	export let formData: SuperValidated<Infer<UpdateTeacherSchema>, App.Superforms.Message>;
-	let teacher: GetTeachersByAcademicPeriodResponse;
+	let teacher: TeachersListByAcademicPeriodJoined;
 
-	const filterFields = ['name', 'abbreviation'];
+	let filterValue = '';
+	let pageIndex: number = 0;
+	let pageSize: number = 0;
+	export let filterTeachersListsByAcademicPeriodRequest: FilterTeachersListsByAcademicPeriodRequest;
+	let initialFilterValue: string | undefined = generateInitialFilterValue(
+		filterTeachersListsByAcademicPeriodRequest
+	);
 
-	const table = createTable(readable(teachers), {
+	export let popoverFilterDataMap: PopoverFilterDataMap = new Map();
+
+	const filterFields = ['teacher', 'career', 'dedication', 'scaled_grade', 'contract_type'];
+
+	const table = createTable(readable(filterTeachersListsResponse), {
 		page: addPagination({
-			initialPageSize: 10
+			initialPageSize: filterTeachersListsByAcademicPeriodResponse.page_size,
+			initialPageIndex: filterTeachersListsByAcademicPeriodResponse.page - 1,
+			serverSide: true,
+			serverItemCount: readable(filterTeachersListsByAcademicPeriodResponse.count)
 		}),
 		sort: addSortBy(),
 		filter: addTableFilter({
-			fn: ({ filterValue, value }) => value.toLowerCase().includes(filterValue.toLowerCase())
+			initialFilterValue: initialFilterValue?.trim(),
+			serverSide: true
 		})
 	});
 
 	const columns = table.createColumns([
 		table.column({
-			accessor: 'person',
+			accessor: 'teacher',
 			header: 'Nombre'
 		}),
 		table.column({
@@ -58,7 +74,7 @@
 			header: 'Tipo contrato'
 		}),
 		table.column({
-			accessor: ({ person_id }) => person_id,
+			accessor: ({ teacher_id }) => teacher_id,
 			header: '',
 			cell: ({ value }) => {
 				const actions = createRender(DataTableActions, {
@@ -121,6 +137,23 @@
 			});
 		}
 	}
+	function handleOnFilterChanged() {
+		dispatch('filterChanged', {
+			filter: filterValue
+		});
+	}
+	function handleOnDetailedFilter() {
+		dispatch('detailedFilter');
+	}
+	function handleOnPageChanged() {
+		filterTeachersListsByAcademicPeriodRequest.page = pageIndex + 1;
+		dispatch('paginationChanged');
+	}
+	function handleOnPageSizeChanged() {
+		filterTeachersListsByAcademicPeriodRequest.page_size = pageSize;
+		filterTeachersListsByAcademicPeriodRequest.page = 1;
+		dispatch('paginationChanged');
+	}
 </script>
 
 <!-- <UpdateModal
@@ -132,6 +165,20 @@
 	on:updated={handleUpdated}
 /> -->
 
-<div class="max-h-[45%] w-full">
-	<Table {table} {columns} {filterFields} tableHeightClass="h-[50vh]" />
+<div class="w-full">
+	<Table
+		tableHeightClass="h-[50vh]"
+		{table}
+		{columns}
+		serverItemCount={filterTeachersListsByAcademicPeriodResponse.count}
+		{filterFields}
+		bind:popoverFilterDataMap
+		bind:filter_value={filterValue}
+		bind:page_index={pageIndex}
+		bind:page_size={pageSize}
+		on:filterChanged={handleOnFilterChanged}
+		on:detailedFilter={handleOnDetailedFilter}
+		on:pageChanged={handleOnPageChanged}
+		on:pageSizeChanged={handleOnPageSizeChanged}
+	/>
 </div>
