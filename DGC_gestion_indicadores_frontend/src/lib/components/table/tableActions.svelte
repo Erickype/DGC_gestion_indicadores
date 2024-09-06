@@ -18,14 +18,14 @@
 	function sendDeleteConfirmation() {
 		dispatch('delete-confirmation', {
 			status: true,
-			id: parseInt(id)
+			id: id
 		});
 	}
 
 	function sendUpdateAction() {
 		dispatch('update-action', {
 			status: true,
-			id: parseInt(id)
+			id: id
 		});
 	}
 </script>
