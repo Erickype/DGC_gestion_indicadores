@@ -93,3 +93,23 @@ func FilterTeachers(filterTeachersResponse *FilterTeachersResponse, filterTeache
 	}
 	return nil
 }
+
+func GetTeacherPersonJoinedByTeacherID(teacherID int, response *TeacherPerson) (err error) {
+	err = database.DB.Model(&Teacher{}).Select(
+		`teachers.id,
+		teachers.person_id,
+		people.identity,
+		people.name,
+		people.lastname,
+		people.email`,
+	).Where(
+		"teachers.ID = ?", teacherID,
+	).Joins(
+		`INNER JOIN people on people.id = teachers.person_id`,
+	).Scan(&response).Error
+
+	if err != nil {
+		return err
+	}
+	return nil
+}
