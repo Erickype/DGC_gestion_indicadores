@@ -1,4 +1,4 @@
-import type { FilterTeachersRequest, FilterTeachersResponse } from "$lib/api/model/api/teacher";
+import type { FilterTeachersRequest, FilterTeachersResponse, TeacherPerson } from "$lib/api/model/api/teacher";
 import type { PopoverFilterDataMap } from "../../table/types";
 import type { CommonError } from "$lib/api/model/errors";
 
@@ -47,6 +47,21 @@ export async function fetchFilterTeachers(filterTeachersRequest: FilterTeachersR
     const response = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(filterTeachersRequest)
+    });
+    if (!response.ok) {
+        const errorData = (await response.json()) as CommonError;
+        if (response.status === 401) {
+            throw goto('/');
+        }
+        throw errorData;
+    }
+    return response.json();
+}
+
+export async function fetchTeacherPersonJoinedByTeacherID(teacherID: string): Promise<TeacherPerson> {
+    const url = `/api/teachers/filter/teacherPersonJoinedByTeacherID/` + teacherID;
+    const response = await fetch(url, {
+        method: 'GET',
     });
     if (!response.ok) {
         const errorData = (await response.json()) as CommonError;
