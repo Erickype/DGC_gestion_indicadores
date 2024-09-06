@@ -4,6 +4,8 @@
 	import { readable } from 'svelte/store';
 
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
+	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
+	import UpdateForm from './updateTeacherForm.svelte';
 	import Table from '$lib/components/table/tablePaginated.svelte';
 
 	import { createEventDispatcher } from 'svelte';
@@ -18,11 +20,13 @@
 		FilterTeachersListsByAcademicPeriodResponse,
 		TeachersListByAcademicPeriodJoined
 	} from '$lib/api/model/api/indicatorsInformation/teachersLists';
+	import type { Message } from '$lib/components/combobox/combobox';
 
 	export let filterTeachersListsByAcademicPeriodResponse: FilterTeachersListsByAcademicPeriodResponse;
 	let filterTeachersListsResponse: TeachersListByAcademicPeriodJoined[] =
 		filterTeachersListsByAcademicPeriodResponse.teachers_lists;
 
+	export let comboMessages: Message[][] | undefined = undefined;
 	export let formData: SuperValidated<Infer<UpdateTeacherSchema>, App.Superforms.Message>;
 	let teacher: TeachersListByAcademicPeriodJoined;
 
@@ -112,10 +116,12 @@
 
 	let updateFormOpen = false;
 	function handleUpdateAction(event: any) {
-		const detail: { status: boolean; id: number } = event.detail;
+		const detail: { status: boolean; id: string } = event.detail;
 		if (detail.status) {
-			/* teacher = teachers.find((teacher) => teacher.ID === detail.id)!;
-			updateFormOpen = true; */
+			const segments = detail.id.split('/');
+			const teacher_id = parseInt(segments.at(segments.length - 1)!);
+			teacher = filterTeachersListsResponse.find((teacher) => teacher.teacher_id === teacher_id)!;
+			updateFormOpen = true;
 		} else {
 			updateFormOpen = false;
 		}
@@ -156,14 +162,15 @@
 	}
 </script>
 
-<!-- <UpdateModal
-	modalTitle="Actualizar información facultad"
+<UpdateModal
+	modalTitle="Actualizar información profesor"
 	{formData}
 	formComponent={UpdateForm}
+	{comboMessages}
 	bind:updateEntity={teacher}
 	bind:open={updateFormOpen}
 	on:updated={handleUpdated}
-/> -->
+/>
 
 <div class="w-full">
 	<Table
