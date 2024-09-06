@@ -128,6 +128,7 @@
 				formData={updateTeacherForm}
 				{filterTeachersListsByAcademicPeriodResponse}
 				bind:popoverFilterDataMap
+				{comboMessages}
 				on:updated={fetchOnSuccess}
 				on:deleted={fetchOnSuccess}
 				on:filterChanged={handleOnFilterChanged}
