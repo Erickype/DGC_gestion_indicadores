@@ -36,7 +36,6 @@ export const addTeacherSchema = z.object({
 export type AddTeacherSchema = typeof addTeacherSchema;
 
 export const updateTeacherSchema = z.object({
-    ID: z.number().gt(0),
     academicPeriod: z.number().gt(0),
     teacher: z.number({
         required_error: "Profesor requerido"
