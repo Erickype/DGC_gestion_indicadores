@@ -1,7 +1,10 @@
 package model
 
 import (
+	"errors"
+	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	teacher "github.com/Erickype/DGC_gestion_indicadores_backend/model/teacher"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -15,4 +18,15 @@ type TeachersDegree struct {
 
 	DegreeLevel DegreeLevel     `json:"-"`
 	Teacher     teacher.Teacher `json:"-"`
+}
+
+func PostTeachersDegree(degree *TeachersDegree) (err error) {
+	err = database.DB.Create(degree).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("título ya registrado")
+		}
+		return err
+	}
+	return nil
 }

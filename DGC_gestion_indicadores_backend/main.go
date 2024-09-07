@@ -7,6 +7,7 @@ import (
 	career "github.com/Erickype/DGC_gestion_indicadores_backend/controller/career"
 	contractTypes "github.com/Erickype/DGC_gestion_indicadores_backend/controller/contractType"
 	dedication "github.com/Erickype/DGC_gestion_indicadores_backend/controller/dedication"
+	degree "github.com/Erickype/DGC_gestion_indicadores_backend/controller/degree"
 	evaluationPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/controller/evaluationPeriod"
 	faculty "github.com/Erickype/DGC_gestion_indicadores_backend/controller/faculty"
 	indicatorsInformationTeachers "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation/teachers"
@@ -108,6 +109,8 @@ func serveApplication() {
 	upeRoutes.POST("/teacher", teacher.CreateTeacher)
 	upeRoutes.DELETE("/teacher/:id", teacher.DeleteTeacher)
 	upeRoutes.PUT("/teacher/:id", teacher.UpdateTeacher)
+
+	upeRoutes.POST("/teachers/degree", degree.PostTeachersDegree)
 
 	// Indicators information routes
 	indicatorsRoutes := router.Group("/api/indicators/information")
