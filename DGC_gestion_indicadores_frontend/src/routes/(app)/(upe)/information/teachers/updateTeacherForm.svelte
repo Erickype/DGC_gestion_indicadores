@@ -1,22 +1,19 @@
 <script lang="ts">
 	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { updateTeacherSchema, type UpdateTeacherSchema } from './scheme';
-	import { updateTeacherAction } from '../../../../../stores';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
-	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Form from '$lib/components/ui/form';
 	import { toast } from 'svelte-sonner';
 
-	import { browser } from '$app/environment';
 	import { createEventDispatcher } from 'svelte';
+	import { browser } from '$app/environment';
 	import { writable } from 'svelte/store';
 
 	import type { TeachersListByAcademicPeriodJoined } from '$lib/api/model/api/indicatorsInformation/teachersLists';
-	import TeachersServerFormSelect from '$lib/components/filters/teachers/teachersServer.svelte';
+	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
 	import FormSelect from '$lib/components/combobox/formSelect.svelte';
 	import type { Message } from '$lib/components/combobox/combobox';
-	import { manageToastFromInvalidAddForm } from '$lib/utils';
 
 	export let updateEntity!: TeachersListByAcademicPeriodJoined;
 	export let data: SuperValidated<Infer<UpdateTeacherSchema>>;
@@ -33,28 +30,23 @@
 			if (!message) {
 				return manageToastFromInvalidAddForm();
 			}
-			if ($message!.success) {
-				updateTeacherAction.set({
-					status: false,
-					teacherID: -1
-				});
-				toast.success('Registro de docente actualizado.');
-				dispatchTeacherUpdated();
-			} else {
-				toast.error('Fallo actualizando docente.');
+			if (message.success) {
+				TeacherUpdated();
+				return toast.success(`Registro de profesor actualizado.`);
 			}
+			return manageToastFromErrorMessageOnAddForm(message);
 		}
 	});
 
 	const dispatch = createEventDispatcher();
 
-	function dispatchTeacherUpdated() {
-		dispatch('teacher-updated', {
+	function TeacherUpdated() {
+		dispatch('updated', {
 			status: true
 		});
 	}
 
-	const { form: formData, message, enhance } = form;
+	const { form: formData, enhance } = form;
 
 	$formData.teacher = updateEntity.teacher_id;
 	$formData.career = updateEntity.career_id;
@@ -82,7 +74,20 @@
 			</Form.Control>
 		</Form.Field>
 		<Form.Field {form} name="teacher" class="flex flex-col">
-			<TeachersServerFormSelect bind:formDataTeacherID />
+			<Form.Control let:attrs>
+				<label
+					class="data-[fs-error]:text-destructive text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+					for="teacher"
+				>
+					Profesor
+				</label>
+				<p
+					class="ring-offset-background focus-visible:ring-ring border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-full items-center justify-between whitespace-nowrap rounded-md border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+				>
+					{updateEntity.teacher_identity + ' ' + updateEntity.teacher}
+				</p>
+				<input hidden value={$formData.teacher} name={attrs.name} />
+			</Form.Control>
 			<Form.FieldErrors />
 		</Form.Field>
 		<Form.Field {form} name="career" class="flex flex-col">
@@ -120,15 +125,6 @@
 	</div>
 	<div class="flex items-center justify-center gap-2">
 		<Form.Button>Actualizar</Form.Button>
-		<Button
-			variant="secondary"
-			on:click={() => {
-				updateTeacherAction.set({
-					status: false,
-					teacherID: -1
-				});
-			}}>Cancelar</Button
-		>
 	</div>
 	<!-- {#if browser}
 		<SuperDebug data={$formData} />
