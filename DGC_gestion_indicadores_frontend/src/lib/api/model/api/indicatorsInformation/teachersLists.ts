@@ -18,6 +18,15 @@ export interface CreateTeachersListsRequest {
     contract_type_id: number;
 }
 
+export interface UpdateTeachersListRequest {
+    academic_period_id: number;
+    teacher_id: number;
+    career_id: number;
+    dedication_id: number;
+    scaled_grade_id: number;
+    contract_type_id: number;
+}
+
 export interface FilterTeachersListsByAcademicPeriodRequest {
     academic_period_id?: number,
     teacher_identity?: string,
