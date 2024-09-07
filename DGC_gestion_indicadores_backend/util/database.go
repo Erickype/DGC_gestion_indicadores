@@ -97,6 +97,14 @@ func seedData() {
 		{Name: "Docente a contrato ocasional", Abbreviation: "Contrato ocasional", Description: "Docente contrato ocasional"},
 		{Name: "Docente de apoyo académico", Abbreviation: "Apoyo académico", Description: "Docente de apoyo académico"},
 	}
+
+	var degreeLevels = []degree.DegreeLevel{
+		{Name: "Tercer nivel", Abbreviation: "3rd Nivel", Description: "Títulos universitarios tercer nivel"},
+		{Name: "Cuarto nivel Posgrado/Master", Abbreviation: "4to Nivel", Description: "Títulos posgrado/master cuarto nivel"},
+		{Name: "Cuarto nivel Doctorado", Abbreviation: "PhD", Description: "Títulos doctorado cuarto nivel"},
+	}
+
+	database.DB.Save(&degreeLevels)
 	database.DB.Save(&contractTypes)
 	database.DB.Save(&scaledGrades)
 	database.DB.Save(&dedications)
