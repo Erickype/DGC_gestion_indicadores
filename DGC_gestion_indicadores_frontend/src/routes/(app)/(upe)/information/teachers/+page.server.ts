@@ -3,7 +3,7 @@ import { mainDashboarRoute } from "$lib/api/util/paths";
 import { redirect } from "@sveltejs/kit";
 
 import { addTeacherSchema, updateTeacherSchema } from "./scheme";
-import { message, superValidate } from "sveltekit-superforms";
+import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 
 import { LoadAcademicPeriodsWithComboMessages } from "$lib/api/controller/view/academicPeriod";
@@ -12,13 +12,9 @@ import { LoadScaledGradesWithComboMessages } from "$lib/api/controller/api/scale
 import { LoadDedicationsWithComboMessages } from "$lib/api/controller/api/dedication";
 import { LoadCareersWithComboMessages } from "$lib/api/controller/api/career";
 
-import type { UpdateTeacherRequest } from "$lib/api/model/api/teacher";
-import { UpdateTeacher } from "$lib/api/controller/api/teacher";
-
+import type { CreateTeachersListsRequest, UpdateTeachersListRequest } from "$lib/api/model/api/indicatorsInformation/teachersLists";
+import { CreateTeachersList, PatchTeachersLists } from "$lib/api/controller/api/indicatorsInformation/teachersList";
 import { generateFormMessageFromHttpResponse, generateFormMessageFromInvalidForm } from "$lib/utils";
-import { toast } from "svelte-sonner";
-import { CreateTeachersList } from "$lib/api/controller/api/indicatorsInformation/teachersList";
-import type { CreateTeachersListsRequest } from "$lib/api/model/api/indicatorsInformation/teachersLists";
 
 export const load: PageServerLoad = async ({ locals, cookies }) => {
     const token = cookies.get("AuthorizationToken")
@@ -71,31 +67,20 @@ export const actions: Actions = {
         const token = event.cookies.get("AuthorizationToken")
 
         if (!form.valid) {
-            return message(form, { success: false, error: "Invalid form" }, {
-                status: 400
-            })
+            return generateFormMessageFromInvalidForm(form)
         }
 
         const data = form.data
-        const updateTeacherRequest: UpdateTeacherRequest = {
-            ID: data.ID,
+        const updateTeacherRequest: UpdateTeachersListRequest = {
             academic_period_id: data.academicPeriod,
+            teacher_id: data.teacher,
             career_id: data.career,
             dedication_id: data.dedication,
-            person_id: data.person,
-            scaled_grade_id: data.scaledGrade
+            scaled_grade_id: data.scaledGrade,
+            contract_type_id: data.contractType
         }
-        const teacherID = data.ID.toString()
-        const res = await UpdateTeacher(token!, updateTeacherRequest, teacherID)
+        const response = await PatchTeachersLists(token!, updateTeacherRequest)
 
-        if (!res.ok) {
-            if (res.status === 401) {
-                toast.warning("No está autenticado.")
-                return redirect(302, "/login")
-            }
-            return message(form, { success: false, error: "Error actualizando docente" })
-        }
-
-        return message(form, { success: true, error: "" })
+        return generateFormMessageFromHttpResponse(form, response)
     }
 };
