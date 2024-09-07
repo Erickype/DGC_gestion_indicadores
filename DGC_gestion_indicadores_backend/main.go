@@ -115,6 +115,7 @@ func serveApplication() {
 
 	indicatorsRoutes.POST("/teachersLists/filter", indicatorsInformationTeachers.FilterTeachersLists)
 	indicatorsRoutes.POST("/teachersList", indicatorsInformationTeachers.CreateTeachersList)
+	indicatorsRoutes.PATCH("/teachersList/:academicPeriodID/:teacherID", indicatorsInformationTeachers.PatchTeachersList)
 
 	// Public view routes
 	academicPeriodRoutes := router.Group("/view")

@@ -46,3 +46,26 @@ func CreateTeachersList(teachersList *TeachersList) (err error) {
 	}
 	return nil
 }
+
+func GetTeachersListByAcademicPeriod(academicPeriodID int, teacherID int) (err error) {
+	err = database.DB.Model(&TeachersList{}).
+		Where("academic_period_id = ? AND teacher_id = ?", academicPeriodID, teacherID).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("no existe el profesor en el periodo")
+		}
+		return err
+	}
+	return nil
+}
+
+func PatchTeachersLists(teachersLists *TeachersList) (err error) {
+	err = database.DB.Model(&TeachersList{}).Save(teachersLists).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("profesor en lista ya existe")
+		}
+		return err
+	}
+	return nil
+}
