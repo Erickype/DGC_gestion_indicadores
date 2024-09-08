@@ -30,6 +30,15 @@ type AddDegreeAndTeachersListsDegreeRequest struct {
 	Name             string `json:"name"`
 }
 
+type GetTeachersListsDegreesJoinedResponse struct {
+	AcademicPeriodID uint   `json:"academic_period_id"`
+	TeacherID        uint   `json:"teacher_id"`
+	TeachersDegreeID uint   `json:"teachers_degree_id"`
+	DegreeLevelID    uint   `json:"degree_level_id"`
+	DegreeLevelName  string `json:"degree_level_name"`
+	Name             string `json:"name"`
+}
+
 func (tl *TeachersListsDegree) TableName() string {
 	return model.IndicatorsInformationSchema + ".teachers_lists_degrees"
 }
@@ -60,4 +69,25 @@ func AddDegreeAndTeachersListsDegree(request *AddDegreeAndTeachersListsDegreeReq
 		}
 		return nil
 	})
+}
+
+func GetTeachersListsDegreesJoined(
+	academicPeriodID, teacherID int,
+	response *[]GetTeachersListsDegreesJoinedResponse) (err error) {
+	err = database.DB.Order("tld.updated_at desc").
+		Table("indicators_information.teachers_lists_degrees tld").
+		Select(`tld.academic_period_id, 
+					tld.teacher_id, 
+					tld.teachers_degree_id, 
+					td.degree_level_id, 
+					dl.name as degree_level_name, 
+					td.name`).
+		Joins("join teachers_degrees td on tld.teachers_degree_id = td.id").
+		Joins("join degree_levels dl on dl.id = td.degree_level_id").
+		Where("tld.academic_period_id = ? AND tld.teacher_id = ?", academicPeriodID, teacherID).
+		Scan(&response).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }

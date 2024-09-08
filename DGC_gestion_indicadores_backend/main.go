@@ -120,6 +120,8 @@ func serveApplication() {
 
 	indicatorsRoutes.POST("/teachersLists/filter", indicatorsInformationTeachers.FilterTeachersLists)
 	indicatorsRoutes.POST("/teachersLists/AddDegreeAndTeachersListsDegree", indicatorsInformationTeachers.AddDegreeAndTeachersListsDegree)
+	indicatorsRoutes.GET("/teachersLists/degrees/:academicPeriodID/:teacherID", indicatorsInformationTeachers.GetTeachersListsDegreesJoined)
+
 	indicatorsRoutes.POST("/teachersList", indicatorsInformationTeachers.CreateTeachersList)
 	indicatorsRoutes.PATCH("/teachersList/:academicPeriodID/:teacherID", indicatorsInformationTeachers.PatchTeachersList)
 
