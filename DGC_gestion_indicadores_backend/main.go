@@ -119,6 +119,7 @@ func serveApplication() {
 	indicatorsRoutes.Use(util.JWTAuth(), util.JWTAuthUPE())
 
 	indicatorsRoutes.POST("/teachersLists/filter", indicatorsInformationTeachers.FilterTeachersLists)
+	indicatorsRoutes.POST("/teachersLists/AddDegreeAndTeachersListsDegree", indicatorsInformationTeachers.AddDegreeAndTeachersListsDegree)
 	indicatorsRoutes.POST("/teachersList", indicatorsInformationTeachers.CreateTeachersList)
 	indicatorsRoutes.PATCH("/teachersList/:academicPeriodID/:teacherID", indicatorsInformationTeachers.PatchTeachersList)
 
