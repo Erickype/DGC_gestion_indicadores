@@ -45,6 +45,7 @@
 				FacultyCreated();
 				return toast.success(`Título creado.`);
 			}
+			$formData.degreeLevelID = $formDataDegreeLevelID
 			return manageToastFromErrorMessageOnAddForm(message);
 		}
 	});
@@ -88,7 +89,7 @@
 		</Form.Field>
 	</div>
 	<Form.Button class="my-2 w-full">Guardar</Form.Button>
-	{#if browser}
+	<!-- {#if browser}
 		<SuperDebug data={$formData} />
-	{/if}
+	{/if} -->
 </form>
