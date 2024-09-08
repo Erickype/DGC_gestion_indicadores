@@ -12,8 +12,10 @@ export const addTeachersListsDegreeSchema = z.object({
     name: z.string({
         required_error: "Nombre requerida"
     }).min(10, {
-        message: "Descripción mínimo 10 caracteres."
-    }).max(50),
+        message: "Nombre mínimo 10 caracteres."
+    }).max(200, {
+        message: "Nombre máximo 200 caracteres."
+    }),
 });
 
 export type AddTeachersListsDegreeSchema = typeof addTeachersListsDegreeSchema;
