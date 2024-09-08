@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const addTeachersListsDegreeSchema = z.object({
+export const addDegreeAndTeachersListsDegreeSchema = z.object({
     academicPeriodID: z.number().gt(0),
 
     teacherID: z.number().gt(0),
@@ -18,4 +18,4 @@ export const addTeachersListsDegreeSchema = z.object({
     }),
 });
 
-export type AddTeachersListsDegreeSchema = typeof addTeachersListsDegreeSchema;
+export type AddDegreeAndTeachersListsDegreeSchema = typeof addDegreeAndTeachersListsDegreeSchema;

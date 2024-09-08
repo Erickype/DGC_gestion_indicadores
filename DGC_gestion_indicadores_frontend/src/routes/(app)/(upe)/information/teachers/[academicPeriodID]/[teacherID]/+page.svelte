@@ -2,7 +2,7 @@
 	import type { PageServerData } from './$types';
 	import { browser } from '$app/environment';
 
-	import AddTeachersListsDegreeForm from './AddTeachersListsDegreeForm.svelte';
+	import AddDegreeAndTeachersListsDegreeForm from './AddDegreeAndTeachersListsDegreeForm.svelte';
 	import AddModal from '$lib/components/modal/AddModal.svelte';
 
 	import { Button } from '$lib/components/ui/button/index';
@@ -12,9 +12,12 @@
 	import type { Message } from '$lib/components/combobox/combobox';
 
 	export let data: PageServerData;
-	const addTeachersListsDegreeForm = data.addTeachersListsDegreeForm;
+	const addDegreeAndTeachersListsDegreeForm = data.addDegreeAndTeachersListsDegreeForm;
 
 	const comboMessages: Message[][] = [data.degreeLevelsData.messages];
+
+	addDegreeAndTeachersListsDegreeForm.data.academicPeriodID = data.academicPeriodID;
+	addDegreeAndTeachersListsDegreeForm.data.teacherID = data.teacherID;
 
 	function returnToTeachers() {
 		if (browser) {
@@ -42,9 +45,9 @@
 		<h2 class="text-2xl font-bold">Títulos</h2>
 	</div>
 	<AddModal
-		formComponent={AddTeachersListsDegreeForm}
+		formComponent={AddDegreeAndTeachersListsDegreeForm}
 		modalTitle="Crear título"
-		formData={addTeachersListsDegreeForm}
+		formData={addDegreeAndTeachersListsDegreeForm}
 		{comboMessages}
 		on:created={fetchOnSuccess}
 	/>

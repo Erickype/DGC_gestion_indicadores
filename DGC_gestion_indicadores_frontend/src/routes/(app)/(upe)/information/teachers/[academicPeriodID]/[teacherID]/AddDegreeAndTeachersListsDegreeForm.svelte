@@ -1,22 +1,27 @@
 <script lang="ts">
 	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
-	import { addTeachersListsDegreeSchema, type AddTeachersListsDegreeSchema } from './schema';
+	import {
+		addDegreeAndTeachersListsDegreeSchema,
+		type AddDegreeAndTeachersListsDegreeSchema
+	} from './schema';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	import { createEventDispatcher } from 'svelte';
 	import { browser } from '$app/environment';
 	import { writable } from 'svelte/store';
-	
+
 	import { Textarea } from '$lib/components/ui/textarea/index.js';
 	import * as Form from '$lib/components/ui/form';
 	import { toast } from 'svelte-sonner';
-	
+
 	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
 	import FormSelect from '$lib/components/combobox/formSelect.svelte';
 	import type { Message } from '$lib/components/combobox/combobox';
-	import type { Faculty } from '$lib/api/model/api/faculty';
 
-	export let data: SuperValidated<Infer<AddTeachersListsDegreeSchema>, App.Superforms.Message>;
+	export let data: SuperValidated<
+		Infer<AddDegreeAndTeachersListsDegreeSchema>,
+		App.Superforms.Message
+	>;
 	export let comboMessages: Message[][];
 	const degreeLevelsComboData = comboMessages.at(0)!;
 
@@ -29,7 +34,7 @@
 	}
 
 	const form = superForm(data, {
-		validators: zodClient(addTeachersListsDegreeSchema),
+		validators: zodClient(addDegreeAndTeachersListsDegreeSchema),
 		taintedMessage: null,
 		onUpdated: ({ form: f }) => {
 			const message = f.message;
@@ -37,9 +42,8 @@
 				return manageToastFromInvalidAddForm();
 			}
 			if (message.success) {
-				const faculty = message.data as Faculty;
 				FacultyCreated();
-				return toast.success(`Título creado: ${faculty.abbreviation}`);
+				return toast.success(`Título creado.`);
 			}
 			return manageToastFromErrorMessageOnAddForm(message);
 		}
@@ -51,7 +55,7 @@
 	formDataDegreeLevelID.subscribe((value) => ($formData.degreeLevelID = value));
 </script>
 
-<form action="?/addTeachersListsDegree" use:enhance>
+<form action="?/addDegreeAndTeachersListsDegree" use:enhance>
 	<div class="flex flex-col gap-2">
 		<Form.Field {form} name="academicPeriodID">
 			<Form.Control let:attrs>
@@ -84,7 +88,7 @@
 		</Form.Field>
 	</div>
 	<Form.Button class="my-2 w-full">Guardar</Form.Button>
-	<!-- 	{#if browser}
+	{#if browser}
 		<SuperDebug data={$formData} />
-	{/if} -->
+	{/if}
 </form>
