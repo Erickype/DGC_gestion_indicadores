@@ -112,6 +112,8 @@ func serveApplication() {
 
 	upeRoutes.POST("/teachers/degree", degree.PostTeachersDegree)
 
+	upeRoutes.GET("/degreeLevels", degree.GetDegreeLevels)
+
 	// Indicators information routes
 	indicatorsRoutes := router.Group("/api/indicators/information")
 	indicatorsRoutes.Use(util.JWTAuth(), util.JWTAuthUPE())
