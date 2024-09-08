@@ -1,16 +1,20 @@
 <script lang="ts">
-	import MoveLeft from 'lucide-svelte/icons/move-left';
-
-	import AddModal from '$lib/components/modal/AddModal.svelte';
+	import type { PageServerData } from './$types';
+	import { browser } from '$app/environment';
 
 	import AddTeachersListsDegreeForm from './AddTeachersListsDegreeForm.svelte';
+	import AddModal from '$lib/components/modal/AddModal.svelte';
 
 	import { Button } from '$lib/components/ui/button/index';
-	import { browser } from '$app/environment';
-	import type { PageServerData } from './$types';
+
+	import MoveLeft from 'lucide-svelte/icons/move-left';
+
+	import type { Message } from '$lib/components/combobox/combobox';
 
 	export let data: PageServerData;
 	const addTeachersListsDegreeForm = data.addTeachersListsDegreeForm;
+
+	const comboMessages: Message[][] = [data.degreeLevelsData.messages];
 
 	function returnToTeachers() {
 		if (browser) {
@@ -41,6 +45,7 @@
 		formComponent={AddTeachersListsDegreeForm}
 		modalTitle="Crear título"
 		formData={addTeachersListsDegreeForm}
+		{comboMessages}
 		on:created={fetchOnSuccess}
 	/>
 </div>
