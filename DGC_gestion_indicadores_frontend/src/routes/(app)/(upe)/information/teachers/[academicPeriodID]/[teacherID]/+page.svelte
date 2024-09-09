@@ -9,15 +9,42 @@
 
 	import MoveLeft from 'lucide-svelte/icons/move-left';
 
+	import TeachersListsDegreesTable from './Table.svelte';
+
 	import type { Message } from '$lib/components/combobox/combobox';
+	import type { GetTeachersListsDegreesJoinedResponse } from '$lib/api/model/api/indicatorsInformation/teachersListsDegree';
+	import Alert from '$lib/components/alert/alert.svelte';
+	import type { CommonError } from '$lib/api/model/errors';
+	import { goto } from '$app/navigation';
 
 	export let data: PageServerData;
 	const addDegreeAndTeachersListsDegreeForm = data.addDegreeAndTeachersListsDegreeForm;
-
+	const updateDegreeAndTeachersListsDegreeForm = data.updateDegreeAndTeachersListsDegreeForm;
+	
 	const comboMessages: Message[][] = [data.degreeLevelsData.messages];
+	
+	$: {
+		addDegreeAndTeachersListsDegreeForm.data.academicPeriodID = data.academicPeriodID;
+		addDegreeAndTeachersListsDegreeForm.data.teacherID = data.teacherID;
+	}
 
-	addDegreeAndTeachersListsDegreeForm.data.academicPeriodID = data.academicPeriodID;
-	addDegreeAndTeachersListsDegreeForm.data.teacherID = data.teacherID;
+	let teachersListsDegreesPromise: Promise<GetTeachersListsDegreesJoinedResponse[]> =
+		fetchGetTeachersListsDegreesJoined();
+
+	async function fetchGetTeachersListsDegreesJoined() {
+		const url = `/api/indicatorsInformation/teachersLists/degrees/${data.academicPeriodID}/${data.teacherID}`;
+		const response = await fetch(url, {
+			method: 'GET'
+		});
+		if (!response.ok) {
+			const errorData = (await response.json()) as CommonError;
+			if (response.status === 401) {
+				throw goto('/');
+			}
+			throw errorData;
+		}
+		return (teachersListsDegreesPromise = response.json());
+	}
 
 	function returnToTeachers() {
 		if (browser) {
@@ -28,7 +55,7 @@
 	function fetchOnSuccess(event: CustomEvent) {
 		const detail: { status: boolean } = event.detail;
 		if (detail.status) {
-			//fetchCareers();
+			fetchGetTeachersListsDegreesJoined();
 		}
 	}
 </script>
@@ -51,4 +78,24 @@
 		{comboMessages}
 		on:created={fetchOnSuccess}
 	/>
+</div>
+
+<div class="mx-auto flex w-full place-content-center px-8">
+	{#await teachersListsDegreesPromise}
+		cargando...
+	{:then degrees}
+		{#if degrees.length > 0}
+			<TeachersListsDegreesTable
+				formData={updateDegreeAndTeachersListsDegreeForm}
+				{degrees}
+				{comboMessages}
+				on:updated={fetchOnSuccess}
+				on:deleted={fetchOnSuccess}
+			></TeachersListsDegreesTable>
+		{:else}
+			<Alert title="Sin registros" description={'Ups, no hay títulos registrados.'} />
+		{/if}
+	{:catch error}
+		<Alert variant="destructive" description={error.message} />
+	{/await}
 </div>
