@@ -7,7 +7,9 @@ import { zod } from "sveltekit-superforms/adapters";
 
 import type { AddDegreeAndTeachersListsDegreeRequest } from "$lib/api/model/api/indicatorsInformation/teachersListsDegree";
 import { AddDegreeAndTeachersListsDegree } from "$lib/api/controller/api/indicatorsInformation/teachersListsDegree";
+import type { PatchTeachersDegreeByTeachersDegreeIDRequest } from "$lib/api/model/api/teachersDegree";
 import { generateFormMessageFromHttpResponse, generateFormMessageFromInvalidForm } from "$lib/utils";
+import { PatchTeachersDegreeByTeachersDegreeID } from "$lib/api/controller/api/teachersDegree";
 import { LoadDegreeLevelsWithComboMessages } from "$lib/api/controller/api/degreeLevels";
 import { mainDashboarRoute } from "$lib/api/util/paths";
 
@@ -58,4 +60,22 @@ export const actions: Actions = {
 
         return generateFormMessageFromHttpResponse(form, response)
     },
+
+    patchTeachersDegree: async (event) => {
+        const form = await superValidate(event, zod(updateDegreeAndTeachersListsDegreeSchema))
+        const token = event.cookies.get("AuthorizationToken")
+
+        if (!form.valid) {
+            return generateFormMessageFromInvalidForm(form)
+        }
+
+        const data = form.data
+        const updateTeacherRequest: PatchTeachersDegreeByTeachersDegreeIDRequest = {
+            degree_level_id: data.degreeLevelID,
+            name: data.name
+        }
+        const response = await PatchTeachersDegreeByTeachersDegreeID(token!, updateTeacherRequest, data.teachersDegreeID.toString())
+
+        return generateFormMessageFromHttpResponse(form, response)
+    }
 };
