@@ -13,3 +13,9 @@ export interface GetTeachersListsDegreesJoinedResponse {
     degree_level_name: string;
     name: string;
 }
+
+export interface GetDegreesNotAssignedResponse {
+    teachers_degree_id: number;
+    abbreviation: string
+    name: string
+}
