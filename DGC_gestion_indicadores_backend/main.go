@@ -111,6 +111,7 @@ func serveApplication() {
 	upeRoutes.PUT("/teacher/:id", teacher.UpdateTeacher)
 
 	upeRoutes.POST("/teachers/degree", degree.PostTeachersDegree)
+	upeRoutes.PATCH("/teachers/degree/:id", degree.PatchTeachersDegreeByTeachersDegreeID)
 
 	upeRoutes.GET("/degreeLevels", degree.GetDegreeLevels)
 

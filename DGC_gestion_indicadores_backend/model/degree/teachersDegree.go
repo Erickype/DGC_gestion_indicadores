@@ -20,11 +20,41 @@ type TeachersDegree struct {
 	Teacher     teacher.Teacher `json:"-"`
 }
 
+type PatchTeachersDegreeByTeachersDegreeIDRequest struct {
+	DegreeLevelID uint   `json:"degree_level_id"`
+	Name          string `json:"name"`
+}
+
+func GetTeachersDegreeByID(teachersDegree *TeachersDegree, id int) (err error) {
+	err = database.DB.Where("id = ?", id).First(teachersDegree).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("título no encontrada")
+		}
+		return err
+	}
+	return nil
+}
+
 func PostTeachersDegree(degree *TeachersDegree) (err error) {
 	err = database.DB.Create(degree).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
 			return errors.New("título ya registrado")
+		}
+		return err
+	}
+	return nil
+}
+
+func PatchTeachersDegreeByTeachersDegreeID(request *PatchTeachersDegreeByTeachersDegreeIDRequest, id int) (err error) {
+	err = database.DB.Model(&TeachersDegree{}).Where("id = ?", id).Updates(request).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrForeignKeyViolated) {
+			return errors.New("no existen las relaciones")
+		}
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("título ya existe")
 		}
 		return err
 	}
