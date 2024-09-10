@@ -34,5 +34,14 @@ export const updateDegreeAndTeachersListsDegreeSchema = z.object({
     }),
 });
 
+export const addDegreeNotAssignedSchema = z.object({
+    academicPeriodID: z.number().gt(0),
+
+    teacherID: z.number().gt(0),
+
+    teachersDegreeID: z.number().gt(0),
+})
+
 export type AddDegreeAndTeachersListsDegreeSchema = typeof addDegreeAndTeachersListsDegreeSchema;
 export type UpdateDegreeAndTeachersListsDegreeSchema = typeof updateDegreeAndTeachersListsDegreeSchema;
+export type AddDegreeNotAssignedSchema = typeof addDegreeNotAssignedSchema;
