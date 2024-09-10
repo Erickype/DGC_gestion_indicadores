@@ -79,14 +79,17 @@ func AddDegreeAndTeachersListsDegree(request *AddDegreeAndTeachersListsDegreeReq
 
 func GetDegreesNotAssigned(response *[]GetDegreesNotAssignedResponse, academicPeriodID, teacherID int) (err error) {
 	err = database.DB.
-		Table("teachers_degree td").
+		Table("teachers_degrees td").
 		Select(
-			`tld.teachers_degree_id,
+			`td.id as teachers_degree_id,
 					dl.abbreviation,
 					td.name`).
-		Joins(`join indicators_information.teachers_lists_degrees tld on td.id = tld.teachers_degree_id`).
-		Joins(`degree_levels dl on td.degree_level_id = dl.id`).
-		Where("tdl.academic_period_id = ? and tdl.teacher_id = ? ", academicPeriodID, teacherID).
+		Joins(`left join indicators_information.teachers_lists_degrees tld 
+						on td.id = tld.teachers_degree_id
+							and tld.academic_period_id = ?
+							and tld.teacher_id = ?`, academicPeriodID, teacherID).
+		Joins(`join degree_levels dl on td.degree_level_id = dl.id`).
+		Where("tld.teachers_degree_id is null").
 		Scan(&response).Error
 
 	if err != nil {
