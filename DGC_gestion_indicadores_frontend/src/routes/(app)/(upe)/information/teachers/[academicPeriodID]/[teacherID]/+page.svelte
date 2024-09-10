@@ -1,8 +1,10 @@
 <script lang="ts">
 	import type { PageServerData } from './$types';
 	import { browser } from '$app/environment';
+	import { goto } from '$app/navigation';
 
 	import AddDegreeAndTeachersListsDegreeForm from './AddDegreeAndTeachersListsDegreeForm.svelte';
+	import AddNotAssignedDegreeForm from './AddNotAssignedDegreeForm.svelte';
 	import AddModal from '$lib/components/modal/AddModal.svelte';
 
 	import { Button } from '$lib/components/ui/button/index';
@@ -10,23 +12,25 @@
 	import MoveLeft from 'lucide-svelte/icons/move-left';
 	import SquarePlus from 'lucide-svelte/icons/square-plus';
 
-	import TeachersListsDegreesTable from './Table.svelte';
-
-	import type { Message } from '$lib/components/combobox/combobox';
 	import type { GetTeachersListsDegreesJoinedResponse } from '$lib/api/model/api/indicatorsInformation/teachersListsDegree';
-	import Alert from '$lib/components/alert/alert.svelte';
+	import type { Message } from '$lib/components/combobox/combobox';
 	import type { CommonError } from '$lib/api/model/errors';
-	import { goto } from '$app/navigation';
+	import TeachersListsDegreesTable from './Table.svelte';
+	import Alert from '$lib/components/alert/alert.svelte';
 
 	export let data: PageServerData;
 	const addDegreeAndTeachersListsDegreeForm = data.addDegreeAndTeachersListsDegreeForm;
 	const updateDegreeAndTeachersListsDegreeForm = data.updateDegreeAndTeachersListsDegreeForm;
+	const addDegreeNotAssignedForm = data.addDegreeNotAssignedForm;
 
 	const comboMessages: Message[][] = [data.degreeLevelsData.messages];
+	const comboMessagesNotAssigned: Message[][] = [data.notAssigedDegrees.messages]
 
 	$: {
 		addDegreeAndTeachersListsDegreeForm.data.academicPeriodID = data.academicPeriodID;
 		addDegreeAndTeachersListsDegreeForm.data.teacherID = data.teacherID;
+		addDegreeNotAssignedForm.data.academicPeriodID = data.academicPeriodID
+		addDegreeNotAssignedForm.data.teacherID = data.teacherID
 	}
 
 	let teachersListsDegreesPromise: Promise<GetTeachersListsDegreesJoinedResponse[]> =
@@ -74,13 +78,13 @@
 	</div>
 	<div class="flex justify-between gap-1">
 		<AddModal
-			formComponent={AddDegreeAndTeachersListsDegreeForm}
+			formComponent={AddNotAssignedDegreeForm}
 			modalTitle="Agregar título"
 			buttonName="Agregar"
 			buttonVariant="secondary"
 			icon={SquarePlus}
-			formData={addDegreeAndTeachersListsDegreeForm}
-			{comboMessages}
+			formData={addDegreeNotAssignedForm}
+			comboMessages={comboMessagesNotAssigned}
 			on:created={fetchOnSuccess}
 		/>
 		<AddModal

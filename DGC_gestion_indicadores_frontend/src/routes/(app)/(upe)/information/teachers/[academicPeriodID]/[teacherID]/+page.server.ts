@@ -1,12 +1,12 @@
 import { error, redirect, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
-import { addDegreeAndTeachersListsDegreeSchema, updateDegreeAndTeachersListsDegreeSchema } from "./schema";
+import { addDegreeAndTeachersListsDegreeSchema, addDegreeNotAssignedSchema, updateDegreeAndTeachersListsDegreeSchema } from "./schema";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 
+import { AddDegreeAndTeachersListsDegree, LoadDegreesNotAssignedWithComboMessages } from "$lib/api/controller/api/indicatorsInformation/teachersListsDegree";
 import type { AddDegreeAndTeachersListsDegreeRequest } from "$lib/api/model/api/indicatorsInformation/teachersListsDegree";
-import { AddDegreeAndTeachersListsDegree } from "$lib/api/controller/api/indicatorsInformation/teachersListsDegree";
 import type { PatchTeachersDegreeByTeachersDegreeIDRequest } from "$lib/api/model/api/teachersDegree";
 import { generateFormMessageFromHttpResponse, generateFormMessageFromInvalidForm } from "$lib/utils";
 import { PatchTeachersDegreeByTeachersDegreeID } from "$lib/api/controller/api/teachersDegree";
@@ -32,7 +32,9 @@ export const load: PageServerLoad = async ({ params, locals, cookies }) => {
             teacherID: teacherID,
             addDegreeAndTeachersListsDegreeForm: await superValidate(zod(addDegreeAndTeachersListsDegreeSchema)),
             updateDegreeAndTeachersListsDegreeForm: await superValidate(zod(updateDegreeAndTeachersListsDegreeSchema)),
-            degreeLevelsData: await LoadDegreeLevelsWithComboMessages(token!)
+            addDegreeNotAssignedForm: await superValidate(zod(addDegreeNotAssignedSchema)),
+            degreeLevelsData: await LoadDegreeLevelsWithComboMessages(token!),
+            notAssigedDegrees: await LoadDegreesNotAssignedWithComboMessages(academicPeriodID.toString(), teacherID.toString(), token!)
         }
     }
 
