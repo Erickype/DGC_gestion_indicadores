@@ -5,8 +5,8 @@ import { addDegreeAndTeachersListsDegreeSchema, addDegreeNotAssignedSchema, upda
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 
-import { AddDegreeAndTeachersListsDegree, LoadDegreesNotAssignedWithComboMessages } from "$lib/api/controller/api/indicatorsInformation/teachersListsDegree";
-import type { AddDegreeAndTeachersListsDegreeRequest } from "$lib/api/model/api/indicatorsInformation/teachersListsDegree";
+import { AddDegreeAndTeachersListsDegree, LoadDegreesNotAssignedWithComboMessages, PostTeachersListsDegree } from "$lib/api/controller/api/indicatorsInformation/teachersListsDegree";
+import type { AddDegreeAndTeachersListsDegreeRequest, TeachersListsDegree } from "$lib/api/model/api/indicatorsInformation/teachersListsDegree";
 import type { PatchTeachersDegreeByTeachersDegreeIDRequest } from "$lib/api/model/api/teachersDegree";
 import { generateFormMessageFromHttpResponse, generateFormMessageFromInvalidForm } from "$lib/utils";
 import { PatchTeachersDegreeByTeachersDegreeID } from "$lib/api/controller/api/teachersDegree";
@@ -42,6 +42,26 @@ export const load: PageServerLoad = async ({ params, locals, cookies }) => {
 };
 
 export const actions: Actions = {
+    postTeachersListsDegree: async (event) => {
+        const form = await superValidate(event, zod(addDegreeNotAssignedSchema))
+
+        if (!form.valid) {
+            return generateFormMessageFromInvalidForm(form)
+        }
+
+        const token = event.cookies.get("AuthorizationToken")
+        const data = form.data
+        const teachersListDegree: TeachersListsDegree = {
+            academic_period_id: data.academicPeriodID,
+            teacher_id: data.teacherID,
+            teachers_degree_id: data.teachersDegreeID
+        }
+
+        const response = await PostTeachersListsDegree(token!, teachersListDegree)
+
+        return generateFormMessageFromHttpResponse(form, response)
+    },
+
     addDegreeAndTeachersListsDegree: async (event) => {
         const form = await superValidate(event, zod(addDegreeAndTeachersListsDegreeSchema))
 

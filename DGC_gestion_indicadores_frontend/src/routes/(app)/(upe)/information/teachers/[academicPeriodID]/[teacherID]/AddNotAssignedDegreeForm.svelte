@@ -50,7 +50,7 @@
 	formDataTeachersDegreeID.subscribe((value) => ($formData.teachersDegreeID = value));
 </script>
 
-<form action="?/addDegreeAndTeachersListsDegree" use:enhance>
+<form action="?/postTeachersListsDegree" use:enhance>
 	<div class="flex flex-col gap-2">
 		<Form.Field {form} name="academicPeriodID">
 			<Form.Control let:attrs>
