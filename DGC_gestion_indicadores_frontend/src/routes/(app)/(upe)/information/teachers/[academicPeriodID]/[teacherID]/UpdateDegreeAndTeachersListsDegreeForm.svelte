@@ -29,8 +29,8 @@
 
 	const dispatch = createEventDispatcher();
 
-	function FacultyCreated() {
-		dispatch('message', {
+	function TeachersDegreePatched() {
+		dispatch('updated', {
 			created: true
 		});
 	}
@@ -44,7 +44,7 @@
 				return manageToastFromInvalidAddForm();
 			}
 			if (message.success) {
-				FacultyCreated();
+				TeachersDegreePatched();
 				return toast.success(`Título actualizado.`);
 			}
 			$formData.degreeLevelID = $formDataDegreeLevelID;
@@ -62,7 +62,7 @@
 	formDataDegreeLevelID.subscribe((value) => ($formData.degreeLevelID = value));
 </script>
 
-<form action="?/addDegreeAndTeachersListsDegree" use:enhance>
+<form action="?/patchTeachersDegree" use:enhance>
 	<div class="flex flex-col gap-2">
 		<Form.Field {form} name="teachersDegreeID">
 			<Form.Control let:attrs>
