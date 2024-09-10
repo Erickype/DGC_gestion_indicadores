@@ -8,6 +8,7 @@
 	import { Button } from '$lib/components/ui/button/index';
 
 	import MoveLeft from 'lucide-svelte/icons/move-left';
+	import SquarePlus from 'lucide-svelte/icons/square-plus';
 
 	import TeachersListsDegreesTable from './Table.svelte';
 
@@ -20,9 +21,9 @@
 	export let data: PageServerData;
 	const addDegreeAndTeachersListsDegreeForm = data.addDegreeAndTeachersListsDegreeForm;
 	const updateDegreeAndTeachersListsDegreeForm = data.updateDegreeAndTeachersListsDegreeForm;
-	
+
 	const comboMessages: Message[][] = [data.degreeLevelsData.messages];
-	
+
 	$: {
 		addDegreeAndTeachersListsDegreeForm.data.academicPeriodID = data.academicPeriodID;
 		addDegreeAndTeachersListsDegreeForm.data.teacherID = data.teacherID;
@@ -71,13 +72,25 @@
 		</Button>
 		<h2 class="text-2xl font-bold">Títulos</h2>
 	</div>
-	<AddModal
-		formComponent={AddDegreeAndTeachersListsDegreeForm}
-		modalTitle="Crear título"
-		formData={addDegreeAndTeachersListsDegreeForm}
-		{comboMessages}
-		on:created={fetchOnSuccess}
-	/>
+	<div class="flex justify-between gap-1">
+		<AddModal
+			formComponent={AddDegreeAndTeachersListsDegreeForm}
+			modalTitle="Agregar título"
+			buttonName="Agregar"
+			buttonVariant="secondary"
+			icon={SquarePlus}
+			formData={addDegreeAndTeachersListsDegreeForm}
+			{comboMessages}
+			on:created={fetchOnSuccess}
+		/>
+		<AddModal
+			formComponent={AddDegreeAndTeachersListsDegreeForm}
+			modalTitle="Crear título"
+			formData={addDegreeAndTeachersListsDegreeForm}
+			{comboMessages}
+			on:created={fetchOnSuccess}
+		/>
+	</div>
 </div>
 
 <div class="mx-auto flex w-full place-content-center px-8">
