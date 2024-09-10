@@ -5,10 +5,14 @@
 
 	import type { Message } from '../combobox/combobox';
 	import { createEventDispatcher } from 'svelte';
+	import type { Variant } from '../ui/badge';
 
 	export let formData;
 	export let formComponent;
 	export let modalTitle = 'Crear';
+	export let buttonName = 'Nuevo';
+	export let buttonVariant: Variant = 'default';
+	export let icon = Plus;
 	export let modalDescription = 'Resgistrar la información luego click en Guardar.';
 	export let comboMessages: Message[][] | undefined = undefined;
 
@@ -28,8 +32,8 @@
 
 <Dialog.Root bind:open>
 	<Dialog.Trigger>
-		<Button variant="default" class="ml-auto">
-			Nuevo <Plus class="ml-2 h-4 w-4" />
+		<Button variant={buttonVariant} class="ml-auto">
+			{buttonName}<svelte:component this={icon} class="h-4 w-4" />
 		</Button>
 	</Dialog.Trigger>
 	<Dialog.Content>
