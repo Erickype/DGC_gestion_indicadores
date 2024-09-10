@@ -33,3 +33,9 @@ func InternalServerErrorResponse(context *gin.Context, message string, err error
 	context.AbortWithStatusJSON(http.StatusInternalServerError, commonError)
 	return
 }
+
+func NotFoundResponse(context *gin.Context, message string, err error) {
+	commonError := CreateCommonError(http.StatusNotFound, message, err.Error())
+	context.AbortWithStatusJSON(http.StatusNotFound, commonError)
+	return
+}
