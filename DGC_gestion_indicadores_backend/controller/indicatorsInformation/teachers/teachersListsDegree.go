@@ -8,6 +8,21 @@ import (
 	"strconv"
 )
 
+func PostTeachersListsDegree(c *gin.Context) {
+	var teachersListsDegree model.TeachersListsDegree
+	err := c.BindJSON(&teachersListsDegree)
+	if err != nil {
+		errors.BadRequestResponse(c, err)
+		return
+	}
+	err = model.PostTeachersListsDegree(&teachersListsDegree)
+	if err != nil {
+		errors.InternalServerErrorResponse(c, "Error creando título", err)
+		return
+	}
+	c.JSON(http.StatusCreated, teachersListsDegree)
+}
+
 func AddDegreeAndTeachersListsDegree(c *gin.Context) {
 	var addDegreeAndTeachersListsDegreeRequest model.AddDegreeAndTeachersListsDegreeRequest
 	err := c.BindJSON(&addDegreeAndTeachersListsDegreeRequest)

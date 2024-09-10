@@ -49,6 +49,17 @@ func (tl *TeachersListsDegree) TableName() string {
 	return model.IndicatorsInformationSchema + ".teachers_lists_degrees"
 }
 
+func PostTeachersListsDegree(request *TeachersListsDegree) (err error) {
+	err = database.DB.Create(request).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrForeignKeyViolated) {
+			return errors.New("claves no encontradas")
+		}
+		return err
+	}
+	return nil
+}
+
 func AddDegreeAndTeachersListsDegree(request *AddDegreeAndTeachersListsDegreeRequest) (err error) {
 	return database.DB.Transaction(func(tx *gorm.DB) error {
 		teachersDegree := degree.TeachersDegree{

@@ -119,6 +119,7 @@ func serveApplication() {
 	indicatorsRoutes := router.Group("/api/indicators/information")
 	indicatorsRoutes.Use(util.JWTAuth(), util.JWTAuthUPE())
 
+	indicatorsRoutes.POST("/teachersLists/degree", indicatorsInformationTeachers.PostTeachersListsDegree)
 	indicatorsRoutes.POST("/teachersLists/filter", indicatorsInformationTeachers.FilterTeachersLists)
 	indicatorsRoutes.POST("/teachersLists/AddDegreeAndTeachersListsDegree", indicatorsInformationTeachers.AddDegreeAndTeachersListsDegree)
 	indicatorsRoutes.GET("/teachersLists/degrees/:academicPeriodID/:teacherID", indicatorsInformationTeachers.GetTeachersListsDegreesJoined)
