@@ -39,6 +39,12 @@ type GetTeachersListsDegreesJoinedResponse struct {
 	Name             string `json:"name"`
 }
 
+type GetDegreesNotAssignedResponse struct {
+	TeachersDegreeID uint   `json:"teachers_degree_id"`
+	Abbreviation     string `json:"abbreviation"`
+	Name             string `json:"name"`
+}
+
 func (tl *TeachersListsDegree) TableName() string {
 	return model.IndicatorsInformationSchema + ".teachers_lists_degrees"
 }
@@ -69,6 +75,24 @@ func AddDegreeAndTeachersListsDegree(request *AddDegreeAndTeachersListsDegreeReq
 		}
 		return nil
 	})
+}
+
+func GetDegreesNotAssigned(response *[]GetDegreesNotAssignedResponse, academicPeriodID, teacherID int) (err error) {
+	err = database.DB.
+		Table("teachers_degree td").
+		Select(
+			`tld.teachers_degree_id,
+					dl.abbreviation,
+					td.name`).
+		Joins(`join indicators_information.teachers_lists_degrees tld on td.id = tld.teachers_degree_id`).
+		Joins(`degree_levels dl on td.degree_level_id = dl.id`).
+		Where("tdl.academic_period_id = ? and tdl.teacher_id = ? ", academicPeriodID, teacherID).
+		Scan(&response).Error
+
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func GetTeachersListsDegreesJoined(

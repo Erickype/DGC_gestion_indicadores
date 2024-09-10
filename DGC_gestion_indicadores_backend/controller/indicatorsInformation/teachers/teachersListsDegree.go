@@ -23,6 +23,18 @@ func AddDegreeAndTeachersListsDegree(c *gin.Context) {
 	c.JSON(http.StatusCreated, addDegreeAndTeachersListsDegreeRequest)
 }
 
+func GetDegreesNotAssigned(context *gin.Context) {
+	degreesNotAssignedResponses := []model.GetDegreesNotAssignedResponse{}
+	academicPeriodID, _ := strconv.Atoi(context.Param("academicPeriodID"))
+	teacherID, _ := strconv.Atoi(context.Param("teacherID"))
+	err := model.GetDegreesNotAssigned(&degreesNotAssignedResponses, academicPeriodID, teacherID)
+	if err != nil {
+		errors.InternalServerErrorResponse(context, "Error retornando títulos", err)
+		return
+	}
+	context.JSON(http.StatusOK, degreesNotAssignedResponses)
+}
+
 func GetTeachersListsDegreesJoined(context *gin.Context) {
 	teachersListsDegreesJoinedResponse := []model.GetTeachersListsDegreesJoinedResponse{}
 	academicPeriodID, _ := strconv.Atoi(context.Param("academicPeriodID"))
