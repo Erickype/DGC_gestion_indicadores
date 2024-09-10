@@ -1,3 +1,11 @@
+export interface TeachersListsDegree {
+    CreatedAt?: string;
+    UpdatedAt?: string;
+    academic_period_id: number;
+    teacher_id: number;
+    teachers_degree_id: number;
+}
+
 export interface AddDegreeAndTeachersListsDegreeRequest {
     academic_period_id: number;
     teacher_id: number;

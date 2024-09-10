@@ -1,8 +1,29 @@
-import type { AddDegreeAndTeachersListsDegreeRequest, GetDegreesNotAssignedResponse, GetTeachersListsDegreesJoinedResponse } from "$lib/api/model/api/indicatorsInformation/teachersListsDegree";
-import { getDegreesNotAssignedRoute, getTeachersListsDegreesJoinedRoute, postAddDegreeAndTeachersListsDegreeRoute } from "$lib/api/routes/api/indicatorsInformation/teachersDegree";
+import type { AddDegreeAndTeachersListsDegreeRequest, GetDegreesNotAssignedResponse, GetTeachersListsDegreesJoinedResponse, TeachersListsDegree } from "$lib/api/model/api/indicatorsInformation/teachersListsDegree";
+import { getDegreesNotAssignedRoute, getTeachersListsDegreesJoinedRoute, postAddDegreeAndTeachersListsDegreeRoute, postTeachersListsDegreeRoute } from "$lib/api/routes/api/indicatorsInformation/teachersDegree";
 import { generateErrorFromCommonError, type CommonError } from "$lib/api/model/errors";
 import type { Message } from "$lib/components/combobox/combobox";
 import { generateCommonErrorFromFetchError } from "$lib/utils";
+
+export async function PostTeachersListsDegree(token: string, request: TeachersListsDegree) {
+    try {
+        const response = await fetch(postTeachersListsDegreeRoute, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify(request)
+        })
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
+        }
+        const teachersListDegree: TeachersListsDegree = await response.json()
+        return teachersListDegree;
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
+}
 
 export async function AddDegreeAndTeachersListsDegree(token: string, request: AddDegreeAndTeachersListsDegreeRequest) {
     try {
@@ -33,7 +54,7 @@ export async function GetDegreesNotAssigned(academic_period_id: string, teacher_
                 'Content-Type': 'application/json',
                 'Authorization': token
             }
-        });        
+        });
 
         if (!response.ok) {
             const error: CommonError = await response.json()
@@ -54,7 +75,7 @@ export async function GetTeachersListsDegreesJoined(academic_period_id: string, 
                 'Content-Type': 'application/json',
                 'Authorization': token
             }
-        });        
+        });
 
         if (!response.ok) {
             const error: CommonError = await response.json()
