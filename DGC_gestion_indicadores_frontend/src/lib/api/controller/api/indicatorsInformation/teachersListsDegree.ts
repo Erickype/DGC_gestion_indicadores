@@ -1,7 +1,8 @@
 import type { AddDegreeAndTeachersListsDegreeRequest, GetDegreesNotAssignedResponse, GetTeachersListsDegreesJoinedResponse } from "$lib/api/model/api/indicatorsInformation/teachersListsDegree";
 import { getDegreesNotAssignedRoute, getTeachersListsDegreesJoinedRoute, postAddDegreeAndTeachersListsDegreeRoute } from "$lib/api/routes/api/indicatorsInformation/teachersDegree";
+import { generateErrorFromCommonError, type CommonError } from "$lib/api/model/errors";
+import type { Message } from "$lib/components/combobox/combobox";
 import { generateCommonErrorFromFetchError } from "$lib/utils";
-import type { CommonError } from "$lib/api/model/errors";
 
 export async function AddDegreeAndTeachersListsDegree(token: string, request: AddDegreeAndTeachersListsDegreeRequest) {
     try {
@@ -63,5 +64,25 @@ export async function GetTeachersListsDegreesJoined(academic_period_id: string, 
         return degrees
     } catch (error) {
         return generateCommonErrorFromFetchError(error)
+    }
+}
+
+export async function LoadDegreesNotAssignedWithComboMessages(academicPeriodID: string, teacherID: string, token: string) {
+    const response = await GetDegreesNotAssigned(academicPeriodID, teacherID, token);
+    if ((response as CommonError).status) {
+        throw generateErrorFromCommonError(response as CommonError)
+    }
+    const degress = response as GetDegreesNotAssignedResponse[];
+    let messages: Message[] = []
+    messages = messages.concat(
+        degress.map((degree) => ({
+            value: degree.teachers_degree_id,
+            label: `${degree.abbreviation} ${degree.name}`,
+        }))
+    );
+
+    return {
+        degress,
+        messages
     }
 }
