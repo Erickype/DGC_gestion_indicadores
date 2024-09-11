@@ -107,3 +107,14 @@ export async function LoadDegreesNotAssignedWithComboMessages(academicPeriodID: 
         messages
     }
 }
+
+export function GenerateComboMessagesFromDegreesNotAssigned(degrees: GetDegreesNotAssignedResponse[]): Message[] {
+    let messages: Message[] = []
+    messages = messages.concat(
+        degrees.map((degree) => ({
+            value: degree.teachers_degree_id,
+            label: `${degree.abbreviation} ${degree.name}`,
+        }))
+    );
+    return messages
+}
