@@ -104,6 +104,20 @@ func seedData() {
 		{Name: "Cuarto nivel Doctorado", Abbreviation: "PhD", Description: "Títulos doctorado cuarto nivel"},
 	}
 
+	var indicatorTypes = []indicators.IndicatorType{
+		{
+			Name:         "Indicador 16: Personal académico con formacion doctoral",
+			Abbreviation: "Tasa personal académico con formacion doctoral",
+			Description:  "Tasa de formación doctoral de al menos el 20%",
+		},
+		{
+			Name:         "Indicador 17: Personal Académico con Dedicación a Tiempo Completo",
+			Abbreviation: "Tasa personal académico con dedicación tiempo completo",
+			Description:  "Tasa del personal académico con dedicación a tiempo completo al menos el 50%",
+		},
+	}
+
+	database.DB.Save(&indicatorTypes)
 	database.DB.Save(&degreeLevels)
 	database.DB.Save(&contractTypes)
 	database.DB.Save(&scaledGrades)
