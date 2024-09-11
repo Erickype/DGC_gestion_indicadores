@@ -4,6 +4,7 @@
 	import { goto } from '$app/navigation';
 
 	import AddDegreeAndTeachersListsDegreeForm from './AddDegreeAndTeachersListsDegreeForm.svelte';
+	import ButtonSkeleton from '$lib/components/skeleton/button.svelte';
 	import AddNotAssignedDegreeForm from './AddNotAssignedDegreeForm.svelte';
 	import AddModal from '$lib/components/modal/AddModal.svelte';
 
@@ -12,7 +13,11 @@
 	import MoveLeft from 'lucide-svelte/icons/move-left';
 	import SquarePlus from 'lucide-svelte/icons/square-plus';
 
-	import type { GetTeachersListsDegreesJoinedResponse } from '$lib/api/model/api/indicatorsInformation/teachersListsDegree';
+	import { GenerateComboMessagesFromDegreesNotAssigned } from '$lib/api/controller/api/indicatorsInformation/teachersListsDegree';
+	import type {
+		GetDegreesNotAssignedResponse,
+		GetTeachersListsDegreesJoinedResponse
+	} from '$lib/api/model/api/indicatorsInformation/teachersListsDegree';
 	import type { Message } from '$lib/components/combobox/combobox';
 	import type { CommonError } from '$lib/api/model/errors';
 	import TeachersListsDegreesTable from './Table.svelte';
@@ -24,17 +29,34 @@
 	const addDegreeNotAssignedForm = data.addDegreeNotAssignedForm;
 
 	const comboMessages: Message[][] = [data.degreeLevelsData.messages];
-	const comboMessagesNotAssigned: Message[][] = [data.notAssigedDegrees.messages]
+
+	let getDegreesNotAsignedPromise: Promise<GetDegreesNotAssignedResponse[]> =
+		fetchGetDegreesNotAssigned();
 
 	$: {
 		addDegreeAndTeachersListsDegreeForm.data.academicPeriodID = data.academicPeriodID;
 		addDegreeAndTeachersListsDegreeForm.data.teacherID = data.teacherID;
-		addDegreeNotAssignedForm.data.academicPeriodID = data.academicPeriodID
-		addDegreeNotAssignedForm.data.teacherID = data.teacherID
+		addDegreeNotAssignedForm.data.academicPeriodID = data.academicPeriodID;
+		addDegreeNotAssignedForm.data.teacherID = data.teacherID;
 	}
 
 	let teachersListsDegreesPromise: Promise<GetTeachersListsDegreesJoinedResponse[]> =
 		fetchGetTeachersListsDegreesJoined();
+
+	async function fetchGetDegreesNotAssigned() {
+		const url = `/api/indicatorsInformation/teachersLists/degrees/notAssigned/${data.academicPeriodID}/${data.teacherID}`;
+		const response = await fetch(url, {
+			method: 'GET'
+		});
+		if (!response.ok) {
+			const errorData = (await response.json()) as CommonError;
+			if (response.status === 401) {
+				throw goto('/');
+			}
+			throw errorData;
+		}
+		return (getDegreesNotAsignedPromise = response.json());
+	}
 
 	async function fetchGetTeachersListsDegreesJoined() {
 		const url = `/api/indicatorsInformation/teachersLists/degrees/${data.academicPeriodID}/${data.teacherID}`;
@@ -60,6 +82,7 @@
 	function fetchOnSuccess(event: CustomEvent) {
 		const detail: { status: boolean } = event.detail;
 		if (detail.status) {
+			fetchGetDegreesNotAssigned();
 			fetchGetTeachersListsDegreesJoined();
 		}
 	}
@@ -77,16 +100,20 @@
 		<h2 class="text-2xl font-bold">Títulos</h2>
 	</div>
 	<div class="flex justify-between gap-1">
-		<AddModal
-			formComponent={AddNotAssignedDegreeForm}
-			modalTitle="Agregar título"
-			buttonName="Agregar"
-			buttonVariant="secondary"
-			icon={SquarePlus}
-			formData={addDegreeNotAssignedForm}
-			comboMessages={comboMessagesNotAssigned}
-			on:created={fetchOnSuccess}
-		/>
+		{#await getDegreesNotAsignedPromise}
+			<ButtonSkeleton />
+		{:then degreesNotAssigned}
+			<AddModal
+				formComponent={AddNotAssignedDegreeForm}
+				modalTitle="Agregar título"
+				buttonName="Agregar"
+				buttonVariant="secondary"
+				icon={SquarePlus}
+				formData={addDegreeNotAssignedForm}
+				comboMessages={[GenerateComboMessagesFromDegreesNotAssigned(degreesNotAssigned)]}
+				on:created={fetchOnSuccess}
+			/>
+		{/await}
 		<AddModal
 			formComponent={AddDegreeAndTeachersListsDegreeForm}
 			modalTitle="Crear título"

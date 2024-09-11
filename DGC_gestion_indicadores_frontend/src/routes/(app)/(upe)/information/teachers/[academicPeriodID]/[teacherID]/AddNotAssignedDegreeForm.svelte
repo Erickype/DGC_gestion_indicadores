@@ -43,8 +43,6 @@
 	});
 
 	const { form: formData, enhance } = form;
-
-	console.log(notAssignedDegrees);
 	
 	let formDataTeachersDegreeID = writable($formData.teachersDegreeID);
 	formDataTeachersDegreeID.subscribe((value) => ($formData.teachersDegreeID = value));
