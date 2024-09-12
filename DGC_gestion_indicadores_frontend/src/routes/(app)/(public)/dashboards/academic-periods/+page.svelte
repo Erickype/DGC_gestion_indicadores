@@ -64,12 +64,14 @@
 						<Card.Header class="pb-2">
 							<Card.Description>Indicador {indicator.indicator_type_id}</Card.Description>
 							<Card.Title class="flex justify-between text-4xl">
-								{indicator.actual_value}%
+								{indicator.actual_value.toFixed(2)}%
 								<Activity class="text-muted-foreground h-4 w-4" />
 							</Card.Title>
 						</Card.Header>
 						<Card.Content>
-							<div class="text-muted-foreground text-xs">Obetivo {indicator.target_value}%</div>
+							<div class="text-muted-foreground text-xs">
+								Obetivo {indicator.target_value}%
+							</div>
 						</Card.Content>
 						<Card.Footer>
 							<Progress
