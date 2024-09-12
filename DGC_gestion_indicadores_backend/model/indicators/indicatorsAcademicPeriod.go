@@ -21,3 +21,16 @@ type IndicatorsAcademicPeriod struct {
 func (iep IndicatorsAcademicPeriod) TableName() string {
 	return model.IndicatorsSchema + ".indicators_academic_periods"
 }
+
+func CalculateIndicatorByTypeIDAndAcademicPeriod(academicPeriodID, indicatorTypeID int, response *IndicatorsAcademicPeriod) error {
+	response.IndicatorTypeID = uint(indicatorTypeID)
+	response.AcademicPeriodID = uint(academicPeriodID)
+	switch indicatorTypeID {
+	case model.Indicator16:
+		err := CalculateIndicator16(academicPeriodID, response)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
