@@ -119,6 +119,39 @@ func seedData() {
 		},
 	}
 
+	var compensationFactors = []academicProduction.CompensationFactor{
+		{ID: 1, Name: "Cuartil 1", Abbreviation: "Q1", Description: "Factor para cualtil 1", Weight: 1},
+		{ID: 2, Name: "Cuartil 2", Abbreviation: "Q2", Description: "Factor para cualtil 2", Weight: 0.9},
+		{ID: 3, Name: "Cuartil 3", Abbreviation: "Q3", Description: "Factor para cualtil 3", Weight: 0.8},
+		{ID: 4, Name: "Cuartil 4", Abbreviation: "Q4", Description: "Factor para cualtil 4", Weight: 0.7},
+		{ID: 5, Name: "ACI", Abbreviation: "ACI", Description: "Factor para ACI", Weight: 0.6},
+		{ID: 6, Name: "BR", Abbreviation: "BR", Description: "Factor para BR", Weight: 0.5},
+		{ID: 7, Name: "LA", Abbreviation: "LA", Description: "Factor para LA", Weight: 0.2},
+	}
+
+	var academicDatabases = []academicProduction.AcademicDatabase{
+		{ID: 1, Name: "SCOPUS", Description: "Base datos principal", Abbreviation: "SCOPUS"},
+		{ID: 2, Name: "WebOfScience", Description: "Base datos WebOfScience", Abbreviation: "WebOfScience"},
+		{ID: 3, Name: "Regionales", Description: "Base datos Regionales", Abbreviation: "Regionales"},
+		{ID: 4, Name: "Anexo1", Description: "Base datos Anexo1", Abbreviation: "Anexo1"},
+		{ID: 5, Name: "Latindex", Description: "Base datos Latindex", Abbreviation: "Latindex"},
+	}
+
+	var impactCoefficients = []academicProduction.ImpactCoefficient{
+		{ID: 1, AcademicDatabaseID: 1, CompensationFactorID: 1},
+		{ID: 2, AcademicDatabaseID: 1, CompensationFactorID: 2},
+		{ID: 3, AcademicDatabaseID: 1, CompensationFactorID: 3},
+		{ID: 4, AcademicDatabaseID: 1, CompensationFactorID: 4},
+		{ID: 5, AcademicDatabaseID: 1, CompensationFactorID: 5},
+		{ID: 6, AcademicDatabaseID: 2, CompensationFactorID: 5},
+		{ID: 7, AcademicDatabaseID: 3, CompensationFactorID: 6},
+		{ID: 8, AcademicDatabaseID: 4, CompensationFactorID: 6},
+		{ID: 9, AcademicDatabaseID: 5, CompensationFactorID: 7},
+	}
+
+	database.DB.Save(&academicDatabases)
+	database.DB.Save(&compensationFactors)
+	database.DB.Save(&impactCoefficients)
 	database.DB.Save(&indicatorTypes)
 	database.DB.Save(&degreeLevels)
 	database.DB.Save(&contractTypes)
