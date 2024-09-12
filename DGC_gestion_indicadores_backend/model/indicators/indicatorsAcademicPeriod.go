@@ -12,7 +12,7 @@ type IndicatorsAcademicPeriod struct {
 	UpdatedAt        time.Time `json:"updated_at"`
 	IndicatorTypeID  uint      `gorm:"primary_key" json:"indicator_type_id"`
 	AcademicPeriodID uint      `gorm:"primary_key" json:"academic_period_id"`
-	ActualValue      float64   `json:"actual_value,omitempty"`
+	ActualValue      float64   `json:"actual_value"`
 	TargetValue      float64   `json:"target_value"`
 
 	IndicatorType  IndicatorType                 `json:"-"`
