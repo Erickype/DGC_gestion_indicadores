@@ -1,6 +1,7 @@
 package model
 
 import (
+	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicPeriod"
 	"time"
@@ -31,6 +32,16 @@ func CalculateIndicatorByTypeIDAndAcademicPeriod(academicPeriodID, indicatorType
 		if err != nil {
 			return err
 		}
+	}
+	return nil
+}
+
+func GetIndicatorsByAcademicPeriod(academicPeriodID int, response *[]IndicatorsAcademicPeriod) (err error) {
+	err = database.DB.Model(&IndicatorsAcademicPeriod{}).
+		Where("academic_period_id = ?", academicPeriodID).
+		Scan(response).Error
+	if err != nil {
+		return err
 	}
 	return nil
 }

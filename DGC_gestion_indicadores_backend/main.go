@@ -134,6 +134,7 @@ func serveApplication() {
 	indicatorsRoutes.Use(util.JWTAuth(), util.JWTAuthUPE())
 
 	indicatorsRoutes.GET("/academicPeriod/:academicPeriodID/:indicatorTypeID", indicators.GetCalculateIndicatorByTypeID)
+	indicatorsRoutes.GET("/academicPeriod/:academicPeriodID", indicators.GetIndicatorsByAcademicPeriod)
 
 	// Public view routes
 	academicPeriodRoutes := router.Group("/view")
