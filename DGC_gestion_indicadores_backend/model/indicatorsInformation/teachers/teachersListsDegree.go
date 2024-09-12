@@ -100,7 +100,7 @@ func GetDegreesNotAssigned(response *[]GetDegreesNotAssignedResponse, academicPe
 							and tld.academic_period_id = ?
 							and tld.teacher_id = ?`, academicPeriodID, teacherID).
 		Joins(`join degree_levels dl on td.degree_level_id = dl.id`).
-		Where("tld.teachers_degree_id is null").
+		Where("tld.teachers_degree_id is null and td.teacher_id = ?", teacherID).
 		Scan(&response).Error
 
 	if err != nil {
