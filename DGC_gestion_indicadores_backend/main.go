@@ -10,6 +10,7 @@ import (
 	degree "github.com/Erickype/DGC_gestion_indicadores_backend/controller/degree"
 	evaluationPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/controller/evaluationPeriod"
 	faculty "github.com/Erickype/DGC_gestion_indicadores_backend/controller/faculty"
+	indicators "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicators"
 	indicatorsInformationTeachers "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation/teachers"
 	person "github.com/Erickype/DGC_gestion_indicadores_backend/controller/person"
 	scaledGrade "github.com/Erickype/DGC_gestion_indicadores_backend/controller/scaledGrade"
@@ -116,17 +117,23 @@ func serveApplication() {
 	upeRoutes.GET("/degreeLevels", degree.GetDegreeLevels)
 
 	// Indicators information routes
-	indicatorsRoutes := router.Group("/api/indicators/information")
+	indicatorsInformationRoutes := router.Group("/api/indicators/information")
+	indicatorsInformationRoutes.Use(util.JWTAuth(), util.JWTAuthUPE())
+
+	indicatorsInformationRoutes.POST("/teachersLists/degree", indicatorsInformationTeachers.PostTeachersListsDegree)
+	indicatorsInformationRoutes.POST("/teachersLists/filter", indicatorsInformationTeachers.FilterTeachersLists)
+	indicatorsInformationRoutes.POST("/teachersLists/AddDegreeAndTeachersListsDegree", indicatorsInformationTeachers.AddDegreeAndTeachersListsDegree)
+	indicatorsInformationRoutes.GET("/teachersLists/degrees/:academicPeriodID/:teacherID", indicatorsInformationTeachers.GetTeachersListsDegreesJoined)
+	indicatorsInformationRoutes.GET("/teachersLists/degrees/notAssigned/:academicPeriodID/:teacherID", indicatorsInformationTeachers.GetDegreesNotAssigned)
+
+	indicatorsInformationRoutes.POST("/teachersList", indicatorsInformationTeachers.CreateTeachersList)
+	indicatorsInformationRoutes.PATCH("/teachersList/:academicPeriodID/:teacherID", indicatorsInformationTeachers.PatchTeachersList)
+
+	// Indicators routes
+	indicatorsRoutes := router.Group("/api/indicators/")
 	indicatorsRoutes.Use(util.JWTAuth(), util.JWTAuthUPE())
 
-	indicatorsRoutes.POST("/teachersLists/degree", indicatorsInformationTeachers.PostTeachersListsDegree)
-	indicatorsRoutes.POST("/teachersLists/filter", indicatorsInformationTeachers.FilterTeachersLists)
-	indicatorsRoutes.POST("/teachersLists/AddDegreeAndTeachersListsDegree", indicatorsInformationTeachers.AddDegreeAndTeachersListsDegree)
-	indicatorsRoutes.GET("/teachersLists/degrees/:academicPeriodID/:teacherID", indicatorsInformationTeachers.GetTeachersListsDegreesJoined)
-	indicatorsRoutes.GET("/teachersLists/degrees/notAssigned/:academicPeriodID/:teacherID", indicatorsInformationTeachers.GetDegreesNotAssigned)
-
-	indicatorsRoutes.POST("/teachersList", indicatorsInformationTeachers.CreateTeachersList)
-	indicatorsRoutes.PATCH("/teachersList/:academicPeriodID/:teacherID", indicatorsInformationTeachers.PatchTeachersList)
+	indicatorsRoutes.GET("/academicPeriod/:academicPeriodID/:indicatorTypeID", indicators.GetCalculateIndicatorByTypeID)
 
 	// Public view routes
 	academicPeriodRoutes := router.Group("/view")
