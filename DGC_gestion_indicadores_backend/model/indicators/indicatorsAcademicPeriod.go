@@ -32,6 +32,11 @@ func CalculateIndicatorByTypeIDAndAcademicPeriod(academicPeriodID, indicatorType
 		if err != nil {
 			return err
 		}
+	case model.Indicator17:
+		err := CalculateIndicator17(academicPeriodID, response)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -40,6 +45,14 @@ func GetIndicatorsByAcademicPeriod(academicPeriodID int, response *[]IndicatorsA
 	err = database.DB.Model(&IndicatorsAcademicPeriod{}).
 		Where("academic_period_id = ?", academicPeriodID).
 		Scan(response).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func RefreshIndicator(indicator *IndicatorsAcademicPeriod) (err error) {
+	err = database.DB.Save(&indicator).Error
 	if err != nil {
 		return err
 	}
