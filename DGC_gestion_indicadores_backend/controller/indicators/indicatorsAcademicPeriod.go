@@ -21,7 +21,7 @@ func GetCalculateIndicatorByTypeID(context *gin.Context) {
 }
 
 func GetIndicatorsByAcademicPeriod(context *gin.Context) {
-	var response []model.IndicatorsAcademicPeriod
+	var response = []model.IndicatorsAcademicPeriod{}
 	academicPeriodID, _ := strconv.Atoi(context.Param("academicPeriodID"))
 	err := model.GetIndicatorsByAcademicPeriod(academicPeriodID, &response)
 	if err != nil {
