@@ -4,7 +4,7 @@ import (
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicPeriod"
 	academicProduction "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicProduction"
-	faculty "github.com/Erickype/DGC_gestion_indicadores_backend/model/faculty"
+	career "github.com/Erickype/DGC_gestion_indicadores_backend/model/career"
 	"gorm.io/datatypes"
 	"time"
 )
@@ -17,14 +17,14 @@ type AcademicProductionList struct {
 	PublicationDate        datatypes.Date `gorm:"not null" json:"publication_date"`
 	PublicationName        string         `gorm:"size:1000;not null" json:"publication_name"`
 	PublicationTypeID      uint16         `json:"publication_type_id"`
-	FacultyID              uint           `json:"faculty_id"`
+	CareerID               uint           `json:"career_id"`
 	ScienceMagazineID      uint           `json:"science_magazine_id"`
 	ImpactCoefficientID    uint           `json:"impact_coefficient_id"`
 	InterculturalComponent bool           `json:"intercultural_component"`
 
 	PublicationType   academicProduction.PublicationType   `json:"-"`
 	AcademicPeriod    academicPeriod.AcademicPeriod        `json:"-"`
-	Faculty           faculty.Faculty                      `json:"-"`
+	Career            career.Career                        `json:"-"`
 	ScienceMagazine   academicProduction.ScienceMagazine   `json:"-"`
 	ImpactCoefficient academicProduction.ImpactCoefficient `json:"-"`
 }

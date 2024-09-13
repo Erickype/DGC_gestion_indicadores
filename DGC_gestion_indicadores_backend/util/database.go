@@ -15,6 +15,7 @@ import (
 	faculty "github.com/Erickype/DGC_gestion_indicadores_backend/model/faculty"
 	indicators "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicators"
 	indicatorsInformation "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation"
+	academicProduction2 "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/academicProduction"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/teachers"
 	person "github.com/Erickype/DGC_gestion_indicadores_backend/model/person"
 	scaledGrade "github.com/Erickype/DGC_gestion_indicadores_backend/model/scaledGrade"
@@ -52,8 +53,8 @@ func LoadDatabase() {
 		&academicProduction.ImpactCoefficient{},
 		&academicProduction.Author{},
 		&academicProduction.PublicationType{},
-		&indicatorsInformation.AcademicProductionList{},
-		&indicatorsInformation.AcademicProductionListsAuthor{},
+		&academicProduction2.AcademicProductionList{},
+		&academicProduction2.AcademicProductionListsAuthor{},
 		&indicatorsInformation.BooksOrChaptersProductionList{},
 		&indicatorsInformation.BooksOrChaptersProductionListAuthor{},
 		&indicators.IndicatorType{},
