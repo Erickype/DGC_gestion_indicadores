@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/controller/academicPeriod"
+	author "github.com/Erickype/DGC_gestion_indicadores_backend/controller/academicProduction/author"
 	controller "github.com/Erickype/DGC_gestion_indicadores_backend/controller/auth"
 	career "github.com/Erickype/DGC_gestion_indicadores_backend/controller/career"
 	contractTypes "github.com/Erickype/DGC_gestion_indicadores_backend/controller/contractType"
@@ -115,6 +116,10 @@ func serveApplication() {
 	upeRoutes.PATCH("/teachers/degree/:id", degree.PatchTeachersDegreeByTeachersDegreeID)
 
 	upeRoutes.GET("/degreeLevels", degree.GetDegreeLevels)
+
+	upeRoutes.POST("/author", author.PostAuthor)
+	upeRoutes.POST("/author/fromPerson", author.PostAuthorFromPerson)
+	upeRoutes.POST("/authors/filter", author.FilterAuthors)
 
 	// Indicators information routes
 	indicatorsInformationRoutes := router.Group("/api/indicators/information")
