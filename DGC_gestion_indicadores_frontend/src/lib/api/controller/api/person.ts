@@ -59,14 +59,26 @@ export async function PostPerson(person: PostPersonRequest, token: string) {
 }
 
 export async function PutPerson(person: PutPersonRequest, token: string) {
-    return await fetch(putPersonRoute + person.ID.toString(), {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
-        },
-        body: JSON.stringify(person)
-    });
+    try {
+        const response = await fetch(putPersonRoute + person.ID.toString(), {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify(person)
+        });
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
+        }
+        const putPersonResponse: Person = await response.json()
+
+        return putPersonResponse
+
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
 }
 
 export async function DeletePerson(id: string, token: string) {
