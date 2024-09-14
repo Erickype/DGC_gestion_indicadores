@@ -79,18 +79,8 @@ export const actions: Actions = {
             email: data.email
         }
 
-        const res = await PutPerson(person, token!)
-        if (res.status === 401) {
-            throw redirect(302, "/")
-        }
-        if (!res.ok) {
-            const status = res.status as unknown as ErrorStatus
-            const err = await res.json()
-            return message(form,
-                { success: false, error: err },
-                { status: status })
-        }
+        const response = await PutPerson(person, token!)
 
-        return message(form, { success: true, error: "" })
+        return generateFormMessageFromHttpResponse(form, response)
     }
 };
