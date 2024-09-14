@@ -45,28 +45,24 @@ func UpdatePerson(c *gin.Context) {
 	err := model.GetPerson(&Person, id)
 	if err != nil {
 		if errorsS.Is(err, gorm.ErrRecordNotFound) {
-			err := errors.CreateCommonError(http.StatusNotFound, "No existe el periodo académico", err.Error())
-			c.AbortWithStatusJSON(http.StatusNotFound, err)
+			errors.NotFoundResponse(c, "No existe la persona", err)
 			return
 		}
-		err := errors.CreateCommonError(http.StatusInternalServerError, "Error interno", err.Error())
-		c.AbortWithStatusJSON(http.StatusInternalServerError, err)
+		errors.InternalServerErrorResponse(c, "Error encontrando persona", err)
 		return
 	}
 	err = c.BindJSON(&Person)
 	if err != nil {
-		err := errors.CreateCommonError(http.StatusBadRequest, "Error en la petición", err.Error())
-		c.AbortWithStatusJSON(http.StatusBadRequest, err)
+		errors.BadRequestResponse(c, err)
 		return
 	}
 
 	err = model.UpdatePerson(&Person)
 	if err != nil {
-		err := errors.CreateCommonError(http.StatusInternalServerError, "Error creando persona", err.Error())
-		c.AbortWithStatusJSON(http.StatusInternalServerError, err)
+		errors.InternalServerErrorResponse(c, "Error creando persona", err)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"status": "success"})
+	c.JSON(http.StatusAccepted, Person)
 }
 
 func DeletePerson(context *gin.Context) {
