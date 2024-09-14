@@ -1,7 +1,7 @@
 export interface Author {
-    ID: number;
-    created_at: string;
-    updated_at: string;
+    ID?: number;
+    created_at?: string;
+    updated_at?: string;
     person_id: number;
 }
 
