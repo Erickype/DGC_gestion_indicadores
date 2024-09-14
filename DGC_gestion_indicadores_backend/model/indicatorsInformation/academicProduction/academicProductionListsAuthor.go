@@ -2,7 +2,7 @@ package model
 
 import (
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
-	academicProduction "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicProduction"
+	academicProduction "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicProduction/author"
 	"time"
 )
 

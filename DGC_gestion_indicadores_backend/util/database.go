@@ -5,6 +5,7 @@ import (
 	modelConsts "github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicPeriod"
 	academicProduction "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicProduction"
+	author "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicProduction/author"
 	user "github.com/Erickype/DGC_gestion_indicadores_backend/model/auth"
 	career "github.com/Erickype/DGC_gestion_indicadores_backend/model/career"
 	contractType "github.com/Erickype/DGC_gestion_indicadores_backend/model/contractType"
@@ -51,7 +52,7 @@ func LoadDatabase() {
 		&academicProduction.ScienceMagazine{},
 		&academicProduction.CompensationFactor{},
 		&academicProduction.ImpactCoefficient{},
-		&academicProduction.Author{},
+		&author.Author{},
 		&academicProduction.PublicationType{},
 		&academicProduction2.AcademicProductionList{},
 		&academicProduction2.AcademicProductionListsAuthor{},
