@@ -102,9 +102,9 @@
 
 	let updateFormOpen = false;
 	function handleUpdateAction(event: any) {
-		const detail: { status: boolean; id: number } = event.detail;
+		const detail: { status: boolean; id: string } = event.detail;
 		if (detail.status) {
-			person = people.find((person) => person.ID === detail.id)!;
+			person = people.find((person) => person.ID.toString() === detail.id)!;
 			updateFormOpen = true;
 		} else {
 			updateFormOpen = false;

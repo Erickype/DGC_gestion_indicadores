@@ -1,13 +1,15 @@
-import { message, superValidate, type ErrorStatus } from "sveltekit-superforms";
-import type { PageServerLoad } from "./$types";
-import { redirect, type Actions } from "@sveltejs/kit";
-import { zod } from "sveltekit-superforms/adapters";
 import { addTeacherSchema, updateTeacherSchema } from "./schema";
-import type { PostPersonRequest, PutPersonRequest } from "$lib/api/model/api/person";
-import { PostPerson, PutPerson } from "$lib/api/controller/api/person";
+import { superValidate } from "sveltekit-superforms";
+import { zod } from "sveltekit-superforms/adapters";
+
+import { redirect, type Actions } from "@sveltejs/kit";
+import type { PageServerLoad } from "./$types";
+
+import { generateFormMessageFromHttpResponse, generateFormMessageFromInvalidForm } from "$lib/utils";
 import type { AddTeacherRequest } from "$lib/api/model/api/teacher";
+import type { PutPersonRequest } from "$lib/api/model/api/person";
 import { CreateTeacher } from "$lib/api/controller/api/teacher";
-import { generateFormMessageFromHttpResponse } from "$lib/utils";
+import { PutPerson } from "$lib/api/controller/api/person";
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (!locals.user) {
@@ -25,9 +27,7 @@ export const actions: Actions = {
         const form = await superValidate(event, zod(addTeacherSchema))
 
         if (!form.valid) {
-            return message(form,
-                { success: false, error: "Invalid form" },
-                { status: 400 })
+            return generateFormMessageFromInvalidForm(form)
         }
 
         const token = event.cookies.get("AuthorizationToken")
@@ -44,9 +44,7 @@ export const actions: Actions = {
     updatePerson: async (event) => {
         const form = await superValidate(event, zod(updateTeacherSchema))
         if (!form.valid) {
-            return message(form,
-                { success: false, error: "Invalid form" },
-                { status: 400 })
+            return generateFormMessageFromInvalidForm(form)
         }
 
         const token = event.cookies.get("AuthorizationToken")
@@ -59,18 +57,8 @@ export const actions: Actions = {
             email: data.email
         }
 
-        const res = await PutPerson(person, token!)
-        if (res.status === 401) {
-            throw redirect(302, "/")
-        }
-        if (!res.ok) {
-            const status = res.status as unknown as ErrorStatus
-            const err = await res.json()
-            return message(form,
-                { success: false, error: err },
-                { status: status })
-        }
+        const response = await PutPerson(person, token!)
 
-        return message(form, { success: true, error: "" })
+        return generateFormMessageFromHttpResponse(form, response)
     }
 };

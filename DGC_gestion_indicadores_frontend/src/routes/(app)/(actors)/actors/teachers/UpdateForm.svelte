@@ -1,19 +1,21 @@
 <script lang="ts">
-	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
+	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { updateTeacherSchema, type UpdateTeacherSchema } from './schema';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
-	import type { CommonError } from '$lib/api/model/errors';
-
 	import { createEventDispatcher } from 'svelte';
+	import { browser } from '$app/environment';
 
-	import type { Person } from '$lib/api/model/api/person';
 	import { Input } from '$lib/components/ui/input';
 	import * as Form from '$lib/components/ui/form';
 	import { toast } from 'svelte-sonner';
 
+	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
+	import type { Person } from '$lib/api/model/api/person';
+	import type { TeacherPerson } from '$lib/api/model/api/teacher';
+
 	export let data: SuperValidated<Infer<UpdateTeacherSchema>>;
-	export let updateEntity: Person;
+	export let updateEntity: TeacherPerson;
 
 	const dispatch = createEventDispatcher();
 
@@ -28,29 +30,25 @@
 		taintedMessage: null,
 		onUpdated: ({ form: f }) => {
 			const message = f.message!;
+			if (!message) {
+				return manageToastFromInvalidAddForm();
+			}
 			if (message.success) {
+				const person = message.data as Person;
 				PersonUpdated();
-				return toast.success(`Persona actualizada.`);
+				return toast.success(`Persona actualizada: ${person.identity}`);
 			}
-			if (message.error as CommonError) {
-				const commonError = message!.error as CommonError;
-				return toast.error(`${commonError.message}: ${commonError.detail}`);
-			} else {
-				const error = message.error as string;
-				return toast.error(error);
-			}
+			return manageToastFromErrorMessageOnAddForm(message);
 		}
 	});
 
 	const { form: formData, enhance } = form;
 
-	$: {
-		$formData.ID = updateEntity!.ID;
-		$formData.identity = updateEntity!.identity;
-		$formData.name = updateEntity!.name;
-		$formData.lastname = updateEntity!.lastname;
-		$formData.email = updateEntity!.email;
-	}
+	$formData.ID = updateEntity!.person_id;
+	$formData.identity = updateEntity!.identity.toString();
+	$formData.name = updateEntity!.name;
+	$formData.lastname = updateEntity!.lastname;
+	$formData.email = updateEntity!.email;
 </script>
 
 <form action="?/updatePerson" use:enhance>
