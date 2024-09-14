@@ -5,10 +5,14 @@
 
 	import Presentation from 'lucide-svelte/icons/square-user-round';
 
-	import type { FilterAuthorsRequest, FilterAuthorsResponse } from '$lib/api/model/api/academicProduction/authors/authorsFilter';
+	import type {
+		FilterAuthorsRequest,
+		FilterAuthorsResponse
+	} from '$lib/api/model/api/academicProduction/authors/authorsFilter';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
 	import AuthorsTable from './Table.svelte';
 	import AddForm from './AddForm.svelte';
+	import AddFromPersonForm from './AddFromPersonForm.svelte';
 	import {
 		fetchFilterAuthors,
 		fetchOnDetailedFilter,
@@ -19,6 +23,7 @@
 
 	export let data: PageData;
 	const addAuthorFormData = data.addAuthorForm;
+	const addAuthorFromPersonFormData = data.addAuthorFromPersonForm;
 	const updateAuthorPersonFormData = data.updateAuthorPersonForm;
 
 	let filterAuthorsRequest: FilterAuthorsRequest = newFilterAuthorsRequest(5, 1);
@@ -66,15 +71,24 @@
 		<Presentation class="h-8 w-8" />
 		<h2 class="text-2xl font-bold">Autores</h2>
 	</div>
-	<AddModal
-		modalTitle="Seleccionar a una persona para autor"
-		formComponent={AddForm}
-		buttonName="Agregar"
-		buttonVariant="secondary"
-		formData={addAuthorFormData}
-		comboMessages={undefined}
-		on:created={fetchOnSuccess}
-	/>
+	<div class="flex justify-between gap-1">
+		<AddModal
+			modalTitle="Seleccionar a una persona para autor"
+			formComponent={AddForm}
+			buttonName="Agregar"
+			buttonVariant="secondary"
+			formData={addAuthorFormData}
+			comboMessages={undefined}
+			on:created={fetchOnSuccess}
+		/>
+		<AddModal
+			modalTitle="Crear a una persona para autor"
+			formComponent={AddFromPersonForm}
+			formData={addAuthorFromPersonFormData}
+			comboMessages={undefined}
+			on:created={fetchOnSuccess}
+		/>
+	</div>
 </div>
 
 <div class="mx-auto flex w-full flex-col place-content-center px-8">
