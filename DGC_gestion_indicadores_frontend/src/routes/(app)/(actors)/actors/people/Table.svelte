@@ -19,6 +19,7 @@
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
 	import type { UpdatePersonSchema } from './schema';
 	import UpdateForm from './UpdateForm.svelte';
+	import { generateInitialFilterValue, newFilterPeopleRequest } from '$lib/components/filters/people';
 
 	export let filterPeopleResponse: FilterPeopleResponse;
 	let people: Person[] = filterPeopleResponse.people;
@@ -29,26 +30,9 @@
 	let filterValue = '';
 	let pageIndex: number = 0;
 	let pageSize: number = 0;
-	export let filterPeopleRequest: FilterPeopleRequest = {
-		identity: '',
-		name: '',
-		lastname: '',
-		email: '',
-		page_size: pageSize,
-		page: pageIndex
-	};
+	export let filterPeopleRequest: FilterPeopleRequest = newFilterPeopleRequest(pageSize, pageIndex);
 
-	let values = [
-		filterPeopleRequest.identity,
-		filterPeopleRequest.name,
-		filterPeopleRequest.lastname,
-		filterPeopleRequest.email
-	];
-
-	let uniqueValues = [...new Set(values.filter((value) => value !== ''))];
-
-	let initialFilterValue: string | undefined =
-		uniqueValues.length === 1 ? uniqueValues[0] : uniqueValues.join(' ');
+	let initialFilterValue: string | undefined = generateInitialFilterValue(filterPeopleRequest)
 
 	export let popoverFilterDataMap: PopoverFilterDataMap = new Map();
 
@@ -114,9 +98,9 @@
 
 	let updateFormOpen = false;
 	function handleUpdateAction(event: any) {
-		const detail: { status: boolean; id: number } = event.detail;
+		const detail: { status: boolean; id: string } = event.detail;
 		if (detail.status) {
-			person = people.find((person) => person.ID === detail.id)!;
+			person = people.find((person) => person.ID.toString() === detail.id)!;
 			updateFormOpen = true;
 		} else {
 			updateFormOpen = false;
