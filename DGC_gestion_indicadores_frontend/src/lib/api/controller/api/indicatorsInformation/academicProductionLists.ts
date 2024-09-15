@@ -3,7 +3,7 @@ import { postFilterAcademicProductionListByAcademicPeriodIDRoute } from "$lib/ap
 import { generateCommonErrorFromFetchError } from "$lib/utils";
 import type { CommonError } from "$lib/api/model/errors";
 
-export async function PostAcademicProductionTeachersListsByAcademicPeriodID(token: string, request: FilterAcademicProductionListsByAcademicPeriodRequest) {
+export async function PostFilterAcademicProductionListsByAcademicPeriodID(token: string, request: FilterAcademicProductionListsByAcademicPeriodRequest) {
     try {
         const response = await fetch(postFilterAcademicProductionListByAcademicPeriodIDRoute, {
             method: 'POST',
