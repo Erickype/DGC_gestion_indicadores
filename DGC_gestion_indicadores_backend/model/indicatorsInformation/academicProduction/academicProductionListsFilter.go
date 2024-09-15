@@ -33,7 +33,7 @@ type AcademicProductionListByAcademicPeriodJoined struct {
 	ImpactCoefficient        string `json:"impact_coefficient"`
 	CareerID                 uint   `json:"career_id"`
 	Career                   string `json:"career"`
-	InterculturalComponentID bool   `json:"intercultural_component_id"`
+	InterculturalComponentID bool   `json:"intercultural_component"`
 }
 
 type FilterAcademicProductionListsByAcademicPeriodResponse struct {
