@@ -13,7 +13,7 @@
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import type { UpdateTeacherSchema } from './scheme';
 
-	import { generateInitialFilterValue } from '$lib/components/filters/indicatorsInformation/teachersLists';
+	import { generateInitialFilterValue } from '$lib/components/filters/indicatorsInformation/teachersLists/teachersLists';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
 	import type {
 		FilterTeachersListsByAcademicPeriodRequest,

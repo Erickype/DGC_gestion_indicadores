@@ -20,7 +20,7 @@
 		fetchOnFilterChanged,
 		newFilterTeachersListsByAcademiPeriodRequest,
 		newPopoverFilterDataMap
-	} from '$lib/components/filters/indicatorsInformation/teachersLists';
+	} from '$lib/components/filters/indicatorsInformation/teachersLists/teachersLists';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
 
 	export let data: PageServerData;
