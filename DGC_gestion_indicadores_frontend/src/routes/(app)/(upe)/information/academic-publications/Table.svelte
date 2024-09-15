@@ -94,7 +94,13 @@
 		}),
 		table.column({
 			accessor: 'intercultural_component',
-			header: 'Componente'
+			header: 'Componente',
+			cell: ({ value }) => {
+				if (value) {
+					return 'Sí';
+				}
+				return 'No';
+			}
 		}),
 		table.column({
 			accessor: ({ doi }) => doi,
