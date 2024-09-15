@@ -113,7 +113,7 @@ func FilterAcademicProductionListsByAcademicPeriod(
 	)
 
 	var totalCount int64
-	err = query.Model(&AcademicProductionList{}).Count(&totalCount).Error
+	err = query.Table("indicators_information.academic_production_lists apl").Count(&totalCount).Error
 	if err != nil {
 		return err
 	}
