@@ -1,19 +1,73 @@
 <script lang="ts">
 	import AcademicPeriodCombo from '$lib/components/combobox/academicPeriodCombo.svelte';
+	
+	import Table from './Table.svelte';
 
 	import Icon from 'lucide-svelte/icons/book-marked';
+	
 	import type { PageServerData } from './$types';
+	import type {
+		FilterAcademicProductionListsByAcademicPeriodRequest,
+		FilterAcademicProductionListsByAcademicPeriodResponse
+	} from '$lib/api/model/api/indicatorsInformation/academicProductionLists';
+	import {
+		fetchFilterAcademicProductionLists,
+		newFilterAcademicProductionListsByAcademiPeriodRequest,
+		newPopoverFilterDataMap
+
+	} from '$lib/components/filters/indicatorsInformation/academicProductionLists/academicProductionLists';
+	import type { PopoverFilterDataMap } from '$lib/components/table/types';
+	import Alert from '$lib/components/alert/alert.svelte';
 
 	export let data: PageServerData;
 
 	const academicPeriodsData = data.academicPeriodsData;
 	let selectedAcademicPeriod: number = academicPeriodsData.periods.at(0)!.ID;
 
+	let filterAcademicProductionListRequest: FilterAcademicProductionListsByAcademicPeriodRequest =
+		newFilterAcademicProductionListsByAcademiPeriodRequest(5, 1, selectedAcademicPeriod);
+	let filterAcademicProductionListPromise: Promise<FilterAcademicProductionListsByAcademicPeriodResponse> =
+		fetchFilterAcademicProductionLists(filterAcademicProductionListRequest);
+	let popoverFilterDataMap: PopoverFilterDataMap = newPopoverFilterDataMap();
+
 	function fetchOnAcademicPeriodChange() {
-		/* filterTeachersListsByAcademicPeriodRequest.academic_period_id = selectedAcademicPeriod;
-		filterTeachersListsByAcademicPeriodPromise = fetchFilterTeachersLists(
-			filterTeachersListsByAcademicPeriodRequest
+		filterAcademicProductionListRequest.academic_period_id = selectedAcademicPeriod;
+		filterAcademicProductionListPromise = fetchFilterAcademicProductionLists(
+			filterAcademicProductionListRequest
+		);
+	}
+	function fetchOnSuccess(event: CustomEvent) {
+		const detail: { status: boolean } = event.detail;
+		if (detail.status) {
+			filterAcademicProductionListPromise = fetchFilterAcademicProductionLists(
+				filterAcademicProductionListRequest
+			);
+		}
+	}
+
+	function handleOnFilterChanged(event: CustomEvent) {
+		const data: { filter: string } = event.detail;
+		/* filterAcademicProductionListPromise = fetchOnFilterChanged(
+			data.filter.trim(),
+			filterAcademicProductionListRequest,
+			popoverFilterDataMap
 		); */
+	}
+
+	function handleOnDetailedFilter() {
+		/* filterAcademicProductionListPromise = fetchOnDetailedFilter(
+			filterAcademicProductionListRequest,
+			popoverFilterDataMap
+		).then(({ request, response }) => {
+			filterAcademicProductionListRequest = request;
+			return response;
+		}); */
+	}
+
+	function handlePaginationChanged() {
+		filterAcademicProductionListPromise = fetchFilterAcademicProductionLists(
+			filterAcademicProductionListRequest
+		);
 	}
 </script>
 
@@ -34,4 +88,27 @@
 		bind:selectedValue={selectedAcademicPeriod}
 		on:message={fetchOnAcademicPeriodChange}
 	></AcademicPeriodCombo>
+</div>
+
+<div class="mx-auto flex w-full place-content-center px-8">
+	{#await filterAcademicProductionListPromise}
+		cargando...
+	{:then filterAcademicProductionListsByAcademicPeriodResponse}
+		{#if filterAcademicProductionListsByAcademicPeriodResponse.academic_production_lists}
+			<Table
+				bind:filterAcademicProductionListRequest
+				{filterAcademicProductionListsByAcademicPeriodResponse}
+				bind:popoverFilterDataMap
+				on:updated={fetchOnSuccess}
+				on:deleted={fetchOnSuccess}
+				on:filterChanged={handleOnFilterChanged}
+				on:detailedFilter={handleOnDetailedFilter}
+				on:paginationChanged={handlePaginationChanged}
+			></Table>
+		{:else}
+			<Alert title="Sin registros" description={'Ups, no hay artículos registrados.'} />
+		{/if}
+	{:catch error}
+		<Alert variant="destructive" description={error.message} />
+	{/await}
 </div>
