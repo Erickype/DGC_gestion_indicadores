@@ -1,10 +1,10 @@
 <script lang="ts">
 	import AcademicPeriodCombo from '$lib/components/combobox/academicPeriodCombo.svelte';
-	
+	import AddForm from './AddForm.svelte';
 	import Table from './Table.svelte';
 
 	import Icon from 'lucide-svelte/icons/book-marked';
-	
+
 	import type { PageServerData } from './$types';
 	import type {
 		FilterAcademicProductionListsByAcademicPeriodRequest,
@@ -14,15 +14,20 @@
 		fetchFilterAcademicProductionLists,
 		newFilterAcademicProductionListsByAcademiPeriodRequest,
 		newPopoverFilterDataMap
-
 	} from '$lib/components/filters/indicatorsInformation/academicProductionLists/academicProductionLists';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
+	import AddModal from '$lib/components/modal/AddModal.svelte';
 	import Alert from '$lib/components/alert/alert.svelte';
 
 	export let data: PageServerData;
+	const addAcademicProductionForm = data.academicProductionForm;
 
 	const academicPeriodsData = data.academicPeriodsData;
 	let selectedAcademicPeriod: number = academicPeriodsData.periods.at(0)!.ID;
+
+	$: {
+		addAcademicProductionForm.data.academicPeriod = selectedAcademicPeriod;
+	}
 
 	let filterAcademicProductionListRequest: FilterAcademicProductionListsByAcademicPeriodRequest =
 		newFilterAcademicProductionListsByAcademiPeriodRequest(5, 1, selectedAcademicPeriod);
@@ -88,6 +93,13 @@
 		bind:selectedValue={selectedAcademicPeriod}
 		on:message={fetchOnAcademicPeriodChange}
 	></AcademicPeriodCombo>
+
+	<AddModal
+		formComponent={AddForm}
+		modalTitle="Crear docente"
+		formData={addAcademicProductionForm}
+		on:created={fetchOnSuccess}
+	/>
 </div>
 
 <div class="mx-auto flex w-full place-content-center px-8">
