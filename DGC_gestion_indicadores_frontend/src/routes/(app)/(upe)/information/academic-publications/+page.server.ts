@@ -3,6 +3,9 @@ import { mainDashboarRoute } from "$lib/api/util/paths";
 import { redirect } from "@sveltejs/kit";
 
 import { LoadAcademicPeriodsWithComboMessages } from "$lib/api/controller/view/academicPeriod";
+import { superValidate } from "sveltekit-superforms";
+import { zod } from "sveltekit-superforms/adapters";
+import { addAcademicProductionSchema } from "./schema";
 
 export const load: PageServerLoad = async ({ locals, cookies }) => {
     const token = cookies.get("AuthorizationToken")
@@ -16,5 +19,6 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
     }
     return {
         academicPeriodsData: await LoadAcademicPeriodsWithComboMessages(),
+        academicProductionForm: await superValidate(zod(addAcademicProductionSchema)),
     }
 };
