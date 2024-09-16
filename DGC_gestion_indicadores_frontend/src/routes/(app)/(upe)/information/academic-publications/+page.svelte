@@ -96,7 +96,7 @@
 
 	<AddModal
 		formComponent={AddForm}
-		modalTitle="Crear docente"
+		modalTitle="Crear publicación académica"
 		formData={addAcademicProductionForm}
 		on:created={fetchOnSuccess}
 	/>

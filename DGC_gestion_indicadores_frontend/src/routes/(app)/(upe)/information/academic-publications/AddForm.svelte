@@ -7,6 +7,8 @@
 	import { browser } from '$app/environment';
 	import { writable } from 'svelte/store';
 
+	import { Textarea } from '$lib/components/ui/textarea/index.js';
+	import { Input } from '$lib/components/ui/input/index.js';
 	import * as Form from '$lib/components/ui/form';
 	import { toast } from 'svelte-sonner';
 
@@ -50,7 +52,7 @@
 
 	const { form: formData, enhance } = form;
 
-/*	let formDataCareerID = writable($formData.career);
+	/*	let formDataCareerID = writable($formData.career);
 	formDataCareerID.subscribe((value) => ($formData.career = value));*/
 </script>
 
@@ -61,6 +63,30 @@
 				<input hidden value={$formData.academicPeriod} name={attrs.name} />
 			</Form.Control>
 		</Form.Field>
+		<Form.Field {form} name="doi">
+			<Form.Control let:attrs>
+				<Form.Label>DOI</Form.Label>
+				<Input
+					type="url"
+					{...attrs}
+					placeholder="https://doi.org/10.47366/sabia.v5n1a3..."
+					bind:value={$formData.doi}
+				/>
+			</Form.Control>
+			<Form.FieldErrors />
+		</Form.Field>
+		<Form.Field {form} name="publication_name">
+			<Form.Control let:attrs>
+				<Form.Label>Nombre publicación</Form.Label>
+				<Textarea
+					{...attrs}
+					placeholder="Saberes emergentes de las artes urbanas..."
+					class="resize-none"
+					bind:value={$formData.publication_name}
+				/>
+			</Form.Control>
+			<Form.FieldErrors />
+		</Form.Field>
 		<!-- 		<Form.Field {form} name="career" class="flex flex-col">
 			<FormSelect
 				formLabel="Carreras"
@@ -70,7 +96,7 @@
 			/> -->
 	</div>
 	<Form.Button class="my-2 w-full">Guardar</Form.Button>
-	{#if browser}
+	<!-- {#if browser}
 		<SuperDebug data={$formData} />
-	{/if}
+	{/if} -->
 </form>
