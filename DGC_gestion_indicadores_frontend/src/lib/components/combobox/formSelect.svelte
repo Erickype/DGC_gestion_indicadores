@@ -18,6 +18,7 @@
 	export let emptyLabel: string = 'Seleccionar';
 	export let formLabel: string = 'Object';
 	export let scrollAreaHeight: string = '';
+	export let formSelectWidth = 'w-[90%]';
 
 	function closeAndFocusTrigger(triggerId: string) {
 		openCombo = false;
@@ -44,7 +45,7 @@
 		</Popover.Trigger>
 		<input hidden value={$formDataID} name={attrs.name} />
 	</Form.Control>
-	<Popover.Content class="w-[90%] p-0">
+	<Popover.Content class="{formSelectWidth} p-0">
 		<Command.Root loop>
 			<Command.Input autofocus placeholder="Filtrar..." class="h-9" />
 			<Command.Empty>Sin coincidencias!</Command.Empty>
