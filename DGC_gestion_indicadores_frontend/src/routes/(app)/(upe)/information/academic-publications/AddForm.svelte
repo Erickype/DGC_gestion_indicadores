@@ -6,17 +6,29 @@
 	import { createEventDispatcher } from 'svelte';
 	import { browser } from '$app/environment';
 	import { writable } from 'svelte/store';
+	import { cn } from '$lib/utils';
 
+	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import { Textarea } from '$lib/components/ui/textarea/index.js';
+	import * as Popover from '$lib/components/ui/popover/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
+	import CalendarIcon from 'lucide-svelte/icons/calendar';
 	import * as Form from '$lib/components/ui/form';
 	import { toast } from 'svelte-sonner';
 
 	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
 	import TeachersServerFormSelect from '$lib/components/filters/teachers/teachersServer.svelte';
 	import FormSelect from '$lib/components/combobox/formSelect.svelte';
+	import CalendarMY from '$lib/components/calendar/month-year.svelte';
 	import type { Message } from '$lib/components/combobox/combobox';
 	import type { Teacher } from '$lib/api/model/api/teacher';
+	import {
+		DateFormatter,
+		type DateValue,
+		getLocalTimeZone,
+		parseDate,
+		today
+	} from '@internationalized/date';
 
 	export let data: SuperValidated<Infer<AddAcademicProductionSchema>, App.Superforms.Message>;
 	/* 	export let comboMessages: Message[][];
@@ -54,6 +66,22 @@
 
 	/*	let formDataCareerID = writable($formData.career);
 	formDataCareerID.subscribe((value) => ($formData.career = value));*/
+
+	let placeholderStart = today(getLocalTimeZone()).set({ day: 1, month: 1 });
+
+	const df = new DateFormatter('ec-EC', {
+		dateStyle: 'long'
+	});
+
+	$: publicationDate = $formData.publication_date
+		? parseDate($formData.publication_date)
+		: undefined;
+
+	function manageDateChanged(event: any) {
+		const data: { date: string } = event.detail;
+		const date = data.date;
+		$formData.publication_date = date;
+	}
 </script>
 
 <form action="?/addTeacher" use:enhance>
@@ -86,6 +114,36 @@
 				/>
 			</Form.Control>
 			<Form.FieldErrors />
+		</Form.Field>
+		<Form.Field {form} name="publication_date" class="flex flex-col">
+			<Form.Control let:attrs>
+				<Form.Label>Fecha inicio</Form.Label>
+				<Popover.Root>
+					<Popover.Trigger
+						{...attrs}
+						class={cn(
+							buttonVariants({ variant: 'outline' }),
+							'justify-start pl-4 text-left font-normal',
+							!publicationDate && 'text-muted-foreground'
+						)}
+					>
+						{publicationDate
+							? df.format(publicationDate.toDate(getLocalTimeZone()))
+							: 'Selecciona una fecha'}
+						<CalendarIcon class="ml-auto h-4 w-4 opacity-50" />
+					</Popover.Trigger>
+					<Popover.Content class="w-auto p-0" side="top">
+						<CalendarMY
+							placeholder={placeholderStart}
+							on:keydown={(v) => {
+								manageDateChanged(v);
+							}}
+						/>
+					</Popover.Content>
+				</Popover.Root>
+				<Form.FieldErrors />
+				<input hidden value={$formData.publication_date} name={attrs.name} />
+			</Form.Control>
 		</Form.Field>
 		<!-- 		<Form.Field {form} name="career" class="flex flex-col">
 			<FormSelect
