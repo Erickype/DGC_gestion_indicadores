@@ -17,25 +17,21 @@
 	import { toast } from 'svelte-sonner';
 
 	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
-	import TeachersServerFormSelect from '$lib/components/filters/teachers/teachersServer.svelte';
 	import FormSelect from '$lib/components/combobox/formSelect.svelte';
 	import CalendarMY from '$lib/components/calendar/month-year.svelte';
 	import type { Message } from '$lib/components/combobox/combobox';
 	import type { Teacher } from '$lib/api/model/api/teacher';
 	import {
 		DateFormatter,
-		type DateValue,
 		getLocalTimeZone,
 		parseDate,
 		today
 	} from '@internationalized/date';
 
 	export let data: SuperValidated<Infer<AddAcademicProductionSchema>, App.Superforms.Message>;
-	/* 	export let comboMessages: Message[][];
+	export let comboMessages: Message[][];
 	const careersComboData = comboMessages.at(0)!;
-	const dedicationsComboData = comboMessages.at(1)!;
-	const scaledGradesComboData = comboMessages.at(2)!;
-	const contractTypesComboData = comboMessages.at(3)!; */
+	const scienceMagazinesComboData = comboMessages.at(1)!;
 
 	const dispatch = createEventDispatcher();
 
@@ -64,8 +60,10 @@
 
 	const { form: formData, enhance } = form;
 
-	/*	let formDataCareerID = writable($formData.career);
-	formDataCareerID.subscribe((value) => ($formData.career = value));*/
+	let formDataCareerID = writable($formData.career);
+	formDataCareerID.subscribe((value) => ($formData.career = value));
+	let formDataScienceMagazineID = writable($formData.science_magazine_id);
+	formDataScienceMagazineID.subscribe((value) => ($formData.science_magazine_id = value));
 
 	let placeholderStart = today(getLocalTimeZone()).set({ day: 1, month: 1 });
 
@@ -145,13 +143,21 @@
 				<input hidden value={$formData.publication_date} name={attrs.name} />
 			</Form.Control>
 		</Form.Field>
-		<!-- 		<Form.Field {form} name="career" class="flex flex-col">
+		<Form.Field {form} name="science_magazine_id" class="flex flex-col">
+			<FormSelect
+				formLabel="Revista científica"
+				comboData={scienceMagazinesComboData}
+				bind:formDataID={formDataScienceMagazineID}
+			/>
+		</Form.Field>
+		<Form.Field {form} name="career" class="flex flex-col">
 			<FormSelect
 				formLabel="Carreras"
 				comboData={careersComboData}
 				bind:formDataID={formDataCareerID}
 				scrollAreaHeight="h-72"
-			/> -->
+			/>
+		</Form.Field>
 	</div>
 	<Form.Button class="my-2 w-full">Guardar</Form.Button>
 	<!-- {#if browser}

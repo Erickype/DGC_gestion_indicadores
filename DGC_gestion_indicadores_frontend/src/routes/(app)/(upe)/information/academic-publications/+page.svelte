@@ -16,6 +16,7 @@
 		newPopoverFilterDataMap
 	} from '$lib/components/filters/indicatorsInformation/academicProductionLists/academicProductionLists';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
+	import type { Message } from '$lib/components/combobox/combobox';
 	import AddModal from '$lib/components/modal/AddModal.svelte';
 	import Alert from '$lib/components/alert/alert.svelte';
 
@@ -23,6 +24,12 @@
 	const addAcademicProductionForm = data.academicProductionForm;
 
 	const academicPeriodsData = data.academicPeriodsData;
+
+	const comboMessages: Message[][] = [
+		data.careersData.messages,
+		data.scienceMagazinesData.messages
+	];
+
 	let selectedAcademicPeriod: number = academicPeriodsData.periods.at(0)!.ID;
 
 	$: {
@@ -98,6 +105,7 @@
 		formComponent={AddForm}
 		modalTitle="Crear publicación académica"
 		formData={addAcademicProductionForm}
+		{comboMessages}
 		on:created={fetchOnSuccess}
 	/>
 </div>
