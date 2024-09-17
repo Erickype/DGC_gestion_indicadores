@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/controller/academicPeriod"
+	academicProduction "github.com/Erickype/DGC_gestion_indicadores_backend/controller/academicProduction"
 	author "github.com/Erickype/DGC_gestion_indicadores_backend/controller/academicProduction/author"
 	controller "github.com/Erickype/DGC_gestion_indicadores_backend/controller/auth"
 	career "github.com/Erickype/DGC_gestion_indicadores_backend/controller/career"
@@ -106,6 +107,8 @@ func serveApplication() {
 	upeRoutes.GET("/contractTypes", contractTypes.GetContractTypes)
 
 	upeRoutes.GET("/scaledGrades", scaledGrade.GetScaledGrades)
+
+	upeRoutes.GET("/scienceMagazines", academicProduction.GetScienceMagazines)
 
 	upeRoutes.POST("/teachers/filter", teacher.FilterTeachers)
 	upeRoutes.GET("/teachers/filter/teacherPersonJoinedByTeacherID/:id", teacher.GetTeacherPersonJoinedByTeacherID)

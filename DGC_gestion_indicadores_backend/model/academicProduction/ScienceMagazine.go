@@ -1,6 +1,9 @@
 package model
 
-import "time"
+import (
+	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
+	"time"
+)
 
 type ScienceMagazine struct {
 	ID                 uint      `gorm:"primary_key"`
@@ -12,4 +15,12 @@ type ScienceMagazine struct {
 	AcademicDatabaseID uint      `json:"academic_database_id"`
 
 	AcademicDatabase AcademicDatabase `json:"academic_database"`
+}
+
+func GetScienceMagazines(magazines *[]ScienceMagazine) (err error) {
+	err = database.DB.Order("updated_at desc").Find(magazines).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }
