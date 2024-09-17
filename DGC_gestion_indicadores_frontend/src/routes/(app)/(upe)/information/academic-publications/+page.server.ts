@@ -2,10 +2,13 @@ import type { Actions, PageServerLoad } from "./$types";
 import { mainDashboarRoute } from "$lib/api/util/paths";
 import { redirect } from "@sveltejs/kit";
 
-import { LoadAcademicPeriodsWithComboMessages } from "$lib/api/controller/view/academicPeriod";
+import { addAcademicProductionSchema } from "./schema";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { addAcademicProductionSchema } from "./schema";
+
+import { LoadGetScienceMagazinesWithComboMessages } from "$lib/api/controller/api/academicProduction/scienceMagazines/scienceMagazine";
+import { LoadAcademicPeriodsWithComboMessages } from "$lib/api/controller/view/academicPeriod";
+import { LoadCareersWithComboMessages } from "$lib/api/controller/api/career";
 
 export const load: PageServerLoad = async ({ locals, cookies }) => {
     const token = cookies.get("AuthorizationToken")
@@ -20,5 +23,7 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
     return {
         academicPeriodsData: await LoadAcademicPeriodsWithComboMessages(),
         academicProductionForm: await superValidate(zod(addAcademicProductionSchema)),
+        careersData: await LoadCareersWithComboMessages(token!),
+        scienceMagazinesData: await LoadGetScienceMagazinesWithComboMessages(token!),
     }
 };
