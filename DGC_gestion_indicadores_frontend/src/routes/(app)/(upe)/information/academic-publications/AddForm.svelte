@@ -26,8 +26,7 @@
 
 	export let data: SuperValidated<Infer<AddAcademicProductionSchema>, App.Superforms.Message>;
 	export let comboMessages: Message[][];
-	const careersComboData = comboMessages.at(0)!;
-	const scienceMagazinesComboData = comboMessages.at(1)!;
+	const scienceMagazinesComboData = comboMessages.at(0)!;
 
 	const dispatch = createEventDispatcher();
 
@@ -56,8 +55,6 @@
 
 	const { form: formData, enhance } = form;
 
-	let formDataCareerID = writable($formData.career);
-	formDataCareerID.subscribe((value) => ($formData.career = value));
 	let formDataScienceMagazineID = writable($formData.science_magazine_id);
 	formDataScienceMagazineID.subscribe((value) => ($formData.science_magazine_id = value));
 
@@ -149,14 +146,6 @@
 				/>
 			</Form.Field>
 		</div>
-		<Form.Field {form} name="career" class="flex flex-col">
-			<FormSelect
-				formLabel="Carreras"
-				comboData={careersComboData}
-				bind:formDataID={formDataCareerID}
-				scrollAreaHeight="h-72"
-			/>
-		</Form.Field>
 		<Form.Field
 			{form}
 			name="intercultural_component"

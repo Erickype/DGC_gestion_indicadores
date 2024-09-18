@@ -26,7 +26,6 @@
 	const academicPeriodsData = data.academicPeriodsData;
 
 	const comboMessages: Message[][] = [
-		data.careersData.messages,
 		data.scienceMagazinesData.messages
 	];
 

@@ -35,12 +35,6 @@ export const addAcademicProductionSchema = z.object({
         message: "Ingrese un coeficiente impacto válido"
     }),
 
-    career: z.number({
-        required_error: "Carrera requerida"
-    }).gt(0, {
-        message: "Ingrese una carrera válida"
-    }),
-
     intercultural_component: z.boolean({
         required_error: "Componente intercultural requerido"
     }).default(false),

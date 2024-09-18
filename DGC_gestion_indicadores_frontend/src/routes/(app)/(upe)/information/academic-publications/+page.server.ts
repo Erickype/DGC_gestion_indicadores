@@ -8,7 +8,6 @@ import { zod } from "sveltekit-superforms/adapters";
 
 import { LoadGetScienceMagazinesWithComboMessages } from "$lib/api/controller/api/academicProduction/scienceMagazines/scienceMagazine";
 import { LoadAcademicPeriodsWithComboMessages } from "$lib/api/controller/view/academicPeriod";
-import { LoadCareersWithComboMessages } from "$lib/api/controller/api/career";
 
 export const load: PageServerLoad = async ({ locals, cookies }) => {
     const token = cookies.get("AuthorizationToken")
@@ -23,7 +22,6 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
     return {
         academicPeriodsData: await LoadAcademicPeriodsWithComboMessages(),
         academicProductionForm: await superValidate(zod(addAcademicProductionSchema)),
-        careersData: await LoadCareersWithComboMessages(token!),
         scienceMagazinesData: await LoadGetScienceMagazinesWithComboMessages(token!),
     }
 };

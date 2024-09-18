@@ -89,10 +89,6 @@
 			header: 'Coeficiente'
 		}),
 		table.column({
-			accessor: 'career',
-			header: 'Carrera'
-		}),
-		table.column({
 			accessor: 'intercultural_component',
 			header: 'Componente',
 			cell: ({ value }) => {
