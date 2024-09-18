@@ -9,6 +9,7 @@
 	import { cn } from '$lib/utils';
 
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
+	import { Checkbox } from '$lib/components/ui/checkbox/index.js';
 	import { Textarea } from '$lib/components/ui/textarea/index.js';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
@@ -21,12 +22,7 @@
 	import CalendarMY from '$lib/components/calendar/month-year.svelte';
 	import type { Message } from '$lib/components/combobox/combobox';
 	import type { Teacher } from '$lib/api/model/api/teacher';
-	import {
-		DateFormatter,
-		getLocalTimeZone,
-		parseDate,
-		today
-	} from '@internationalized/date';
+	import { DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date';
 
 	export let data: SuperValidated<Infer<AddAcademicProductionSchema>, App.Superforms.Message>;
 	export let comboMessages: Message[][];
@@ -113,43 +109,46 @@
 			</Form.Control>
 			<Form.FieldErrors />
 		</Form.Field>
-		<Form.Field {form} name="publication_date" class="flex flex-col">
-			<Form.Control let:attrs>
-				<Form.Label>Fecha inicio</Form.Label>
-				<Popover.Root>
-					<Popover.Trigger
-						{...attrs}
-						class={cn(
-							buttonVariants({ variant: 'outline' }),
-							'justify-start pl-4 text-left font-normal',
-							!publicationDate && 'text-muted-foreground'
-						)}
-					>
-						{publicationDate
-							? df.format(publicationDate.toDate(getLocalTimeZone()))
-							: 'Selecciona una fecha'}
-						<CalendarIcon class="ml-auto h-4 w-4 opacity-50" />
-					</Popover.Trigger>
-					<Popover.Content class="w-auto p-0" side="top">
-						<CalendarMY
-							placeholder={placeholderStart}
-							on:keydown={(v) => {
-								manageDateChanged(v);
-							}}
-						/>
-					</Popover.Content>
-				</Popover.Root>
-				<Form.FieldErrors />
-				<input hidden value={$formData.publication_date} name={attrs.name} />
-			</Form.Control>
-		</Form.Field>
-		<Form.Field {form} name="science_magazine_id" class="flex flex-col">
-			<FormSelect
-				formLabel="Revista científica"
-				comboData={scienceMagazinesComboData}
-				bind:formDataID={formDataScienceMagazineID}
-			/>
-		</Form.Field>
+		<div class="grid grid-cols-2 justify-between gap-4">
+			<Form.Field {form} name="publication_date" class="flex flex-col">
+				<Form.Control let:attrs>
+					<Form.Label>Fecha inicio</Form.Label>
+					<Popover.Root>
+						<Popover.Trigger
+							{...attrs}
+							class={cn(
+								buttonVariants({ variant: 'outline' }),
+								'justify-start pl-4 text-left font-normal',
+								!publicationDate && 'text-muted-foreground'
+							)}
+						>
+							{publicationDate
+								? df.format(publicationDate.toDate(getLocalTimeZone()))
+								: 'Selecciona una fecha'}
+							<CalendarIcon class="ml-auto h-4 w-4 opacity-50" />
+						</Popover.Trigger>
+						<Popover.Content class="w-auto p-0" side="top">
+							<CalendarMY
+								placeholder={placeholderStart}
+								on:keydown={(v) => {
+									manageDateChanged(v);
+								}}
+							/>
+						</Popover.Content>
+					</Popover.Root>
+					<Form.FieldErrors />
+					<input hidden value={$formData.publication_date} name={attrs.name} />
+				</Form.Control>
+			</Form.Field>
+			<Form.Field {form} name="science_magazine_id" class="flex flex-col">
+				<FormSelect
+					formLabel="Revista científica"
+					formSelectWidth="w-[45%]"
+					comboData={scienceMagazinesComboData}
+					bind:formDataID={formDataScienceMagazineID}
+				/>
+			</Form.Field>
+		</div>
 		<Form.Field {form} name="career" class="flex flex-col">
 			<FormSelect
 				formLabel="Carreras"
@@ -157,6 +156,23 @@
 				bind:formDataID={formDataCareerID}
 				scrollAreaHeight="h-72"
 			/>
+		</Form.Field>
+		<Form.Field
+			{form}
+			name="intercultural_component"
+			class="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"
+		>
+			<Form.Control let:attrs>
+				<Checkbox {...attrs} bind:checked={$formData.intercultural_component} />
+				<div class="space-y-1 leading-none">
+					<Form.Label
+						>{!$formData.intercultural_component
+							? 'No tiene componente intercultural'
+							: 'Tiene componente intercultural'}</Form.Label
+					>
+				</div>
+				<input name={attrs.name} value={$formData.intercultural_component} hidden />
+			</Form.Control>
 		</Form.Field>
 	</div>
 	<Form.Button class="my-2 w-full">Guardar</Form.Button>
