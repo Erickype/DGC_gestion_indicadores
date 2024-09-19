@@ -9,13 +9,14 @@ import (
 )
 
 type AcademicProductionList struct {
-	DOI                    string         `gorm:"primary_key;size:1000" json:"DOI"`
 	CreatedAt              time.Time      `json:"created_at"`
 	UpdatedAt              time.Time      `json:"updated_at"`
-	AcademicPeriodID       uint           `json:"academic_period_id"`
+	ID                     uint           `gorm:"primary_key"`
+	DOI                    string         `gorm:"size:1000;not null;unique" json:"DOI"`
 	PublicationDate        datatypes.Date `gorm:"not null" json:"publication_date"`
 	PublicationName        string         `gorm:"size:1000;not null" json:"publication_name"`
-	PublicationTypeID      uint16         `json:"publication_type_id"`
+	AcademicPeriodID       uint           `json:"academic_period_id"`
+	PublicationTypeID      uint           `json:"publication_type_id"`
 	ScienceMagazineID      uint           `json:"science_magazine_id"`
 	ImpactCoefficientID    uint           `json:"impact_coefficient_id"`
 	InterculturalComponent bool           `json:"intercultural_component"`
