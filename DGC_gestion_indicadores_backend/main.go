@@ -110,6 +110,8 @@ func serveApplication() {
 
 	upeRoutes.GET("/scienceMagazines", academicProduction.GetScienceMagazines)
 
+	upeRoutes.GET("/impactCoefficients", academicProduction.GetImpactCoefficients)
+
 	upeRoutes.POST("/teachers/filter", teacher.FilterTeachers)
 	upeRoutes.GET("/teachers/filter/teacherPersonJoinedByTeacherID/:id", teacher.GetTeacherPersonJoinedByTeacherID)
 	upeRoutes.POST("/teacher", teacher.CreateTeacher)

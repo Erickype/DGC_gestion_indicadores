@@ -1,6 +1,9 @@
 package model
 
-import "time"
+import (
+	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
+	"time"
+)
 
 type ImpactCoefficient struct {
 	ID                   uint      `gorm:"primary_key"`
@@ -11,4 +14,12 @@ type ImpactCoefficient struct {
 
 	AcademicDatabase   AcademicDatabase   `json:"-"`
 	CompensationFactor CompensationFactor `json:"-"`
+}
+
+func GetImpactCoefficients(impactCoefficients *[]ImpactCoefficient) (err error) {
+	err = database.DB.Order("updated_at desc").Find(impactCoefficients).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }
