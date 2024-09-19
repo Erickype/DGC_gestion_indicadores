@@ -15,7 +15,6 @@ type FilterAcademicProductionListsByAcademicPeriodRequest struct {
 	PublicationType        string `json:"publication_type,omitempty"`
 	ScienceMagazine        string `json:"science_magazine,omitempty"`
 	ImpactCoefficient      string `json:"impact_coefficient,omitempty"`
-	Career                 string `json:"career,omitempty"`
 	InterculturalComponent *bool  `json:"intercultural_component,omitempty"`
 	PageSize               int    `json:"page_size"`
 	Page                   int    `json:"page"`
@@ -31,8 +30,6 @@ type AcademicProductionListByAcademicPeriodJoined struct {
 	ScienceMagazine          string `json:"science_magazine"`
 	ImpactCoefficientID      uint   `json:"impact_coefficient_id"`
 	ImpactCoefficient        string `json:"impact_coefficient"`
-	CareerID                 uint   `json:"career_id"`
-	Career                   string `json:"career"`
 	InterculturalComponentID bool   `json:"intercultural_component"`
 }
 
@@ -75,10 +72,6 @@ func FilterAcademicProductionListsByAcademicPeriod(
 		conditions = append(conditions, "LOWER(ad.name || ' ' || cf.name) LIKE ?")
 		values = append(values, fmt.Sprintf("%%%s%%", strings.ToLower(filterAcademicProductionListsRequest.ImpactCoefficient)))
 	}
-	if filterAcademicProductionListsRequest.Career != "" {
-		conditions = append(conditions, "LOWER(c.name) LIKE ?")
-		values = append(values, fmt.Sprintf("%%%s%%", strings.ToLower(filterAcademicProductionListsRequest.Career)))
-	}
 	if filterAcademicProductionListsRequest.InterculturalComponent != nil {
 		conditions = append(conditions, "apl.intercultural_component = ?")
 		values = append(values, fmt.Sprintf("%%%b%%", filterAcademicProductionListsRequest.InterculturalComponent))
@@ -98,16 +91,13 @@ func FilterAcademicProductionListsByAcademicPeriod(
 		sm.name as science_magazine,
 		apl.impact_coefficient_id,
 		ad.name || ' ' || cf.name as impact_coefficient,
-		apl.career_id,
-		c.name as career,
 		apl.intercultural_component`,
 	).Joins(
 		`join publication_types pt on apl.publication_type_id = pt.id
 		join science_magazines sm on apl.science_magazine_id = sm.id
 		join impact_coefficients ic on apl.impact_coefficient_id = ic.id
 		join academic_databases ad on ic.academic_database_id = ad.id
-		join compensation_factors cf on ic.compensation_factor_id = cf.id
-		join careers c on apl.career_id = c.id`,
+		join compensation_factors cf on ic.compensation_factor_id = cf.id`,
 	).Where(
 		"apl.academic_period_id = ?", filterAcademicProductionListsRequest.AcademicPeriodID,
 	)
