@@ -8,7 +8,7 @@ import (
 )
 
 func GetImpactCoefficients(context *gin.Context) {
-	var coefficients []model.ImpactCoefficient
+	var coefficients []model.ImpactCoefficientJoined
 	err := model.GetImpactCoefficients(&coefficients)
 	if err != nil {
 		errors.InternalServerErrorResponse(context, "Error retornando coeficientes impacto", err)
