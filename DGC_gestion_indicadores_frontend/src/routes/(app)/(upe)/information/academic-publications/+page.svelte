@@ -26,7 +26,8 @@
 	const academicPeriodsData = data.academicPeriodsData;
 
 	const comboMessages: Message[][] = [
-		data.scienceMagazinesData.messages
+		data.scienceMagazinesData.messages,
+		data.impactCoefficientsData.messages,
 	];
 
 	let selectedAcademicPeriod: number = academicPeriodsData.periods.at(0)!.ID;
