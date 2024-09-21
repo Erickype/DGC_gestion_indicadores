@@ -15,6 +15,7 @@ import (
 	indicators "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicators"
 	indicatorsInformationAcademicProduction "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation/academicProduction"
 	indicatorsInformationTeachers "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation/teachers"
+	knowledgeField "github.com/Erickype/DGC_gestion_indicadores_backend/controller/knowledgeLevel"
 	person "github.com/Erickype/DGC_gestion_indicadores_backend/controller/person"
 	scaledGrade "github.com/Erickype/DGC_gestion_indicadores_backend/controller/scaledGrade"
 	teacher "github.com/Erickype/DGC_gestion_indicadores_backend/controller/teacher"
@@ -126,6 +127,8 @@ func serveApplication() {
 	upeRoutes.POST("/author", author.PostAuthor)
 	upeRoutes.POST("/author/fromPerson", author.PostAuthorFromPerson)
 	upeRoutes.POST("/authors/filter", author.FilterAuthors)
+
+	upeRoutes.GET("/detailedFields/filter", knowledgeField.FilterDetailedFields)
 
 	// Indicators information routes
 	indicatorsInformationRoutes := router.Group("/api/indicators/information")
