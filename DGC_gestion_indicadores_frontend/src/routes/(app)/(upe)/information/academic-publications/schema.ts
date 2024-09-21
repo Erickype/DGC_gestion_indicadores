@@ -29,7 +29,7 @@ export const addAcademicProductionSchema = z.object({
         message: "Ingrese una revista válida"
     }),
 
-    impact_cefficient_id: z.number({
+    impact_coefficient_id: z.number({
         required_error: "Coeficiente impacto requirido"
     }).gt(0, {
         message: "Ingrese un coeficiente impacto válido"
