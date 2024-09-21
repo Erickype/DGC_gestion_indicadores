@@ -1,5 +1,5 @@
 export interface ScienceMagazine {
-    id: number
+    ID: number
     academic_database_id: number
     created_at: string
     updated_at: string
