@@ -27,6 +27,7 @@
 	export let data: SuperValidated<Infer<AddAcademicProductionSchema>, App.Superforms.Message>;
 	export let comboMessages: Message[][];
 	const scienceMagazinesComboData = comboMessages.at(0)!;
+	const impactCoefficientsComboData = comboMessages.at(1)!;
 
 	const dispatch = createEventDispatcher();
 
@@ -57,6 +58,8 @@
 
 	let formDataScienceMagazineID = writable($formData.science_magazine_id);
 	formDataScienceMagazineID.subscribe((value) => ($formData.science_magazine_id = value));
+	let formImpactCoefficientID = writable($formData.impact_coefficient_id);
+	formImpactCoefficientID.subscribe((value) => ($formData.impact_coefficient_id = value));
 
 	let placeholderStart = today(getLocalTimeZone()).set({ day: 1, month: 1 });
 
@@ -146,6 +149,13 @@
 				/>
 			</Form.Field>
 		</div>
+		<Form.Field {form} name="impact_coefficient_id" class="flex flex-col">
+			<FormSelect
+				formLabel="Coefficiente impacto"
+				comboData={impactCoefficientsComboData}
+				bind:formDataID={formImpactCoefficientID}
+			/>
+		</Form.Field>
 		<Form.Field
 			{form}
 			name="intercultural_component"
