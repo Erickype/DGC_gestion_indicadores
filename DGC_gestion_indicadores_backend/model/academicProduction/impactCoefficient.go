@@ -25,7 +25,7 @@ type ImpactCoefficientJoined struct {
 }
 
 func GetImpactCoefficients(impactCoefficients *[]ImpactCoefficientJoined) (err error) {
-	err = database.DB.Order("updated_at desc").
+	err = database.DB.Order("ic.updated_at desc").
 		Table("impact_coefficients ic").
 		Select(`ic.id,
 			ic.academic_database_id,
