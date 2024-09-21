@@ -12,7 +12,7 @@ type FilterAcademicProductionListsByAcademicPeriodRequest struct {
 	DOI                    string `json:"doi,omitempty"`
 	PublicationDate        string `json:"publication_date,omitempty"`
 	PublicationName        string `json:"publication_name,omitempty"`
-	PublicationType        string `json:"publication_type,omitempty"`
+	DetailedField          string `json:"detailed_field,omitempty"`
 	ScienceMagazine        string `json:"science_magazine,omitempty"`
 	ImpactCoefficient      string `json:"impact_coefficient,omitempty"`
 	InterculturalComponent *bool  `json:"intercultural_component,omitempty"`
@@ -24,8 +24,8 @@ type AcademicProductionListByAcademicPeriodJoined struct {
 	DOI                      string `json:"doi"`
 	PublicationDate          string `json:"publication_date"`
 	PublicationName          string `json:"publication_name"`
-	PublicationTypeID        uint   `json:"publication_type_id"`
-	PublicationType          string `json:"publication_type"`
+	DetailedFieldID          uint   `json:"detailed_field_id"`
+	DetailedField            string `json:"detailed_field"`
 	ScienceMagazineID        uint   `json:"science_magazine_id"`
 	ScienceMagazine          string `json:"science_magazine"`
 	ImpactCoefficientID      uint   `json:"impact_coefficient_id"`
@@ -60,9 +60,9 @@ func FilterAcademicProductionListsByAcademicPeriod(
 		conditions = append(conditions, "LOWER(apl.publication_name) LIKE ?")
 		values = append(values, fmt.Sprintf("%%%s%%", strings.ToLower(filterAcademicProductionListsRequest.PublicationName)))
 	}
-	if filterAcademicProductionListsRequest.PublicationType != "" {
+	if filterAcademicProductionListsRequest.DetailedField != "" {
 		conditions = append(conditions, "LOWER(pt.name) LIKE ?")
-		values = append(values, fmt.Sprintf("%%%s%%", strings.ToLower(filterAcademicProductionListsRequest.PublicationType)))
+		values = append(values, fmt.Sprintf("%%%s%%", strings.ToLower(filterAcademicProductionListsRequest.DetailedField)))
 	}
 	if filterAcademicProductionListsRequest.ScienceMagazine != "" {
 		conditions = append(conditions, "LOWER(sm.name) LIKE ?")
