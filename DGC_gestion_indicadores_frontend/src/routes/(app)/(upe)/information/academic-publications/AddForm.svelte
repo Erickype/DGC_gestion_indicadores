@@ -159,6 +159,7 @@
 			<Form.Field {form} name="impact_coefficient_id" class="flex flex-col">
 				<FormSelect
 					formLabel="Coefficiente impacto"
+					formSelectWidth="w-[45%]"
 					comboData={impactCoefficientsComboData}
 					bind:formDataID={formImpactCoefficientID}
 				/>
