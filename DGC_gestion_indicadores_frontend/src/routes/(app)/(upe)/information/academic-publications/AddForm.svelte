@@ -22,6 +22,7 @@
 	import CalendarMY from '$lib/components/calendar/month-year.svelte';
 	import type { Message } from '$lib/components/combobox/combobox';
 	import type { Teacher } from '$lib/api/model/api/teacher';
+	import DetailedFieldsServer from '$lib/components/filters/detailedFields/detailedFieldsServer.svelte';
 	import { DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date';
 
 	export let data: SuperValidated<Infer<AddAcademicProductionSchema>, App.Superforms.Message>;
@@ -60,6 +61,8 @@
 	formDataScienceMagazineID.subscribe((value) => ($formData.science_magazine_id = value));
 	let formImpactCoefficientID = writable($formData.impact_coefficient_id);
 	formImpactCoefficientID.subscribe((value) => ($formData.impact_coefficient_id = value));
+	let formDataDetailedFieldID = writable($formData.detailed_field_id);
+	formDataDetailedFieldID.subscribe((value) => ($formData.detailed_field_id = value));
 
 	let placeholderStart = today(getLocalTimeZone()).set({ day: 1, month: 1 });
 
@@ -149,6 +152,9 @@
 				/>
 			</Form.Field>
 		</div>
+		<Form.Field {form} name="detailed_field_id">
+			<DetailedFieldsServer {formDataDetailedFieldID}></DetailedFieldsServer>
+		</Form.Field>
 		<div class="grid grid-cols-2 justify-between gap-4">
 			<Form.Field {form} name="impact_coefficient_id" class="flex flex-col">
 				<FormSelect
