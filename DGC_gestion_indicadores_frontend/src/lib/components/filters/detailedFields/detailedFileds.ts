@@ -3,6 +3,8 @@ import type { PopoverFilterDataMap } from "$lib/components/table/types";
 
 import type { CommonError } from "$lib/api/model/errors";
 import { goto } from "$app/navigation";
+import { toast } from "svelte-sonner";
+
 
 export function newFilterDetailedFieldsRequest(page_size: number, page: number): FilterDetailedFieldRequest {
     let filterDetailedFieldRequest: FilterDetailedFieldRequest = {
@@ -52,4 +54,23 @@ export async function fetchFilterDetailedFields(filterDetailedFieldRequest: Filt
         throw errorData;
     }
     return response.json();
+}
+
+export async function fetchOnFilterChanged(filter: string, filterDetailedFieldRequest: FilterDetailedFieldRequest, popoverFilterDataMap: PopoverFilterDataMap): Promise<FilterDetailedFieldResponse> {
+    popoverFilterDataMap.forEach((_, key) => {
+        (filterDetailedFieldRequest as any)[key] = filter;
+    });
+
+    return fetchFilterDetailedFields(filterDetailedFieldRequest).then(
+        (response: FilterDetailedFieldResponse) => {
+            if (response.count === 0) {
+                toast.warning(`No hay datos para el filtro: ${filter}`);
+                popoverFilterDataMap.forEach((_, key) => {
+                    (filterDetailedFieldRequest as any)[key] = '';
+                });
+                return fetchFilterDetailedFields(filterDetailedFieldRequest);
+            }
+            return response;
+        }
+    );
 }

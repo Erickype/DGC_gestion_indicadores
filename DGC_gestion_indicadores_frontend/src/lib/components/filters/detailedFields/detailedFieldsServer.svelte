@@ -9,6 +9,7 @@
 	} from '$lib/api/model/api/knowledgeFields/detailedFields';
 	import {
 		fetchFilterDetailedFields,
+		fetchOnFilterChanged,
 		generateInitialFilterValue,
 		newFilterDetailedFieldsRequest,
 		newPopoverFilterDataMap
@@ -31,7 +32,7 @@
 		fetchFilterDetailedFields(filterDetailedFieldRequest);
 	let teachersPopoverFilterDataMap: PopoverFilterDataMap = newPopoverFilterDataMap();
 
-	/* function handleOnTeachersFilterChanged() {
+	function handleOnFilterChanged() {
 		filterDetailedFieldResponsePromise = fetchOnFilterChanged(
 			teachersFilterValue.trim(),
 			filterDetailedFieldRequest,
@@ -39,7 +40,7 @@
 		);
 	}
 
-	async function handleOnDetailedFilter() {
+	/* async function handleOnDetailedFilter() {
 		filterDetailedFieldResponsePromise = fetchOnDetailedFilter(
 			filterDetailedFieldRequest,
 			teachersPopoverFilterDataMap
@@ -71,5 +72,6 @@
 		)}
 		bind:openCombo={openTeachers}
 		bind:formDataID={formDataDetailedFieldID}
+		on:filterChanged={handleOnFilterChanged}
 	/>
 {/await}
