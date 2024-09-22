@@ -3,6 +3,8 @@ import { z } from "zod";
 export const addAcademicProductionSchema = z.object({
     doi: z.string({
         required_error: "DOI requerido"
+    }).url({
+        message:"URL inválida"
     }).max(1000),
 
     academicPeriod: z.number({
