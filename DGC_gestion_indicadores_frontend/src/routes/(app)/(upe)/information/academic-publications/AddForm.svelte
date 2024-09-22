@@ -149,30 +149,32 @@
 				/>
 			</Form.Field>
 		</div>
-		<Form.Field {form} name="impact_coefficient_id" class="flex flex-col">
-			<FormSelect
-				formLabel="Coefficiente impacto"
-				comboData={impactCoefficientsComboData}
-				bind:formDataID={formImpactCoefficientID}
-			/>
-		</Form.Field>
-		<Form.Field
-			{form}
-			name="intercultural_component"
-			class="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"
-		>
-			<Form.Control let:attrs>
-				<Checkbox {...attrs} bind:checked={$formData.intercultural_component} />
-				<div class="space-y-1 leading-none">
-					<Form.Label
-						>{!$formData.intercultural_component
-							? 'No tiene componente intercultural'
-							: 'Tiene componente intercultural'}</Form.Label
-					>
-				</div>
-				<input name={attrs.name} value={$formData.intercultural_component} hidden />
-			</Form.Control>
-		</Form.Field>
+		<div class="grid grid-cols-2 justify-between gap-4">
+			<Form.Field {form} name="impact_coefficient_id" class="flex flex-col">
+				<FormSelect
+					formLabel="Coefficiente impacto"
+					comboData={impactCoefficientsComboData}
+					bind:formDataID={formImpactCoefficientID}
+				/>
+			</Form.Field>
+			<Form.Field
+				{form}
+				name="intercultural_component"
+				class="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"
+			>
+				<Form.Control let:attrs>
+					<Checkbox {...attrs} bind:checked={$formData.intercultural_component} />
+					<div class="space-y-1 leading-none">
+						<Form.Label
+							>{!$formData.intercultural_component
+								? 'Sin componente intercultural'
+								: 'Con componente intercultural'}</Form.Label
+						>
+					</div>
+					<input name={attrs.name} value={$formData.intercultural_component} hidden />
+				</Form.Control>
+			</Form.Field>
+		</div>
 	</div>
 	<Form.Button class="my-2 w-full">Guardar</Form.Button>
 	<!-- {#if browser}
