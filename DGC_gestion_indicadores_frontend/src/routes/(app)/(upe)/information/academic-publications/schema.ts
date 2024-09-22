@@ -17,10 +17,10 @@ export const addAcademicProductionSchema = z.object({
         required_error: "Nombre publicación requerido"
     }).max(1000),
 
-    publication_type_id: z.number({
-        required_error: "Tipo publicación requirida"
+    detailed_field_id: z.number({
+        required_error: "Campo detallado requirido"
     }).gt(0, {
-        message: "Ingrese un tipo publicación válida"
+        message: "Ingrese un campo detallado válida"
     }),
 
     science_magazine_id: z.number({
