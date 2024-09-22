@@ -128,7 +128,7 @@ func serveApplication() {
 	upeRoutes.POST("/author/fromPerson", author.PostAuthorFromPerson)
 	upeRoutes.POST("/authors/filter", author.FilterAuthors)
 
-	upeRoutes.GET("/detailedFields/filter", knowledgeField.FilterDetailedFields)
+	upeRoutes.POST("/detailedFields/filter", knowledgeField.FilterDetailedFields)
 
 	// Indicators information routes
 	indicatorsInformationRoutes := router.Group("/api/indicators/information")
