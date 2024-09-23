@@ -10,10 +10,10 @@ export interface FilterDetailedFieldResponse {
     count: number,
     page_size: number,
     page: number,
-    detailed_fields: DetailedFilterJoined[]
+    detailed_fields: DetailedFieldJoined[]
 }
 
-export interface DetailedFilterJoined {
+export interface DetailedFieldJoined {
     wide_field_id: number,
     wide_field: string,
     specific_field_id: number,
