@@ -15,7 +15,7 @@ type FilterDetailedFieldRequest struct {
 	Page          int    `json:"page"`
 }
 
-type DetailedFilterJoined struct {
+type DetailedFieldJoined struct {
 	WideFieldID     uint   `json:"wide_field_id"`
 	WideField       string `json:"wide_field"`
 	SpecificFieldID uint   `json:"specific_field_id"`
@@ -25,10 +25,10 @@ type DetailedFilterJoined struct {
 }
 
 type FilterDetailedFieldResponse struct {
-	Count          int64                  `json:"count"`
-	PageSize       int                    `json:"page_size"`
-	Page           int                    `json:"page"`
-	DetailedFields []DetailedFilterJoined `json:"detailed_fields"`
+	Count          int64                 `json:"count"`
+	PageSize       int                   `json:"page_size"`
+	Page           int                   `json:"page"`
+	DetailedFields []DetailedFieldJoined `json:"detailed_fields"`
 }
 
 func FilterDetailedFields(
@@ -89,6 +89,27 @@ func FilterDetailedFields(
 		filterDetailedFieldResponse.Page = 1
 	} else {
 		filterDetailedFieldResponse.Page = page
+	}
+	return nil
+}
+
+func GetDetailedFilterJoinedByDetailedFieldID(detailedFieldID int, response *DetailedFieldJoined) (err error) {
+	err = database.DB.Table("detailed_fields df").
+		Select(
+			`wf.id as wide_field_id,
+			wf.name as wide_field,
+			sf.id as specific_field_id,
+			sf.name as specific_field,
+			df.id as detailed_field_id,
+			df.name as detailed_field`,
+		).
+		Joins(`join specific_fields sf on sf.id = df.specific_field_id`).
+		Joins("join wide_fields wf on wf.id = sf.wide_field_id").
+		Where("df.id = ?", detailedFieldID).
+		Scan(&response).Error
+
+	if err != nil {
+		return err
 	}
 	return nil
 }

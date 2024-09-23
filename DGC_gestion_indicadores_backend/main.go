@@ -129,6 +129,7 @@ func serveApplication() {
 	upeRoutes.POST("/authors/filter", author.FilterAuthors)
 
 	upeRoutes.POST("/detailedFields/filter", knowledgeField.FilterDetailedFields)
+	upeRoutes.GET("/detailedField/joined/:id", knowledgeField.GetDetailedFilterJoinedByDetailedFieldID)
 
 	// Indicators information routes
 	indicatorsInformationRoutes := router.Group("/api/indicators/information")
