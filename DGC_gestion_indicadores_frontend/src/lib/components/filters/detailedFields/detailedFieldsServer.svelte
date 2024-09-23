@@ -5,10 +5,11 @@
 	import type {
 		FilterDetailedFieldRequest,
 		FilterDetailedFieldResponse,
-		DetailedFilterJoined
+		DetailedFieldJoined
 	} from '$lib/api/model/api/knowledgeFields/detailedFields';
 	import {
 		fetchFilterDetailedFields,
+		fetchGetDetailedFieldJoinedByDetailedFieldID,
 		fetchOnFilterChanged,
 		generateInitialFilterValue,
 		newFilterDetailedFieldsRequest,
@@ -17,17 +18,19 @@
 	import type { PopoverFilterDataMap } from '../../table/types';
 
 	import { writable } from 'svelte/store';
-	import { GenerateComboMessagesFromDetailedFilterJoined } from '$lib/api/controller/api/knowledgeFields/detailedFieldsFilter';
+	import { GenerateComboMessagesFromDetailedFieldJoined } from '$lib/api/controller/api/knowledgeFields/detailedFieldsFilter';
 
 	export let formDataDetailedFieldID = writable();
-	/* 	let teacherPerson: Promise<TeacherPerson>;
-	 */
+	let detailedFieldJoinedPromise: Promise<DetailedFieldJoined>;
+
 	let openTeachers = false;
 	let filterDetailedFieldRequest: FilterDetailedFieldRequest = newFilterDetailedFieldsRequest(5, 1);
 	let teachersFilterValue: string = '';
 
-	/* 	teacherPerson = fetchTeacherPersonJoinedByTeacherID($formDataDetailedFieldID as string);
-	 */
+	detailedFieldJoinedPromise = fetchGetDetailedFieldJoinedByDetailedFieldID(
+		$formDataDetailedFieldID as string
+	);
+
 	let filterDetailedFieldResponsePromise: Promise<FilterDetailedFieldResponse> =
 		fetchFilterDetailedFields(filterDetailedFieldRequest);
 	let teachersPopoverFilterDataMap: PopoverFilterDataMap = newPopoverFilterDataMap();
@@ -52,22 +55,22 @@
 	} */
 </script>
 
-{#await Promise.all([filterDetailedFieldResponsePromise])}
+{#await Promise.all([filterDetailedFieldResponsePromise, detailedFieldJoinedPromise])}
 	<FormFieldSkeleton />
-{:then [filterDetailedFieldResponse]}
-	<!-- {#if resolvedTeacherPerson.ID}
-		{#if !filterDetailedFieldResponse.teachers.some((teacher) => teacher.ID === resolvedTeacherPerson.ID)}
+{:then [filterDetailedFieldResponse, detailedFieldJoinedResponse]}
+	{#if detailedFieldJoinedResponse.detailed_field_id}
+		{#if !filterDetailedFieldResponse.detailed_fields.some((detailedField) => detailedField.detailed_field_id === detailedFieldJoinedResponse.detailed_field_id)}
 			<p class="hidden">
-				{filterDetailedFieldResponse.teachers.unshift(resolvedTeacherPerson)}
+				{filterDetailedFieldResponse.detailed_fields.unshift(detailedFieldJoinedResponse)}
 			</p>
 		{/if}
-	{/if} -->
+	{/if}
 
 	<ServerFormSelect
 		bind:filterValue={teachersFilterValue}
 		formLabel="Campo detallado"
 		bind:popoverFilterDataMap={teachersPopoverFilterDataMap}
-		comboData={GenerateComboMessagesFromDetailedFilterJoined(
+		comboData={GenerateComboMessagesFromDetailedFieldJoined(
 			filterDetailedFieldResponse.detailed_fields
 		)}
 		bind:openCombo={openTeachers}
