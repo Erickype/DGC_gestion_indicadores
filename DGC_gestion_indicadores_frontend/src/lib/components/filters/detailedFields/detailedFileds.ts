@@ -1,4 +1,4 @@
-import type { FilterDetailedFieldRequest, FilterDetailedFieldResponse } from "$lib/api/model/api/knowledgeFields/detailedFields";
+import type { DetailedFieldJoined, FilterDetailedFieldRequest, FilterDetailedFieldResponse } from "$lib/api/model/api/knowledgeFields/detailedFields";
 import type { PopoverFilterDataMap } from "$lib/components/table/types";
 
 import type { CommonError } from "$lib/api/model/errors";
@@ -45,6 +45,21 @@ export async function fetchFilterDetailedFields(filterDetailedFieldRequest: Filt
     const response = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(filterDetailedFieldRequest)
+    });
+    if (!response.ok) {
+        const errorData = (await response.json()) as CommonError;
+        if (response.status === 401) {
+            throw goto('/');
+        }
+        throw errorData;
+    }
+    return response.json();
+}
+
+export async function fetchGetDetailedFieldJoinedByDetailedFieldID(detailedFieldID: string): Promise<DetailedFieldJoined> {
+    const url = `/api/knowledgeFields/detailedField/joined/` + detailedFieldID;
+    const response = await fetch(url, {
+        method: 'GET',
     });
     if (!response.ok) {
         const errorData = (await response.json()) as CommonError;

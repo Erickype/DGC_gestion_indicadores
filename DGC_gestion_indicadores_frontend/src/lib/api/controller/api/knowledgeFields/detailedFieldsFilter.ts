@@ -1,5 +1,5 @@
-import type { DetailedFilterJoined, FilterDetailedFieldRequest, FilterDetailedFieldResponse } from "$lib/api/model/api/knowledgeFields/detailedFields"
-import { postFilterDetailedFieldsRoute } from "$lib/api/routes/api/knowledgeFields/detailedFields"
+import type { DetailedFieldJoined, FilterDetailedFieldRequest, FilterDetailedFieldResponse } from "$lib/api/model/api/knowledgeFields/detailedFields"
+import { getDetailedFieldJoinedByDetailedFieldIDRoute, postFilterDetailedFieldsRoute } from "$lib/api/routes/api/knowledgeFields/detailedFields"
 
 import { generateCommonErrorFromFetchError } from "$lib/utils"
 import type { CommonError } from "$lib/api/model/errors"
@@ -27,7 +27,30 @@ export async function PostFilterDetailedFields(token: string, filterDetailedFiel
     }
 }
 
-export function GenerateComboMessagesFromDetailedFilterJoined(detailedFields: DetailedFilterJoined[]): Message[] {
+export async function GetDetailedFieldJoinedByDetailedFieldID(token: string, detailedFieldID: string): Promise<DetailedFieldJoined | CommonError> {
+    try {
+        const response = await fetch(getDetailedFieldJoinedByDetailedFieldIDRoute + detailedFieldID, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+        })
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            
+            console.log(error);
+            return error
+        }
+        const detailedField: DetailedFieldJoined = await response.json()
+        return detailedField
+
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
+}
+
+export function GenerateComboMessagesFromDetailedFieldJoined(detailedFields: DetailedFieldJoined[]): Message[] {
     let messages: Message[] = []
     messages = messages.concat(
         detailedFields.map((detailedField) => ({
