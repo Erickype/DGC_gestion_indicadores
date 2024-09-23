@@ -38,8 +38,6 @@ export async function GetDetailedFieldJoinedByDetailedFieldID(token: string, det
         })
         if (!response.ok) {
             const error: CommonError = await response.json()
-            
-            console.log(error);
             return error
         }
         const detailedField: DetailedFieldJoined = await response.json()
