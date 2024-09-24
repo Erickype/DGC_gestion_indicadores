@@ -17,13 +17,13 @@
 	import * as Form from '$lib/components/ui/form';
 	import { toast } from 'svelte-sonner';
 
+	import type { AcademicProductionList } from '$lib/api/model/api/indicatorsInformation/academicProductionLists';
+	import DetailedFieldsServer from '$lib/components/filters/detailedFields/detailedFieldsServer.svelte';
 	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
+	import { DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date';
 	import FormSelect from '$lib/components/combobox/formSelect.svelte';
 	import CalendarMY from '$lib/components/calendar/month-year.svelte';
 	import type { Message } from '$lib/components/combobox/combobox';
-	import type { Teacher } from '$lib/api/model/api/teacher';
-	import DetailedFieldsServer from '$lib/components/filters/detailedFields/detailedFieldsServer.svelte';
-	import { DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date';
 
 	export let data: SuperValidated<Infer<AddAcademicProductionSchema>, App.Superforms.Message>;
 	export let comboMessages: Message[][];
@@ -32,7 +32,7 @@
 
 	const dispatch = createEventDispatcher();
 
-	function TeacherCreated() {
+	function AcademicProductionCreated() {
 		dispatch('message', {
 			created: true
 		});
@@ -47,9 +47,9 @@
 				return manageToastFromInvalidAddForm();
 			}
 			if (message.success) {
-				const teacher = message.data as Teacher;
-				TeacherCreated();
-				return toast.success(`Docente creado: ${teacher.person_id}`);
+				const academicProduction = message.data as AcademicProductionList;
+				AcademicProductionCreated();
+				return toast.success(`Publicación creada: ${academicProduction.publication_name}`);
 			}
 			return manageToastFromErrorMessageOnAddForm(message);
 		}
@@ -81,7 +81,7 @@
 	}
 </script>
 
-<form action="?/addTeacher" use:enhance>
+<form action="?/postAcademicProductionList" use:enhance>
 	<div class="flex flex-col gap-2">
 		<Form.Field {form} name="academicPeriod">
 			<Form.Control let:attrs>
