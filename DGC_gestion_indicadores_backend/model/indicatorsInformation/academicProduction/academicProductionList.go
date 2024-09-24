@@ -1,11 +1,14 @@
 package model
 
 import (
+	"errors"
+	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicPeriod"
 	academicProduction "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicProduction"
 	knowledgeField "github.com/Erickype/DGC_gestion_indicadores_backend/model/knowledgeField"
 	"gorm.io/datatypes"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -30,4 +33,15 @@ type AcademicProductionList struct {
 
 func (apl *AcademicProductionList) TableName() string {
 	return model.IndicatorsInformationSchema + ".academic_production_lists"
+}
+
+func PostAcademicProductionList(request *AcademicProductionList) (err error) {
+	err = database.DB.Create(request).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("publicación académica en lista ya existe")
+		}
+		return err
+	}
+	return nil
 }

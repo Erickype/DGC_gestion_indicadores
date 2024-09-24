@@ -146,6 +146,7 @@ func serveApplication() {
 
 	indicatorsInformationRoutes.POST("/academicProductionLists/filter",
 		indicatorsInformationAcademicProduction.FilterAcademicProductionListsByAcademicPeriod)
+	indicatorsInformationRoutes.POST("/academicProductionList", indicatorsInformationAcademicProduction.PostAcademicProductionList)
 
 	// Indicators routes
 	indicatorsRoutes := router.Group("/api/indicators/")
