@@ -10,7 +10,7 @@ export function newFilterAcademicProductionListsByAcademiPeriodRequest(page_size
         doi: '',
         publication_date: '',
         publication_name: '',
-        publication_type: '',
+        detailed_field: '',
         science_magazine: '',
         impact_coefficient: '',
         career: '',
@@ -42,7 +42,7 @@ export function newPopoverFilterDataMap(): PopoverFilterDataMap {
     popoverFilterDataMap.set('doi', { label: 'DOI', value: '' });
     popoverFilterDataMap.set('publication_date', { label: 'Fecha', value: '' });
     popoverFilterDataMap.set('publication_name', { label: 'Nombre', value: '' });
-    popoverFilterDataMap.set('publication_type', { label: 'Tipo', value: '' });
+    popoverFilterDataMap.set('detailed_field', { label: 'Campo detallado', value: '' });
     popoverFilterDataMap.set('science_magazine', { label: 'Revista', value: '' });
     popoverFilterDataMap.set('impact_coefficient', { label: 'Coeficiente', value: '' });
     popoverFilterDataMap.set('career', { label: 'Carrera', value: '' });
