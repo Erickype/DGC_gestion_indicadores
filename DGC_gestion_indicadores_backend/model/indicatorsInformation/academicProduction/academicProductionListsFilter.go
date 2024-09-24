@@ -21,6 +21,7 @@ type FilterAcademicProductionListsByAcademicPeriodRequest struct {
 }
 
 type AcademicProductionListByAcademicPeriodJoined struct {
+	ID                       uint
 	DOI                      string `json:"doi"`
 	PublicationDate          string `json:"publication_date"`
 	PublicationName          string `json:"publication_name"`
@@ -61,7 +62,7 @@ func FilterAcademicProductionListsByAcademicPeriod(
 		values = append(values, fmt.Sprintf("%%%s%%", strings.ToLower(filterAcademicProductionListsRequest.PublicationName)))
 	}
 	if filterAcademicProductionListsRequest.DetailedField != "" {
-		conditions = append(conditions, "LOWER(pt.name) LIKE ?")
+		conditions = append(conditions, "LOWER(df.name) LIKE ?")
 		values = append(values, fmt.Sprintf("%%%s%%", strings.ToLower(filterAcademicProductionListsRequest.DetailedField)))
 	}
 	if filterAcademicProductionListsRequest.ScienceMagazine != "" {
@@ -82,22 +83,23 @@ func FilterAcademicProductionListsByAcademicPeriod(
 	}
 
 	query = query.Select(
-		`apl.doi,
+		`apl.id,
+		apl.doi,
 		apl.publication_date,
 		apl.publication_name,
-		apl.publication_type_id,
-		pt.name as publication_type,
+		apl.detailed_field_id,
+		df.name as detailed_field,
 		apl.science_magazine_id,
 		sm.name as science_magazine,
 		apl.impact_coefficient_id,
 		ad.name || ' ' || cf.name as impact_coefficient,
 		apl.intercultural_component`,
 	).Joins(
-		`join publication_types pt on apl.publication_type_id = pt.id
-		join science_magazines sm on apl.science_magazine_id = sm.id
+		`join science_magazines sm on apl.science_magazine_id = sm.id
 		join impact_coefficients ic on apl.impact_coefficient_id = ic.id
 		join academic_databases ad on ic.academic_database_id = ad.id
-		join compensation_factors cf on ic.compensation_factor_id = cf.id`,
+		join compensation_factors cf on ic.compensation_factor_id = cf.id
+		join detailed_fields df on apl.detailed_field_id = df.id`,
 	).Where(
 		"apl.academic_period_id = ?", filterAcademicProductionListsRequest.AcademicPeriodID,
 	)
