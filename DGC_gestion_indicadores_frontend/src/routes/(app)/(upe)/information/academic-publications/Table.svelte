@@ -99,13 +99,13 @@
 			}
 		}),
 		table.column({
-			accessor: ({ doi }) => doi,
+			accessor: ({ ID }) => ID,
 			header: '',
 			cell: ({ value }) => {
 				const actions = createRender(DataTableActions, {
 					id: `${value}`,
 					moreAction: true,
-					moreActionURL: `/information/teachers/`
+					moreActionURL: `/information/academic-publications/`
 				});
 				actions.on('delete-confirmation', handleDeleteConfirmation);
 				actions.on('update-action', handleUpdateAction);

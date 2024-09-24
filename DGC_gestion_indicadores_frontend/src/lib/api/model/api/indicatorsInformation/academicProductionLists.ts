@@ -27,6 +27,7 @@ export interface FilterAcademicProductionListsByAcademicPeriodRequest {
 }
 
 export interface AcademicProductionListByAcademicPeriodJoined {
+    ID: number
     doi: string
     publication_date: string
     publication_name: string
