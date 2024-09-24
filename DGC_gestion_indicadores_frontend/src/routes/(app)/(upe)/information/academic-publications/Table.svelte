@@ -36,7 +36,7 @@
 		'doi',
 		'publication_date',
 		'publication_name',
-		'publication_type',
+		'detailed_field',
 		'science_magazine',
 		'impact_coefficient',
 		'career',
@@ -77,8 +77,8 @@
 			header: 'Nombre'
 		}),
 		table.column({
-			accessor: 'publication_type',
-			header: 'Tipo'
+			accessor: 'detailed_field',
+			header: 'Campo detallado'
 		}),
 		table.column({
 			accessor: 'science_magazine',
