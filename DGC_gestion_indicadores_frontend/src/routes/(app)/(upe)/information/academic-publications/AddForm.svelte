@@ -115,7 +115,7 @@
 		<div class="grid grid-cols-2 justify-between gap-4">
 			<Form.Field {form} name="publication_date" class="flex flex-col">
 				<Form.Control let:attrs>
-					<Form.Label>Fecha inicio</Form.Label>
+					<Form.Label>Fecha publicación</Form.Label>
 					<Popover.Root>
 						<Popover.Trigger
 							{...attrs}

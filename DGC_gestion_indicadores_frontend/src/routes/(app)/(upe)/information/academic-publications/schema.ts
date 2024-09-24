@@ -4,7 +4,7 @@ export const addAcademicProductionSchema = z.object({
     doi: z.string({
         required_error: "DOI requerido"
     }).url({
-        message:"URL inválida"
+        message: "URL inválida"
     }).max(1000),
 
     academicPeriod: z.number({
@@ -13,16 +13,20 @@ export const addAcademicProductionSchema = z.object({
         message: "Ingrese un periodo válido"
     }),
 
-    publication_date: z.string().refine((v) => v, { message: "Fecha publicación requerida" }),
+    publication_date: z.string({
+        required_error: "Fecha publicación requerida"
+    }).refine((v) => v, { message: "Fecha publicación requerida" }),
 
     publication_name: z.string({
         required_error: "Nombre publicación requerido"
-    }).max(1000),
+    }).max(1000).min(5, {
+        message: "Ingrese un nombre válido"
+    }),
 
     detailed_field_id: z.number({
-        required_error: "Campo detallado requirido"
+        required_error: "Campo detallado requerido"
     }).gt(0, {
-        message: "Ingrese un campo detallado válida"
+        message: "Ingrese un campo detallado válido"
     }),
 
     science_magazine_id: z.number({
