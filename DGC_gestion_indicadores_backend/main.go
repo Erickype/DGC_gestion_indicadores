@@ -148,6 +148,9 @@ func serveApplication() {
 		indicatorsInformationAcademicProduction.FilterAcademicProductionListsByAcademicPeriod)
 	indicatorsInformationRoutes.POST("/academicProductionList", indicatorsInformationAcademicProduction.PostAcademicProductionList)
 
+	indicatorsInformationRoutes.GET("/academicProductionListAuthor/previousCareers/:authorID",
+		indicatorsInformationAcademicProduction.GetAcademicProductionListAuthorPreviousCareers)
+
 	// Indicators routes
 	indicatorsRoutes := router.Group("/api/indicators/")
 	indicatorsRoutes.Use(util.JWTAuth(), util.JWTAuthUPE())
