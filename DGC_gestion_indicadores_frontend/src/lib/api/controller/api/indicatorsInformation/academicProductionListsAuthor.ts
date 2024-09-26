@@ -3,7 +3,7 @@ import type { CommonError } from "$lib/api/model/errors";
 import { getAcademicProductionListsAuthorsJoinedByAcademicProductionListID } from "$lib/api/routes/api/indicatorsInformation/academicProductionListsAuthor";
 import { generateCommonErrorFromFetchError } from "$lib/utils";
 
-export async function GetAcademicProductionListsAuthorsJoinedByAcademicProductionListID(token: string, academicProductionListID: number) {
+export async function GetAcademicProductionListsAuthorsJoinedByAcademicProductionListID(token: string, academicProductionListID: string): Promise<AcademicProductionListsAuthorsCareersJoined[] | CommonError> {
     try {
         const response = await fetch(getAcademicProductionListsAuthorsJoinedByAcademicProductionListID + academicProductionListID, {
             method: 'GET',
@@ -20,7 +20,6 @@ export async function GetAcademicProductionListsAuthorsJoinedByAcademicProductio
         const academicProductionListsAuthorsCareersJoined: AcademicProductionListsAuthorsCareersJoined[] = await response.json()
         return academicProductionListsAuthorsCareersJoined
     } catch (error) {
-        
         return generateCommonErrorFromFetchError(error)
     }
 }
