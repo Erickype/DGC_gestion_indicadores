@@ -1,6 +1,7 @@
 import type { Career } from "../career"
 
-export interface AcademicProductionListsAuthorsCareersJoined{
+export interface AcademicProductionListsAuthorsCareersJoined {
     author_id: number
+    author: string
     careers: Career[]
 }

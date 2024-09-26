@@ -8,22 +8,22 @@
 	import Table from '$lib/components/table/table.svelte';
 	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
 
-/* 	import UpdateForm from './UpdateForm.svelte';
- */
+	/* 	import UpdateForm from './UpdateForm.svelte';
+	 */
 	import { createEventDispatcher } from 'svelte';
 	import { toast } from 'svelte-sonner';
 
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 
-/* 	import type { UpdateCarrerSchema } from './schema';
- */	import type { Career } from '$lib/api/model/api/career';
+	/* 	import type { UpdateCarrerSchema } from './schema';
+	 */ import type { Career } from '$lib/api/model/api/career';
 	import type { AcademicProductionListsAuthorsCareersJoined } from '$lib/api/model/api/indicatorsInformation/academicProductionListsAuthor';
 
 	export let authorsCareers: AcademicProductionListsAuthorsCareersJoined[];
-/* 	export let formData: SuperValidated<Infer<UpdateCarrerSchema>>;
- */	let career: Career;
+	/* 	export let formData: SuperValidated<Infer<UpdateCarrerSchema>>;
+	 */ let career: Career;
 
-	const filterFields = ['name', 'abbreviation'];
+	const filterFields = ['author', 'careers'];
 
 	const table = createTable(readable(authorsCareers), {
 		page: addPagination({
@@ -37,8 +37,20 @@
 
 	const columns = table.createColumns([
 		table.column({
-			accessor: 'author_id',
-			header: 'Nombre'
+			accessor: 'author',
+			header: 'Autor'
+		}),
+		table.column({
+			accessor: 'careers',
+			header: 'Carreras',
+			cell: ({ value }) => {
+				let label = '';
+				value.map((career) => {
+					label += career.name + ', ';
+				});
+				label = label.slice(0, label.length - 2);
+				return label;
+			}
 		}),
 		table.column({
 			accessor: ({ author_id }) => author_id,
@@ -95,6 +107,7 @@
 		}
 	}
 </script>
+
 <!-- 
 <UpdateModal
 	modalTitle="Actualizar información carrera"
