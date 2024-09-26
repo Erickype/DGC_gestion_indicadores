@@ -21,8 +21,9 @@ type AcademicProductionListsAuthor struct {
 }
 
 type AcademicProductionListsAuthorsCareersJoined struct {
-	AuthorID uint            `gorm:"primary_key" json:"author_id"`
-	Careers  []career.Career `json:"careers"`
+	AuthorID uint            `json:"author_id"`
+	Author   string          `json:"author"`
+	Careers  []career.Career `json:"careers,omitempty"`
 }
 
 func (apl *AcademicProductionListsAuthor) TableName() string {
@@ -55,22 +56,28 @@ func GetAcademicProductionListAuthorPreviousCareers(authorID int, previousCareer
 
 func GetAcademicProductionListsAuthorsJoinedByAcademicProductionListID(
 	academicProductionListID int, response *[]AcademicProductionListsAuthorsCareersJoined) (err error) {
-	var academicProductionAuthors []uint
+	var academicProductionAuthors []struct {
+		Author   string `json:"author"`
+		AuthorId uint   `json:"author_id"`
+	}
 	err = database.DB.Table("indicators_information.academic_production_lists_authors apla").
-		Select("apla.author_id").
-		Group("apla.author_id").
+		Select(`p.name || ' ' || p.lastname as author,
+				apla.author_id`).
+		Joins("join authors a on apla.author_id = a.id").
+		Joins("join people p on a.person_id = p.id").
+		Group("apla.author_id, p.name, p.lastname").
 		Where("apla.academic_production_list_id = ?", academicProductionListID).
 		Scan(&academicProductionAuthors).Error
 	if err != nil {
 		return err
 	}
 
-	for _, authorID := range academicProductionAuthors {
+	for _, authorCareer := range academicProductionAuthors {
 		authorCareers := []career.Career{}
 		err = database.DB.Table("indicators_information.academic_production_lists_authors apla").
 			Select("c.*").
 			Joins("join careers c on apla.career_id = c.id").
-			Where("apla.author_id = ?", authorID).
+			Where("apla.author_id = ?", authorCareer.AuthorId).
 			Where("apla.academic_production_list_id = ?", academicProductionListID).
 			Scan(&authorCareers).Error
 		if err != nil {
@@ -78,7 +85,8 @@ func GetAcademicProductionListsAuthorsJoinedByAcademicProductionListID(
 		}
 
 		authorCareersJoined := AcademicProductionListsAuthorsCareersJoined{
-			AuthorID: authorID,
+			AuthorID: authorCareer.AuthorId,
+			Author:   authorCareer.Author,
 			Careers:  authorCareers,
 		}
 		*response = append(*response, authorCareersJoined)
