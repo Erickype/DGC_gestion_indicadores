@@ -150,7 +150,7 @@ func serveApplication() {
 
 	indicatorsInformationRoutes.GET("/academicProductionListAuthor/previousCareers/:authorID",
 		indicatorsInformationAcademicProduction.GetAcademicProductionListAuthorPreviousCareers)
-	indicatorsInformationRoutes.GET("/academicProductionListsAuthorsJoinedByAcademicProductionListID/:academicProductionListID",
+	indicatorsInformationRoutes.GET("/academicProductionListsAuthors/JoinedByAcademicProductionListID/:academicProductionListID",
 		indicatorsInformationAcademicProduction.GetAcademicProductionListsAuthorsJoinedByAcademicProductionListID)
 
 	// Indicators routes
