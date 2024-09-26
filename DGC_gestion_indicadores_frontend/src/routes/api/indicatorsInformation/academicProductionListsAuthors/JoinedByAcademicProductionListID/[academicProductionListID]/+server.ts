@@ -2,9 +2,10 @@ import { GetAcademicProductionListsAuthorsJoinedByAcademicProductionListID } fro
 import { generateErrorFromCommonError, type CommonError } from "$lib/api/model/errors";
 import { json, type RequestHandler } from "@sveltejs/kit";
 
-export const GET: RequestHandler = async ({ cookies, request }) => {
+export const GET: RequestHandler = async ({ cookies, params }) => {
     const token = cookies.get("AuthorizationToken")
-    const response = await GetAcademicProductionListsAuthorsJoinedByAcademicProductionListID(token!, await request.json())
+    const academicProductionID = params.academicProductionListID
+    const response = await GetAcademicProductionListsAuthorsJoinedByAcademicProductionListID(token!, academicProductionID!)
 
     if ((response as CommonError).status_code) {
         return generateErrorFromCommonError(response as CommonError)
