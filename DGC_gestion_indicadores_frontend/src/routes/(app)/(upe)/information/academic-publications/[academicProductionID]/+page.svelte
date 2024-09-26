@@ -9,11 +9,13 @@
 
 	import type { AcademicProductionListsAuthorsCareersJoined } from '$lib/api/model/api/indicatorsInformation/academicProductionListsAuthor';
 	import AddModal from '$lib/components/modal/AddModal.svelte';
+	import AddForm from './AddForm.svelte';
 	import type { CommonError } from '$lib/api/model/errors';
 	import Alert from '$lib/components/alert/alert.svelte';
 	import AuthorsCareersTable from './Table.svelte';
 
 	export let data: PageServerData;
+	let addAcademicProductionListsAuthorForm = data.addAcademicProductionListsAuthorForm;
 	let authorsCareersPromise: Promise<AcademicProductionListsAuthorsCareersJoined[]> =
 		fetchGetAcademicProductionListsAuthorsCareersJoined();
 
@@ -52,12 +54,12 @@
 		</Button>
 		<h2 class="text-2xl font-bold">Producción Académica Autores</h2>
 	</div>
-	<!-- <AddModal
-		formComponent={AddDegreeAndTeachersListsDegreeForm}
+	<AddModal
+		formComponent={AddForm}
 		modalTitle="Añadir autor"
-		formData={addDegreeAndTeachersListsDegreeForm}
+		formData={addAcademicProductionListsAuthorForm}
 		on:created={fetchOnSuccess}
-	/> -->
+	/>
 </div>
 
 <div class="mx-auto flex w-full place-content-center px-8">
