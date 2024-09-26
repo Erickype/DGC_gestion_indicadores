@@ -19,3 +19,15 @@ func GetAcademicProductionListAuthorPreviousCareers(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, previousCareers)
 }
+
+func GetAcademicProductionListsAuthorsJoinedByAcademicProductionListID(c *gin.Context) {
+	academicProductionListID, _ := strconv.Atoi(c.Param("academicProductionListID"))
+	response := []model.AcademicProductionListsAuthorsCareersJoined{}
+	err := model.GetAcademicProductionListsAuthorsJoinedByAcademicProductionListID(
+		academicProductionListID, &response)
+	if err != nil {
+		errors.InternalServerErrorResponse(c, "Error retornando autores", err)
+		return
+	}
+	c.JSON(http.StatusOK, response)
+}

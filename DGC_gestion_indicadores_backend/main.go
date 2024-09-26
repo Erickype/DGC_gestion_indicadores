@@ -150,6 +150,8 @@ func serveApplication() {
 
 	indicatorsInformationRoutes.GET("/academicProductionListAuthor/previousCareers/:authorID",
 		indicatorsInformationAcademicProduction.GetAcademicProductionListAuthorPreviousCareers)
+	indicatorsInformationRoutes.GET("/academicProductionListsAuthorsJoinedByAcademicProductionListID/:academicProductionListID",
+		indicatorsInformationAcademicProduction.GetAcademicProductionListsAuthorsJoinedByAcademicProductionListID)
 
 	// Indicators routes
 	indicatorsRoutes := router.Group("/api/indicators/")

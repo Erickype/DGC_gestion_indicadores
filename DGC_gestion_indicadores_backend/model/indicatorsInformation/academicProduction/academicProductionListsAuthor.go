@@ -20,6 +20,11 @@ type AcademicProductionListsAuthor struct {
 	Career                 career.Career             `json:"-"`
 }
 
+type AcademicProductionListsAuthorsCareersJoined struct {
+	AuthorID uint            `gorm:"primary_key" json:"author_id"`
+	Careers  []career.Career `json:"careers"`
+}
+
 func (apl *AcademicProductionListsAuthor) TableName() string {
 	return model.IndicatorsInformationSchema + ".academic_production_lists_authors"
 }
@@ -44,6 +49,39 @@ func GetAcademicProductionListAuthorPreviousCareers(authorID int, previousCareer
 
 	if err != nil {
 		return err
+	}
+	return nil
+}
+
+func GetAcademicProductionListsAuthorsJoinedByAcademicProductionListID(
+	academicProductionListID int, response *[]AcademicProductionListsAuthorsCareersJoined) (err error) {
+	var academicProductionAuthors []uint
+	err = database.DB.Table("indicators_information.academic_production_lists_authors apla").
+		Select("apla.author_id").
+		Group("apla.author_id").
+		Where("apla.academic_production_list_id = ?", academicProductionListID).
+		Scan(&academicProductionAuthors).Error
+	if err != nil {
+		return err
+	}
+
+	for _, authorID := range academicProductionAuthors {
+		authorCareers := []career.Career{}
+		err = database.DB.Table("indicators_information.academic_production_lists_authors apla").
+			Select("c.*").
+			Joins("join careers c on apla.career_id = c.id").
+			Where("apla.author_id = ?", authorID).
+			Where("apla.academic_production_list_id = ?", academicProductionListID).
+			Scan(&authorCareers).Error
+		if err != nil {
+			return err
+		}
+
+		authorCareersJoined := AcademicProductionListsAuthorsCareersJoined{
+			AuthorID: authorID,
+			Careers:  authorCareers,
+		}
+		*response = append(*response, authorCareersJoined)
 	}
 	return nil
 }
