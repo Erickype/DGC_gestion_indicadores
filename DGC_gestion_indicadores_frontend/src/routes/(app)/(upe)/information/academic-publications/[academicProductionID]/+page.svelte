@@ -19,6 +19,8 @@
 	let authorsCareersPromise: Promise<AcademicProductionListsAuthorsCareersJoined[]> =
 		fetchGetAcademicProductionListsAuthorsCareersJoined();
 
+	addAcademicProductionListsAuthorForm.data.academicProductionID = data.academicProductionID;
+
 	async function fetchGetAcademicProductionListsAuthorsCareersJoined() {
 		const url = `/api/indicatorsInformation/academicProductionListsAuthors/JoinedByAcademicProductionListID/${data.academicProductionID}`;
 		const response = await fetch(url, {
