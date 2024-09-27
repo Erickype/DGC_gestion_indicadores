@@ -125,6 +125,7 @@ func serveApplication() {
 	upeRoutes.GET("/degreeLevels", degree.GetDegreeLevels)
 
 	upeRoutes.POST("/author", author.PostAuthor)
+	upeRoutes.GET("/author/joined/:id", author.GetAuthorPersonJoinedByAuthorID)
 	upeRoutes.POST("/author/fromPerson", author.PostAuthorFromPerson)
 	upeRoutes.POST("/authors/filter", author.FilterAuthors)
 
