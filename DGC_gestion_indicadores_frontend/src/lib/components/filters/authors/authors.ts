@@ -1,4 +1,4 @@
-import type { FilterAuthorsRequest, FilterAuthorsResponse } from "$lib/api/model/api/academicProduction/authors/authorsFilter";
+import type { AuthorPerson, FilterAuthorsRequest, FilterAuthorsResponse } from "$lib/api/model/api/academicProduction/authors/authorsFilter";
 import type { PopoverFilterDataMap } from "$lib/components/table/types";
 import type { CommonError } from "$lib/api/model/errors";
 
@@ -47,6 +47,21 @@ export async function fetchFilterAuthors(filterAuthorsRequest: FilterAuthorsRequ
     const response = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(filterAuthorsRequest)
+    });
+    if (!response.ok) {
+        const errorData = (await response.json()) as CommonError;
+        if (response.status === 401) {
+            throw goto('/');
+        }
+        throw errorData;
+    }
+    return response.json();
+}
+
+export async function fetchAuthorPersonJoinedByAuthorID(authorID: string): Promise<AuthorPerson> {
+    const url = `/api/author/joined/` + authorID;
+    const response = await fetch(url, {
+        method: 'GET',
     });
     if (!response.ok) {
         const errorData = (await response.json()) as CommonError;

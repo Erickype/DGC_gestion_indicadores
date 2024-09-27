@@ -1,7 +1,30 @@
-import { postAuthorFromPersontRoute, postAuthorRoute } from "$lib/api/routes/api/academicProduction/authors/author";
+import { getAuthorPersonRoute, postAuthorFromPersontRoute, postAuthorRoute } from "$lib/api/routes/api/academicProduction/authors/author";
 import type { Author, PostAuthorFromPersonRequest } from "$lib/api/model/api/academicProduction/authors/author";
+import type { AuthorPerson } from "$lib/api/model/api/academicProduction/authors/authorsFilter";
+
 import { generateCommonErrorFromFetchError } from "$lib/utils";
 import type { CommonError } from "$lib/api/model/errors";
+import type { Message } from "$lib/components/combobox/combobox";
+
+export async function GetAuthorPersonByAuthorID(token: string, authorID: number) {
+    try {
+        const response = await fetch(getAuthorPersonRoute + authorID, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+        })
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
+        }
+        const author: AuthorPerson = await response.json()
+        return author;
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
+}
 
 export async function PostAuthor(token: string, request: Author) {
     try {
@@ -43,4 +66,15 @@ export async function PostAuthorFromPerson(token: string, request: PostAuthorFro
     } catch (error) {
         return generateCommonErrorFromFetchError(error)
     }
+}
+
+export function GenerateComboMessagesFromAuthors(authors: AuthorPerson[]): Message[] {
+    let messages: Message[] = []
+    messages = messages.concat(
+        authors.map((person) => ({
+            value: person.ID,
+            label: person.identity + " " + person.name + " " + person.lastname,
+        }))
+    );
+    return messages
 }
