@@ -9,6 +9,21 @@ import (
 	"strconv"
 )
 
+func PostAcademicProductionListsAuthorCareers(c *gin.Context) {
+	var postAcademicProductionListsAuthorCareersRequest model.PostAcademicProductionListsAuthorCareersRequest
+	err := c.BindJSON(&postAcademicProductionListsAuthorCareersRequest)
+	if err != nil {
+		errors.BadRequestResponse(c, err)
+		return
+	}
+	err = model.PostAcademicProductionListsAuthorCareers(&postAcademicProductionListsAuthorCareersRequest)
+	if err != nil {
+		errors.InternalServerErrorResponse(c, "Error añadiendo autor y sus carreras", err)
+		return
+	}
+	c.JSON(http.StatusCreated, postAcademicProductionListsAuthorCareersRequest)
+}
+
 func GetAcademicProductionListAuthorPreviousCareers(c *gin.Context) {
 	previousCareers := []career.Career{}
 	authorID, _ := strconv.Atoi(c.Param("authorID"))

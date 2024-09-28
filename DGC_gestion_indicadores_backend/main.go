@@ -149,6 +149,8 @@ func serveApplication() {
 		indicatorsInformationAcademicProduction.FilterAcademicProductionListsByAcademicPeriod)
 	indicatorsInformationRoutes.POST("/academicProductionList", indicatorsInformationAcademicProduction.PostAcademicProductionList)
 
+	indicatorsInformationRoutes.POST("/academicProductionListsAuthor/authorCareers",
+		indicatorsInformationAcademicProduction.PostAcademicProductionListsAuthorCareers)
 	indicatorsInformationRoutes.GET("/academicProductionListsAuthor/previousCareers/:authorID",
 		indicatorsInformationAcademicProduction.GetAcademicProductionListAuthorPreviousCareers)
 	indicatorsInformationRoutes.GET("/academicProductionListsAuthors/JoinedByAcademicProductionListID/:academicProductionListID",

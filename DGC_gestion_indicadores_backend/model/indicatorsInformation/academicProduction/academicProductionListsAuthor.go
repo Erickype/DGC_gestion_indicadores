@@ -1,10 +1,12 @@
 package model
 
 import (
+	"errors"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	academicProduction "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicProduction/author"
 	career "github.com/Erickype/DGC_gestion_indicadores_backend/model/career"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -26,8 +28,36 @@ type AcademicProductionListsAuthorsCareersJoined struct {
 	Careers  []career.Career `json:"careers,omitempty"`
 }
 
+type PostAcademicProductionListsAuthorCareersRequest struct {
+	AcademicProductionListID uint   `json:"academic_production_list_id"`
+	AuthorID                 uint   `json:"author_id"`
+	Careers                  []uint `json:"careers"`
+}
+
 func (apl *AcademicProductionListsAuthor) TableName() string {
 	return model.IndicatorsInformationSchema + ".academic_production_lists_authors"
+}
+
+func PostAcademicProductionListsAuthorCareers(request *PostAcademicProductionListsAuthorCareersRequest) (err error) {
+	return database.DB.Transaction(func(tx *gorm.DB) error {
+		for _, careerID := range request.Careers {
+			academicProductionListsAuthor := AcademicProductionListsAuthor{
+				AcademicProductionListID: request.AcademicProductionListID,
+				AuthorID:                 request.AuthorID,
+				CareerID:                 careerID,
+			}
+			if err := tx.Create(&academicProductionListsAuthor).Error; err != nil {
+				if errors.Is(err, gorm.ErrForeignKeyViolated) {
+					return errors.New("claves no encontradas")
+				}
+				if errors.Is(err, gorm.ErrDuplicatedKey) {
+					return errors.New("autor ya registrado")
+				}
+				return err
+			}
+		}
+		return nil
+	})
 }
 
 func GetAcademicProductionListAuthorPreviousCareers(authorID int, previousCareers *[]career.Career) (err error) {
