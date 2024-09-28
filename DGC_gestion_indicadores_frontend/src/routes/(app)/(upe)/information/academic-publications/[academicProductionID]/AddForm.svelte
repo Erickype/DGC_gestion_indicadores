@@ -1,14 +1,11 @@
 <script lang="ts">
 	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
-	import {
-		addAcademicProductionListsAuthorSchema,
-		type AddAcademicProductionListsAuthorSchema
-	} from './schema';
+	import { addAcademicProductionListsAuthorSchema } from './schema';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-
 	import { createEventDispatcher } from 'svelte';
 	import { browser } from '$app/environment';
 	import { writable } from 'svelte/store';
+	import { goto } from '$app/navigation';
 
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import { Button } from '$lib/components/ui/button';
@@ -21,10 +18,13 @@
 	import FormSelect from '$lib/components/combobox/formSelect.svelte';
 
 	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
+	import { GenerateComboMessagesFromCareers } from '$lib/api/controller/api/career';
 	import type { Message } from '$lib/components/combobox/combobox';
+	import type { CommonError } from '$lib/api/model/errors';
+	import type { Career } from '$lib/api/model/api/career';
 
 	export let data: SuperValidated<
-		Infer<AddAcademicProductionListsAuthorSchema>,
+		Infer<typeof addAcademicProductionListsAuthorSchema>,
 		App.Superforms.Message
 	>;
 	export let comboMessages: Message[][];
@@ -33,9 +33,7 @@
 	const dispatch = createEventDispatcher();
 
 	function AcademicProductionListAuthorCareersCreated() {
-		dispatch('message', {
-			created: true
-		});
+		dispatch('message', { created: true });
 	}
 
 	const form = superForm(data, {
@@ -47,10 +45,7 @@
 				return manageToastFromInvalidAddForm();
 			}
 			if (message.success) {
-				/* 				const academicProduction = message.data as AcademicProductionList;
-				 */ AcademicProductionListAuthorCareersCreated();
-				/* 				return toast.success(`Publicación creada: ${academicProduction.publication_name}`);
-				 */
+				AcademicProductionListAuthorCareersCreated();
 			}
 			return manageToastFromErrorMessageOnAddForm(message);
 		}
@@ -63,11 +58,37 @@
 	formDataCareerID.subscribe((value) => ($formData.career = value));
 
 	let selectedCareers: Message[] = [];
+	let selectedCareersPromise: Promise<Career[]> =
+		fetchAcademicProductionListsAuthorPreviousCareersByAuthorID(0);
 
 	$: {
-		if ($formDataCareerID !== 0) {
-			addItem($formDataCareerID);
+		if ($formData.career !== 0) {
+			addItem($formData.career);
+			$formData.career = 0;
 		}
+	}
+	formDataAuthorID.subscribe((value) => {
+		selectedCareersPromise = fetchAcademicProductionListsAuthorPreviousCareersByAuthorID(value);
+	});
+
+	async function fetchAcademicProductionListsAuthorPreviousCareersByAuthorID(
+		authorID: number
+	): Promise<Career[]> {
+		const url = `/api/indicatorsInformation/academicProductionListsAuthor/previousCareers/${authorID}`;
+		const response = await fetch(url, { method: 'GET' });
+		if (!response.ok) {
+			const errorData = (await response.json()) as CommonError;
+			if (response.status === 401) {
+				throw goto('/');
+			}
+			throw errorData;
+		}
+		return response.json();
+	}
+
+	function setCareersComboData(careers: Career[]) {
+		selectedCareers = GenerateComboMessagesFromCareers(careers);
+		$formData.careers = selectedCareers.map((career) => career.value);
 	}
 
 	function addItem(id: number) {
@@ -105,32 +126,38 @@
 				scrollAreaHeight="h-72"
 			/>
 		</Form.Field>
-	</div>
 
-	<Form.Fieldset {form} name="careers" class="space-y-0 pt-4">
-		<ScrollArea class="h-32 rounded-md border">
-			{#each selectedCareers as item}
-				<div class="flex flex-row items-start space-x-3 p-2">
-					<Form.Control let:attrs>
-						<Button
-							class="m-0 h-min p-0"
-							variant="ghost"
-							on:click={() => {
-								removeItem(item.value);
-							}}
-						>
-							<X class="stroke-primary h-4 w-4"></X>
-						</Button>
-						<Form.Label class="font-normal">
-							{item.label}
-						</Form.Label>
-						<input hidden type="checkbox" name={attrs.name} value={item.value} />
-					</Form.Control>
-				</div>
-			{/each}
-			<Form.FieldErrors class="p-2" />
-		</ScrollArea>
-	</Form.Fieldset>
+		<Form.Fieldset {form} name="careers" class="space-y-0">
+			<ScrollArea class="h-32 rounded-md border">
+				{#await selectedCareersPromise}
+					cargando...
+				{:then selectedCareersResponse}
+					{#if selectedCareersResponse.length > 0}
+						<div class="hidden">
+							{setCareersComboData(selectedCareersResponse)}
+						</div>
+					{/if}
+				{/await}
+				{#each selectedCareers as item}
+					<div class="flex flex-row items-start space-x-3 p-2">
+						<Form.Control let:attrs>
+							<Button class="m-0 h-min p-0" variant="ghost" on:click={() => removeItem(item.value)}>
+								<X class="stroke-primary h-4 w-4"></X>
+							</Button>
+							<Form.Label class="font-normal">{item.label}</Form.Label>
+							<input hidden type="checkbox" name={attrs.name} value={item.value} />
+						</Form.Control>
+					</div>
+				{/each}
+				{#if selectedCareers.length === 0}
+					<p class="flex h-32 items-center justify-center">
+						Aquí se mostrarán las carreras seleccionadas
+					</p>
+				{/if}
+				<Form.FieldErrors class="p-2" />
+			</ScrollArea>
+		</Form.Fieldset>
+	</div>
 	<Form.Button class="my-2 w-full">Guardar</Form.Button>
 	<!-- {#if browser}
 		<SuperDebug data={$formData} />
