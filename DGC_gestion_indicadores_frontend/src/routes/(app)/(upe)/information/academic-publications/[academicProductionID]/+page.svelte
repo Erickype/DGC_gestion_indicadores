@@ -40,7 +40,12 @@
 		return (authorsCareersPromise = response.json());
 	}
 
-	function fetchOnSuccess(event: CustomEvent) {}
+	function fetchOnSuccess(event: CustomEvent) {
+		const detail: { status: boolean } = event.detail;
+		if (detail.status) {
+			fetchGetAcademicProductionListsAuthorsCareersJoined();
+		}
+	}
 
 	function returnToAcademicProduction() {
 		if (browser) {

@@ -46,6 +46,7 @@
 			}
 			if (message.success) {
 				AcademicProductionListAuthorCareersCreated();
+				return toast.success(`Autor y sus carreras creadas`);
 			}
 			return manageToastFromErrorMessageOnAddForm(message);
 		}
@@ -87,8 +88,13 @@
 	}
 
 	function setCareersComboData(careers: Career[]) {
-		selectedCareers = GenerateComboMessagesFromCareers(careers);
-		$formData.careers = selectedCareers.map((career) => career.value);
+		if (careers.length > 0) {
+			selectedCareers = GenerateComboMessagesFromCareers(careers);
+			$formData.careers = selectedCareers.map((career) => career.value);
+		} else {
+			selectedCareers = [];
+			$formData.careers = [];
+		}
 	}
 
 	function addItem(id: number) {
@@ -107,7 +113,7 @@
 	}
 </script>
 
-<form action="?/postAcademicProductionList" use:enhance>
+<form action="?/postAcademicProductionListsAuthorCareers" use:enhance>
 	<div class="flex flex-col gap-2">
 		<Form.Field {form} name="academicProductionID">
 			<Form.Control let:attrs>
@@ -132,11 +138,9 @@
 				{#await selectedCareersPromise}
 					cargando...
 				{:then selectedCareersResponse}
-					{#if selectedCareersResponse.length > 0}
-						<div class="hidden">
-							{setCareersComboData(selectedCareersResponse)}
-						</div>
-					{/if}
+					<div class="hidden">
+						{setCareersComboData(selectedCareersResponse)}
+					</div>
 				{/await}
 				{#each selectedCareers as item}
 					<div class="flex flex-row items-start space-x-3 p-2">
@@ -145,7 +149,7 @@
 								<X class="stroke-primary h-4 w-4"></X>
 							</Button>
 							<Form.Label class="font-normal">{item.label}</Form.Label>
-							<input hidden type="checkbox" name={attrs.name} value={item.value} />
+							<input hidden name={attrs.name} value={item.value} />
 						</Form.Control>
 					</div>
 				{/each}
@@ -154,8 +158,8 @@
 						Aquí se mostrarán las carreras seleccionadas
 					</p>
 				{/if}
-				<Form.FieldErrors class="p-2" />
 			</ScrollArea>
+			<Form.FieldErrors />
 		</Form.Fieldset>
 	</div>
 	<Form.Button class="my-2 w-full">Guardar</Form.Button>
