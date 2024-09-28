@@ -13,8 +13,12 @@
 	import type { CommonError } from '$lib/api/model/errors';
 	import Alert from '$lib/components/alert/alert.svelte';
 	import AuthorsCareersTable from './Table.svelte';
+	import type { Message } from '$lib/components/combobox/combobox';
 
 	export let data: PageServerData;
+
+	const comboMessages: Message[][] = [data.careersData.messages];
+
 	let addAcademicProductionListsAuthorForm = data.addAcademicProductionListsAuthorForm;
 	let authorsCareersPromise: Promise<AcademicProductionListsAuthorsCareersJoined[]> =
 		fetchGetAcademicProductionListsAuthorsCareersJoined();
@@ -60,6 +64,7 @@
 		formComponent={AddForm}
 		modalTitle="Añadir autor"
 		formData={addAcademicProductionListsAuthorForm}
+		{comboMessages}
 		on:created={fetchOnSuccess}
 	/>
 </div>

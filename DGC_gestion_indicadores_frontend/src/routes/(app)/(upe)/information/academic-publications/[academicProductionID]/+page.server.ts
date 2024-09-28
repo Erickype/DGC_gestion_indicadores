@@ -4,6 +4,7 @@ import { mainDashboarRoute } from "$lib/api/util/paths";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { addAcademicProductionListsAuthorSchema } from "./schema";
+import { LoadCareersWithComboMessages } from "$lib/api/controller/api/career";
 
 export const load: PageServerLoad = async ({ locals, cookies, params }) => {
     const token = cookies.get("AuthorizationToken")
@@ -21,6 +22,7 @@ export const load: PageServerLoad = async ({ locals, cookies, params }) => {
         return {
             academicProductionID: academicProductionID,
             addAcademicProductionListsAuthorForm: await superValidate(zod(addAcademicProductionListsAuthorSchema)),
+            careersData: await LoadCareersWithComboMessages(token!),
         }
     }
 
