@@ -5,3 +5,9 @@ export interface AcademicProductionListsAuthorsCareersJoined {
     author: string
     careers: Career[]
 }
+
+export interface PostAcademicProductionListsAuthorCareersRequest {
+    academic_production_list_id: number
+    author_id: number
+    careers: number[]
+}
