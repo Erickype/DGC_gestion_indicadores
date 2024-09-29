@@ -7,6 +7,7 @@
 
 	import type { FilterTeachersRequest, FilterTeachersResponse } from '$lib/api/model/api/teacher';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
+	import TableSkeleton from '$lib/components/skeleton/table.svelte';
 	import PeopleTable from './Table.svelte';
 	import AddForm from './AddForm.svelte';
 	import {
@@ -62,9 +63,9 @@
 </svelte:head>
 
 <div class="mx-auto flex w-full place-content-center justify-between px-8">
-	<div class="flex gap-1 items-center">
+	<div class="flex items-center gap-1">
 		<Presentation class="h-8 w-8" />
-	<h2 class="text-2xl font-bold">Profesores</h2>
+		<h2 class="text-2xl font-bold">Profesores</h2>
 	</div>
 	<AddModal
 		modalTitle="Seleccionar a una persona para profesor"
@@ -77,7 +78,7 @@
 
 <div class="mx-auto flex w-full flex-col place-content-center px-8">
 	{#await filterTeachersResponsePromise}
-		cargando...
+		<TableSkeleton />
 	{:then filterTeachersResponse}
 		{#if filterTeachersResponse.teachers.length > 0}
 			<PeopleTable

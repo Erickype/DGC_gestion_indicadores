@@ -5,6 +5,7 @@
 	import Alert from '$lib/components/alert/alert.svelte';
 	import type { PageData } from './$types';
 	import AddModal from './AddModal.svelte';
+	import TableSkeleton from '$lib/components/skeleton/table.svelte';
 
 	import Users from 'lucide-svelte/icons/users';
 
@@ -125,7 +126,7 @@
 
 <div class="mx-auto flex w-full flex-col place-content-center px-8">
 	{#await filterPeopleResponsePromise}
-		cargando...
+		<TableSkeleton />
 	{:then filterPeopleResponse}
 		{#if filterPeopleResponse.people.length > 0}
 			<PeopleTable

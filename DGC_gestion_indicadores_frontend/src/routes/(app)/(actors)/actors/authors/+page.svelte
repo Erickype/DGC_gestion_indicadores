@@ -10,9 +10,10 @@
 		FilterAuthorsResponse
 	} from '$lib/api/model/api/academicProduction/authors/authorsFilter';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
+	import TableSkeleton from '$lib/components/skeleton/table.svelte';
+	import AddFromPersonForm from './AddFromPersonForm.svelte';
 	import AuthorsTable from './Table.svelte';
 	import AddForm from './AddForm.svelte';
-	import AddFromPersonForm from './AddFromPersonForm.svelte';
 	import {
 		fetchFilterAuthors,
 		fetchOnDetailedFilter,
@@ -93,7 +94,7 @@
 
 <div class="mx-auto flex w-full flex-col place-content-center px-8">
 	{#await filterAuthorsResponsePromise}
-		cargando...
+		<TableSkeleton />
 	{:then filterAuthorsResponse}
 		{#if filterAuthorsResponse.authors.length > 0}
 			<AuthorsTable
