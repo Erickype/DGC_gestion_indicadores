@@ -12,6 +12,8 @@
 	} from '$lib/api/model/api/indicatorsInformation/academicProductionLists';
 	import {
 		fetchFilterAcademicProductionLists,
+		fetchOnDetailedFilter,
+		fetchOnFilterChanged,
 		newFilterAcademicProductionListsByAcademiPeriodRequest,
 		newPopoverFilterDataMap
 	} from '$lib/components/filters/indicatorsInformation/academicProductionLists/academicProductionLists';
@@ -59,21 +61,21 @@
 
 	function handleOnFilterChanged(event: CustomEvent) {
 		const data: { filter: string } = event.detail;
-		/* filterAcademicProductionListPromise = fetchOnFilterChanged(
+		filterAcademicProductionListPromise = fetchOnFilterChanged(
 			data.filter.trim(),
 			filterAcademicProductionListRequest,
 			popoverFilterDataMap
-		); */
+		);
 	}
 
 	function handleOnDetailedFilter() {
-		/* filterAcademicProductionListPromise = fetchOnDetailedFilter(
+		filterAcademicProductionListPromise = fetchOnDetailedFilter(
 			filterAcademicProductionListRequest,
 			popoverFilterDataMap
 		).then(({ request, response }) => {
 			filterAcademicProductionListRequest = request;
 			return response;
-		}); */
+		});
 	}
 
 	function handlePaginationChanged() {

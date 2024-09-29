@@ -13,7 +13,7 @@
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
 	import Table from '$lib/components/table/tablePaginated.svelte';
 
-	import { generateInitialFilterValue } from '$lib/components/filters/indicatorsInformation/teachersLists/teachersLists';
+	import { generateInitialFilterValue } from '$lib/components/filters/indicatorsInformation/academicProductionLists/academicProductionLists';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
 
 	export let filterAcademicProductionListsByAcademicPeriodResponse: FilterAcademicProductionListsByAcademicPeriodResponse;
