@@ -8,12 +8,14 @@
 	import MoveLeft from 'lucide-svelte/icons/move-left';
 
 	import type { AcademicProductionListsAuthorsCareersJoined } from '$lib/api/model/api/indicatorsInformation/academicProductionListsAuthor';
+	import TableSkeleton from '$lib/components/skeleton/table.svelte';
+	import type { Message } from '$lib/components/combobox/combobox';
 	import AddModal from '$lib/components/modal/AddModal.svelte';
-	import AddForm from './AddForm.svelte';
 	import type { CommonError } from '$lib/api/model/errors';
 	import Alert from '$lib/components/alert/alert.svelte';
+	import AddForm from './AddForm.svelte';
+
 	import AuthorsCareersTable from './Table.svelte';
-	import type { Message } from '$lib/components/combobox/combobox';
 
 	export let data: PageServerData;
 
@@ -76,7 +78,7 @@
 
 <div class="mx-auto flex w-full place-content-center px-8">
 	{#await authorsCareersPromise}
-		cargando...
+		<TableSkeleton tableHeightClass="h-[65vh]" />
 	{:then authorsCareers}
 		{#if authorsCareers.length > 0}
 			<AuthorsCareersTable {authorsCareers} on:updated={fetchOnSuccess} on:deleted={fetchOnSuccess}

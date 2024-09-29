@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageServerData } from './$types';
-	
+
 	import AcademicPeriodCombo from '$lib/components/combobox/academicPeriodCombo.svelte';
 	import AddModal from '$lib/components/modal/AddModal.svelte';
 	import TeachersListsTable from './Table.svelte';
@@ -8,6 +8,7 @@
 
 	import Icon from 'lucide-svelte/icons/list';
 
+	import TableSkeleton from '$lib/components/skeleton/table.svelte';
 	import type { Message } from '$lib/components/combobox/combobox';
 	import Alert from '$lib/components/alert/alert.svelte';
 	import type {
@@ -118,9 +119,9 @@
 	/>
 </div>
 
-<div class="mx-auto flex w-full place-content-center px-8">
+<div class="mx-auto flex w-full flex-col place-content-center px-8">
 	{#await filterTeachersListsByAcademicPeriodPromise}
-		cargando...
+		<TableSkeleton />
 	{:then filterTeachersListsByAcademicPeriodResponse}
 		{#if filterTeachersListsByAcademicPeriodResponse.teachers_lists}
 			<TeachersListsTable

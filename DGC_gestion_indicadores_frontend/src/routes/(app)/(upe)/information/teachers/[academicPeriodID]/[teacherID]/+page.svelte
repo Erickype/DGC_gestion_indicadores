@@ -4,8 +4,9 @@
 	import { goto } from '$app/navigation';
 
 	import AddDegreeAndTeachersListsDegreeForm from './AddDegreeAndTeachersListsDegreeForm.svelte';
-	import ButtonSkeleton from '$lib/components/skeleton/button.svelte';
 	import AddNotAssignedDegreeForm from './AddNotAssignedDegreeForm.svelte';
+	import ButtonSkeleton from '$lib/components/skeleton/button.svelte';
+	import TableSkeleton from '$lib/components/skeleton/table.svelte';
 	import AddModal from '$lib/components/modal/AddModal.svelte';
 
 	import { Button } from '$lib/components/ui/button/index';
@@ -124,9 +125,9 @@
 	</div>
 </div>
 
-<div class="mx-auto flex w-full place-content-center px-8">
+<div class="mx-auto flex w-full flex-col place-content-center px-8">
 	{#await teachersListsDegreesPromise}
-		cargando...
+		<TableSkeleton tableHeightClass="h-[65vh]"/>
 	{:then degrees}
 		{#if degrees.length > 0}
 			<TeachersListsDegreesTable

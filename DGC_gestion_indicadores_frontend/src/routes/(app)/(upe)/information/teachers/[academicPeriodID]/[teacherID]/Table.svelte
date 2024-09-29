@@ -120,6 +120,6 @@
 	on:updated={handleUpdated}
 />
 
-<div class="max-h-[50%] w-full">
+<div class="h-[60vh] w-full">
 	<Table {table} {columns} {filterFields} itemCount={degrees.length} />
 </div>

@@ -18,6 +18,7 @@
 		newPopoverFilterDataMap
 	} from '$lib/components/filters/indicatorsInformation/academicProductionLists/academicProductionLists';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
+	import TableSkeleton from '$lib/components/skeleton/table.svelte';
 	import type { Message } from '$lib/components/combobox/combobox';
 	import AddModal from '$lib/components/modal/AddModal.svelte';
 	import Alert from '$lib/components/alert/alert.svelte';
@@ -29,7 +30,7 @@
 
 	const comboMessages: Message[][] = [
 		data.scienceMagazinesData.messages,
-		data.impactCoefficientsData.messages,
+		data.impactCoefficientsData.messages
 	];
 
 	let selectedAcademicPeriod: number = academicPeriodsData.periods.at(0)!.ID;
@@ -114,7 +115,7 @@
 
 <div class="mx-auto flex w-full place-content-center px-8">
 	{#await filterAcademicProductionListPromise}
-		cargando...
+		<TableSkeleton />
 	{:then filterAcademicProductionListsByAcademicPeriodResponse}
 		{#if filterAcademicProductionListsByAcademicPeriodResponse.academic_production_lists}
 			<Table
