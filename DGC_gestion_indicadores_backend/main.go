@@ -148,6 +148,7 @@ func serveApplication() {
 	indicatorsInformationRoutes.POST("/academicProductionLists/filter",
 		indicatorsInformationAcademicProduction.FilterAcademicProductionListsByAcademicPeriod)
 	indicatorsInformationRoutes.POST("/academicProductionList", indicatorsInformationAcademicProduction.PostAcademicProductionList)
+	indicatorsInformationRoutes.PATCH("/academicProductionList/:id", indicatorsInformationAcademicProduction.PatchAcademicProductionList)
 
 	indicatorsInformationRoutes.POST("/academicProductionListsAuthor/authorCareers",
 		indicatorsInformationAcademicProduction.PostAcademicProductionListsAuthorCareers)
