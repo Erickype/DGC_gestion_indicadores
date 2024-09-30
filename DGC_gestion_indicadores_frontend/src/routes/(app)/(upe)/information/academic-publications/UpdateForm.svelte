@@ -37,7 +37,7 @@
 	const dispatch = createEventDispatcher();
 
 	function AcademicProductionCreated() {
-		dispatch('message', {
+		dispatch('updated', {
 			created: true
 		});
 	}
@@ -53,7 +53,7 @@
 			if (message.success) {
 				const academicProduction = message.data as AcademicProductionList;
 				AcademicProductionCreated();
-				return toast.success(`Publicación creada: ${academicProduction.publication_name}`);
+				return toast.success(`Publicación actualizada: ${academicProduction.publication_name}`);
 			}
 			return manageToastFromErrorMessageOnAddForm(message);
 		}
@@ -102,8 +102,13 @@
 	}
 </script>
 
-<form action="?/postAcademicProductionList" use:enhance>
+<form action="?/patchAcademicProductionList" use:enhance>
 	<div class="flex flex-col gap-2">
+		<Form.Field {form} name="ID">
+			<Form.Control let:attrs>
+				<input hidden value={$formData.ID} name={attrs.name} />
+			</Form.Control>
+		</Form.Field>
 		<Form.Field {form} name="academicPeriod">
 			<Form.Control let:attrs>
 				<input hidden value={$formData.academicPeriod} name={attrs.name} />
