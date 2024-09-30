@@ -32,6 +32,7 @@ export interface AcademicProductionListByAcademicPeriodJoined {
     publication_date: string
     publication_name: string
     publication_type_id: number
+    detailed_field_id: number
     detailed_field: string
     science_magazine_id: number
     science_magazine: string

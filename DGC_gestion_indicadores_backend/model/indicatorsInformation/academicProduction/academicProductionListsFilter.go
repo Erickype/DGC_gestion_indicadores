@@ -21,17 +21,17 @@ type FilterAcademicProductionListsByAcademicPeriodRequest struct {
 }
 
 type AcademicProductionListByAcademicPeriodJoined struct {
-	ID                       uint
-	DOI                      string `json:"doi"`
-	PublicationDate          string `json:"publication_date"`
-	PublicationName          string `json:"publication_name"`
-	DetailedFieldID          uint   `json:"detailed_field_id"`
-	DetailedField            string `json:"detailed_field"`
-	ScienceMagazineID        uint   `json:"science_magazine_id"`
-	ScienceMagazine          string `json:"science_magazine"`
-	ImpactCoefficientID      uint   `json:"impact_coefficient_id"`
-	ImpactCoefficient        string `json:"impact_coefficient"`
-	InterculturalComponentID bool   `json:"intercultural_component"`
+	ID                     uint
+	DOI                    string `json:"doi"`
+	PublicationDate        string `json:"publication_date"`
+	PublicationName        string `json:"publication_name"`
+	DetailedFieldID        uint   `json:"detailed_field_id"`
+	DetailedField          string `json:"detailed_field"`
+	ScienceMagazineID      uint   `json:"science_magazine_id"`
+	ScienceMagazine        string `json:"science_magazine"`
+	ImpactCoefficientID    uint   `json:"impact_coefficient_id"`
+	ImpactCoefficient      string `json:"impact_coefficient"`
+	InterculturalComponent *bool  `json:"intercultural_component"`
 }
 
 type FilterAcademicProductionListsByAcademicPeriodResponse struct {
