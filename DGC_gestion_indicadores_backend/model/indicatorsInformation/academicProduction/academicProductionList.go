@@ -23,7 +23,7 @@ type AcademicProductionList struct {
 	DetailedFieldID        uint           `json:"detailed_field_id"`
 	ScienceMagazineID      uint           `json:"science_magazine_id"`
 	ImpactCoefficientID    uint           `json:"impact_coefficient_id"`
-	InterculturalComponent bool           `json:"intercultural_component"`
+	InterculturalComponent *bool          `json:"intercultural_component"`
 
 	DetailedField     knowledgeField.DetailedField         `json:"-"`
 	AcademicPeriod    academicPeriod.AcademicPeriod        `json:"-"`
@@ -35,8 +35,34 @@ func (apl *AcademicProductionList) TableName() string {
 	return model.IndicatorsInformationSchema + ".academic_production_lists"
 }
 
+func GetAcademicProductionListByID(id int, response *AcademicProductionList) (err error) {
+	err = database.DB.First(&response, id).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("no existe la publicación en el periodo")
+		}
+		return err
+	}
+	return nil
+}
+
 func PostAcademicProductionList(request *AcademicProductionList) (err error) {
 	err = database.DB.Create(request).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("publicación académica en lista ya existe")
+		}
+		return err
+	}
+	return nil
+}
+
+func PatchAcademicProductionList(academicProductionList *AcademicProductionList) (err error) {
+	err = database.DB.Model(&AcademicProductionList{}).
+		Where("id = ?",
+			academicProductionList.ID).
+		Updates(academicProductionList).
+		Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
 			return errors.New("publicación académica en lista ya existe")
