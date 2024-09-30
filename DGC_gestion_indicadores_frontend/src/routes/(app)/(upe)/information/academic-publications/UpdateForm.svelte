@@ -55,28 +55,14 @@
 				AcademicProductionCreated();
 				return toast.success(`Publicación actualizada: ${academicProduction.publication_name}`);
 			}
-			$formData.ID = updateEntity.ID;
-			$formData.doi = updateEntity.doi;
-			$formData.publication_date = toISO8601(updateEntity.publication_date);
-			$formData.detailed_field_id = updateEntity.detailed_field_id;
-			$formData.publication_name = updateEntity.publication_name;
-			$formData.science_magazine_id = updateEntity.science_magazine_id;
-			$formData.impact_coefficient_id = updateEntity.impact_coefficient_id;
-			$formData.intercultural_component = updateEntity.intercultural_component;
+			fillForm();
 			return manageToastFromErrorMessageOnAddForm(message);
 		}
 	});
 
 	const { form: formData, enhance } = form;
 
-	$formData.ID = updateEntity.ID;
-	$formData.doi = updateEntity.doi;
-	$formData.publication_date = toISO8601(updateEntity.publication_date);
-	$formData.detailed_field_id = updateEntity.detailed_field_id;
-	$formData.publication_name = updateEntity.publication_name;
-	$formData.science_magazine_id = updateEntity.science_magazine_id;
-	$formData.impact_coefficient_id = updateEntity.impact_coefficient_id;
-	$formData.intercultural_component = updateEntity.intercultural_component;
+	fillForm();
 
 	let formDataScienceMagazineID = writable($formData.science_magazine_id);
 	formDataScienceMagazineID.subscribe((value) => ($formData.science_magazine_id = value));
@@ -94,6 +80,17 @@
 	$: publicationDate = $formData.publication_date
 		? parseDate($formData.publication_date)
 		: undefined;
+
+	function fillForm() {
+		$formData.ID = updateEntity.ID;
+		$formData.doi = updateEntity.doi;
+		$formData.publication_date = toISO8601(updateEntity.publication_date);
+		$formData.detailed_field_id = updateEntity.detailed_field_id;
+		$formData.publication_name = updateEntity.publication_name;
+		$formData.science_magazine_id = updateEntity.science_magazine_id;
+		$formData.impact_coefficient_id = updateEntity.impact_coefficient_id;
+		$formData.intercultural_component = updateEntity.intercultural_component;
+	}
 
 	function toISO8601(dateString: string): string {
 		const date = new Date(dateString);
