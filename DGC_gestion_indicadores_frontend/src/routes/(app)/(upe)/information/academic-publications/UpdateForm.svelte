@@ -55,6 +55,14 @@
 				AcademicProductionCreated();
 				return toast.success(`Publicación actualizada: ${academicProduction.publication_name}`);
 			}
+			$formData.ID = updateEntity.ID;
+			$formData.doi = updateEntity.doi;
+			$formData.publication_date = toISO8601(updateEntity.publication_date);
+			$formData.detailed_field_id = updateEntity.detailed_field_id;
+			$formData.publication_name = updateEntity.publication_name;
+			$formData.science_magazine_id = updateEntity.science_magazine_id;
+			$formData.impact_coefficient_id = updateEntity.impact_coefficient_id;
+			$formData.intercultural_component = updateEntity.intercultural_component;
 			return manageToastFromErrorMessageOnAddForm(message);
 		}
 	});
