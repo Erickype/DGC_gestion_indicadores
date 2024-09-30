@@ -25,6 +25,7 @@
 
 	export let data: PageServerData;
 	const addAcademicProductionForm = data.academicProductionForm;
+	const updateAcademicProductionForm = data.updateAcademicProductionForm;
 
 	const academicPeriodsData = data.academicPeriodsData;
 
@@ -37,6 +38,7 @@
 
 	$: {
 		addAcademicProductionForm.data.academicPeriod = selectedAcademicPeriod;
+		updateAcademicProductionForm.data.academicPeriod = selectedAcademicPeriod;
 	}
 
 	let filterAcademicProductionListRequest: FilterAcademicProductionListsByAcademicPeriodRequest =
@@ -113,15 +115,17 @@
 	/>
 </div>
 
-<div class="mx-auto flex w-full place-content-center px-8">
+<div class="mx-auto flex w-full flex-col place-content-center px-8">
 	{#await filterAcademicProductionListPromise}
 		<TableSkeleton />
 	{:then filterAcademicProductionListsByAcademicPeriodResponse}
 		{#if filterAcademicProductionListsByAcademicPeriodResponse.academic_production_lists}
 			<Table
 				bind:filterAcademicProductionListRequest
+				formData={updateAcademicProductionForm}
 				{filterAcademicProductionListsByAcademicPeriodResponse}
 				bind:popoverFilterDataMap
+				{comboMessages}
 				on:updated={fetchOnSuccess}
 				on:deleted={fetchOnSuccess}
 				on:filterChanged={handleOnFilterChanged}

@@ -2,7 +2,7 @@ import type { Actions, PageServerLoad } from "./$types";
 import { mainDashboarRoute } from "$lib/api/util/paths";
 import { redirect } from "@sveltejs/kit";
 
-import { addAcademicProductionSchema } from "./schema";
+import { addAcademicProductionSchema, updateAcademicProductionSchema } from "./schema";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 
@@ -26,6 +26,7 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
     return {
         academicPeriodsData: await LoadAcademicPeriodsWithComboMessages(),
         academicProductionForm: await superValidate(zod(addAcademicProductionSchema)),
+        updateAcademicProductionForm: await superValidate(zod(updateAcademicProductionSchema)),
         scienceMagazinesData: await LoadGetScienceMagazinesWithComboMessages(token!),
         impactCoefficientsData: await LoadGetImpactCoefficientssWithComboMessages(token!),
     }
