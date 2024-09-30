@@ -10,16 +10,27 @@
 	import { createEventDispatcher } from 'svelte';
 	import { readable } from 'svelte/store';
 
+	import type { Infer, SuperValidated } from 'sveltekit-superforms';
+	import type { UpdateAcademicProductionSchema } from './schema';
+
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
+	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
 	import Table from '$lib/components/table/tablePaginated.svelte';
+	import UpdateForm from './UpdateForm.svelte';
 
 	import { generateInitialFilterValue } from '$lib/components/filters/indicatorsInformation/academicProductionLists/academicProductionLists';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
+	import type { Message } from '$lib/components/combobox/combobox';
 
 	export let filterAcademicProductionListsByAcademicPeriodResponse: FilterAcademicProductionListsByAcademicPeriodResponse;
 	let filterAcademicProductionListsResponse: AcademicProductionListByAcademicPeriodJoined[] =
 		filterAcademicProductionListsByAcademicPeriodResponse.academic_production_lists;
 
+	export let comboMessages: Message[][] | undefined = undefined;
+	export let formData: SuperValidated<
+		Infer<UpdateAcademicProductionSchema>,
+		App.Superforms.Message
+	>;
 	let academicProduction: AcademicProductionListByAcademicPeriodJoined;
 
 	let filterValue = '';
@@ -122,7 +133,7 @@
 		const detail: { status: boolean; id: string } = event.detail;
 		if (detail.status) {
 			academicProduction = filterAcademicProductionListsResponse.find(
-				(academicProduction) => academicProduction.doi === detail.id
+				(academicProduction) => academicProduction.ID.toString() === detail.id
 			)!;
 			updateFormOpen = true;
 		} else {
@@ -158,6 +169,16 @@
 		dispatch('paginationChanged');
 	}
 </script>
+
+<UpdateModal
+	modalTitle="Actualizar publicación académica"
+	{formData}
+	formComponent={UpdateForm}
+	{comboMessages}
+	bind:updateEntity={academicProduction}
+	bind:open={updateFormOpen}
+	on:updated={handleUpdated}
+/>
 
 <div class="w-full">
 	<Table
