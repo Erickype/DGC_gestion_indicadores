@@ -9,15 +9,17 @@ import (
 )
 
 type BooksOrChaptersProductionList struct {
-	DOI              uint           `gorm:"primary_key"`
+	ID               uint           `gorm:"primaryKey"`
+	DOI              string         `gorm:"unique" json:"DOI"`
 	CreatedAt        time.Time      `json:"created_at"`
 	UpdatedAt        time.Time      `json:"updated_at"`
-	DetailedFieldID  uint           `json:"detailed_field_id"`
-	AcademicPeriodID uint           `json:"academic_period_id"`
+	IsChapter        bool           `json:"is_chapter"`
 	BookTitle        string         `gorm:"size:1000;not null;" json:"book_title"`
 	ChapterTitle     string         `gorm:"size:1000;not null;" json:"chapter_title"`
 	PublicationDate  datatypes.Date `gorm:"not null;" json:"publication_date"`
 	PeerReviewed     bool           `json:"peer_reviewed"`
+	AcademicPeriodID uint           `json:"academic_period_id"`
+	DetailedFieldID  uint           `json:"detailed_field_id"`
 
 	DetailedField  knowledgeField.DetailedField  `json:"-"`
 	AcademicPeriod academicPeriod.AcademicPeriod `json:"-"`
