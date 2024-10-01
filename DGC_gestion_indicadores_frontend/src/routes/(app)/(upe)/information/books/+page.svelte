@@ -1,5 +1,6 @@
 <script lang="ts">
 	import AcademicPeriodCombo from '$lib/components/combobox/academicPeriodCombo.svelte';
+	import AddForm from './AddForm.svelte';
 
 	import Icon from 'lucide-svelte/icons/book-open-text';
 
@@ -8,12 +9,19 @@
 	import AddModal from '$lib/components/modal/AddModal.svelte';
 
 	export let data: PageServerData;
+	const addBookOrChaptersProductionForm = data.addBookOrChaptersProductionForm;
 
 	const academicPeriodsData = data.academicPeriodsData;
 
 	let selectedAcademicPeriod: number = academicPeriodsData.periods.at(0)!.ID;
 
+	$: {
+		addBookOrChaptersProductionForm.data.academic_period_id = selectedAcademicPeriod;
+	}
+
 	function fetchOnAcademicPeriodChange() {}
+
+	function fetchOnSuccess(event: CustomEvent) {}
 </script>
 
 <svelte:head>
@@ -34,10 +42,10 @@
 		on:message={fetchOnAcademicPeriodChange}
 	></AcademicPeriodCombo>
 
-	<!-- <AddModal
+	<AddModal
 		formComponent={AddForm}
-		modalTitle="Crear publicación académica"
-		formData={addAcademicProductionForm}
+		modalTitle="Crear libro o capítulo"
+		formData={addBookOrChaptersProductionForm}
 		on:created={fetchOnSuccess}
-	/> -->
+	/>
 </div>
