@@ -11,14 +11,8 @@ export const addBookOrChaptersProductionListSchema = z.object({
         required_error: "Tipo de publicación requerido"
     }).default(false),
 
-    book_title: z.string({
-        required_error: "Nombre libro requerido"
-    }).max(1000).min(5, {
-        message: "Ingrese un nombre válido"
-    }),
-
-    chapter_title: z.string({
-        required_error: "Nombre capítulo requerido"
+    title: z.string({
+        required_error: "Título requerido"
     }).max(1000).min(5, {
         message: "Ingrese un nombre válido"
     }),
