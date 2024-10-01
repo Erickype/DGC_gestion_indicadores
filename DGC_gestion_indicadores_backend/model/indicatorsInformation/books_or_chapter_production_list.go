@@ -14,8 +14,7 @@ type BooksOrChaptersProductionList struct {
 	CreatedAt        time.Time      `json:"created_at"`
 	UpdatedAt        time.Time      `json:"updated_at"`
 	IsChapter        bool           `json:"is_chapter"`
-	BookTitle        string         `gorm:"size:1000;not null;" json:"book_title"`
-	ChapterTitle     string         `gorm:"size:1000;not null;" json:"chapter_title"`
+	Title            string         `gorm:"size:1000;not null;" json:"title"`
 	PublicationDate  datatypes.Date `gorm:"not null;" json:"publication_date"`
 	PeerReviewed     bool           `json:"peer_reviewed"`
 	AcademicPeriodID uint           `json:"academic_period_id"`
