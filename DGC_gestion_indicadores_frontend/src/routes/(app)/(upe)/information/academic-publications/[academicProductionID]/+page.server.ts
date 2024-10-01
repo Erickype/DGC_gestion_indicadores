@@ -1,4 +1,4 @@
-import { addAcademicProductionListsAuthorSchema } from "./schema";
+import { addAcademicProductionListsAuthorSchema, updateAcademicProductionListsAuthorCareersSchema } from "./schema";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 
@@ -6,8 +6,8 @@ import { error, redirect, type Actions } from "@sveltejs/kit";
 import { mainDashboarRoute } from "$lib/api/util/paths";
 import type { PageServerLoad } from "./$types";
 
-import type { PostAcademicProductionListsAuthorCareersRequest } from "$lib/api/model/api/indicatorsInformation/academicProductionListsAuthor";
-import { PostAcademicProductionListsAuthorCareers } from "$lib/api/controller/api/indicatorsInformation/academicProductionListsAuthor";
+import type { PostAcademicProductionListsAuthorCareersRequest, UpdateAcademicProductionListsAuthorCareersRequest } from "$lib/api/model/api/indicatorsInformation/academicProductionListsAuthor";
+import { PostAcademicProductionListsAuthorCareers, UpdateAcademicProductionListsAuthorCareers } from "$lib/api/controller/api/indicatorsInformation/academicProductionListsAuthor";
 import { generateFormMessageFromHttpResponse, generateFormMessageFromInvalidForm } from "$lib/utils";
 import { LoadCareersWithComboMessages } from "$lib/api/controller/api/career";
 
@@ -27,6 +27,7 @@ export const load: PageServerLoad = async ({ locals, cookies, params }) => {
         return {
             academicProductionID: academicProductionID,
             addAcademicProductionListsAuthorForm: await superValidate(zod(addAcademicProductionListsAuthorSchema)),
+            updateAcademicProductionListsAuthorCareeersForm: await superValidate(zod(updateAcademicProductionListsAuthorCareersSchema)),
             careersData: await LoadCareersWithComboMessages(token!),
         }
     }
@@ -51,6 +52,26 @@ export const actions: Actions = {
         }
 
         const response = await PostAcademicProductionListsAuthorCareers(token!, academicProductionListsAuthorCareersRequest)
+
+        return generateFormMessageFromHttpResponse(form, response)
+    },
+
+    updateAcademicProductionListsAuthorCareers: async (event) => {
+        const form = await superValidate(event, zod(updateAcademicProductionListsAuthorCareersSchema))
+
+        if (!form.valid) {
+            return generateFormMessageFromInvalidForm(form)
+        }
+
+        const token = event.cookies.get("AuthorizationToken")
+        const data = form.data
+        const request: UpdateAcademicProductionListsAuthorCareersRequest = {
+            academic_production_list_id: data.academicProductionID,
+            author_id: data.authorID,
+            careers: data.careers
+        }
+
+        const response = await UpdateAcademicProductionListsAuthorCareers(token!, request)
 
         return generateFormMessageFromHttpResponse(form, response)
     },
