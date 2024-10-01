@@ -7,25 +7,30 @@
 
 	import MoveLeft from 'lucide-svelte/icons/move-left';
 
-	import type { AcademicProductionListsAuthorsCareersJoined } from '$lib/api/model/api/indicatorsInformation/academicProductionListsAuthor';
 	import TableSkeleton from '$lib/components/skeleton/table.svelte';
 	import type { Message } from '$lib/components/combobox/combobox';
 	import AddModal from '$lib/components/modal/AddModal.svelte';
 	import type { CommonError } from '$lib/api/model/errors';
 	import Alert from '$lib/components/alert/alert.svelte';
-	import AddForm from './AddForm.svelte';
 
+	import type { AcademicProductionListsAuthorsCareersJoined } from '$lib/api/model/api/indicatorsInformation/academicProductionListsAuthor';
 	import AuthorsCareersTable from './Table.svelte';
+	import AddForm from './AddForm.svelte';
 
 	export let data: PageServerData;
 
 	const comboMessages: Message[][] = [data.careersData.messages];
 
 	let addAcademicProductionListsAuthorForm = data.addAcademicProductionListsAuthorForm;
+	let updateAcademicProductionListsAuthorCareeersForm =
+		data.updateAcademicProductionListsAuthorCareeersForm;
+
 	let authorsCareersPromise: Promise<AcademicProductionListsAuthorsCareersJoined[]> =
 		fetchGetAcademicProductionListsAuthorsCareersJoined();
 
 	addAcademicProductionListsAuthorForm.data.academicProductionID = data.academicProductionID;
+	updateAcademicProductionListsAuthorCareeersForm.data.academicProductionID =
+		data.academicProductionID;
 
 	async function fetchGetAcademicProductionListsAuthorsCareersJoined() {
 		const url = `/api/indicatorsInformation/academicProductionListsAuthors/JoinedByAcademicProductionListID/${data.academicProductionID}`;
@@ -76,12 +81,17 @@
 	/>
 </div>
 
-<div class="mx-auto flex w-full place-content-center px-8">
+<div class="mx-auto flex w-full flex-col place-content-center px-8">
 	{#await authorsCareersPromise}
 		<TableSkeleton tableHeightClass="h-[65vh]" />
 	{:then authorsCareers}
 		{#if authorsCareers.length > 0}
-			<AuthorsCareersTable {authorsCareers} on:updated={fetchOnSuccess} on:deleted={fetchOnSuccess}
+			<AuthorsCareersTable
+				{authorsCareers}
+				{comboMessages}
+				formData={updateAcademicProductionListsAuthorCareeersForm}
+				on:updated={fetchOnSuccess}
+				on:deleted={fetchOnSuccess}
 			></AuthorsCareersTable>
 		{:else}
 			<Alert title="Sin registros" description={'Ups, no hay autores registrados.'} />
