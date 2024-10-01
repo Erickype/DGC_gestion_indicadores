@@ -11,3 +11,9 @@ export interface PostAcademicProductionListsAuthorCareersRequest {
     author_id: number
     careers: number[]
 }
+
+export interface UpdateAcademicProductionListsAuthorCareersRequest {
+    academic_production_list_id: number
+    author_id: number
+    careers: number[]
+}
