@@ -135,6 +135,7 @@ func UpdateAcademicProductionListsAuthorCareersByAcademicPeriodID(
 	return database.DB.Transaction(func(tx *gorm.DB) error {
 		err = database.DB.Delete(
 			&AcademicProductionListsAuthor{},
+			"academic_production_list_id = ? and author_id = ?",
 			request.AcademicProductionListID, request.AuthorID).
 			Error
 		if err != nil {
