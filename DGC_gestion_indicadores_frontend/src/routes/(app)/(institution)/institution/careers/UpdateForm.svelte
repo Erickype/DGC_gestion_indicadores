@@ -3,6 +3,7 @@
 	import { updateCarrerSchema, type UpdateCarrerSchema } from './schema';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { browser } from '$app/environment';
+	import { writable } from 'svelte/store';
 
 	import { createEventDispatcher, onMount } from 'svelte';
 
@@ -13,15 +14,17 @@
 	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
 	import FormFieldSkeleton from '$lib/components/skeleton/formField.svelte';
 	import FormSelect from '$lib/components/combobox/formSelect.svelte';
+	import type { Message } from '$lib/components/combobox/combobox';
 	import type { Faculty } from '$lib/api/model/api/faculty';
 	import type { Career } from '$lib/api/model/api/career';
 	import {
 		fetchFaculties,
 		GenerateComboMessagesFromFaculties
 	} from '$lib/components/filters/faculties';
-	import { writable } from 'svelte/store';
 
 	export let data: SuperValidated<Infer<UpdateCarrerSchema>, App.Superforms.Message>;
+	export let comboMessages: Message[][];
+	comboMessages = [];
 	export let updateEntity: Career;
 
 	const facultiesPromise: Promise<Faculty[]> = fetchFaculties();
