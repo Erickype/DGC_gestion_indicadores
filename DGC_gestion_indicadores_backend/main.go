@@ -152,6 +152,8 @@ func serveApplication() {
 
 	indicatorsInformationRoutes.POST("/academicProductionListsAuthor/authorCareers",
 		indicatorsInformationAcademicProduction.PostAcademicProductionListsAuthorCareers)
+	indicatorsInformationRoutes.PUT("/academicProductionListsAuthor/authorCareers",
+		indicatorsInformationAcademicProduction.UpdateAcademicProductionListsAuthorCareersByAcademicPeriodID)
 	indicatorsInformationRoutes.GET("/academicProductionListsAuthor/previousCareers/:authorID",
 		indicatorsInformationAcademicProduction.GetAcademicProductionListAuthorPreviousCareers)
 	indicatorsInformationRoutes.GET("/academicProductionListsAuthors/JoinedByAcademicProductionListID/:academicProductionListID",

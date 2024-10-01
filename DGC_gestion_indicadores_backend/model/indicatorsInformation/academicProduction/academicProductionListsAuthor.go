@@ -34,6 +34,12 @@ type PostAcademicProductionListsAuthorCareersRequest struct {
 	Careers                  []uint `json:"careers"`
 }
 
+type UpdateAcademicProductionListsAuthorCareersRequest struct {
+	AcademicProductionListID uint   `json:"academic_production_list_id"`
+	AuthorID                 uint   `json:"author_id"`
+	Careers                  []uint `json:"careers"`
+}
+
 func (apl *AcademicProductionListsAuthor) TableName() string {
 	return model.IndicatorsInformationSchema + ".academic_production_lists_authors"
 }
@@ -122,4 +128,34 @@ func GetAcademicProductionListsAuthorsJoinedByAcademicProductionListID(
 		*response = append(*response, authorCareersJoined)
 	}
 	return nil
+}
+
+func UpdateAcademicProductionListsAuthorCareersByAcademicPeriodID(
+	request *UpdateAcademicProductionListsAuthorCareersRequest) (err error) {
+	return database.DB.Transaction(func(tx *gorm.DB) error {
+		err = database.DB.Delete(
+			&AcademicProductionListsAuthor{},
+			request.AcademicProductionListID, request.AuthorID).
+			Error
+		if err != nil {
+			return err
+		}
+		for _, careerID := range request.Careers {
+			academicProductionListsAuthor := AcademicProductionListsAuthor{
+				AcademicProductionListID: request.AcademicProductionListID,
+				AuthorID:                 request.AuthorID,
+				CareerID:                 careerID,
+			}
+			if err := tx.Create(&academicProductionListsAuthor).Error; err != nil {
+				if errors.Is(err, gorm.ErrForeignKeyViolated) {
+					return errors.New("claves no encontradas")
+				}
+				if errors.Is(err, gorm.ErrDuplicatedKey) {
+					return errors.New("autor ya registrado")
+				}
+				return err
+			}
+		}
+		return nil
+	})
 }

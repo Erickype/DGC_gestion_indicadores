@@ -24,6 +24,21 @@ func PostAcademicProductionListsAuthorCareers(c *gin.Context) {
 	c.JSON(http.StatusCreated, postAcademicProductionListsAuthorCareersRequest)
 }
 
+func UpdateAcademicProductionListsAuthorCareersByAcademicPeriodID(c *gin.Context) {
+	var request model.UpdateAcademicProductionListsAuthorCareersRequest
+	err := c.BindJSON(&request)
+	if err != nil {
+		errors.BadRequestResponse(c, err)
+		return
+	}
+	err = model.UpdateAcademicProductionListsAuthorCareersByAcademicPeriodID(&request)
+	if err != nil {
+		errors.InternalServerErrorResponse(c, "Error carreras del autor", err)
+		return
+	}
+	c.JSON(http.StatusAccepted, request)
+}
+
 func GetAcademicProductionListAuthorPreviousCareers(c *gin.Context) {
 	previousCareers := []career.Career{}
 	authorID, _ := strconv.Atoi(c.Param("authorID"))
