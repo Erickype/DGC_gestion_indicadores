@@ -2,11 +2,10 @@
 	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { addAcademicProductionListsAuthorSchema } from './schema';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	
+
 	import { createEventDispatcher } from 'svelte';
 	import { browser } from '$app/environment';
 	import { writable } from 'svelte/store';
-	import { goto } from '$app/navigation';
 
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import { Button } from '$lib/components/ui/button';
@@ -15,15 +14,12 @@
 
 	import X from 'lucide-svelte/icons/circle-x';
 
-	import AuthorsServer from '$lib/components/filters/authors/authorsServer.svelte';
 	import FormSelect from '$lib/components/combobox/formSelect.svelte';
 
 	import type { AcademicProductionListsAuthorsCareersJoined } from '$lib/api/model/api/indicatorsInformation/academicProductionListsAuthor';
 	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
 	import { GenerateComboMessagesFromCareers } from '$lib/api/controller/api/career';
 	import type { Message } from '$lib/components/combobox/combobox';
-	import type { CommonError } from '$lib/api/model/errors';
-	import type { Career } from '$lib/api/model/api/career';
 
 	export let data: SuperValidated<
 		Infer<typeof addAcademicProductionListsAuthorSchema>,
@@ -52,12 +48,13 @@
 				AcademicProductionListAuthorCareersCreated();
 				return toast.success(`Autor y sus carreras actualizadas`);
 			}
-			selectedCareers = GenerateComboMessagesFromCareers(updateEntity.careers);
 			fillForm();
 			return manageToastFromErrorMessageOnAddForm(message);
 		}
 	});
 	const { form: formData, enhance } = form;
+
+	let selectedCareers: Message[] = [];
 
 	fillForm();
 
@@ -66,48 +63,17 @@
 	let formDataCareerID = writable($formData.career);
 	formDataCareerID.subscribe((value) => ($formData.career = value));
 
-	let selectedCareers: Message[] = [];
-	let selectedCareersPromise: Promise<Career[]> =
-		fetchAcademicProductionListsAuthorPreviousCareersByAuthorID(0);
-
 	$: {
 		if ($formData.career !== 0) {
 			addItem($formData.career);
 			$formData.career = 0;
 		}
 	}
-	formDataAuthorID.subscribe((value) => {
-		selectedCareersPromise = fetchAcademicProductionListsAuthorPreviousCareersByAuthorID(value);
-	});
 
 	function fillForm() {
+		selectedCareers = GenerateComboMessagesFromCareers(updateEntity.careers);
 		$formData.authorID = updateEntity.author_id;
 		$formData.careers = updateEntity.careers.map((career) => career.ID);
-	}
-
-	async function fetchAcademicProductionListsAuthorPreviousCareersByAuthorID(
-		authorID: number
-	): Promise<Career[]> {
-		const url = `/api/indicatorsInformation/academicProductionListsAuthor/previousCareers/${authorID}`;
-		const response = await fetch(url, { method: 'GET' });
-		if (!response.ok) {
-			const errorData = (await response.json()) as CommonError;
-			if (response.status === 401) {
-				throw goto('/');
-			}
-			throw errorData;
-		}
-		return response.json();
-	}
-
-	function setCareersComboData(careers: Career[]) {
-		if (careers.length > 0) {
-			selectedCareers = GenerateComboMessagesFromCareers(careers);
-			$formData.careers = selectedCareers.map((career) => career.value);
-		} else {
-			selectedCareers = [];
-			$formData.careers = [];
-		}
 	}
 
 	function addItem(id: number) {
@@ -133,8 +99,21 @@
 				<input hidden value={$formData.academicProductionID} name={attrs.name} />
 			</Form.Control>
 		</Form.Field>
-		<Form.Field {form} name="authorID">
-			<AuthorsServer {formDataAuthorID}></AuthorsServer>
+		<Form.Field {form} name="authorID" class="flex flex-col">
+			<Form.Control let:attrs>
+				<label
+					class="data-[fs-error]:text-destructive text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+					for="teacher"
+				>
+					Autor
+				</label>
+				<p
+					class="ring-offset-background focus-visible:ring-ring border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-full items-center justify-between whitespace-nowrap rounded-md border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+				>
+					{updateEntity.author}
+				</p>
+				<input hidden value={$formData.authorID} name={attrs.name} />
+			</Form.Control>
 			<Form.FieldErrors />
 		</Form.Field>
 		<Form.Field {form} name="career" class="flex flex-col">
@@ -148,13 +127,6 @@
 
 		<Form.Fieldset {form} name="careers" class="space-y-0">
 			<ScrollArea class="h-32 rounded-md border">
-				{#await selectedCareersPromise}
-					cargando...
-				{:then selectedCareersResponse}
-					<div class="hidden">
-						{setCareersComboData(selectedCareersResponse)}
-					</div>
-				{/await}
 				{#each selectedCareers as item}
 					<div class="flex flex-row items-start space-x-3 p-2">
 						<Form.Control let:attrs>
@@ -176,7 +148,7 @@
 		</Form.Fieldset>
 	</div>
 	<Form.Button class="my-2 w-full">Guardar</Form.Button>
-	<!-- {#if browser}
+	{#if browser}
 		<SuperDebug data={$formData} />
-	{/if} -->
+	{/if}
 </form>
