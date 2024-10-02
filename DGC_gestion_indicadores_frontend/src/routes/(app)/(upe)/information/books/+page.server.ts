@@ -9,7 +9,7 @@ import { PostBooksOrChaptersProductionLists } from "$lib/api/controller/api/indi
 import type { BooksOrChaptersProductionList } from "$lib/api/model/api/indicatorsInformation/booksOrChaptersProductionLists";
 import { generateFormMessageFromHttpResponse, generateFormMessageFromInvalidForm } from "$lib/utils";
 import { LoadAcademicPeriodsWithComboMessages } from "$lib/api/controller/view/academicPeriod";
-import { addBookOrChaptersProductionListSchema } from "./schema";
+import { addBookOrChaptersProductionListSchema, updateBookOrChaptersProductionListSchema } from "./schema";
 
 export const load: PageServerLoad = async ({ locals, cookies }) => {
     const token = cookies.get("AuthorizationToken")
@@ -23,7 +23,8 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
     }
     return {
         academicPeriodsData: await LoadAcademicPeriodsWithComboMessages(),
-        addBookOrChaptersProductionForm: await superValidate(zod(addBookOrChaptersProductionListSchema))
+        addBookOrChaptersProductionForm: await superValidate(zod(addBookOrChaptersProductionListSchema)),
+        updateBookOrChaptersProductionForm: await superValidate(zod(updateBookOrChaptersProductionListSchema))
     }
 };
 

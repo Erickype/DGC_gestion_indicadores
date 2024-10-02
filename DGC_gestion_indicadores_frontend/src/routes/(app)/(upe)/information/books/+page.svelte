@@ -10,6 +10,7 @@
 
 	export let data: PageServerData;
 	const addBookOrChaptersProductionForm = data.addBookOrChaptersProductionForm;
+	const updateBookOrChaptersProductionForm = data.updateBookOrChaptersProductionForm;
 
 	const academicPeriodsData = data.academicPeriodsData;
 
@@ -48,4 +49,7 @@
 		formData={addBookOrChaptersProductionForm}
 		on:created={fetchOnSuccess}
 	/>
+</div>
+
+<div class="mx-auto flex w-full flex-col place-content-center px-8">
 </div>
