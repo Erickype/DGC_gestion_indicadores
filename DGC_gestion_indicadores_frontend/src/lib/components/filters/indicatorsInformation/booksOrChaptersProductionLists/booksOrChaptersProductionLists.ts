@@ -5,11 +5,10 @@ import type { CommonError } from "$lib/api/model/errors";
 import { goto } from "$app/navigation";
 import { toast } from "svelte-sonner";
 
-export function newFilterAcademicProductionListsByAcademiPeriodRequest(page_size: number, page: number, academicPeriodID: number): FilterBooksOrChaptersProductionListsByAcademicPeriodRequest {
+export function newFilterBooksOrChaptersProductionListsByAcademiPeriodRequest(page_size: number, page: number, academicPeriodID: number): FilterBooksOrChaptersProductionListsByAcademicPeriodRequest {
     let filterAcademicProductionRequest: FilterBooksOrChaptersProductionListsByAcademicPeriodRequest = {
         DOI: '',
         title: '',
-        publication_date: '',
         detailed_field: '',
         academic_period_id: academicPeriodID,
         page_size: page_size,
@@ -18,7 +17,7 @@ export function newFilterAcademicProductionListsByAcademiPeriodRequest(page_size
     return filterAcademicProductionRequest
 }
 
-export async function fetchFilterAcademicProductionLists(filterAcademicProductionRequest: FilterBooksOrChaptersProductionListsByAcademicPeriodRequest):
+export async function fetchFilterBooksOrChaptersProductionLists(filterAcademicProductionRequest: FilterBooksOrChaptersProductionListsByAcademicPeriodRequest):
     Promise<FilterBooksOrChaptersProductionListsByAcademicPeriodResponse> {
     const url = `/api/indicatorsInformation/booksOrChaptersProductionLists/filter`;
     const response = await fetch(url, {
