@@ -1,10 +1,4 @@
 <script lang="ts">
-	import type {
-		AcademicProductionListByAcademicPeriodJoined,
-		FilterAcademicProductionListsByAcademicPeriodRequest,
-		FilterAcademicProductionListsByAcademicPeriodResponse
-	} from '$lib/api/model/api/indicatorsInformation/academicProductionLists';
-
 	import { addPagination, addSortBy, addTableFilter } from 'svelte-headless-table/plugins';
 	import { createTable, createRender } from 'svelte-headless-table';
 	import { createEventDispatcher } from 'svelte';
@@ -18,13 +12,14 @@
 	import Table from '$lib/components/table/tablePaginated.svelte';
 	/* 	import UpdateForm from './UpdateForm.svelte';
 	 */
-	import { generateInitialFilterValue } from '$lib/components/filters/indicatorsInformation/academicProductionLists/academicProductionLists';
-	import type { PopoverFilterDataMap } from '$lib/components/table/types';
-	import type { Message } from '$lib/components/combobox/combobox';
+	import { generateInitialFilterValue } from '$lib/components/filters/indicatorsInformation/booksOrChaptersProductionLists/booksOrChaptersProductionLists';
 	import type {
 		BooksOrChaptersProductionListsByAcademicPeriodJoined,
+		FilterBooksOrChaptersProductionListsByAcademicPeriodRequest,
 		FilterBooksOrChaptersProductionListsByAcademicPeriodResponse
 	} from '$lib/api/model/api/indicatorsInformation/booksOrChaptersProductionLists';
+	import type { PopoverFilterDataMap } from '$lib/components/table/types';
+	import type { Message } from '$lib/components/combobox/combobox';
 
 	export let filterBooksOrChaptersProductionListsByAcademicPeriodResponse: FilterBooksOrChaptersProductionListsByAcademicPeriodResponse;
 	let filterBooksOrChaptersProductionListsResponse: BooksOrChaptersProductionListsByAcademicPeriodJoined[] =
@@ -41,7 +36,7 @@
 	let filterValue = '';
 	let pageIndex: number = 0;
 	let pageSize: number = 0;
-	export let filterBooksOrChaptersProductionListsByAcademicPeriodRequest: FilterAcademicProductionListsByAcademicPeriodRequest;
+	export let filterBooksOrChaptersProductionListsByAcademicPeriodRequest: FilterBooksOrChaptersProductionListsByAcademicPeriodRequest;
 	let initialFilterValue: string | undefined = generateInitialFilterValue(
 		filterBooksOrChaptersProductionListsByAcademicPeriodRequest
 	);
