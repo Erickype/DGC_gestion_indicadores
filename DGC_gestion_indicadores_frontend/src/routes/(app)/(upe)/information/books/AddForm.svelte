@@ -20,7 +20,7 @@
 	import * as Form from '$lib/components/ui/form';
 	import { toast } from 'svelte-sonner';
 
-	import type { AcademicProductionList } from '$lib/api/model/api/indicatorsInformation/academicProductionLists';
+	import type { BooksOrChaptersProductionList } from '$lib/api/model/api/indicatorsInformation/booksOrChaptersProductionLists';
 	import DetailedFieldsServer from '$lib/components/filters/detailedFields/detailedFieldsServer.svelte';
 	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
 	import { DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date';
@@ -36,7 +36,7 @@
 
 	const dispatch = createEventDispatcher();
 
-	function AcademicProductionCreated() {
+	function BooksOrChaptersProductionListCreated() {
 		dispatch('message', {
 			created: true
 		});
@@ -51,9 +51,11 @@
 				return manageToastFromInvalidAddForm();
 			}
 			if (message.success) {
-				const academicProduction = message.data as AcademicProductionList;
-				AcademicProductionCreated();
-				return toast.success(`Publicación creada: ${academicProduction.publication_name}`);
+				const response = message.data as BooksOrChaptersProductionList;
+				BooksOrChaptersProductionListCreated();
+				return toast.success(
+					`${response.is_chapter ? 'Capítulo libro' : 'Libro'} creado: ${response.title}`
+				);
 			}
 			return manageToastFromErrorMessageOnAddForm(message);
 		}
