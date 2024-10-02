@@ -81,7 +81,7 @@
 	}
 </script>
 
-<form action="?/postAcademicProductionList" use:enhance>
+<form action="?/postBooksOrChaptersProductionLists" use:enhance>
 	<div class="flex flex-col gap-2">
 		<Form.Field {form} name="academic_period_id">
 			<Form.Control let:attrs>
