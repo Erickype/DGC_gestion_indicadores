@@ -1,6 +1,8 @@
 <script lang="ts">
 	import AcademicPeriodCombo from '$lib/components/combobox/academicPeriodCombo.svelte';
 	import TableSkeleton from '$lib/components/skeleton/table.svelte';
+	import AddModal from '$lib/components/modal/AddModal.svelte';
+	import Alert from '$lib/components/alert/alert.svelte';
 	import AddForm from './AddForm.svelte';
 	import Table from './Table.svelte';
 
@@ -8,18 +10,18 @@
 
 	import type { PageServerData } from './$types';
 
-	import AddModal from '$lib/components/modal/AddModal.svelte';
+	import {
+		fetchFilterBooksOrChaptersProductionLists,
+		fetchOnDetailedFilter,
+		fetchOnFilterChanged,
+		newFilterBooksOrChaptersProductionListsByAcademiPeriodRequest,
+		newPopoverFilterDataMap
+	} from '$lib/components/filters/indicatorsInformation/booksOrChaptersProductionLists/booksOrChaptersProductionLists';
 	import type {
 		FilterBooksOrChaptersProductionListsByAcademicPeriodRequest,
 		FilterBooksOrChaptersProductionListsByAcademicPeriodResponse
 	} from '$lib/api/model/api/indicatorsInformation/booksOrChaptersProductionLists';
-	import {
-		fetchFilterBooksOrChaptersProductionLists,
-		newFilterBooksOrChaptersProductionListsByAcademiPeriodRequest,
-		newPopoverFilterDataMap
-	} from '$lib/components/filters/indicatorsInformation/booksOrChaptersProductionLists/booksOrChaptersProductionLists';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
-	import Alert from '$lib/components/alert/alert.svelte';
 
 	export let data: PageServerData;
 	const addBookOrChaptersProductionForm = data.addBookOrChaptersProductionForm;
@@ -59,28 +61,28 @@
 	}
 
 	function handleOnFilterChanged(event: CustomEvent) {
-		/* const data: { filter: string } = event.detail;
-		filterAcademicProductionListPromise = fetchOnFilterChanged(
+		const data: { filter: string } = event.detail;
+		filterBooksOrChaptersProductionListPromise = fetchOnFilterChanged(
 			data.filter.trim(),
-			filterAcademicProductionListRequest,
+			filterBooksOrChaptersProductionListsByAcademicPeriodRequest,
 			popoverFilterDataMap
-		); */
+		);
 	}
 
 	function handleOnDetailedFilter() {
-		/* filterAcademicProductionListPromise = fetchOnDetailedFilter(
-			filterAcademicProductionListRequest,
+		filterBooksOrChaptersProductionListPromise = fetchOnDetailedFilter(
+			filterBooksOrChaptersProductionListsByAcademicPeriodRequest,
 			popoverFilterDataMap
 		).then(({ request, response }) => {
-			filterAcademicProductionListRequest = request;
+			filterBooksOrChaptersProductionListsByAcademicPeriodRequest = request;
 			return response;
-		}); */
+		});
 	}
 
 	function handlePaginationChanged() {
-		/* filterAcademicProductionListPromise = fetchFilterAcademicProductionLists(
-			filterAcademicProductionListRequest
-		); */
+		filterBooksOrChaptersProductionListPromise = fetchFilterBooksOrChaptersProductionLists(
+			filterBooksOrChaptersProductionListsByAcademicPeriodRequest
+		);
 	}
 </script>
 
