@@ -4,32 +4,31 @@ import (
 	"fmt"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
-	"gorm.io/datatypes"
 	"strings"
 )
 
 type FilterBooksOrChaptersProductionListsByAcademicPeriodRequest struct {
-	DOI              string         `json:"DOI"`
-	IsChapter        *bool          `json:"is_chapter"`
-	Title            string         `json:"title"`
-	PublicationDate  datatypes.Date `json:"publication_date"`
-	PeerReviewed     *bool          `json:"peer_reviewed"`
-	DetailedField    string         `json:"detailed_field_id"`
-	AcademicPeriodID uint           `json:"academic_period_id"`
-	PageSize         int            `json:"page_size"`
-	Page             int            `json:"page"`
+	DOI              string `json:"DOI"`
+	IsChapter        *bool  `json:"is_chapter"`
+	Title            string `json:"title"`
+	PublicationDate  string `json:"publication_date"`
+	PeerReviewed     *bool  `json:"peer_reviewed"`
+	DetailedField    string `json:"detailed_field_id"`
+	AcademicPeriodID uint   `json:"academic_period_id"`
+	PageSize         int    `json:"page_size"`
+	Page             int    `json:"page"`
 }
 
 type BooksOrChaptersProductionListsByAcademicPeriodJoined struct {
 	ID               uint
-	DOI              string         `json:"DOI"`
-	IsChapter        *bool          `json:"is_chapter"`
-	Title            string         `json:"title"`
-	PublicationDate  datatypes.Date `json:"publication_date"`
-	PeerReviewed     *bool          `json:"peer_reviewed"`
-	DetailedFieldID  uint           `json:"detailed_field_id"`
-	DetailedField    string         `json:"detailed_field"`
-	AcademicPeriodID uint           `json:"academic_period_id"`
+	DOI              string `json:"DOI"`
+	IsChapter        *bool  `json:"is_chapter"`
+	Title            string `json:"title"`
+	PublicationDate  string `json:"publication_date"`
+	PeerReviewed     *bool  `json:"peer_reviewed"`
+	DetailedFieldID  uint   `json:"detailed_field_id"`
+	DetailedField    string `json:"detailed_field"`
+	AcademicPeriodID uint   `json:"academic_period_id"`
 }
 
 type FilterBooksOrChaptersProductionListsByAcademicPeriodResponse struct {
@@ -53,19 +52,19 @@ func FilterBooksOrChaptersProductionListsByAcademicPeriod(
 	}
 	if booksOrChaptersProductionListsByAcademicPeriodRequest.IsChapter != nil {
 		conditions = append(conditions, "bocpl.is_chapter = ?")
-		values = append(values, fmt.Sprintf("%b", booksOrChaptersProductionListsByAcademicPeriodRequest.IsChapter))
+		values = append(values, fmt.Sprintf("%t", *booksOrChaptersProductionListsByAcademicPeriodRequest.IsChapter))
 	}
 	if booksOrChaptersProductionListsByAcademicPeriodRequest.Title != "" {
 		conditions = append(conditions, "LOWER(bocpl.title) LIKE ?")
 		values = append(values, fmt.Sprintf("%%%s%%", strings.ToLower(booksOrChaptersProductionListsByAcademicPeriodRequest.Title)))
 	}
-	if booksOrChaptersProductionListsByAcademicPeriodRequest.PublicationDate.GormDataType() != "" {
+	if booksOrChaptersProductionListsByAcademicPeriodRequest.PublicationDate != "" {
 		conditions = append(conditions, "cast(bocpl.publication_date as varchar) LIKE ?")
-		values = append(values, fmt.Sprintf("%%%s%%", strings.ToLower(booksOrChaptersProductionListsByAcademicPeriodRequest.PublicationDate.GormDataType())))
+		values = append(values, fmt.Sprintf("%%%s%%", strings.ToLower(booksOrChaptersProductionListsByAcademicPeriodRequest.PublicationDate)))
 	}
 	if booksOrChaptersProductionListsByAcademicPeriodRequest.PeerReviewed != nil {
 		conditions = append(conditions, "bocpl.peer_reviewed = ?")
-		values = append(values, fmt.Sprintf("%b", booksOrChaptersProductionListsByAcademicPeriodRequest.PeerReviewed))
+		values = append(values, fmt.Sprintf("%t", *booksOrChaptersProductionListsByAcademicPeriodRequest.PeerReviewed))
 	}
 	if booksOrChaptersProductionListsByAcademicPeriodRequest.DetailedField != "" {
 		conditions = append(conditions, "LOWER(df.name) LIKE ?")
