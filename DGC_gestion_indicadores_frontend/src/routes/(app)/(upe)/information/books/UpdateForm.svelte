@@ -110,6 +110,11 @@
 
 <form action="?/updateBooksOrChaptersProductionLists" use:enhance>
 	<div class="flex flex-col gap-2">
+		<Form.Field {form} name="id">
+			<Form.Control let:attrs>
+				<input hidden value={$formData.id} name={attrs.name} />
+			</Form.Control>
+		</Form.Field>
 		<Form.Field {form} name="academic_period_id">
 			<Form.Control let:attrs>
 				<input hidden value={$formData.academic_period_id} name={attrs.name} />
@@ -204,7 +209,7 @@
 		</Form.Field>
 	</div>
 	<Form.Button class="my-2 w-full">Guardar</Form.Button>
-	<!-- {#if browser}
+	{#if browser}
 		<SuperDebug data={$formData} />
-	{/if} -->
+	{/if}
 </form>

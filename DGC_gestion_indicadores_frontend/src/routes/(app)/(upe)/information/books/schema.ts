@@ -35,7 +35,7 @@ export const addBookOrChaptersProductionListSchema = z.object({
 });
 
 export const updateBookOrChaptersProductionListSchema = z.object({
-    id: z.number({}).gt(0),
+    id: z.number().gt(0),
 
     doi: z.string({
         required_error: "DOI requerido"
