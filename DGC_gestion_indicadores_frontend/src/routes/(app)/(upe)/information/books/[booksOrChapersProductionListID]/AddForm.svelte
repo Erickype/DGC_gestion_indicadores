@@ -116,7 +116,7 @@
 	}
 </script>
 
-<form action="?/postAcademicProductionListsAuthorCareers" use:enhance>
+<form action="?/postBooksOrChaptersProductionListsAuthorCareers" use:enhance>
 	<div class="flex flex-col gap-2">
 		<Form.Field {form} name="booksOrChaptersProductionListID">
 			<Form.Control let:attrs>

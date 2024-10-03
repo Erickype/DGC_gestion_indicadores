@@ -6,8 +6,8 @@ import { error, redirect, type Actions } from "@sveltejs/kit";
 import { mainDashboarRoute } from "$lib/api/util/paths";
 import type { PageServerLoad } from "./$types";
 
-import type { PostAcademicProductionListsAuthorCareersRequest, UpdateAcademicProductionListsAuthorCareersRequest } from "$lib/api/model/api/indicatorsInformation/academicProductionListsAuthor";
-import { PostAcademicProductionListsAuthorCareers, UpdateAcademicProductionListsAuthorCareers } from "$lib/api/controller/api/indicatorsInformation/academicProductionListsAuthor";
+import type { PostBooksOrChaptersProductionListsAuthorCareersRequest } from "$lib/api/model/api/indicatorsInformation/booksOrChaptersProductionListsAuthor";
+import { PostBooksOrChaptersProductionListsAuthorCareers } from "$lib/api/controller/api/indicatorsInformation/booksOrChaptersProductionListsAuthor";
 import { generateFormMessageFromHttpResponse, generateFormMessageFromInvalidForm } from "$lib/utils";
 import { LoadCareersWithComboMessages } from "$lib/api/controller/api/career";
 
@@ -35,4 +35,23 @@ export const load: PageServerLoad = async ({ locals, cookies, params }) => {
 };
 
 export const actions: Actions = {
+    postBooksOrChaptersProductionListsAuthorCareers: async (event) => {
+        const form = await superValidate(event, zod(addBooksOrChaptersProductionListsAuthorCareersSchema))
+
+        if (!form.valid) {
+            return generateFormMessageFromInvalidForm(form)
+        }
+
+        const token = event.cookies.get("AuthorizationToken")
+        const data = form.data
+        const academicProductionListsAuthorCareersRequest: PostBooksOrChaptersProductionListsAuthorCareersRequest = {
+            books_or_chapters_production_list_id: data.booksOrChaptersProductionListID,
+            author_id: data.authorID,
+            careers: data.careers
+        }
+
+        const response = await PostBooksOrChaptersProductionListsAuthorCareers(token!, academicProductionListsAuthorCareersRequest)
+
+        return generateFormMessageFromHttpResponse(form, response)
+    },
 };
