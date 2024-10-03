@@ -167,6 +167,9 @@ func serveApplication() {
 	indicatorsInformationRoutes.PUT("/booksOrChaptersProductionList/:id",
 		indicatorsInformationBooksOrChaptersProduction.UpdateBooksOrChaptersProductionList)
 
+	indicatorsInformationRoutes.POST("/booksOrChaptersProductionListsAuthor",
+		indicatorsInformationBooksOrChaptersProduction.PostBooksOrChaptersProductionListsAuthorCareers)
+
 	// Indicators routes
 	indicatorsRoutes := router.Group("/api/indicators/")
 	indicatorsRoutes.Use(util.JWTAuth(), util.JWTAuthUPE())
