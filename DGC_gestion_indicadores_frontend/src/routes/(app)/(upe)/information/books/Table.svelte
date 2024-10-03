@@ -111,7 +111,7 @@
 				const actions = createRender(DataTableActions, {
 					id: `${value}`,
 					moreAction: true,
-					moreActionURL: `/`
+					moreActionURL: `/information/books/`
 				});
 				actions.on('delete-confirmation', handleDeleteConfirmation);
 				actions.on('update-action', handleUpdateAction);
