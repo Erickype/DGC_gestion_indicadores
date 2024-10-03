@@ -162,8 +162,11 @@ func serveApplication() {
 
 	indicatorsInformationRoutes.POST("/booksOrChaptersProductionList",
 		indicatorsInformationBooksOrChaptersProduction.PostBooksOrChaptersProductionList)
-	indicatorsInformationRoutes.POST("booksOrChaptersProductionLists/filter",
+	indicatorsInformationRoutes.POST("/booksOrChaptersProductionLists/filter",
 		indicatorsInformationBooksOrChaptersProduction.FilterBooksOrChaptersProductionListsByAcademicPeriod)
+	indicatorsInformationRoutes.PUT("/booksOrChaptersProductionList/:id",
+		indicatorsInformationBooksOrChaptersProduction.UpdateBooksOrChaptersProductionList)
+
 	// Indicators routes
 	indicatorsRoutes := router.Group("/api/indicators/")
 	indicatorsRoutes.Use(util.JWTAuth(), util.JWTAuthUPE())

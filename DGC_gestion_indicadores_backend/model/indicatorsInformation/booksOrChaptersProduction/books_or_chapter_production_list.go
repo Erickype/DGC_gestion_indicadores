@@ -31,8 +31,34 @@ func (bc BooksOrChaptersProductionList) TableName() string {
 	return model.IndicatorsInformationSchema + ".books_or_chapter_production_lists"
 }
 
+func GetBooksOrChaptersProductionListByID(id int, response *BooksOrChaptersProductionList) (err error) {
+	err = database.DB.First(&response, id).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("no existe el libro o capítulo en el periodo")
+		}
+		return err
+	}
+	return nil
+}
+
 func PostBooksOrChaptersProductionList(request *BooksOrChaptersProductionList) (err error) {
 	err = database.DB.Create(request).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("libro o capítulo en lista ya existe")
+		}
+		return err
+	}
+	return nil
+}
+
+func UpdateBooksOrChaptersProductionList(booksOrChaptersProductionList *BooksOrChaptersProductionList) (err error) {
+	err = database.DB.Model(&BooksOrChaptersProductionList{}).
+		Where("id = ?",
+			booksOrChaptersProductionList.ID).
+		Updates(booksOrChaptersProductionList).
+		Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
 			return errors.New("libro o capítulo en lista ya existe")
