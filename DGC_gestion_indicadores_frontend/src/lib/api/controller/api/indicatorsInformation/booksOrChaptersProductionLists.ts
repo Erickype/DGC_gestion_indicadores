@@ -1,4 +1,4 @@
-import { postBookOrChaptersProductionListRoute, postFilterBooksOrChaptersProductionListByAcademicPeriodIDRoute } from "$lib/api/routes/api/indicatorsInformation/booksOrChaptersProductionLists";
+import { postBookOrChaptersProductionListRoute, postFilterBooksOrChaptersProductionListByAcademicPeriodIDRoute, updateBookOrChaptersProductionListRoute } from "$lib/api/routes/api/indicatorsInformation/booksOrChaptersProductionLists";
 
 import { generateCommonErrorFromFetchError } from "$lib/utils";
 import type { CommonError } from "$lib/api/model/errors";
@@ -8,6 +8,27 @@ export async function PostBooksOrChaptersProductionLists(token: string, request:
     try {
         const response = await fetch(postBookOrChaptersProductionListRoute, {
             method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify(request)
+        })
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
+        }
+        const booksOrChaptersProductionList: BooksOrChaptersProductionList = await response.json()
+        return booksOrChaptersProductionList;
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
+}
+
+export async function UpdateBooksOrChaptersProductionList(token: string, request: BooksOrChaptersProductionList) {
+    try {
+        const response = await fetch(updateBookOrChaptersProductionListRoute + request.ID, {
+            method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': token
