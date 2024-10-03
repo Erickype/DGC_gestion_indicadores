@@ -33,6 +33,7 @@
 
 	$: {
 		addBookOrChaptersProductionForm.data.academic_period_id = selectedAcademicPeriod;
+		updateBookOrChaptersProductionForm.data.academic_period_id = selectedAcademicPeriod;
 	}
 
 	let filterBooksOrChaptersProductionListsByAcademicPeriodRequest: FilterBooksOrChaptersProductionListsByAcademicPeriodRequest =
