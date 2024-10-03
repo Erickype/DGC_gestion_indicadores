@@ -10,8 +10,8 @@
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
 	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
 	import Table from '$lib/components/table/tablePaginated.svelte';
-	/* 	import UpdateForm from './UpdateForm.svelte';
-	 */
+	import UpdateForm from './UpdateForm.svelte';
+
 	import { generateInitialFilterValue } from '$lib/components/filters/indicatorsInformation/booksOrChaptersProductionLists/booksOrChaptersProductionLists';
 	import type {
 		BooksOrChaptersProductionListsByAcademicPeriodJoined,
@@ -31,7 +31,7 @@
 		Infer<UpdateBookOrChaptersProductionListSchema>,
 		App.Superforms.Message
 	>;
-	let academicProduction: BooksOrChaptersProductionListsByAcademicPeriodJoined;
+	let booksOrChaptersProduction: BooksOrChaptersProductionListsByAcademicPeriodJoined;
 
 	let filterValue = '';
 	let pageIndex: number = 0;
@@ -127,8 +127,8 @@
 	function handleUpdateAction(event: any) {
 		const detail: { status: boolean; id: string } = event.detail;
 		if (detail.status) {
-			academicProduction = filterBooksOrChaptersProductionListsResponse.find(
-				(academicProduction) => academicProduction.ID.toString() === detail.id
+			booksOrChaptersProduction = filterBooksOrChaptersProductionListsResponse.find(
+				(booksOrChaptersProduction) => booksOrChaptersProduction.ID.toString() === detail.id
 			)!;
 			updateFormOpen = true;
 		} else {
@@ -165,15 +165,15 @@
 	}
 </script>
 
-<!-- <UpdateModal
-	modalTitle="Actualizar publicación académica"
+<UpdateModal
+	modalTitle="Actualizar libro o capítulo libro"
 	{formData}
 	formComponent={UpdateForm}
 	{comboMessages}
-	bind:updateEntity={academicProduction}
+	bind:updateEntity={booksOrChaptersProduction}
 	bind:open={updateFormOpen}
 	on:updated={handleUpdated}
-/> -->
+/>
 
 <div class="w-full">
 	<Table
