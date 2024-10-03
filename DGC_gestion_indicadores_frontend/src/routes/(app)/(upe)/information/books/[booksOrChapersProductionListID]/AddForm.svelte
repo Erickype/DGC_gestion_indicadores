@@ -118,9 +118,9 @@
 
 <form action="?/postAcademicProductionListsAuthorCareers" use:enhance>
 	<div class="flex flex-col gap-2">
-		<Form.Field {form} name="academicProductionID">
+		<Form.Field {form} name="booksOrChaptersProductionListID">
 			<Form.Control let:attrs>
-				<input hidden value={$formData.academicProductionID} name={attrs.name} />
+				<input hidden value={$formData.booksOrChaptersProductionListID} name={attrs.name} />
 			</Form.Control>
 		</Form.Field>
 		<Form.Field {form} name="authorID">

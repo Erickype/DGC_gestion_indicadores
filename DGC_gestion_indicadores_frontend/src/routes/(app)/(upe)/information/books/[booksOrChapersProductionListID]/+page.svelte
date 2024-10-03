@@ -19,6 +19,9 @@
 	let addBooksOrChaptersProductionListsAuthorCareersForm =
 		data.addBooksOrChaptersProductionListsAuthorCareersForm;
 
+	addBooksOrChaptersProductionListsAuthorCareersForm.data.booksOrChaptersProductionListID =
+		data.booksOrChapersProductionListID;
+
 	function fetchOnSuccess(event: CustomEvent) {
 		const detail: { status: boolean } = event.detail;
 		if (detail.status) {

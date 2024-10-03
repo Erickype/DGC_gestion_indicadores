@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const addBooksOrChaptersProductionListsAuthorCareersSchema = z.object({
-    academicProductionID: z.number().gt(0),
+    booksOrChaptersProductionListID: z.number().gt(0),
 
     authorID: z.number({
         required_error: "Autor requerido"
