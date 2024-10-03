@@ -1,8 +1,9 @@
 
 import { generateCommonErrorFromFetchError } from "$lib/utils";
 import type { CommonError } from "$lib/api/model/errors";
-import { postBookOrChaptersProductionListsAuthorRoute } from "$lib/api/routes/api/indicatorsInformation/booksOrChaptersProductionListsAuthor";
+import { getBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionListIDRoute, postBookOrChaptersProductionListsAuthorRoute } from "$lib/api/routes/api/indicatorsInformation/booksOrChaptersProductionListsAuthor";
 import type { PostBooksOrChaptersProductionListsAuthorCareersRequest } from "$lib/api/model/api/indicatorsInformation/booksOrChaptersProductionListsAuthor";
+import type { BooksOrChaptersProductionListsByAcademicPeriodJoined } from "$lib/api/model/api/indicatorsInformation/booksOrChaptersProductionLists";
 
 export async function PostBooksOrChaptersProductionListsAuthorCareers(token: string, request: PostBooksOrChaptersProductionListsAuthorCareersRequest) {
     try {
@@ -21,6 +22,27 @@ export async function PostBooksOrChaptersProductionListsAuthorCareers(token: str
         }
         const postBooksOrChaptersProductionListsAuthorCareersRequest: PostBooksOrChaptersProductionListsAuthorCareersRequest[] = await response.json()
         return postBooksOrChaptersProductionListsAuthorCareersRequest
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
+}
+
+export async function GetBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionListID(token: string, booksOrChaptersProductionListID: string): Promise<BooksOrChaptersProductionListsByAcademicPeriodJoined[] | CommonError> {
+    try {
+        const response = await fetch(getBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionListIDRoute + booksOrChaptersProductionListID, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+        });
+
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
+        }
+        const booksOrChaptersProductionListsByAcademicPeriodJoined: BooksOrChaptersProductionListsByAcademicPeriodJoined[] = await response.json()
+        return booksOrChaptersProductionListsByAcademicPeriodJoined
     } catch (error) {
         return generateCommonErrorFromFetchError(error)
     }
