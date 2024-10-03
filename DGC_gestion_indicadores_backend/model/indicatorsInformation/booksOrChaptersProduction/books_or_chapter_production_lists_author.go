@@ -28,6 +28,12 @@ type PostBooksOrChaptersProductionListsAuthorCareersRequest struct {
 	Careers                         []uint `json:"careers"`
 }
 
+type BooksOrChaptersProductionListsAuthorsCareersJoined struct {
+	AuthorID uint            `json:"author_id"`
+	Author   string          `json:"author"`
+	Careers  []career.Career `json:"careers,omitempty"`
+}
+
 func (bc BooksOrChaptersProductionListAuthor) TableName() string {
 	return model.IndicatorsInformationSchema + ".books_or_chapter_production_lists_authors"
 }
@@ -53,4 +59,44 @@ func PostBooksOrChaptersProductionListsAuthorCareers(
 		}
 		return nil
 	})
+}
+
+func GetBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionListID(
+	academicProductionListID int, response *[]BooksOrChaptersProductionListsAuthorsCareersJoined) (err error) {
+	var academicProductionAuthors []struct {
+		Author   string `json:"author"`
+		AuthorId uint   `json:"author_id"`
+	}
+	err = database.DB.Table("indicators_information.academic_production_lists_authors apla").
+		Select(`p.name || ' ' || p.lastname as author,
+				bocpla.author_id`).
+		Joins("join authors a on bocpla.author_id = a.id").
+		Joins("join people p on a.person_id = p.id").
+		Group("bocpla.author_id, p.name, p.lastname").
+		Where("bocpla.books_or_chapters_production_list_id = ?", academicProductionListID).
+		Scan(&academicProductionAuthors).Error
+	if err != nil {
+		return err
+	}
+
+	for _, authorCareer := range academicProductionAuthors {
+		authorCareers := []career.Career{}
+		err = database.DB.Table("indicators_information.books_or_chapter_production_lists_authors bocpla").
+			Select("c.*").
+			Joins("join careers c on bocpla.career_id = c.id").
+			Where("bocpla.author_id = ?", authorCareer.AuthorId).
+			Where("bocpla.books_or_chapters_production_list_id = ?", academicProductionListID).
+			Scan(&authorCareers).Error
+		if err != nil {
+			return err
+		}
+
+		authorCareersJoined := BooksOrChaptersProductionListsAuthorsCareersJoined{
+			AuthorID: authorCareer.AuthorId,
+			Author:   authorCareer.Author,
+			Careers:  authorCareers,
+		}
+		*response = append(*response, authorCareersJoined)
+	}
+	return nil
 }

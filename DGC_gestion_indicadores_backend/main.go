@@ -169,6 +169,9 @@ func serveApplication() {
 
 	indicatorsInformationRoutes.POST("/booksOrChaptersProductionListsAuthor",
 		indicatorsInformationBooksOrChaptersProduction.PostBooksOrChaptersProductionListsAuthorCareers)
+	indicatorsInformationRoutes.GET(
+		"/booksOrChaptersProductionListsAuthors/JoinedByBooksOrChaptersProductionListID/:booksOrChaptersProductionListID",
+		indicatorsInformationBooksOrChaptersProduction.GetBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionListID)
 
 	// Indicators routes
 	indicatorsRoutes := router.Group("/api/indicators/")

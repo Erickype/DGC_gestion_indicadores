@@ -5,6 +5,7 @@ import (
 	model "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/booksOrChaptersProduction"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 func PostBooksOrChaptersProductionListsAuthorCareers(c *gin.Context) {
@@ -20,4 +21,16 @@ func PostBooksOrChaptersProductionListsAuthorCareers(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, postBooksOrChaptersProductionListsAuthorCareersRequest)
+}
+
+func GetBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionListID(c *gin.Context) {
+	bookOrChaptersProductionListID, _ := strconv.Atoi(c.Param("booksOrChaptersProductionListID"))
+	response := []model.BooksOrChaptersProductionListsAuthorsCareersJoined{}
+	err := model.GetBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionListID(
+		bookOrChaptersProductionListID, &response)
+	if err != nil {
+		errors.InternalServerErrorResponse(c, "Error retornando autores", err)
+		return
+	}
+	c.JSON(http.StatusOK, response)
 }
