@@ -1,4 +1,4 @@
-import { addBooksOrChaptersProductionListsAuthorCareersSchema } from "./schema";
+import { addBooksOrChaptersProductionListsAuthorCareersSchema, updateBooksOrChaptersProductionListsAuthorCareersSchema } from "./schema";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 
@@ -27,6 +27,7 @@ export const load: PageServerLoad = async ({ locals, cookies, params }) => {
         return {
             booksOrChapersProductionListID: booksOrChapersProductionListID,
             addBooksOrChaptersProductionListsAuthorCareersForm: await superValidate(zod(addBooksOrChaptersProductionListsAuthorCareersSchema)),
+            updateBooksOrChaptersProductionListsAuthorCareersForm: await superValidate(zod(updateBooksOrChaptersProductionListsAuthorCareersSchema)),
             careersData: await LoadCareersWithComboMessages(token!),
         }
     }
