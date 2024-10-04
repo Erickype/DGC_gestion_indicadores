@@ -67,7 +67,7 @@ func GetBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionLi
 		Author   string `json:"author"`
 		AuthorId uint   `json:"author_id"`
 	}
-	err = database.DB.Table("indicators_information.academic_production_lists_authors apla").
+	err = database.DB.Table("indicators_information.books_or_chapter_production_lists_authors bocpla").
 		Select(`p.name || ' ' || p.lastname as author,
 				bocpla.author_id`).
 		Joins("join authors a on bocpla.author_id = a.id").
