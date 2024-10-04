@@ -4,8 +4,9 @@ import { json, type RequestHandler } from "@sveltejs/kit";
 
 export const GET: RequestHandler = async ({ cookies, params }) => {
     const token = cookies.get("AuthorizationToken")
-    const academicProductionID = params.academicProductionListID
-    const response = await GetBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionListID(token!, academicProductionID!)
+    const booksOrChaptersProductionListID = params.booksOrChaptersProductionListID
+
+    const response = await GetBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionListID(token!, booksOrChaptersProductionListID!)
 
     if ((response as CommonError).status_code) {
         return generateErrorFromCommonError(response as CommonError)
