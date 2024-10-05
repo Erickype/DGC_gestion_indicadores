@@ -124,6 +124,12 @@ func seedData() {
 			Abbreviation: "Tasa personal académico con dedicación tiempo completo",
 			Description:  "Tasa del personal académico con dedicación a tiempo completo al menos el 50%",
 		},
+		{
+			ID:           26,
+			Name:         "Indicador 26: Producción Académica",
+			Abbreviation: "Producción Académica",
+			Description:  "La institución cuenta con producción académica como resultado de sus procesos de investigación. Se espera que el índice de producción académica per cápita sea de al menos 1,5 en 3 años.",
+		},
 	}
 
 	var compensationFactors = []academicProduction.CompensationFactor{
