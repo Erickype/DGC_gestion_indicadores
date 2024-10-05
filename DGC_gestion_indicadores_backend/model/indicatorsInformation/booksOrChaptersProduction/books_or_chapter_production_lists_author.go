@@ -1,7 +1,6 @@
 package model
 
 import (
-	"errors"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	academicProduction "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicProduction/author"
@@ -15,11 +14,9 @@ type BooksOrChaptersProductionListAuthor struct {
 	UpdatedAt                       time.Time `json:"updated_at"`
 	BooksOrChaptersProductionListID uint      `gorm:"primary_key" json:"books_or_chapters_production_list_id;"`
 	AuthorID                        uint      `gorm:"primary_key" json:"author_id"`
-	CareerID                        uint      `gorm:"primary_key" json:"career_id"`
 
 	BooksOrChaptersProductionList BooksOrChaptersProductionList `json:"-"`
 	Author                        academicProduction.Author     `json:"-"`
-	Career                        career.Career                 `json:"-"`
 }
 
 type PostBooksOrChaptersProductionListsAuthorCareersRequest struct {
@@ -41,7 +38,7 @@ func (bc BooksOrChaptersProductionListAuthor) TableName() string {
 func PostBooksOrChaptersProductionListsAuthorCareers(
 	request *PostBooksOrChaptersProductionListsAuthorCareersRequest) (err error) {
 	return database.DB.Transaction(func(tx *gorm.DB) error {
-		for _, careerID := range request.Careers {
+		/*for _, careerID := range request.Careers {
 			booksOrChaptersProductionListAuthor := BooksOrChaptersProductionListAuthor{
 				BooksOrChaptersProductionListID: request.BooksOrChaptersProductionListID,
 				AuthorID:                        request.AuthorID,
@@ -56,7 +53,7 @@ func PostBooksOrChaptersProductionListsAuthorCareers(
 				}
 				return err
 			}
-		}
+		}*/
 		return nil
 	})
 }

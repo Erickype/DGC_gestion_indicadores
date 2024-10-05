@@ -1,7 +1,6 @@
 package model
 
 import (
-	"errors"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	academicProduction "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicProduction/author"
@@ -15,11 +14,9 @@ type AcademicProductionListsAuthor struct {
 	UpdatedAt                time.Time `json:"updated_at"`
 	AcademicProductionListID uint      `gorm:"primary_key" json:"academic_production_list_id"`
 	AuthorID                 uint      `gorm:"primary_key" json:"author_id"`
-	CareerID                 uint      `gorm:"primary_key" json:"career_id"`
 
 	AcademicProductionList AcademicProductionList    `json:"-"`
 	Author                 academicProduction.Author `json:"-"`
-	Career                 career.Career             `json:"-"`
 }
 
 type AcademicProductionListsAuthorsCareersJoined struct {
@@ -46,7 +43,7 @@ func (apl *AcademicProductionListsAuthor) TableName() string {
 
 func PostAcademicProductionListsAuthorCareers(request *PostAcademicProductionListsAuthorCareersRequest) (err error) {
 	return database.DB.Transaction(func(tx *gorm.DB) error {
-		for _, careerID := range request.Careers {
+		/*for _, careerID := range request.Careers {
 			academicProductionListsAuthor := AcademicProductionListsAuthor{
 				AcademicProductionListID: request.AcademicProductionListID,
 				AuthorID:                 request.AuthorID,
@@ -61,7 +58,7 @@ func PostAcademicProductionListsAuthorCareers(request *PostAcademicProductionLis
 				}
 				return err
 			}
-		}
+		}*/
 		return nil
 	})
 }
@@ -141,22 +138,22 @@ func UpdateAcademicProductionListsAuthorCareersByAcademicPeriodID(
 		if err != nil {
 			return err
 		}
-		for _, careerID := range request.Careers {
-			academicProductionListsAuthor := AcademicProductionListsAuthor{
-				AcademicProductionListID: request.AcademicProductionListID,
-				AuthorID:                 request.AuthorID,
-				CareerID:                 careerID,
-			}
-			if err := tx.Create(&academicProductionListsAuthor).Error; err != nil {
-				if errors.Is(err, gorm.ErrForeignKeyViolated) {
-					return errors.New("claves no encontradas")
-				}
-				if errors.Is(err, gorm.ErrDuplicatedKey) {
-					return errors.New("autor ya registrado")
-				}
-				return err
-			}
-		}
+		//for _, careerID := range request.Careers {
+		//	academicProductionListsAuthor := AcademicProductionListsAuthor{
+		//		AcademicProductionListID: request.AcademicProductionListID,
+		//		AuthorID:                 request.AuthorID,
+		//		CareerID:                 careerID,
+		//	}
+		//	if err := tx.Create(&academicProductionListsAuthor).Error; err != nil {
+		//		if errors.Is(err, gorm.ErrForeignKeyViolated) {
+		//			return errors.New("claves no encontradas")
+		//		}
+		//		if errors.Is(err, gorm.ErrDuplicatedKey) {
+		//			return errors.New("autor ya registrado")
+		//		}
+		//		return err
+		//	}
+		//}
 		return nil
 	})
 }
