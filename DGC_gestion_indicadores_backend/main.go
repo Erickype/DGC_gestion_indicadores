@@ -13,6 +13,7 @@ import (
 	evaluationPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/controller/evaluationPeriod"
 	faculty "github.com/Erickype/DGC_gestion_indicadores_backend/controller/faculty"
 	indicators "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicators"
+	indicatorsInformation "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation"
 	indicatorsInformationAcademicProduction "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation/academicProduction"
 	indicatorsInformationBooksOrChaptersProduction "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation/booksOrChaptersProduction"
 	indicatorsInformationTeachers "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation/teachers"
@@ -137,6 +138,9 @@ func serveApplication() {
 	indicatorsInformationRoutes := router.Group("/api/indicators/information")
 	indicatorsInformationRoutes.Use(util.JWTAuth(), util.JWTAuthUPE())
 
+	indicatorsInformationRoutes.GET("/academicPeriodAuthorPreviousCareers/:authorID",
+		indicatorsInformation.GetAcademicPeriodAuthorPreviousCareers)
+
 	indicatorsInformationRoutes.POST("/teachersLists/degree", indicatorsInformationTeachers.PostTeachersListsDegree)
 	indicatorsInformationRoutes.POST("/teachersLists/filter", indicatorsInformationTeachers.FilterTeachersLists)
 	indicatorsInformationRoutes.POST("/teachersLists/AddDegreeAndTeachersListsDegree", indicatorsInformationTeachers.AddDegreeAndTeachersListsDegree)
@@ -155,8 +159,6 @@ func serveApplication() {
 		indicatorsInformationAcademicProduction.PostAcademicProductionListsAuthorCareers)
 	indicatorsInformationRoutes.PUT("/academicProductionListsAuthor/authorCareers",
 		indicatorsInformationAcademicProduction.UpdateAcademicProductionListsAuthorCareersByAcademicPeriodID)
-	indicatorsInformationRoutes.GET("/academicProductionListsAuthor/previousCareers/:authorID",
-		indicatorsInformationAcademicProduction.GetAcademicProductionListAuthorPreviousCareers)
 	indicatorsInformationRoutes.GET("/academicProductionListsAuthors/JoinedByAcademicProductionListID/:academicProductionListID",
 		indicatorsInformationAcademicProduction.GetAcademicProductionListsAuthorsJoinedByAcademicProductionListID)
 
