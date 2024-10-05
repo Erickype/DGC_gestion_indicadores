@@ -67,14 +67,21 @@ func PostAcademicProductionListsAuthorCareers(request *PostAcademicProductionLis
 		if academicPeriodID == 0 {
 			return errors.New("no se encontró periodo académico")
 		}
-
+		err = database.DB.Delete(
+			&indicatorsInformation.AcademicPeriodAuthorCareer{},
+			"academic_period_id = ? and author_id = ?",
+			academicPeriodID, request.AuthorID).
+			Error
+		if err != nil {
+			return err
+		}
 		for _, careerID := range request.Careers {
 			academicPeriodAuthorCareer := indicatorsInformation.AcademicPeriodAuthorCareer{
 				AcademicPeriodID: academicPeriodID,
 				AuthorID:         request.AuthorID,
 				CareerID:         careerID,
 			}
-			if err = tx.Save(&academicPeriodAuthorCareer).Error; err != nil {
+			if err = tx.Create(&academicPeriodAuthorCareer).Error; err != nil {
 				if errors.Is(err, gorm.ErrForeignKeyViolated) {
 					return errors.New("claves no encontradas")
 				}
