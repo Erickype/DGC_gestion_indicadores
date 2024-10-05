@@ -8,8 +8,8 @@
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
 	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
 	import Table from '$lib/components/table/table.svelte';
-	/* 	import UpdateForm from './UpdateForm.svelte';
-	 */
+	import UpdateForm from './UpdateForm.svelte';
+
 	import type { BooksOrChaptersProductionListsAuthorsCareersJoined } from '$lib/api/model/api/indicatorsInformation/booksOrChaptersProductionListsAuthor';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import type { Message } from '$lib/components/combobox/combobox';
@@ -91,7 +91,6 @@
 	}
 </script>
 
-<!-- 
 <UpdateModal
 	modalTitle="Actualizar información de autor"
 	{formData}
@@ -100,7 +99,7 @@
 	bind:updateEntity={authorCareer}
 	bind:open={updateFormOpen}
 	on:updated={handleUpdated}
-/> -->
+/>
 
 <div class="w-full">
 	<Table {table} {columns} {filterFields} itemCount={authorsCareers.length} />
