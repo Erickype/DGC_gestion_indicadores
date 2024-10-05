@@ -1,6 +1,7 @@
 package model
 
 import (
+	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	evaluationPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationPeriod"
 	"time"
@@ -20,4 +21,25 @@ type IndicatorsEvaluationPeriod struct {
 
 func (iep IndicatorsEvaluationPeriod) TableName() string {
 	return model.IndicatorsSchema + ".indicators_evaluation_periods"
+}
+
+func CalculateIndicatorByTypeIDAndEvaluationPeriod(evaluationPeriodID, indicatorTypeID int, response *IndicatorsEvaluationPeriod) error {
+	response.IndicatorTypeID = uint(indicatorTypeID)
+	response.EvaluationPeriodID = uint(evaluationPeriodID)
+	switch indicatorTypeID {
+	case model.Indicator26:
+		err := CalculateIndicator26(evaluationPeriodID, response)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func RefreshIndicatorEvaluationPeriod(indicator *IndicatorsEvaluationPeriod) (err error) {
+	err = database.DB.Save(&indicator).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }
