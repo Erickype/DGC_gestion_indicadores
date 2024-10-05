@@ -26,7 +26,7 @@ func CalculateIndicator16(academicPeriodID int, indicator *IndicatorsAcademicPer
 	}
 	indicator.ActualValue = float64(phdCount) / float64(teachersCount) * 100
 	indicator.TargetValue = model.Indicator16TargetValue
-	err = RefreshIndicator(indicator)
+	err = RefreshIndicatorAcademicPeriod(indicator)
 	if err != nil {
 		return err
 	}

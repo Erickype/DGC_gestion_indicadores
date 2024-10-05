@@ -51,7 +51,7 @@ func GetIndicatorsByAcademicPeriod(academicPeriodID int, response *[]IndicatorsA
 	return nil
 }
 
-func RefreshIndicator(indicator *IndicatorsAcademicPeriod) (err error) {
+func RefreshIndicatorAcademicPeriod(indicator *IndicatorsAcademicPeriod) (err error) {
 	err = database.DB.Save(&indicator).Error
 	if err != nil {
 		return err
