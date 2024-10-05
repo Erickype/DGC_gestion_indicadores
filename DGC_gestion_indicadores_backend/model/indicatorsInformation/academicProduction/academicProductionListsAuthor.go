@@ -1,10 +1,12 @@
 package model
 
 import (
+	"errors"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	academicProduction "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicProduction/author"
 	career "github.com/Erickype/DGC_gestion_indicadores_backend/model/career"
+	indicatorsInformation "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation"
 	"gorm.io/gorm"
 	"time"
 )
@@ -43,13 +45,36 @@ func (apl *AcademicProductionListsAuthor) TableName() string {
 
 func PostAcademicProductionListsAuthorCareers(request *PostAcademicProductionListsAuthorCareersRequest) (err error) {
 	return database.DB.Transaction(func(tx *gorm.DB) error {
-		/*for _, careerID := range request.Careers {
-			academicProductionListsAuthor := AcademicProductionListsAuthor{
-				AcademicProductionListID: request.AcademicProductionListID,
-				AuthorID:                 request.AuthorID,
-				CareerID:                 careerID,
+		academicProductionListsAuthor := AcademicProductionListsAuthor{
+			AcademicProductionListID: request.AcademicProductionListID,
+			AuthorID:                 request.AuthorID,
+		}
+		if err = tx.Create(&academicProductionListsAuthor).Error; err != nil {
+			if errors.Is(err, gorm.ErrDuplicatedKey) {
+				return errors.New("autor ya registrado en la publicación")
 			}
-			if err := tx.Create(&academicProductionListsAuthor).Error; err != nil {
+			return err
+		}
+
+		var academicPeriodID uint
+		err = database.DB.Table("indicators_information.academic_production_lists apl").
+			Select("apl.academic_period_id").
+			Where("apl.id = ?", request.AcademicProductionListID).
+			Scan(&academicPeriodID).Error
+		if err != nil {
+			return err
+		}
+		if academicPeriodID == 0 {
+			return errors.New("no se encontró periodo académico")
+		}
+
+		for _, careerID := range request.Careers {
+			academicPeriodAuthorCareer := indicatorsInformation.AcademicPeriodAuthorCareer{
+				AcademicPeriodID: academicPeriodID,
+				AuthorID:         request.AuthorID,
+				CareerID:         careerID,
+			}
+			if err = tx.Save(&academicPeriodAuthorCareer).Error; err != nil {
 				if errors.Is(err, gorm.ErrForeignKeyViolated) {
 					return errors.New("claves no encontradas")
 				}
@@ -58,7 +83,7 @@ func PostAcademicProductionListsAuthorCareers(request *PostAcademicProductionLis
 				}
 				return err
 			}
-		}*/
+		}
 		return nil
 	})
 }
