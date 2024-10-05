@@ -6,6 +6,12 @@ export interface PostBooksOrChaptersProductionListsAuthorCareersRequest {
     careers: number[]
 }
 
+export interface UpdateBooksOrChaptersProductionListsAuthorCareersRequest {
+    books_or_chapters_production_list_id: number
+    author_id: number
+    careers: number[]
+}
+
 export interface BooksOrChaptersProductionListsAuthorsCareersJoined {
     author_id: number
     author: string

@@ -1,4 +1,5 @@
 import { indicatorsInformationBaseRoute } from "./base";
 
 export const postBookOrChaptersProductionListsAuthorRoute = indicatorsInformationBaseRoute + "/booksOrChaptersProductionListsAuthor"
+export const updateBookOrChaptersProductionListsAuthorRoute = indicatorsInformationBaseRoute + "/booksOrChaptersProductionListsAuthor/authorCareers"
 export const getBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionListIDRoute = indicatorsInformationBaseRoute + "/booksOrChaptersProductionListsAuthors/JoinedByBooksOrChaptersProductionListID/"

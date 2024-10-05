@@ -1,6 +1,6 @@
 
-import { getBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionListIDRoute, postBookOrChaptersProductionListsAuthorRoute } from "$lib/api/routes/api/indicatorsInformation/booksOrChaptersProductionListsAuthor";
-import type { BooksOrChaptersProductionListsAuthorsCareersJoined, PostBooksOrChaptersProductionListsAuthorCareersRequest } from "$lib/api/model/api/indicatorsInformation/booksOrChaptersProductionListsAuthor";
+import { getBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionListIDRoute, postBookOrChaptersProductionListsAuthorRoute, updateBookOrChaptersProductionListsAuthorRoute } from "$lib/api/routes/api/indicatorsInformation/booksOrChaptersProductionListsAuthor";
+import type { BooksOrChaptersProductionListsAuthorsCareersJoined, PostBooksOrChaptersProductionListsAuthorCareersRequest, UpdateBooksOrChaptersProductionListsAuthorCareersRequest } from "$lib/api/model/api/indicatorsInformation/booksOrChaptersProductionListsAuthor";
 
 import { generateCommonErrorFromFetchError } from "$lib/utils";
 import type { CommonError } from "$lib/api/model/errors";
@@ -22,6 +22,28 @@ export async function PostBooksOrChaptersProductionListsAuthorCareers(token: str
         }
         const postBooksOrChaptersProductionListsAuthorCareersRequest: PostBooksOrChaptersProductionListsAuthorCareersRequest[] = await response.json()
         return postBooksOrChaptersProductionListsAuthorCareersRequest
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
+}
+
+export async function UpdateBooksOrChaptersProductionListsAuthorCareers(token: string, request: UpdateBooksOrChaptersProductionListsAuthorCareersRequest) {
+    try {
+        const response = await fetch(updateBookOrChaptersProductionListsAuthorRoute, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify(request)
+        });
+
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
+        }
+        const updateBooksOrChaptersProductionListsAuthorCareersRequest: UpdateBooksOrChaptersProductionListsAuthorCareersRequest[] = await response.json()
+        return updateBooksOrChaptersProductionListsAuthorCareersRequest
     } catch (error) {
         return generateCommonErrorFromFetchError(error)
     }
