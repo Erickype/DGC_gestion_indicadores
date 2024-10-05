@@ -23,6 +23,21 @@ func PostBooksOrChaptersProductionListsAuthorCareers(c *gin.Context) {
 	c.JSON(http.StatusCreated, postBooksOrChaptersProductionListsAuthorCareersRequest)
 }
 
+func UpdateBooksOrChaptersProductionListsAuthorCareers(c *gin.Context) {
+	var request model.UpdateBooksOrChaptersProductionListsAuthorCareersRequest
+	err := c.BindJSON(&request)
+	if err != nil {
+		errors.BadRequestResponse(c, err)
+		return
+	}
+	err = model.UpdateBooksOrChaptersProductionListsAuthorCareers(&request)
+	if err != nil {
+		errors.InternalServerErrorResponse(c, "Error actualizando carreras del autor", err)
+		return
+	}
+	c.JSON(http.StatusAccepted, request)
+}
+
 func GetBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionListID(c *gin.Context) {
 	bookOrChaptersProductionListID, _ := strconv.Atoi(c.Param("booksOrChaptersProductionListID"))
 	var response []model.BooksOrChaptersProductionListsAuthorsCareersJoined

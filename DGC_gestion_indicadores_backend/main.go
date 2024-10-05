@@ -171,6 +171,8 @@ func serveApplication() {
 
 	indicatorsInformationRoutes.POST("/booksOrChaptersProductionListsAuthor",
 		indicatorsInformationBooksOrChaptersProduction.PostBooksOrChaptersProductionListsAuthorCareers)
+	indicatorsInformationRoutes.PUT("/booksOrChaptersProductionListsAuthor/authorCareers",
+		indicatorsInformationBooksOrChaptersProduction.UpdateBooksOrChaptersProductionListsAuthorCareers)
 	indicatorsInformationRoutes.GET(
 		"/booksOrChaptersProductionListsAuthors/JoinedByBooksOrChaptersProductionListID/:booksOrChaptersProductionListID",
 		indicatorsInformationBooksOrChaptersProduction.GetBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionListID)

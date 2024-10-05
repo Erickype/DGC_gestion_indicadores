@@ -27,6 +27,12 @@ type PostBooksOrChaptersProductionListsAuthorCareersRequest struct {
 	Careers                         []uint `json:"careers"`
 }
 
+type UpdateBooksOrChaptersProductionListsAuthorCareersRequest struct {
+	BooksOrChaptersProductionListID uint   `json:"books_or_chapters_production_list_id"`
+	AuthorID                        uint   `json:"author_id"`
+	Careers                         []uint `json:"careers"`
+}
+
 type BooksOrChaptersProductionListsAuthorsCareersJoined struct {
 	AuthorID uint            `json:"author_id"`
 	Author   string          `json:"author"`
@@ -51,6 +57,50 @@ func PostBooksOrChaptersProductionListsAuthorCareers(
 			return err
 		}
 
+		var academicPeriodID uint
+		err = database.DB.Table("indicators_information.books_or_chapter_production_lists bocpl").
+			Select("bocpl.academic_period_id").
+			Where("bocpl.id = ?", request.BooksOrChaptersProductionListID).
+			Scan(&academicPeriodID).Error
+		if err != nil {
+			return err
+		}
+		if academicPeriodID == 0 {
+			return errors.New("no se encontró periodo académico")
+		}
+
+		err = database.DB.Delete(
+			&indicatorsInformation.AcademicPeriodAuthorCareer{},
+			"academic_period_id = ? and author_id = ?",
+			academicPeriodID, request.AuthorID).
+			Error
+		if err != nil {
+			return err
+		}
+
+		for _, careerID := range request.Careers {
+			academicPeriodAuthorCareer := indicatorsInformation.AcademicPeriodAuthorCareer{
+				AcademicPeriodID: academicPeriodID,
+				AuthorID:         request.AuthorID,
+				CareerID:         careerID,
+			}
+			if err = tx.Create(&academicPeriodAuthorCareer).Error; err != nil {
+				if errors.Is(err, gorm.ErrForeignKeyViolated) {
+					return errors.New("claves no encontradas")
+				}
+				if errors.Is(err, gorm.ErrDuplicatedKey) {
+					return errors.New("autor ya registrado")
+				}
+				return err
+			}
+		}
+		return nil
+	})
+}
+
+func UpdateBooksOrChaptersProductionListsAuthorCareers(
+	request *UpdateBooksOrChaptersProductionListsAuthorCareersRequest) (err error) {
+	return database.DB.Transaction(func(tx *gorm.DB) error {
 		var academicPeriodID uint
 		err = database.DB.Table("indicators_information.books_or_chapter_production_lists bocpl").
 			Select("bocpl.academic_period_id").
