@@ -27,19 +27,20 @@ func GetAcademicPeriodAuthorPreviousCareers(authorID int, previousCareers *[]car
 	database.DB.Table("academic_periods ap").
 		Order("ap.start_date desc").
 		Select("ap.id").
-		Limit(1).Scan(&academicPeriodsIDs)
-	if len(academicPeriodsIDs) == 0 {
-		database.DB.Table("academic_periods ap").
-			Order("ap.start_date desc").
-			Select("ap.id").
-			Limit(2).Scan(&academicPeriodsIDs)
-	}
+		Limit(2).Scan(&academicPeriodsIDs)
 
 	var authorPreviousCareers []uint
 	database.DB.Table("indicators_information.academic_period_author_careers apac").
 		Distinct("apac.career_id").
-		Where("apac.academic_period_id in (?)", academicPeriodsIDs).
+		Where("apac.academic_period_id = ?", academicPeriodsIDs[0]).
 		Where("apac.author_id = ?", authorID).Scan(&authorPreviousCareers)
+
+	if len(authorPreviousCareers) == 0 {
+		database.DB.Table("indicators_information.academic_period_author_careers apac").
+			Distinct("apac.career_id").
+			Where("apac.academic_period_id = ?", academicPeriodsIDs[1]).
+			Where("apac.author_id = ?", authorID).Scan(&authorPreviousCareers)
+	}
 
 	err = database.DB.Table("careers c").
 		Where("c.id in (?)", authorPreviousCareers).
