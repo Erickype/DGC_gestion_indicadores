@@ -33,7 +33,7 @@ export const menus: Menu[] = [
         links: [
             { name: 'Listas Docentes', route: '/information/teachers' },
             { name: 'Publicaciones Académicas', route: '/information/academic-publications' },
-            { name: 'Libros', route: '/information/books' }
+            { name: 'Libros o Capítulos', route: '/information/books' }
         ],
         roles: [1, 2]
     },

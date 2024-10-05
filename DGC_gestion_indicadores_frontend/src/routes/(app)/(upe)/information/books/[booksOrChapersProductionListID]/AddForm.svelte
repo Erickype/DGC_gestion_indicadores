@@ -62,8 +62,7 @@
 	formDataCareerID.subscribe((value) => ($formData.career = value));
 
 	let selectedCareers: Message[] = [];
-	let selectedCareersPromise: Promise<Career[]> =
-		fetchAcademicProductionListsAuthorPreviousCareersByAuthorID(0);
+	let selectedCareersPromise: Promise<Career[]> = fetchAcademicPeriodAuthorPreviousCareers(0);
 
 	$: {
 		if ($formData.career !== 0) {
@@ -72,13 +71,11 @@
 		}
 	}
 	formDataAuthorID.subscribe((value) => {
-		selectedCareersPromise = fetchAcademicProductionListsAuthorPreviousCareersByAuthorID(value);
+		selectedCareersPromise = fetchAcademicPeriodAuthorPreviousCareers(value);
 	});
 
-	async function fetchAcademicProductionListsAuthorPreviousCareersByAuthorID(
-		authorID: number
-	): Promise<Career[]> {
-		const url = `/api/indicatorsInformation/academicProductionListsAuthor/previousCareers/${authorID}`;
+	async function fetchAcademicPeriodAuthorPreviousCareers(authorID: number): Promise<Career[]> {
+		const url = `/api/indicatorsInformation/academicPeriodAuthorPreviousCareers/${authorID}`;
 		const response = await fetch(url, { method: 'GET' });
 		if (!response.ok) {
 			const errorData = (await response.json()) as CommonError;
