@@ -142,30 +142,42 @@ func GetAcademicProductionListsAuthorsJoinedByAcademicProductionListID(
 func UpdateAcademicProductionListsAuthorCareersByAcademicPeriodID(
 	request *UpdateAcademicProductionListsAuthorCareersRequest) (err error) {
 	return database.DB.Transaction(func(tx *gorm.DB) error {
+		var academicPeriodID uint
+		err = database.DB.Table("indicators_information.academic_production_lists apl").
+			Select("apl.academic_period_id").
+			Where("apl.id = ?", request.AcademicProductionListID).
+			Scan(&academicPeriodID).Error
+		if err != nil {
+			return err
+		}
+		if academicPeriodID == 0 {
+			return errors.New("no se encontró periodo académico")
+		}
 		err = database.DB.Delete(
-			&AcademicProductionListsAuthor{},
-			"academic_production_list_id = ? and author_id = ?",
-			request.AcademicProductionListID, request.AuthorID).
+			&indicatorsInformation.AcademicPeriodAuthorCareer{},
+			"academic_period_id = ? and author_id = ?",
+			academicPeriodID, request.AuthorID).
 			Error
 		if err != nil {
 			return err
 		}
-		//for _, careerID := range request.Careers {
-		//	academicProductionListsAuthor := AcademicProductionListsAuthor{
-		//		AcademicProductionListID: request.AcademicProductionListID,
-		//		AuthorID:                 request.AuthorID,
-		//		CareerID:                 careerID,
-		//	}
-		//	if err := tx.Create(&academicProductionListsAuthor).Error; err != nil {
-		//		if errors.Is(err, gorm.ErrForeignKeyViolated) {
-		//			return errors.New("claves no encontradas")
-		//		}
-		//		if errors.Is(err, gorm.ErrDuplicatedKey) {
-		//			return errors.New("autor ya registrado")
-		//		}
-		//		return err
-		//	}
-		//}
+		
+		for _, careerID := range request.Careers {
+			academicPeriodAuthorCareer := indicatorsInformation.AcademicPeriodAuthorCareer{
+				AcademicPeriodID: academicPeriodID,
+				AuthorID:         request.AuthorID,
+				CareerID:         careerID,
+			}
+			if err = tx.Create(&academicPeriodAuthorCareer).Error; err != nil {
+				if errors.Is(err, gorm.ErrForeignKeyViolated) {
+					return errors.New("claves no encontradas")
+				}
+				if errors.Is(err, gorm.ErrDuplicatedKey) {
+					return errors.New("autor ya registrado")
+				}
+				return err
+			}
+		}
 		return nil
 	})
 }
