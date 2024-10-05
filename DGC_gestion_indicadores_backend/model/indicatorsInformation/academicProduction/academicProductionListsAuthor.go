@@ -107,10 +107,14 @@ func GetAcademicProductionListsAuthorsJoinedByAcademicProductionListID(
 	}
 
 	for _, authorCareer := range academicProductionAuthors {
-		authorCareers := []career.Career{}
+		var authorCareers []career.Career
+		authorCareers = []career.Career{}
 		err = database.DB.Table("indicators_information.academic_production_lists_authors apla").
 			Select("c.*").
-			Joins("join careers c on apla.career_id = c.id").
+			Joins("join indicators_information.academic_production_lists apl on apla.academic_production_list_id = apl.id").
+			Joins(`join indicators_information.academic_period_author_careers apac
+    					on apla.author_id = apac.author_id and apl.academic_period_id = apac.academic_period_id`).
+			Joins("join careers c on apac.career_id = c.id").
 			Where("apla.author_id = ?", authorCareer.AuthorId).
 			Where("apla.academic_production_list_id = ?", academicProductionListID).
 			Scan(&authorCareers).Error
