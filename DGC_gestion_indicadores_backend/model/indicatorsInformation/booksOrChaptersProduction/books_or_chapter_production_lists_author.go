@@ -1,10 +1,12 @@
 package model
 
 import (
+	"errors"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	academicProduction "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicProduction/author"
 	career "github.com/Erickype/DGC_gestion_indicadores_backend/model/career"
+	indicatorsInformation "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation"
 	"gorm.io/gorm"
 	"time"
 )
@@ -38,13 +40,45 @@ func (bc BooksOrChaptersProductionListAuthor) TableName() string {
 func PostBooksOrChaptersProductionListsAuthorCareers(
 	request *PostBooksOrChaptersProductionListsAuthorCareersRequest) (err error) {
 	return database.DB.Transaction(func(tx *gorm.DB) error {
-		/*for _, careerID := range request.Careers {
-			booksOrChaptersProductionListAuthor := BooksOrChaptersProductionListAuthor{
-				BooksOrChaptersProductionListID: request.BooksOrChaptersProductionListID,
-				AuthorID:                        request.AuthorID,
-				CareerID:                        careerID,
+		booksOrChaptersProductionListAuthor := BooksOrChaptersProductionListAuthor{
+			BooksOrChaptersProductionListID: request.BooksOrChaptersProductionListID,
+			AuthorID:                        request.AuthorID,
+		}
+		if err = tx.Create(&booksOrChaptersProductionListAuthor).Error; err != nil {
+			if errors.Is(err, gorm.ErrDuplicatedKey) {
+				return errors.New("autor ya registrado en el libro o capítulo")
 			}
-			if err := tx.Create(&booksOrChaptersProductionListAuthor).Error; err != nil {
+			return err
+		}
+
+		var academicPeriodID uint
+		err = database.DB.Table("indicators_information.books_or_chapter_production_lists bocpl").
+			Select("bocpl.academic_period_id").
+			Where("bocpl.id = ?", request.BooksOrChaptersProductionListID).
+			Scan(&academicPeriodID).Error
+		if err != nil {
+			return err
+		}
+		if academicPeriodID == 0 {
+			return errors.New("no se encontró periodo académico")
+		}
+
+		err = database.DB.Delete(
+			&indicatorsInformation.AcademicPeriodAuthorCareer{},
+			"academic_period_id = ? and author_id = ?",
+			academicPeriodID, request.AuthorID).
+			Error
+		if err != nil {
+			return err
+		}
+
+		for _, careerID := range request.Careers {
+			academicPeriodAuthorCareer := indicatorsInformation.AcademicPeriodAuthorCareer{
+				AcademicPeriodID: academicPeriodID,
+				AuthorID:         request.AuthorID,
+				CareerID:         careerID,
+			}
+			if err = tx.Create(&academicPeriodAuthorCareer).Error; err != nil {
 				if errors.Is(err, gorm.ErrForeignKeyViolated) {
 					return errors.New("claves no encontradas")
 				}
@@ -53,7 +87,7 @@ func PostBooksOrChaptersProductionListsAuthorCareers(
 				}
 				return err
 			}
-		}*/
+		}
 		return nil
 	})
 }
