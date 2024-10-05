@@ -25,12 +25,15 @@ func PostBooksOrChaptersProductionListsAuthorCareers(c *gin.Context) {
 
 func GetBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionListID(c *gin.Context) {
 	bookOrChaptersProductionListID, _ := strconv.Atoi(c.Param("booksOrChaptersProductionListID"))
-	response := []model.BooksOrChaptersProductionListsAuthorsCareersJoined{}
+	var response []model.BooksOrChaptersProductionListsAuthorsCareersJoined
 	err := model.GetBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionListID(
 		bookOrChaptersProductionListID, &response)
 	if err != nil {
 		errors.InternalServerErrorResponse(c, "Error retornando autores", err)
 		return
+	}
+	if len(response) == 0 {
+		response = []model.BooksOrChaptersProductionListsAuthorsCareersJoined{}
 	}
 	c.JSON(http.StatusOK, response)
 }

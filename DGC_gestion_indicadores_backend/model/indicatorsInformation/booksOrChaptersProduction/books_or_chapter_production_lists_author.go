@@ -111,10 +111,14 @@ func GetBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionLi
 	}
 
 	for _, authorCareer := range academicProductionAuthors {
-		authorCareers := []career.Career{}
+		var authorCareers []career.Career
 		err = database.DB.Table("indicators_information.books_or_chapter_production_lists_authors bocpla").
 			Select("c.*").
-			Joins("join careers c on bocpla.career_id = c.id").
+			Joins(`join indicators_information.books_or_chapter_production_lists bocpl 
+    					on bocpla.books_or_chapters_production_list_id = bocpl.id`).
+			Joins(`join indicators_information.academic_period_author_careers apac
+    					on bocpla.author_id = apac.author_id and bocpl.academic_period_id = apac.academic_period_id`).
+			Joins("join careers c on apac.career_id = c.id").
 			Where("bocpla.author_id = ?", authorCareer.AuthorId).
 			Where("bocpla.books_or_chapters_production_list_id = ?", academicProductionListID).
 			Scan(&authorCareers).Error
