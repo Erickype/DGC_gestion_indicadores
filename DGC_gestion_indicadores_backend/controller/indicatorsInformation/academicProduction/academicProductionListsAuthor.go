@@ -2,7 +2,6 @@ package controller
 
 import (
 	errors "github.com/Erickype/DGC_gestion_indicadores_backend/model"
-	career "github.com/Erickype/DGC_gestion_indicadores_backend/model/career"
 	model "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/academicProduction"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -39,25 +38,17 @@ func UpdateAcademicProductionListsAuthorCareersByAcademicPeriodID(c *gin.Context
 	c.JSON(http.StatusAccepted, request)
 }
 
-func GetAcademicProductionListAuthorPreviousCareers(c *gin.Context) {
-	previousCareers := []career.Career{}
-	authorID, _ := strconv.Atoi(c.Param("authorID"))
-	err := model.GetAcademicProductionListAuthorPreviousCareers(authorID, &previousCareers)
-	if err != nil {
-		errors.InternalServerErrorResponse(c, "Error retornando carreras previas", err)
-		return
-	}
-	c.JSON(http.StatusOK, previousCareers)
-}
-
 func GetAcademicProductionListsAuthorsJoinedByAcademicProductionListID(c *gin.Context) {
 	academicProductionListID, _ := strconv.Atoi(c.Param("academicProductionListID"))
-	response := []model.AcademicProductionListsAuthorsCareersJoined{}
+	var response []model.AcademicProductionListsAuthorsCareersJoined
 	err := model.GetAcademicProductionListsAuthorsJoinedByAcademicProductionListID(
 		academicProductionListID, &response)
 	if err != nil {
 		errors.InternalServerErrorResponse(c, "Error retornando autores", err)
 		return
+	}
+	if len(response) == 0 {
+		response = []model.AcademicProductionListsAuthorsCareersJoined{}
 	}
 	c.JSON(http.StatusOK, response)
 }
