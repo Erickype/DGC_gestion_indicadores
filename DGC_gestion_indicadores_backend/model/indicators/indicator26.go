@@ -13,13 +13,25 @@ func CalculateIndicator26(evaluationPeriodID int, indicator *IndicatorsEvaluatio
 		return err
 	}
 
+	var countFullTimeTeachers int64
+	err = getFullTimeTeachers(academicPeriodIds, &countFullTimeTeachers)
+	if err != nil {
+		return err
+	}
+
+	var countPartTimeTeachers int64
+	err = getPartTimeTeachers(academicPeriodIds, &countPartTimeTeachers)
+	if err != nil {
+		return err
+	}
+
 	var academicPublication float64
 	err = calculateIndicator26AcademicPublication(academicPeriodIds, &academicPublication)
 	if err != nil {
 		return err
 	}
 
-	indicator.ActualValue = academicPublication
+	indicator.ActualValue = academicPublication / (float64(countFullTimeTeachers) + 0.5*float64(countPartTimeTeachers))
 	indicator.TargetValue = model.Indicator26TargetValue
 	err = RefreshIndicatorEvaluationPeriod(indicator)
 	if err != nil {
@@ -51,6 +63,30 @@ func calculateIndicator26AcademicPublication(academicPeriodIDs []int, academicPu
 			weightedValue = weight.Weight
 		}
 		*academicPublication += weightedValue
+	}
+	return nil
+}
+
+func getFullTimeTeachers(academicPeriodIds []int, countFullTimeTeachers *int64) (err error) {
+	err = database.DB.Table("indicators_information.teachers_lists tl").
+		Joins("join dedications d on tl.dedication_id = d.id").
+		Where("academic_period_id in ?", academicPeriodIds).
+		Where("d.name = ?", model.FullTimeDedication).
+		Distinct("teacher_id").Count(countFullTimeTeachers).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func getPartTimeTeachers(academicPeriodIds []int, countFullTimeTeachers *int64) (err error) {
+	err = database.DB.Table("indicators_information.teachers_lists tl").
+		Joins("join dedications d on tl.dedication_id = d.id").
+		Where("academic_period_id in ?", academicPeriodIds).
+		Where("d.name = ?", model.PartTimeDedication).
+		Distinct("teacher_id").Count(countFullTimeTeachers).Error
+	if err != nil {
+		return err
 	}
 	return nil
 }

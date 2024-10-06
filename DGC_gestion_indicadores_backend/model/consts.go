@@ -16,4 +16,5 @@ const (
 	DegreeLevelPhD = "Cuarto nivel Doctorado"
 
 	FullTimeDedication = "Tiempo completo"
+	PartTimeDedication = "Medio tiempo"
 )
