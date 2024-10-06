@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	evaluationAcademicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationAcademicPeriod"
@@ -112,6 +113,9 @@ func calculateIndicator26BooksOrChapterPublication(
 		Count(&countPeerReviewedChapters).Error
 	if err != nil {
 		return err
+	}
+	if countPeerReviewedChapters == 0 {
+		return errors.New("no hay capítulos revisados pares")
 	}
 
 	*booksOrChaptersPublication =
