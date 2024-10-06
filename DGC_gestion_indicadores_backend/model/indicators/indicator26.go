@@ -4,11 +4,19 @@ import (
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	evaluationAcademicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationAcademicPeriod"
+	evaluationPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationPeriod"
+	"gorm.io/datatypes"
 )
 
 func CalculateIndicator26(evaluationPeriodID int, indicator *IndicatorsEvaluationPeriod) (err error) {
 	var academicPeriodIds []int
 	err = getAcademicPeriodsInEvaluationPeriod(evaluationPeriodID, &academicPeriodIds)
+	if err != nil {
+		return err
+	}
+
+	var selectedEvaluationPeriod evaluationPeriod.EvaluationPeriod
+	err = getCurrentEvaluationPeriod(evaluationPeriodID, &selectedEvaluationPeriod)
 	if err != nil {
 		return err
 	}
@@ -26,7 +34,7 @@ func CalculateIndicator26(evaluationPeriodID int, indicator *IndicatorsEvaluatio
 	}
 
 	var academicPublication float64
-	err = calculateIndicator26AcademicPublication(academicPeriodIds, &academicPublication)
+	err = calculateIndicator26AcademicPublication(selectedEvaluationPeriod.StartYear, selectedEvaluationPeriod.EndYear, &academicPublication)
 	if err != nil {
 		return err
 	}
@@ -40,7 +48,7 @@ func CalculateIndicator26(evaluationPeriodID int, indicator *IndicatorsEvaluatio
 	return nil
 }
 
-func calculateIndicator26AcademicPublication(academicPeriodIDs []int, academicPublication *float64) (err error) {
+func calculateIndicator26AcademicPublication(startYear, endYear datatypes.Date, academicPublication *float64) (err error) {
 	var weights []struct {
 		Weight                 float64 `json:"weight"`
 		InterculturalComponent bool    `json:"intercultural_component"`
@@ -48,7 +56,7 @@ func calculateIndicator26AcademicPublication(academicPeriodIDs []int, academicPu
 	err = database.DB.Table("indicators_information.academic_production_lists apl").
 		Joins("join impact_coefficients ic on apl.impact_coefficient_id = ic.id").
 		Joins("join compensation_factors cf on ic.compensation_factor_id = cf.id").
-		Where("apl.academic_period_id in ?", academicPeriodIDs).
+		Where("apl.publication_date between ? and ?", startYear, endYear).
 		Scan(&weights).Error
 
 	*academicPublication = 0
@@ -85,6 +93,18 @@ func getPartTimeTeachers(academicPeriodIds []int, countFullTimeTeachers *int64) 
 		Where("academic_period_id in ?", academicPeriodIds).
 		Where("d.name = ?", model.PartTimeDedication).
 		Distinct("teacher_id").Count(countFullTimeTeachers).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func getCurrentEvaluationPeriod(evaluationPeriodID int, currentEvaluationPeriod *evaluationPeriod.EvaluationPeriod) (err error) {
+	err = database.DB.Model(&evaluationPeriod.EvaluationPeriod{}).
+		Select(`start_year,
+    				end_year`).
+		Where("id = ?", evaluationPeriodID).
+		Scan(&currentEvaluationPeriod).Error
 	if err != nil {
 		return err
 	}
