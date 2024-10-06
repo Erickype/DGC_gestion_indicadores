@@ -38,8 +38,16 @@ func CalculateIndicator26(evaluationPeriodID int, indicator *IndicatorsEvaluatio
 	if err != nil {
 		return err
 	}
+	var booksOrChaptersPublication float64
+	err = calculateIndicator26BooksOrChapterPublication(
+		selectedEvaluationPeriod.StartYear, selectedEvaluationPeriod.EndYear, &booksOrChaptersPublication)
+	if err != nil {
+		return err
+	}
 
-	indicator.ActualValue = academicPublication / (float64(countFullTimeTeachers) + 0.5*float64(countPartTimeTeachers))
+	indicator.ActualValue =
+		(academicPublication + booksOrChaptersPublication) /
+			(float64(countFullTimeTeachers) + 0.5*float64(countPartTimeTeachers))
 	indicator.TargetValue = model.Indicator26TargetValue
 	err = RefreshIndicatorEvaluationPeriod(indicator)
 	if err != nil {
@@ -72,6 +80,43 @@ func calculateIndicator26AcademicPublication(startYear, endYear datatypes.Date, 
 		}
 		*academicPublication += weightedValue
 	}
+	return nil
+}
+
+func calculateIndicator26BooksOrChapterPublication(
+	startYear, endYear datatypes.Date, booksOrChaptersPublication *float64) (err error) {
+	var countPeerReviewedBooks int64
+	err = database.DB.Table("indicators_information.books_or_chapter_production_lists bocpl").
+		Where("bocpl.publication_date between ? and ?", startYear, endYear).
+		Where("bocpl.is_chapter = false").
+		Where("bocpl.peer_reviewed").
+		Count(&countPeerReviewedBooks).Error
+	if err != nil {
+		return err
+	}
+
+	var countChapters int64
+	err = database.DB.Table("indicators_information.books_or_chapter_production_lists bocpl").
+		Where("bocpl.publication_date between ? and ?", startYear, endYear).
+		Where("bocpl.is_chapter").
+		Count(&countChapters).Error
+	if err != nil {
+		return err
+	}
+
+	var countPeerReviewedChapters int64
+	err = database.DB.Table("indicators_information.books_or_chapter_production_lists bocpl").
+		Where("bocpl.publication_date between ? and ?", startYear, endYear).
+		Where("bocpl.is_chapter").
+		Where("bocpl.peer_reviewed").
+		Count(&countPeerReviewedChapters).Error
+	if err != nil {
+		return err
+	}
+
+	*booksOrChaptersPublication =
+		float64(countPeerReviewedBooks) +
+			float64(countChapters)/float64(countPeerReviewedChapters)
 	return nil
 }
 
