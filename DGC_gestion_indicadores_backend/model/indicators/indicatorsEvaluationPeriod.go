@@ -19,8 +19,37 @@ type IndicatorsEvaluationPeriod struct {
 	EvaluationPeriod evaluationPeriod.EvaluationPeriod `json:"-"`
 }
 
+type IndicatorEvaluationPeriodJoined struct {
+	IndicatorTypeID    uint    `json:"indicator_type_id"`
+	IndicatorType      string  `json:"indicator_type"`
+	EvaluationPeriodID uint    `json:"evaluation_period_id"`
+	EvaluationPeriod   string  `json:"evaluation_period"`
+	ActualValue        float64 `json:"actual_value,omitempty"`
+	TargetValue        float64 `json:"target_value"`
+}
+
 func (iep IndicatorsEvaluationPeriod) TableName() string {
 	return model.IndicatorsSchema + ".indicators_evaluation_periods"
+}
+
+func GetIndicatorByTypeIDAndEvaluationPeriod(
+	evaluationPeriodID, indicatorTypeID int, indicatorEvaluationPeriodJoined *IndicatorEvaluationPeriodJoined) (err error) {
+	err = database.DB.Table("indicators.indicators_evaluation_periods iep").
+		Select(`iep.indicator_type_id,
+				it.name as indicator_type,
+				iep.evaluation_period_id,
+				ep.name as evaluation_period,
+				iep.actual_value,
+				iep.target_value`).
+		Joins("join indicators.indicator_types it on iep.indicator_type_id = it.id").
+		Joins("join evaluation_periods ep on iep.evaluation_period_id = ep.id").
+		Where("iep.evaluation_period_id = ?", evaluationPeriodID).
+		Where("iep.indicator_type_id = ?", indicatorTypeID).
+		Scan(&indicatorEvaluationPeriodJoined).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func CalculateIndicatorByTypeIDAndEvaluationPeriod(evaluationPeriodID, indicatorTypeID int, response *IndicatorsEvaluationPeriod) error {

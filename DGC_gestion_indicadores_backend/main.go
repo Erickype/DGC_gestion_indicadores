@@ -181,8 +181,10 @@ func serveApplication() {
 	indicatorsRoutes := router.Group("/api/indicators/")
 	indicatorsRoutes.Use(util.JWTAuth(), util.JWTAuthUPE())
 
-	indicatorsRoutes.GET("/evaluationPeriod/:evaluationPeriodID/:indicatorTypeID",
+	indicatorsRoutes.GET("/evaluationPeriod/calculate/:evaluationPeriodID/:indicatorTypeID",
 		indicators.GetCalculateIndicatorByTypeIDAndEvaluationPeriod)
+	indicatorsRoutes.GET("/evaluationPeriod/:evaluationPeriodID/:indicatorTypeID",
+		indicators.GetIndicatorByTypeIDAndEvaluationPeriod)
 
 	indicatorsRoutes.GET("/academicPeriod/:academicPeriodID/:indicatorTypeID", indicators.GetCalculateIndicatorByTypeID)
 	indicatorsRoutes.GET("/academicPeriod/:academicPeriodID", indicators.GetIndicatorsByAcademicPeriod)
