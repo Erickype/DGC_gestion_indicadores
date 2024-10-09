@@ -22,5 +22,5 @@ jobs:
         go-version: '1.22.0'
 
     - name: Build
-      run: go build -v ./DGC_gestion_indicadores/...
+      run: go build -v ./DGC_gestion_indicadores/DGC_gestion_indicadores_backend/...
       
