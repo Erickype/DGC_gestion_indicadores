@@ -1,23 +1,41 @@
-import type { EvaluationPeriod } from "$lib/api/model/view/evaluationPeriod";
 import { getEvaluationPeriodsRoute } from "$lib/api/routes/view/evaluationPeriod";
+import type { EvaluationPeriod } from "$lib/api/model/view/evaluationPeriod";
+
+import { generateErrorFromCommonError, type CommonError } from "$lib/api/model/errors";
 import type { Message } from "$lib/components/combobox/combobox";
 
 export async function GetEvaluationPeriods() {
-    return await fetch(getEvaluationPeriodsRoute, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
+    try {
+        const response = await fetch(getEvaluationPeriodsRoute, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
         }
-    });
+        const periods: EvaluationPeriod[] = await response.json()
+        return periods
+    } catch (error) {
+        const errorMessage: CommonError = {
+            status: "500",
+            status_code: 500,
+            detail: "Error al solicitar datos",
+            message: (error as Error).message
+        }
+        return errorMessage
+    }
 }
 
 
 export async function LoadEvaluationPeriodsWithComboMessages() {
-    const res = await GetEvaluationPeriods();
-    if (!res.ok) {
-        throw new Error('Fallo cargando periodos');
+    const response = await GetEvaluationPeriods();
+    if ((response as CommonError).status) {
+        throw generateErrorFromCommonError(response as CommonError)
     }
-    const periods: EvaluationPeriod[] = await res.json();
+    const periods = response as EvaluationPeriod[]
     let messages: Message[] = []
     messages = messages.concat(
         periods.map((period) => ({
