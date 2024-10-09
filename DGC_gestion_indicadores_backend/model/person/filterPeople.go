@@ -2,8 +2,8 @@ package model
 
 import (
 	"fmt"
-	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
-	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
+	"github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/database"
+	"github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model"
 	"strings"
 )
 

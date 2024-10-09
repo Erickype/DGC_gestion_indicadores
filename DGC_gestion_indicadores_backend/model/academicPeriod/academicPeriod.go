@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
+	"github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/database"
 	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )

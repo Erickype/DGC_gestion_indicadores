@@ -1,9 +1,9 @@
 package model
 
 import (
-	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
-	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
-	indicatorsInformation "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/teachers"
+	"github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/database"
+	"github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model"
+	indicatorsInformation "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/indicatorsInformation/teachers"
 )
 
 func CalculateIndicator17(academicPeriodID int, indicator *IndicatorsAcademicPeriod) (err error) {

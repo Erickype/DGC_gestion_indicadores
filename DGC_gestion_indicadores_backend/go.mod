@@ -1,4 +1,4 @@
-module github.com/Erickype/DGC_gestion_indicadores_backend
+module github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend
 
 go 1.22.0
 

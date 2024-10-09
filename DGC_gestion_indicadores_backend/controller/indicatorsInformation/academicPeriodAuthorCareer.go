@@ -1,9 +1,9 @@
 package controller
 
 import (
-	errors "github.com/Erickype/DGC_gestion_indicadores_backend/model"
-	career "github.com/Erickype/DGC_gestion_indicadores_backend/model/career"
-	model "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation"
+	errors "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model"
+	career "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/career"
+	model "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/indicatorsInformation"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"

@@ -3,10 +3,10 @@ package model
 import (
 	"errors"
 
-	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
-	acaP "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicPeriod"
-	evaAcaP "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationAcademicPeriod"
-	evaP "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationPeriod"
+	"github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/database"
+	acaP "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/academicPeriod"
+	evaAcaP "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/evaluationAcademicPeriod"
+	evaP "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/evaluationPeriod"
 	"gorm.io/gorm"
 )
 

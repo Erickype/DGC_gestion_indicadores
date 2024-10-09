@@ -1,8 +1,8 @@
 package controller
 
 import (
-	errors "github.com/Erickype/DGC_gestion_indicadores_backend/model"
-	model "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/booksOrChaptersProduction"
+	errors "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model"
+	model "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/indicatorsInformation/booksOrChaptersProduction"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"

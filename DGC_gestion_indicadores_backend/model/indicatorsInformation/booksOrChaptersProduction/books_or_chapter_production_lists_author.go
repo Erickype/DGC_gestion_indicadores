@@ -2,11 +2,11 @@ package model
 
 import (
 	"errors"
-	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
-	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
-	academicProduction "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicProduction/author"
-	career "github.com/Erickype/DGC_gestion_indicadores_backend/model/career"
-	indicatorsInformation "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation"
+	"github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/database"
+	"github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model"
+	academicProduction "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/academicProduction/author"
+	career "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/career"
+	indicatorsInformation "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/indicatorsInformation"
 	"gorm.io/gorm"
 	"time"
 )

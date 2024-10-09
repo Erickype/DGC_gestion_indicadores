@@ -1,11 +1,11 @@
 package model
 
 import (
-	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
-	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
-	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicPeriod"
-	author "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicProduction/author"
-	career "github.com/Erickype/DGC_gestion_indicadores_backend/model/career"
+	"github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/database"
+	"github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model"
+	academicPeriod "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/academicPeriod"
+	author "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/academicProduction/author"
+	career "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/career"
 )
 
 type AcademicPeriodAuthorCareer struct {

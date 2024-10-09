@@ -1,9 +1,9 @@
 package model
 
 import (
-	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
-	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicPeriod"
-	evaluationPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationPeriod"
+	"github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/database"
+	academicPeriod "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/academicPeriod"
+	evaluationPeriod "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/evaluationPeriod"
 	"time"
 )
 

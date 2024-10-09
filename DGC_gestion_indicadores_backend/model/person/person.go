@@ -2,7 +2,7 @@ package model
 
 import (
 	"errors"
-	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
+	"github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/database"
 	"gorm.io/gorm"
 	"time"
 )

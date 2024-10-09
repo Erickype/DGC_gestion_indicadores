@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
-	errors "github.com/Erickype/DGC_gestion_indicadores_backend/model"
-	model "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationPeriod"
+	errors "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model"
+	model "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/evaluationPeriod"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )

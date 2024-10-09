@@ -2,7 +2,7 @@ package controller
 
 import (
 	"errors"
-	model "github.com/Erickype/DGC_gestion_indicadores_backend/model/auth"
+	model "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/auth"
 	"net/http"
 	"strconv"
 

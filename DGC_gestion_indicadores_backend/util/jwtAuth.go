@@ -1,7 +1,7 @@
 package util
 
 import (
-	errors "github.com/Erickype/DGC_gestion_indicadores_backend/model"
+	errors "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

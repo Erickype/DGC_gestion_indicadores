@@ -2,8 +2,8 @@ package controller
 
 import (
 	errorsS "errors"
-	errors "github.com/Erickype/DGC_gestion_indicadores_backend/model"
-	model "github.com/Erickype/DGC_gestion_indicadores_backend/model/knowledgeField"
+	errors "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model"
+	model "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/knowledgeField"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"

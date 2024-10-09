@@ -3,9 +3,9 @@ package controller
 import (
 	"errors"
 	"fmt"
-	commonErrors "github.com/Erickype/DGC_gestion_indicadores_backend/model"
-	model "github.com/Erickype/DGC_gestion_indicadores_backend/model/auth"
-	"github.com/Erickype/DGC_gestion_indicadores_backend/util"
+	commonErrors "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model"
+	model "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/auth"
+	"github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/util"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"gorm.io/gorm"

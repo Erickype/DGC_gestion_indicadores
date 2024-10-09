@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
+	"github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/database"
 	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
@@ -33,14 +33,14 @@ func GetEvaluationPeriods(periods *[]EvaluationPeriod) (err error) {
 }
 
 func GetEvaluationPeriodsByDateRange(periods *[]EvaluationPeriod, startDate datatypes.Date, endDate datatypes.Date) (err error) {
-    err = database.DB.
-        Where("start_year <= ? AND end_year >= ?", endDate, startDate).
-        Order("start_year desc").
-        Find(periods).Error
-    if err != nil {
-        return err
-    }
-    return nil
+	err = database.DB.
+		Where("start_year <= ? AND end_year >= ?", endDate, startDate).
+		Order("start_year desc").
+		Find(periods).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func GetEvaluationPeriod(period *EvaluationPeriod, id int) (err error) {

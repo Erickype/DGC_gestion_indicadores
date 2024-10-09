@@ -2,8 +2,8 @@ package model
 
 import (
 	"errors"
-	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
-	teacher "github.com/Erickype/DGC_gestion_indicadores_backend/model/teacher"
+	"github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/database"
+	teacher "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/teacher"
 	"gorm.io/gorm"
 	"time"
 )

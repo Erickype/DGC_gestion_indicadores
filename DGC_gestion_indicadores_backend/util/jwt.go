@@ -3,7 +3,7 @@ package util
 import (
 	"errors"
 	"fmt"
-	model "github.com/Erickype/DGC_gestion_indicadores_backend/model/auth"
+	model "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/auth"
 	"os"
 	"strconv"
 	"strings"

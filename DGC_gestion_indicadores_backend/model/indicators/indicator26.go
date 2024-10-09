@@ -2,10 +2,10 @@ package model
 
 import (
 	"errors"
-	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
-	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
-	evaluationAcademicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationAcademicPeriod"
-	evaluationPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationPeriod"
+	"github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/database"
+	"github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model"
+	evaluationAcademicPeriod "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/evaluationAcademicPeriod"
+	evaluationPeriod "github.com/Erickype/DGC_gestion_indicadores/DGC_gestion_indicadores_backend/model/evaluationPeriod"
 	"gorm.io/datatypes"
 )
 
