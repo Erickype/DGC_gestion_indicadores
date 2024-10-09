@@ -40,9 +40,8 @@
 				return manageToastFromInvalidAddForm();
 			}
 			if (message.success) {
-				const teacher = message.data as Teacher;
 				TeacherCreated();
-				return toast.success(`Docente creado: ${teacher.person_id}`);
+				return toast.success(`Docente creado`);
 			}
 			return manageToastFromErrorMessageOnAddForm(message);
 		}
