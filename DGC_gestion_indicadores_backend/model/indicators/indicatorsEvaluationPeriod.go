@@ -4,6 +4,7 @@ import (
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	evaluationPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationPeriod"
+	"math"
 	"time"
 )
 
@@ -20,12 +21,12 @@ type IndicatorsEvaluationPeriod struct {
 }
 
 type IndicatorEvaluationPeriodJoined struct {
-	IndicatorTypeID    uint    `json:"indicator_type_id"`
-	IndicatorType      string  `json:"indicator_type"`
-	EvaluationPeriodID uint    `json:"evaluation_period_id"`
-	EvaluationPeriod   string  `json:"evaluation_period"`
-	ActualValue        float64 `json:"actual_value,omitempty"`
-	TargetValue        float64 `json:"target_value"`
+	IndicatorTypeID    uint     `json:"indicator_type_id"`
+	IndicatorType      string   `json:"indicator_type"`
+	EvaluationPeriodID uint     `json:"evaluation_period_id"`
+	EvaluationPeriod   string   `json:"evaluation_period"`
+	ActualValue        *float64 `json:"actual_value,omitempty"`
+	TargetValue        float64  `json:"target_value"`
 }
 
 func (iep IndicatorsEvaluationPeriod) TableName() string {
@@ -48,6 +49,9 @@ func GetIndicatorByTypeIDAndEvaluationPeriod(
 		Scan(&indicatorEvaluationPeriodJoined).Error
 	if err != nil {
 		return err
+	}
+	if math.IsNaN(*indicatorEvaluationPeriodJoined.ActualValue) {
+		*indicatorEvaluationPeriodJoined.ActualValue = 0
 	}
 	return nil
 }
