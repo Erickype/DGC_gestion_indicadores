@@ -31,9 +31,11 @@
 
 	addBooksOrChaptersProductionListsAuthorCareersForm.data.booksOrChaptersProductionListID =
 		data.booksOrChapersProductionListID;
+	updateBooksOrChaptersProductionListsAuthorCareersForm.data.booksOrChaptersProductionListID =
+		data.booksOrChapersProductionListID;
 
-	async function fetchGetBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionListID() {        
-        const url = `/api/indicatorsInformation/booksOrChaptersProductionListsAuthors/JoinedByBooksOrChaptersProductionListID/${data.booksOrChapersProductionListID}`;
+	async function fetchGetBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionListID() {
+		const url = `/api/indicatorsInformation/booksOrChaptersProductionListsAuthors/JoinedByBooksOrChaptersProductionListID/${data.booksOrChapersProductionListID}`;
 		const response = await fetch(url, {
 			method: 'GET'
 		});
