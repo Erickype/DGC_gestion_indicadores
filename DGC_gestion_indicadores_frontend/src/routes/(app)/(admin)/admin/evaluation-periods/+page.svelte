@@ -1,9 +1,10 @@
 <script lang="ts">
 	import type { EvaluationPeriod } from '$lib/api/model/view/evaluationPeriod';
+	import type { CommonError } from '$lib/api/model/errors';
+	import Alert from '$lib/components/alert/alert.svelte';
+	import PeriodsTable from './Table.svelte';
 	import type { PageData } from './$types';
 	import AddModal from './AddModal.svelte';
-	import PeriodsTable from './Table.svelte';
-	import Alert from '$lib/components/alert/alert.svelte';
 
 	export let data: PageData;
 
@@ -18,7 +19,8 @@
 			method: 'GET'
 		});
 		if (!response.ok) {
-			throw new Error(response.statusText);
+			const errorData = (await response.json()) as CommonError;
+			throw errorData;
 		}
 		return (evaluationPeriodsPromise = response.json());
 	}
