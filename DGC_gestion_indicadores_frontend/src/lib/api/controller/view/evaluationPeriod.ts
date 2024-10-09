@@ -40,7 +40,7 @@ export async function LoadEvaluationPeriodsWithComboMessages() {
     messages = messages.concat(
         periods.map((period) => ({
             value: period.ID,
-            label: period.abbreviation,
+            label: period.name,
         }))
     );
 
