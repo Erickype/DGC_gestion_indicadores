@@ -18,6 +18,7 @@ import (
 	indicatorsInformation "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation"
 	indicatorsInformationAcademicProduction "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/academicProduction"
 	indicatorsInformationBooksOrChaptersProduction "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/booksOrChaptersProduction"
+	indicatorInformationSocialProject "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/socialProjectProduction"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/teachers"
 	knowledgeField "github.com/Erickype/DGC_gestion_indicadores_backend/model/knowledgeField"
 	person "github.com/Erickype/DGC_gestion_indicadores_backend/model/person"
@@ -59,6 +60,7 @@ func LoadDatabase() {
 		&knowledgeField.SpecificField{},
 		&knowledgeField.DetailedField{},
 		&indicatorsInformation.AcademicPeriodAuthorCareer{},
+		&indicatorInformationSocialProject.SocialProjectList{},
 		&indicatorsInformationAcademicProduction.AcademicProductionList{},
 		&indicatorsInformationAcademicProduction.AcademicProductionListsAuthor{},
 		&indicatorsInformationBooksOrChaptersProduction.BooksOrChaptersProductionList{},
