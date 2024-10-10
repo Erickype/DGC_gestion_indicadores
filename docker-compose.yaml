@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:latest
+    image: postgres:16
     container_name: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -12,6 +12,40 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5432:5432"
+    networks:
+      - dgc_gestion_indicadores
+
+  dgc_gestion_indicadores_backend:
+    container_name: dgc_gestion_indicadores_backend
+    build:
+      context: ./DGC_gestion_indicadores_backend
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_HOST=postgres
+    networks:
+      - dgc_gestion_indicadores
+
+  dgc_gestion_indicadores_frontend:
+    container_name: dgc_gestion_indicadores_frontend
+    build:
+      context: ./DGC_gestion_indicadores_frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - dgc_gestion_indicadores_backend
+    ports:
+      - "3000:3000"
+    environment:
+      - ORIGIN=http://localhost:3000
+    networks:
+      - dgc_gestion_indicadores
 
 volumes:
   postgres_data:
+
+networks:
+  dgc_gestion_indicadores:
+    driver: bridge
