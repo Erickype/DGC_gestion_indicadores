@@ -57,7 +57,12 @@ func FilterAcademicPeriods(
 		query = query.Where(strings.Join(conditions, " OR "), values...)
 	}
 
-	query = query.Select(`ap.*`)
+	query = query.Select(`ap.id,
+			ap.name,
+			ap.description,
+			ap.abbreviation,
+			ap.start_date,
+			ap.end_date`)
 
 	var totalCount int64
 	err = query.Table("academic_periods ap").Count(&totalCount).Error
