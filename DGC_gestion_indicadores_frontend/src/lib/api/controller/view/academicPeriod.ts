@@ -1,7 +1,9 @@
+import type { AcademicPeriod, FilterAcademicPeriodsRequest, FilterAcademicPeriodsResponse } from "$lib/api/model/view/academicPeriod";
+import { getAcademicPeriodsRoute, postFilterAcademicPeriodsRoute } from "$lib/api/routes/view/academicPeriod";
+
 import { generateErrorFromCommonError, type CommonError } from "$lib/api/model/errors";
-import type { AcademicPeriod } from "$lib/api/model/view/academicPeriod";
-import { getAcademicPeriodsRoute } from "$lib/api/routes/view/academicPeriod";
 import type { Message } from "$lib/components/combobox/combobox";
+import { generateCommonErrorFromFetchError } from "$lib/utils";
 
 export async function GetAcademicPeriods(): Promise<AcademicPeriod[] | CommonError> {
     try {
@@ -28,6 +30,27 @@ export async function GetAcademicPeriods(): Promise<AcademicPeriod[] | CommonErr
     }
 }
 
+export async function PostFilterAcademicPeriods(token: string, filterAcademicPeriodsRequest: FilterAcademicPeriodsRequest) {
+    try {
+        const response = await fetch(postFilterAcademicPeriodsRoute, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify(filterAcademicPeriodsRequest)
+        })
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
+        }
+        const filterAcademicPeriodsResponse: FilterAcademicPeriodsResponse = await response.json()
+        return filterAcademicPeriodsResponse
+
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
+}
 
 export async function LoadAcademicPeriodsWithComboMessages() {
     const response = await GetAcademicPeriods();
