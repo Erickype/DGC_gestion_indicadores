@@ -5,6 +5,7 @@ import type { TransitionConfig } from "svelte/transition";
 import type { CommonError } from "./api/model/errors";
 import { toast } from "svelte-sonner";
 import { message, type ErrorStatus, type SuperValidated } from "sveltekit-superforms";
+import { z } from "zod";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -120,3 +121,10 @@ export interface DragableFilterFields {
 	name: string;
 	label: string;
 }
+
+//FilterAcademicPeriodsAuxForm
+export const filterAcademicPeriodsAuxSchema = z.object({
+	academic_period_id: z.number().gt(0)
+})
+
+export type FilterAcademicPeriodsAuxSchema = typeof filterAcademicPeriodsAuxSchema
