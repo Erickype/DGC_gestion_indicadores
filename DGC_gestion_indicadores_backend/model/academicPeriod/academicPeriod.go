@@ -3,11 +3,12 @@ package model
 import (
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"gorm.io/datatypes"
-	"gorm.io/gorm"
+	"time"
 )
 
 type AcademicPeriod struct {
-	gorm.Model
+	CreatedAt    time.Time      `json:"created_at"`
+	UpdatedAt    time.Time      `json:"updated_at"`
 	ID           uint           `gorm:"primary_key"`
 	Name         string         `gorm:"size:50;not null" json:"name"`
 	Description  string         `gorm:"size:255;not null" json:"description"`
