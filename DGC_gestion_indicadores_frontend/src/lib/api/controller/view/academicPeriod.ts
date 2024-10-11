@@ -52,6 +52,17 @@ export async function PostFilterAcademicPeriods(token: string, filterAcademicPer
     }
 }
 
+export function GenerateComboMessagesFromAcademicPeriods(academicPeriods: AcademicPeriod[]): Message[] {
+    let messages: Message[] = []
+    messages = messages.concat(
+        academicPeriods.map((person) => ({
+            value: person.ID,
+            label: person.name,
+        }))
+    );
+    return messages
+}
+
 export async function LoadAcademicPeriodsWithComboMessages() {
     const response = await GetAcademicPeriods();
     if ((response as CommonError).status) {
