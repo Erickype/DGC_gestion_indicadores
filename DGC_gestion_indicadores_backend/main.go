@@ -195,7 +195,9 @@ func serveApplication() {
 
 	// Public view routes
 	academicPeriodRoutes := router.Group("/view")
+
 	academicPeriodRoutes.GET("/academicPeriods", academicPeriod.GetAcademicPeriods)
+	academicPeriodRoutes.POST("/academicPeriods/filter", academicPeriod.FilterAcademicPeriods)
 
 	academicPeriodRoutes.GET("/evaluationPeriods", evaluationPeriod.GetEvaluationPeriods)
 
