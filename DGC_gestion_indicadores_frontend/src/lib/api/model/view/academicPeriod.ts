@@ -27,11 +27,11 @@ export interface UpdateAcademicPeriodRequest {
 }
 
 export interface FilterAcademicPeriodsRequest {
-    name: string;
-    description: string;
-    abbreviation: string;
-    start_date: string;
-    end_date: string;
+    name?: string;
+    description?: string;
+    abbreviation?: string;
+    start_date?: string;
+    end_date?: string;
     page_size: number;
     page: number;
 }
