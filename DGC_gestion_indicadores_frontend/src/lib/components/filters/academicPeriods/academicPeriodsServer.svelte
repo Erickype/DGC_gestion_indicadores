@@ -69,6 +69,7 @@
 	{/if}
 
 	<ServerFormSelect
+		formSelectWidth="w-[25%]"
 		bind:filterValue={academicPeriodsFilterValue}
 		formLabel="Periodo académico"
 		bind:popoverFilterDataMap={academicPeriodsPopoverFilterDataMap}

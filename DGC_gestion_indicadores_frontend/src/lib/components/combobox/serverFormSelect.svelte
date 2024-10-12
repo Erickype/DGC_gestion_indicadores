@@ -25,6 +25,7 @@
 	export let popoverFilterDataMap: PopoverFilterDataMap = new Map();
 	export let filterValue: string;
 	export let formLabel: string = 'Object';
+	export let formSelectWidth = 'w-[90%]';
 
 	let isFocused = false;
 
@@ -85,7 +86,7 @@
 		</Popover.Trigger>
 		<input hidden value={$formDataID} name={attrs.name} />
 	</Form.Control>
-	<Popover.Content class="w-[90%] p-0">
+	<Popover.Content class="{formSelectWidth} p-0">
 		<Command.Root loop>
 			<div class="flex items-center gap-1 p-1">
 				<div
