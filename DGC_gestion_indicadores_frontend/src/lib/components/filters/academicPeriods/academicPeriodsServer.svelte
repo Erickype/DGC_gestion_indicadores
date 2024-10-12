@@ -10,7 +10,9 @@
 		newFilterAcademicPeriodsRequest,
 		generateInitialFilterValue,
 		newPopoverFilterDataMap,
-		fetchFilterAcademicPeriods
+		fetchFilterAcademicPeriods,
+		fetchOnFilterChanged,
+		fetchOnDetailedFilter
 	} from '$lib/components/filters/academicPeriods/academicPeriods';
 	import type {
 		FilterAcademicPeriodsRequest,
@@ -20,30 +22,33 @@
 	export let formDataAcademicPeriodID = writable();
 
 	let openAcademicPeriods = false;
-	let filterTeachersRequest: FilterAcademicPeriodsRequest = newFilterAcademicPeriodsRequest(5, 1);
+	let filterAcademicPeriodsRequest: FilterAcademicPeriodsRequest = newFilterAcademicPeriodsRequest(
+		5,
+		1
+	);
 	let academicPeriodsFilterValue: string = '';
 
 	let filterAcademicPeriodsPromise: Promise<FilterAcademicPeriodsResponse> =
-		fetchFilterAcademicPeriods(filterTeachersRequest);
+		fetchFilterAcademicPeriods(filterAcademicPeriodsRequest);
 	let academicPeriodsPopoverFilterDataMap: PopoverFilterDataMap = newPopoverFilterDataMap();
 
 	function handleOnTeachersFilterChanged() {
-		/* filterTeachersResponsePromise = fetchOnFilterChanged(
-			teachersFilterValue.trim(),
-			filterTeachersRequest,
-			teachersPopoverFilterDataMap
-		); */
+		filterAcademicPeriodsPromise = fetchOnFilterChanged(
+			academicPeriodsFilterValue.trim(),
+			filterAcademicPeriodsRequest,
+			academicPeriodsPopoverFilterDataMap
+		);
 	}
 
 	async function handleOnDetailedFilter() {
-		/* filterTeachersResponsePromise = fetchOnDetailedFilter(
-			filterTeachersRequest,
-			teachersPopoverFilterDataMap
+		filterAcademicPeriodsPromise = fetchOnDetailedFilter(
+			filterAcademicPeriodsRequest,
+			academicPeriodsPopoverFilterDataMap
 		).then(({ request, response }) => {
-			filterTeachersRequest = request;
-			teachersFilterValue = generateInitialFilterValue(filterTeachersRequest)!;
+			filterAcademicPeriodsRequest = request;
+			academicPeriodsFilterValue = generateInitialFilterValue(filterAcademicPeriodsRequest)!;
 			return response;
-		}); */
+		});
 	}
 </script>
 
