@@ -15,25 +15,22 @@ func CreateAcademicPeriod(c *gin.Context) {
 	var period model.AcademicPeriod
 	err := c.BindJSON(&period)
 	if err != nil {
-		err := errors.CreateCommonError(http.StatusBadRequest, "Error en la solicitud", err.Error())
-		c.AbortWithStatusJSON(http.StatusBadRequest, err)
+		errors.BadRequestResponse(c, err)
 		return
 	}
 	err = common.CreateAcademicPeriod(&period)
 	if err != nil {
-		err := errors.CreateCommonError(http.StatusInternalServerError, "Error creando periodo", err.Error())
-		c.AbortWithStatusJSON(http.StatusInternalServerError, err)
+		errors.InternalServerErrorResponse(c, "Error creando periodo", err)
 		return
 	}
-	c.JSON(http.StatusOK, period)
+	c.JSON(http.StatusCreated, period)
 }
 
 func GetAcademicPeriods(context *gin.Context) {
 	var academicPeriods []model.AcademicPeriod
 	err := model.GetAcademicPeriods(&academicPeriods)
 	if err != nil {
-		err := errors.CreateCommonError(http.StatusInternalServerError, "Error retornando periodos", err.Error())
-		context.AbortWithStatusJSON(http.StatusInternalServerError, err)
+		errors.InternalServerErrorResponse(context, "Error retornando periodos", err)
 		return
 	}
 	context.JSON(http.StatusOK, academicPeriods)
@@ -46,44 +43,37 @@ func UpdateAcademicPeriod(c *gin.Context) {
 	err := model.GetAcademicPeriod(&AcademicPeriod, id)
 	if err != nil {
 		if errorsS.Is(err, gorm.ErrRecordNotFound) {
-			err := errors.CreateCommonError(http.StatusNotFound, "No existe el periodo académico", err.Error())
-			c.AbortWithStatusJSON(http.StatusNotFound, err)
+			errors.NotFoundResponse(c, "No existe el periodo académico", err)
 			return
 		}
-		err := errors.CreateCommonError(http.StatusInternalServerError, "Error interno", err.Error())
-		c.AbortWithStatusJSON(http.StatusInternalServerError, err)
+		errors.InternalServerErrorResponse(c, "Error retornando periodo académico", err)
 		return
 	}
 	err = c.BindJSON(&AcademicPeriod)
 	if err != nil {
-		err := errors.CreateCommonError(http.StatusBadRequest, "Error en la petición", err.Error())
-		c.AbortWithStatusJSON(http.StatusBadRequest, err)
+		errors.BadRequestResponse(c, err)
 		return
 	}
 
 	err = common.UpdateAcademicPeriod(&AcademicPeriod)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		errors.InternalServerErrorResponse(c, "Error actualizando periodo", err)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"status": "success"})
+	c.JSON(http.StatusAccepted, AcademicPeriod)
 }
 
 func DeleteAcademicPeriod(context *gin.Context) {
 	id, err := strconv.ParseInt(context.Param("id"), 10, 64)
 	if err != nil {
-		err := errors.CreateCommonError(http.StatusBadRequest,
-			"Error en parámetro id.", err.Error())
-		context.AbortWithStatusJSON(http.StatusBadRequest, err)
+		errors.BadRequestResponse(context, err)
 		return
 	}
 
 	err = model.DeleteAcademicPeriod(int(id))
 	if err != nil {
-		err := errors.CreateCommonError(http.StatusInternalServerError,
-			"Error eliminando periodo evaluación", err.Error())
-		context.AbortWithStatusJSON(http.StatusInternalServerError, err)
+		errors.InternalServerErrorResponse(context, "Error eliminando periodo evaluación", err)
 		return
 	}
-	context.JSON(http.StatusOK, gin.H{"status": "success"})
+	context.JSON(http.StatusAccepted, errors.CreateCommonDeleteResponse("AcademicPeriod", int(id)))
 }
