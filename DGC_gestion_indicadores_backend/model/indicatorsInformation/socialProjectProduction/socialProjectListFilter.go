@@ -16,7 +16,8 @@ type FilterSocialProjectListsByAcademicPeriodRequest struct {
 }
 
 type SocialProjectListByAcademicPeriodJoined struct {
-	AcademicPeriodID int    `json:"academic_period_id"`
+	ID               uint
+	AcademicPeriodID uint   `json:"academic_period_id"`
 	CareerID         uint   `json:"career_id"`
 	Career           string `json:"career"`
 	Name             string `json:"name"`
@@ -52,12 +53,13 @@ func FilterSocialProjectListsByAcademicPeriod(
 		query = query.Where(strings.Join(conditions, " OR "), values...)
 	}
 
-	query = query.Select(
-		`spl.academic_period_id,
+	query = query.
+		Select(`spl.id,
+		spl.academic_period_id,
 		spl.career_id,
 		c.name as career,
 		spl.name`,
-	).
+		).
 		Joins(`join careers c on spl.career_id = c.id`).
 		Where("spl.academic_period_id = ?",
 			filterSocialProjectListsByAcademicPeriodRequest.AcademicPeriodID)
