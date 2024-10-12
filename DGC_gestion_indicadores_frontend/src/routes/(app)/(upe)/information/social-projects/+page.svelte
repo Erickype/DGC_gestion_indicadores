@@ -13,7 +13,9 @@
 	import AcademicPeriodsServer from '$lib/components/filters/academicPeriods/academicPeriodsServer.svelte';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
 	import TableSkeleton from '$lib/components/skeleton/table.svelte';
+	import AddModal from '$lib/components/modal/AddModal.svelte';
 	import Alert from '$lib/components/alert/alert.svelte';
+	import AddForm from './AddForm.svelte';
 	import Table from './Table.svelte';
 
 	import {
@@ -27,9 +29,13 @@
 		FilterSocialProjectListsByAcademicPeriodRequest,
 		FilterSocialProjectListsByAcademicPeriodResponse
 	} from '$lib/api/model/api/indicatorsInformation/socialProjectLists';
+	import type { Message } from '$lib/components/combobox/combobox';
 
 	export let data: PageServerData;
 	const filterAcademicPeriodsAuxForm = data.filterAcademicPeriodsAuxForm;
+	const addSocialProjectListForm = data.addSocialProjectListForm;
+
+	const comboMessages: Message[][] = [data.careersData.messages];
 
 	const form = superForm(filterAcademicPeriodsAuxForm, {
 		validators: zodClient(filterAcademicPeriodsAuxSchema)
@@ -47,6 +53,7 @@
 	let formDataAcademicPeriodID = writable($formData.academic_period_id);
 	formDataAcademicPeriodID.subscribe((value) => {
 		$formData.academic_period_id = value;
+		addSocialProjectListForm.data.academic_period_id = $formData.academic_period_id;
 		fetchFilterSocialProjecListsOnAcademicPeriodChange();
 	});
 
@@ -108,6 +115,14 @@
 	<Form.Field {form} name="academic_period_id" class="w-1/3">
 		<AcademicPeriodsServer {formDataAcademicPeriodID} />
 	</Form.Field>
+
+	<AddModal
+		formComponent={AddForm}
+		modalTitle="Crear proyecto vinculación"
+		formData={addSocialProjectListForm}
+		{comboMessages}
+		on:created={fetchOnSuccess}
+	/>
 </div>
 
 <div class="mx-auto flex w-full flex-col place-content-center px-8">
