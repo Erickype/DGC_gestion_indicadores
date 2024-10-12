@@ -66,12 +66,12 @@
 	}
 
 	function fetchOnSuccess(event: CustomEvent) {
-		/* const detail: { status: boolean } = event.detail;
+		const detail: { status: boolean } = event.detail;
 		if (detail.status) {
-			filterBooksOrChaptersProductionListPromise = fetchFilterBooksOrChaptersProductionLists(
-				filterBooksOrChaptersProductionListsByAcademicPeriodRequest
+			filterSocialProjectListsPromise = fetchFilterSocialProjectLists(
+				filterSocialProjectListsByAcademicPeriodRequest
 			);
-		} */
+		}
 	}
 
 	function handleOnFilterChanged(event: CustomEvent) {
