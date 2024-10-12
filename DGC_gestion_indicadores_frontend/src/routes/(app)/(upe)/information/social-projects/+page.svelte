@@ -21,7 +21,7 @@
 
 	const { form: formData } = form;
 
-	$formData.academic_period_id = 7
+	$formData.academic_period_id = data.academicPeriodsData.periods.at(0)!.ID;
 
 	let formDataAcademicPeriodID = writable($formData.academic_period_id);
 	formDataAcademicPeriodID.subscribe((value) => {
