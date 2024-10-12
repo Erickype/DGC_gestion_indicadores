@@ -18,6 +18,8 @@
 
 	import {
 		fetchFilterSocialProjectLists,
+		fetchOnDetailedFilter,
+		fetchOnFilterChanged,
 		newFilterSocialProjectListsByAcademiPeriodRequest,
 		newPopoverFilterDataMap
 	} from '$lib/components/filters/indicatorsInformation/socialProjectLists/socialProjectLists';
@@ -66,22 +68,22 @@
 	}
 
 	function handleOnFilterChanged(event: CustomEvent) {
-		/* 	const data: { filter: string } = event.detail;
-		filterBooksOrChaptersProductionListPromise = fetchOnFilterChanged(
+		const data: { filter: string } = event.detail;
+		filterSocialProjectListsPromise = fetchOnFilterChanged(
 			data.filter.trim(),
-			filterBooksOrChaptersProductionListsByAcademicPeriodRequest,
+			filterSocialProjectListsByAcademicPeriodRequest,
 			popoverFilterDataMap
-		); */
+		);
 	}
 
 	function handleOnDetailedFilter() {
-		/* 	filterBooksOrChaptersProductionListPromise = fetchOnDetailedFilter(
-			filterBooksOrChaptersProductionListsByAcademicPeriodRequest,
+		filterSocialProjectListsPromise = fetchOnDetailedFilter(
+			filterSocialProjectListsByAcademicPeriodRequest,
 			popoverFilterDataMap
 		).then(({ request, response }) => {
-			filterBooksOrChaptersProductionListsByAcademicPeriodRequest = request;
+			filterSocialProjectListsByAcademicPeriodRequest = request;
 			return response;
-		}); */
+		});
 	}
 
 	function handlePaginationChanged() {

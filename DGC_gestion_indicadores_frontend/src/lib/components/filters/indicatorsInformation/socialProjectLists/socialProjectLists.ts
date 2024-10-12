@@ -53,3 +53,64 @@ export function generateInitialFilterValue(filterTeachersListsRequest: FilterSoc
 
     return initialFilterValue
 }
+
+export async function fetchOnFilterChanged(filter: string, filterSocialProjectListsByAcademicPeriodRequest: FilterSocialProjectListsByAcademicPeriodRequest, popoverFilterDataMap: PopoverFilterDataMap) {
+    popoverFilterDataMap.forEach((_, key) => {
+        (filterSocialProjectListsByAcademicPeriodRequest as any)[key] = filter;
+    });
+
+    return fetchFilterSocialProjectLists(filterSocialProjectListsByAcademicPeriodRequest).then(
+        (response: FilterSocialProjectListsByAcademicPeriodResponse) => {
+            if (response.count === 0) {
+                toast.warning(`No hay datos para el filtro: ${filter}`);
+                popoverFilterDataMap.forEach((_, key) => {
+                    (filterSocialProjectListsByAcademicPeriodRequest as any)[key] = '';
+                });
+                return fetchFilterSocialProjectLists(filterSocialProjectListsByAcademicPeriodRequest);
+            }
+            return response;
+        }
+    );
+}
+
+export async function fetchOnDetailedFilter(
+    filterSocialProjectListsByAcademicPeriodRequest: FilterSocialProjectListsByAcademicPeriodRequest,
+    popoverFilterDataMap: PopoverFilterDataMap
+): Promise<{ request: FilterSocialProjectListsByAcademicPeriodRequest, response: FilterSocialProjectListsByAcademicPeriodResponse }> {
+
+    let request: FilterSocialProjectListsByAcademicPeriodRequest = {
+        academic_period_id: filterSocialProjectListsByAcademicPeriodRequest.academic_period_id,
+        page: filterSocialProjectListsByAcademicPeriodRequest.page,
+        page_size: filterSocialProjectListsByAcademicPeriodRequest.page_size
+    };
+
+    popoverFilterDataMap.forEach((item, key) => {
+        if (item.value !== '') {
+            (request as any)[key] = item.value;
+        }
+    });
+
+    filterSocialProjectListsByAcademicPeriodRequest = request;
+
+    const response = await fetchFilterSocialProjectLists(filterSocialProjectListsByAcademicPeriodRequest);
+
+    if (response.count === 0) {
+        let message = 'No hay datos para el filtro\n';
+        popoverFilterDataMap.forEach((item, _) => {
+            if (item.value !== '') {
+                message += `${item.label}: ${item.value}; `;
+            }
+        });
+        message = message.slice(0, message.length - 2);
+        toast.warning(message);
+
+        popoverFilterDataMap.forEach((_, key) => {
+            (filterSocialProjectListsByAcademicPeriodRequest as any)[key] = '';
+        });
+
+        const newResponse = await fetchFilterSocialProjectLists(filterSocialProjectListsByAcademicPeriodRequest);
+        return { request: filterSocialProjectListsByAcademicPeriodRequest, response: newResponse };
+    }
+
+    return { request: filterSocialProjectListsByAcademicPeriodRequest, response };
+}
