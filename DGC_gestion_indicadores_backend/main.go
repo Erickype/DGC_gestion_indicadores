@@ -179,6 +179,7 @@ func serveApplication() {
 		indicatorsInformationBooksOrChaptersProduction.GetBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionListID)
 
 	indicatorsInformationRoutes.POST("/socialProjectList", indicatorsInformationSocialProject.PostSocialProjectList)
+	indicatorsInformationRoutes.PUT("/socialProjectList/:id", indicatorsInformationSocialProject.PutSocialProjectList)
 	indicatorsInformationRoutes.POST("/socialProjectLists/filter",
 		indicatorsInformationSocialProject.FilterSocialProjectListsByAcademicPeriod)
 

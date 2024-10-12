@@ -26,8 +26,32 @@ func (sp SocialProjectList) TableName() string {
 	return model.IndicatorsInformationSchema + ".social_project_lists"
 }
 
+func GetSocialProjectListByID(id int, socialProjectList *SocialProjectList) (err error) {
+	err = database.DB.Model(&SocialProjectList{}).
+		Where("id = ?", id).
+		Scan(&socialProjectList).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("no existe el proyecto en el periodo")
+		}
+		return err
+	}
+	return nil
+}
+
 func PostSocialProjectList(socialProjectList *SocialProjectList) (err error) {
 	err = database.DB.Create(socialProjectList).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("proyecto vinculación en lista ya existe")
+		}
+		return err
+	}
+	return nil
+}
+
+func PutSocialProjectList(socialProjectList *SocialProjectList) (err error) {
+	err = database.DB.Save(socialProjectList).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
 			return errors.New("proyecto vinculación en lista ya existe")
