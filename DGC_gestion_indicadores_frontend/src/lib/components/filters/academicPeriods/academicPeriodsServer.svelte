@@ -43,6 +43,7 @@
 			filterAcademicPeriodsRequest,
 			academicPeriodsPopoverFilterDataMap
 		);
+		academicPeriodPromise = fetchAcademicPeriodByID($formDataAcademicPeriodID as string);
 	}
 
 	async function handleOnDetailedFilter() {
@@ -54,6 +55,7 @@
 			academicPeriodsFilterValue = generateInitialFilterValue(filterAcademicPeriodsRequest)!;
 			return response;
 		});
+		academicPeriodPromise = fetchAcademicPeriodByID($formDataAcademicPeriodID as string);
 	}
 </script>
 
