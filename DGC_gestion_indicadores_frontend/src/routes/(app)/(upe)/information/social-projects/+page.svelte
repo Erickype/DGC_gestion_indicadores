@@ -34,6 +34,7 @@
 	export let data: PageServerData;
 	const filterAcademicPeriodsAuxForm = data.filterAcademicPeriodsAuxForm;
 	const addSocialProjectListForm = data.addSocialProjectListForm;
+	const updateSocialProjectListForm = data.updateSocialProjectListForm;
 
 	const comboMessages: Message[][] = [data.careersData.messages];
 
@@ -54,6 +55,7 @@
 	formDataAcademicPeriodID.subscribe((value) => {
 		$formData.academic_period_id = value;
 		addSocialProjectListForm.data.academic_period_id = $formData.academic_period_id;
+		updateSocialProjectListForm.data.academic_period_id = $formData.academic_period_id;
 		fetchFilterSocialProjecListsOnAcademicPeriodChange();
 	});
 
@@ -132,9 +134,10 @@
 		{#if filterSocialProjectListsByAcademicPeriodResponse.social_project_lists}
 			<Table
 				bind:filterSocialProjectListsByAcademicPeriodRequest
+				formData={updateSocialProjectListForm}
 				{filterSocialProjectListsByAcademicPeriodResponse}
 				bind:popoverFilterDataMap
-				comboMessages={undefined}
+				{comboMessages}
 				on:updated={fetchOnSuccess}
 				on:deleted={fetchOnSuccess}
 				on:filterChanged={handleOnFilterChanged}
