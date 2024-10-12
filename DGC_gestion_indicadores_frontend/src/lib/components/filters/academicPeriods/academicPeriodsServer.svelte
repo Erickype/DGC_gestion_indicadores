@@ -12,14 +12,17 @@
 		newPopoverFilterDataMap,
 		fetchFilterAcademicPeriods,
 		fetchOnFilterChanged,
-		fetchOnDetailedFilter
+		fetchOnDetailedFilter,
+		fetchAcademicPeriodByID
 	} from '$lib/components/filters/academicPeriods/academicPeriods';
 	import type {
+		AcademicPeriod,
 		FilterAcademicPeriodsRequest,
 		FilterAcademicPeriodsResponse
 	} from '$lib/api/model/view/academicPeriod';
 
 	export let formDataAcademicPeriodID = writable();
+	let academicPeriodPromise: Promise<AcademicPeriod>;
 
 	let openAcademicPeriods = false;
 	let filterAcademicPeriodsRequest: FilterAcademicPeriodsRequest = newFilterAcademicPeriodsRequest(
@@ -27,6 +30,8 @@
 		1
 	);
 	let academicPeriodsFilterValue: string = '';
+
+	academicPeriodPromise = fetchAcademicPeriodByID($formDataAcademicPeriodID as string);
 
 	let filterAcademicPeriodsPromise: Promise<FilterAcademicPeriodsResponse> =
 		fetchFilterAcademicPeriods(filterAcademicPeriodsRequest);
@@ -52,9 +57,17 @@
 	}
 </script>
 
-{#await Promise.all([filterAcademicPeriodsPromise])}
+{#await Promise.all([filterAcademicPeriodsPromise, academicPeriodPromise])}
 	<FormFieldSkeleton />
-{:then [filterAcademicPeriodsResponse]}
+{:then [filterAcademicPeriodsResponse, academicPeriodResponse]}
+	{#if academicPeriodResponse.ID}
+		{#if !filterAcademicPeriodsResponse.academic_periods.some((academicPeriod) => academicPeriod.ID === academicPeriodResponse.ID)}
+			<p class="hidden">
+				{filterAcademicPeriodsResponse.academic_periods.unshift(academicPeriodResponse)}
+			</p>
+		{/if}
+	{/if}
+
 	<ServerFormSelect
 		bind:filterValue={academicPeriodsFilterValue}
 		formLabel="Periodo académico"

@@ -1,4 +1,4 @@
-import type { FilterAcademicPeriodsRequest, FilterAcademicPeriodsResponse } from "$lib/api/model/view/academicPeriod";
+import type { AcademicPeriod, FilterAcademicPeriodsRequest, FilterAcademicPeriodsResponse } from "$lib/api/model/view/academicPeriod";
 import type { PopoverFilterDataMap } from "$lib/components/table/types";
 
 import type { CommonError } from "$lib/api/model/errors";
@@ -50,6 +50,21 @@ export async function fetchFilterAcademicPeriods(filterAcademicPeriodsRequest: F
     const response = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(filterAcademicPeriodsRequest)
+    });
+    if (!response.ok) {
+        const errorData = (await response.json()) as CommonError;
+        if (response.status === 401) {
+            throw goto('/');
+        }
+        throw errorData;
+    }
+    return response.json();
+}
+
+export async function fetchAcademicPeriodByID(academicPeriodID: string): Promise<AcademicPeriod> {
+    const url = `/api/academicPeriod/` + academicPeriodID;
+    const response = await fetch(url, {
+        method: 'GET',
     });
     if (!response.ok) {
         const errorData = (await response.json()) as CommonError;
