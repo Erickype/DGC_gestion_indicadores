@@ -7,6 +7,7 @@ export interface FilterSocialProjectListsByAcademicPeriodRequest {
 }
 
 export interface SocialProjectListByAcademicPeriodJoined {
+    ID: number
     academic_period_id: number
     career_id: number
     career: string

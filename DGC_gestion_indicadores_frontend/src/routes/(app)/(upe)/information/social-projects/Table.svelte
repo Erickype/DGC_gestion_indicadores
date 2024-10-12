@@ -75,13 +75,11 @@
 			header: 'Título'
 		}),
 		table.column({
-			accessor: ({ career_id }) => career_id,
+			accessor: ({ ID }) => ID,
 			header: '',
 			cell: ({ value }) => {
 				const actions = createRender(DataTableActions, {
-					id: `${value}`,
-					moreAction: true,
-					moreActionURL: `/information/books/`
+					id: `${value}`
 				});
 				actions.on('delete-confirmation', handleDeleteConfirmation);
 				actions.on('update-action', handleUpdateAction);
