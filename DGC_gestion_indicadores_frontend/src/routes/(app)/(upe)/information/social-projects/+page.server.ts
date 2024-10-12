@@ -7,7 +7,7 @@ import { addSocialProjectListSchema, updateSocialProjectListSchema } from "./sch
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 
-import { PostSocialProjectList } from "$lib/api/controller/api/indicatorsInformation/socialProjectLists";
+import { PostSocialProjectList, PutSocialProjectList } from "$lib/api/controller/api/indicatorsInformation/socialProjectLists";
 import type { SocialProjectList } from "$lib/api/model/api/indicatorsInformation/socialProjectLists";
 import { LoadAcademicPeriodsWithComboMessages } from "$lib/api/controller/view/academicPeriod";
 import { LoadCareersWithComboMessages } from "$lib/api/controller/api/career";
@@ -48,6 +48,27 @@ export const actions: Actions = {
         }
 
         const response = await PostSocialProjectList(token!, socialProjectList)
+
+        return generateFormMessageFromHttpResponse(form, response)
+    },
+
+    putSocialProjectList: async (event) => {
+        const form = await superValidate(event, zod(updateSocialProjectListSchema))
+
+        if (!form.valid) {
+            return generateFormMessageFromInvalidForm(form)
+        }
+
+        const token = event.cookies.get("AuthorizationToken")
+        const data = form.data
+        const socialProjectList: SocialProjectList = {
+            ID: data.ID,
+            academic_period_id: data.academic_period_id,
+            career_id: data.career_id,
+            name: data.name
+        }
+
+        const response = await PutSocialProjectList(token!, socialProjectList)
 
         return generateFormMessageFromHttpResponse(form, response)
     }

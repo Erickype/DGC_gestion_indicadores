@@ -24,7 +24,7 @@
 	const dispatch = createEventDispatcher();
 
 	function SocialProjectListCreated() {
-		dispatch('message', {
+		dispatch('updated', {
 			created: true
 		});
 	}
@@ -61,7 +61,7 @@
 	}
 </script>
 
-<form action="?/postSocialProjectList" use:enhance>
+<form action="?/putSocialProjectList" use:enhance>
 	<div class="flex flex-col gap-2">
 		<Form.Field {form} name="ID">
 			<Form.Control let:attrs>
