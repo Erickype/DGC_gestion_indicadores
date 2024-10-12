@@ -63,7 +63,7 @@ func FilterSocialProjectListsByAcademicPeriod(
 			filterSocialProjectListsByAcademicPeriodRequest.AcademicPeriodID)
 
 	var totalCount int64
-	err = query.Table("from indicators_information.social_project_lists spl").Count(&totalCount).Error
+	err = query.Table("indicators_information.social_project_lists spl").Count(&totalCount).Error
 	if err != nil {
 		return err
 	}
