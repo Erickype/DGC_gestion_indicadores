@@ -178,6 +178,7 @@ func serveApplication() {
 		"/booksOrChaptersProductionListsAuthors/JoinedByBooksOrChaptersProductionListID/:booksOrChaptersProductionListID",
 		indicatorsInformationBooksOrChaptersProduction.GetBooksOrChaptersProductionListsAuthorsJoinedByBooksOrChaptersProductionListID)
 
+	indicatorsInformationRoutes.POST("/socialProjectList", indicatorsInformationSocialProject.PostSocialProjectList)
 	indicatorsInformationRoutes.POST("/socialProjectLists/filter",
 		indicatorsInformationSocialProject.FilterSocialProjectListsByAcademicPeriod)
 
