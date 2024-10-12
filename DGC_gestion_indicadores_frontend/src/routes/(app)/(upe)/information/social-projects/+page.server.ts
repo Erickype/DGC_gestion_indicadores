@@ -3,7 +3,7 @@ import { mainDashboarRoute } from "$lib/api/util/paths";
 import { redirect } from "@sveltejs/kit";
 
 import { filterAcademicPeriodsAuxSchema, generateFormMessageFromHttpResponse, generateFormMessageFromInvalidForm } from "$lib/utils";
-import { addSocialProjectListSchema } from "./schema";
+import { addSocialProjectListSchema, updateSocialProjectListSchema } from "./schema";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 
@@ -26,7 +26,8 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
         academicPeriodsData: await LoadAcademicPeriodsWithComboMessages(),
         careersData: await LoadCareersWithComboMessages(token!),
         filterAcademicPeriodsAuxForm: await superValidate(zod(filterAcademicPeriodsAuxSchema)),
-        addSocialProjectListForm: await superValidate(zod(addSocialProjectListSchema))
+        addSocialProjectListForm: await superValidate(zod(addSocialProjectListSchema)),
+        updateSocialProjectListForm: await superValidate(zod(updateSocialProjectListSchema))
     }
 };
 
