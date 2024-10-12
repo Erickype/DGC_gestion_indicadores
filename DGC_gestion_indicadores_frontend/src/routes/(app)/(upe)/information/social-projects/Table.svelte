@@ -5,13 +5,13 @@
 	import { readable } from 'svelte/store';
 
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
-	/* 	import type { UpdateBookOrChaptersProductionListSchema } from './schema';
-	 */
+	import type { UpdateSocialProjectListSchema } from './schema';
+
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
 	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
 	import Table from '$lib/components/table/tablePaginated.svelte';
-	/* 	import UpdateForm from './UpdateForm.svelte';
-	 */
+	import UpdateForm from './UpdateForm.svelte';
+
 	import { generateInitialFilterValue } from '$lib/components/filters/indicatorsInformation/socialProjectLists/socialProjectLists';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
 	import type {
@@ -26,11 +26,7 @@
 		filterSocialProjectListsByAcademicPeriodResponse.social_project_lists;
 
 	export let comboMessages: Message[][] | undefined;
-	comboMessages = [];
-	/* 	export let formData: SuperValidated<
-		Infer<UpdateBookOrChaptersProductionListSchema>,
-		App.Superforms.Message
-	>; */
+	export let formData: SuperValidated<Infer<UpdateSocialProjectListSchema>, App.Superforms.Message>;
 	let socialProject: SocialProjectListByAcademicPeriodJoined;
 
 	let filterValue = '';
@@ -89,10 +85,8 @@
 	function handleUpdateAction(event: any) {
 		const detail: { status: boolean; id: string } = event.detail;
 		if (detail.status) {
-			const segments = detail.id.split('/');
-			const career_id = parseInt(segments.at(segments.length - 1)!);
 			socialProject = filterSocialProjectListsResponse.find(
-				(socialProject) => socialProject.career_id === career_id
+				(socialProject) => socialProject.ID.toString() === detail.id
 			)!;
 			updateFormOpen = true;
 		} else {
@@ -129,15 +123,15 @@
 	}
 </script>
 
-<!-- <UpdateModal
-	modalTitle="Actualizar libro o capítulo libro"
+<UpdateModal
+	modalTitle="Actualizar proyecto vinculación"
 	{formData}
 	formComponent={UpdateForm}
 	{comboMessages}
 	bind:updateEntity={socialProject}
 	bind:open={updateFormOpen}
 	on:updated={handleUpdated}
-/> -->
+/>
 
 <div class="w-full">
 	<Table
