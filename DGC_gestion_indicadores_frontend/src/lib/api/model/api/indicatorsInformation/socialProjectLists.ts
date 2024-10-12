@@ -1,3 +1,12 @@
+export interface SocialProjectList {
+    created_at?: string
+    udpdated_at?: string
+    ID?: number
+    academic_period_id: number
+    career_id: number
+    name: string
+}
+
 export interface FilterSocialProjectListsByAcademicPeriodRequest {
     academic_period_id: number
     career?: string
