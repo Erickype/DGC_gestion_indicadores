@@ -43,13 +43,7 @@
 
 	export let popoverFilterDataMap: PopoverFilterDataMap = new Map();
 
-	const filterFields = [
-		'publication_date',
-		'is_chapter',
-		'title',
-		'detailed_field',
-		'peer_reviewed'
-	];
+	const filterFields = ['career', 'name'];
 
 	const table = createTable(readable(filterSocialProjectListsResponse), {
 		page: addPagination({
