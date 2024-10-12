@@ -11,7 +11,7 @@
 	import * as Form from '$lib/components/ui/form';
 	import { toast } from 'svelte-sonner';
 
-	import type { BooksOrChaptersProductionList } from '$lib/api/model/api/indicatorsInformation/booksOrChaptersProductionLists';
+	import type { SocialProjectList } from '$lib/api/model/api/indicatorsInformation/socialProjectLists';
 	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
 	import FormSelect from '$lib/components/combobox/formSelect.svelte';
 	import type { Message } from '$lib/components/combobox/combobox';
@@ -37,9 +37,9 @@
 				return manageToastFromInvalidAddForm();
 			}
 			if (message.success) {
-				const response = message.data as BooksOrChaptersProductionList;
+				const response = message.data as SocialProjectList;
 				SocialProjectListCreated();
-				return toast.success(`Proyecto de vinculación creado:`);
+				return toast.success(`Proyecto de vinculación creado:${response.name}`);
 			}
 			return manageToastFromErrorMessageOnAddForm(message);
 		}
