@@ -1,5 +1,5 @@
 import type { AcademicPeriod, FilterAcademicPeriodsRequest, FilterAcademicPeriodsResponse } from "$lib/api/model/view/academicPeriod";
-import { getAcademicPeriodsRoute, postFilterAcademicPeriodsRoute } from "$lib/api/routes/view/academicPeriod";
+import { getAcademicPeriodByIDRoute, getAcademicPeriodsRoute, postFilterAcademicPeriodsRoute } from "$lib/api/routes/view/academicPeriod";
 
 import { generateErrorFromCommonError, type CommonError } from "$lib/api/model/errors";
 import type { Message } from "$lib/components/combobox/combobox";
@@ -20,13 +20,26 @@ export async function GetAcademicPeriods(): Promise<AcademicPeriod[] | CommonErr
         const periods: AcademicPeriod[] = await response.json()
         return periods
     } catch (error) {
-        const errorMessage: CommonError = {
-            status: "500",
-            status_code: 500,
-            detail: "Error al solicitar datos",
-            message: (error as Error).message
+        return generateCommonErrorFromFetchError(error)
+    }
+}
+
+export async function GetAcademicPeriodByID(id: string): Promise<AcademicPeriod | CommonError> {
+    try {
+        const response = await fetch(getAcademicPeriodByIDRoute + id, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
         }
-        return errorMessage
+        const period: AcademicPeriod = await response.json()
+        return period
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
     }
 }
 
