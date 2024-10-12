@@ -46,7 +46,7 @@
 </div>
 
 <div class="mx-auto flex w-full place-content-center justify-between px-8">
-	<Form.Field {form} name="academic_period_id">
+	<Form.Field {form} name="academic_period_id" class="w-1/3">
 		<AcademicPeriodsServer {formDataAcademicPeriodID} />
 	</Form.Field>
 </div>
