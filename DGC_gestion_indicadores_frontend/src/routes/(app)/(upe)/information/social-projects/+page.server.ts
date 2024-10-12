@@ -2,11 +2,13 @@ import type { Actions, PageServerLoad } from "./$types";
 import { mainDashboarRoute } from "$lib/api/util/paths";
 import { redirect } from "@sveltejs/kit";
 
-import { filterAcademicPeriodsAuxSchema } from "$lib/utils";
+import { filterAcademicPeriodsAuxSchema, generateFormMessageFromHttpResponse, generateFormMessageFromInvalidForm } from "$lib/utils";
 import { addSocialProjectListSchema } from "./schema";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 
+import { PostSocialProjectList } from "$lib/api/controller/api/indicatorsInformation/socialProjectLists";
+import type { SocialProjectList } from "$lib/api/model/api/indicatorsInformation/socialProjectLists";
 import { LoadAcademicPeriodsWithComboMessages } from "$lib/api/controller/view/academicPeriod";
 import { LoadCareersWithComboMessages } from "$lib/api/controller/api/career";
 
@@ -25,5 +27,27 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
         careersData: await LoadCareersWithComboMessages(token!),
         filterAcademicPeriodsAuxForm: await superValidate(zod(filterAcademicPeriodsAuxSchema)),
         addSocialProjectListForm: await superValidate(zod(addSocialProjectListSchema))
+    }
+};
+
+export const actions: Actions = {
+    postSocialProjectList: async (event) => {
+        const form = await superValidate(event, zod(addSocialProjectListSchema))
+
+        if (!form.valid) {
+            return generateFormMessageFromInvalidForm(form)
+        }
+
+        const token = event.cookies.get("AuthorizationToken")
+        const data = form.data
+        const socialProjectList: SocialProjectList = {
+            academic_period_id: data.academic_period_id,
+            career_id: data.career_id,
+            name: data.name
+        }
+
+        const response = await PostSocialProjectList(token!, socialProjectList)
+
+        return generateFormMessageFromHttpResponse(form, response)
     }
 };

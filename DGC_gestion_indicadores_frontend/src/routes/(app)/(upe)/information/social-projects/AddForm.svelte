@@ -51,7 +51,7 @@
 	formDataCareerID.subscribe((value) => ($formData.career_id = value));
 </script>
 
-<form action="?/postSocialProjectLists" use:enhance>
+<form action="?/postSocialProjectList" use:enhance>
 	<div class="flex flex-col gap-2">
 		<Form.Field {form} name="academic_period_id">
 			<Form.Control let:attrs>
