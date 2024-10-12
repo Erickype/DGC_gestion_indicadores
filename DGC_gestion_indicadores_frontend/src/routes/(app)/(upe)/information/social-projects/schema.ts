@@ -17,6 +17,8 @@ export const addSocialProjectListSchema = z.object({
 });
 
 export const updateSocialProjectListSchema = z.object({
+    ID: z.number().gt(0),
+
     academic_period_id: z.number().gt(0),
 
     career_id: z.number({
