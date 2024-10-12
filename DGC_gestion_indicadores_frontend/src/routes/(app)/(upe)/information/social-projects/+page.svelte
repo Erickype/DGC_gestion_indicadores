@@ -85,9 +85,9 @@
 	}
 
 	function handlePaginationChanged() {
-		/* filterBooksOrChaptersProductionListPromise = fetchFilterBooksOrChaptersProductionLists(
-			filterBooksOrChaptersProductionListsByAcademicPeriodRequest
-		); */
+		filterSocialProjectListsPromise = fetchFilterSocialProjectLists(
+			filterSocialProjectListsByAcademicPeriodRequest
+		);
 	}
 </script>
 
