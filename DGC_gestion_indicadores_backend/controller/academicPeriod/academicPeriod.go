@@ -36,6 +36,21 @@ func GetAcademicPeriods(context *gin.Context) {
 	context.JSON(http.StatusOK, academicPeriods)
 }
 
+func GetAcademicPeriodByID(context *gin.Context) {
+	id, err := strconv.ParseInt(context.Param("id"), 10, 64)
+	if err != nil {
+		errors.BadRequestResponse(context, err)
+		return
+	}
+	var academicPeriod model.AcademicPeriod
+	err = model.GetAcademicPeriod(&academicPeriod, int(id))
+	if err != nil {
+		errors.InternalServerErrorResponse(context, "Error retornando periodo", err)
+		return
+	}
+	context.JSON(http.StatusOK, academicPeriod)
+}
+
 func UpdateAcademicPeriod(c *gin.Context) {
 	var AcademicPeriod model.AcademicPeriod
 	id, _ := strconv.Atoi(c.Param("id"))
@@ -72,7 +87,7 @@ func DeleteAcademicPeriod(context *gin.Context) {
 
 	err = model.DeleteAcademicPeriod(int(id))
 	if err != nil {
-		errors.InternalServerErrorResponse(context, "Error eliminando periodo evaluación", err)
+		errors.InternalServerErrorResponse(context, "Error eliminando periodo académico", err)
 		return
 	}
 	context.JSON(http.StatusAccepted, errors.CreateCommonDeleteResponse("AcademicPeriod", int(id)))

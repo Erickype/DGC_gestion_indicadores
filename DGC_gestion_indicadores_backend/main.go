@@ -198,6 +198,7 @@ func serveApplication() {
 
 	academicPeriodRoutes.GET("/academicPeriods", academicPeriod.GetAcademicPeriods)
 	academicPeriodRoutes.POST("/academicPeriods/filter", academicPeriod.FilterAcademicPeriods)
+	academicPeriodRoutes.GET("/academicPeriod/:id", academicPeriod.GetAcademicPeriodByID)
 
 	academicPeriodRoutes.GET("/evaluationPeriods", evaluationPeriod.GetEvaluationPeriods)
 
