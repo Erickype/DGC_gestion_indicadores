@@ -11,19 +11,20 @@
 	import Icon from 'lucide-svelte/icons/users-round';
 
 	import AcademicPeriodsServer from '$lib/components/filters/academicPeriods/academicPeriodsServer.svelte';
+	import type { PopoverFilterDataMap } from '$lib/components/table/types';
 	import TableSkeleton from '$lib/components/skeleton/table.svelte';
 	import Alert from '$lib/components/alert/alert.svelte';
 	import Table from './Table.svelte';
-	import type {
-		FilterSocialProjectListsByAcademicPeriodRequest,
-		FilterSocialProjectListsByAcademicPeriodResponse
-	} from '$lib/api/model/api/indicatorsInformation/socialProjectLists';
+
 	import {
 		fetchFilterSocialProjectLists,
 		newFilterSocialProjectListsByAcademiPeriodRequest,
 		newPopoverFilterDataMap
 	} from '$lib/components/filters/indicatorsInformation/socialProjectLists/socialProjectLists';
-	import type { PopoverFilterDataMap } from '$lib/components/table/types';
+	import type {
+		FilterSocialProjectListsByAcademicPeriodRequest,
+		FilterSocialProjectListsByAcademicPeriodResponse
+	} from '$lib/api/model/api/indicatorsInformation/socialProjectLists';
 
 	export let data: PageServerData;
 	const filterAcademicPeriodsAuxForm = data.filterAcademicPeriodsAuxForm;
@@ -36,20 +37,23 @@
 
 	$formData.academic_period_id = data.academicPeriodsData.periods.at(0)!.ID;
 
+	let filterSocialProjectListsByAcademicPeriodRequest: FilterSocialProjectListsByAcademicPeriodRequest =
+		newFilterSocialProjectListsByAcademiPeriodRequest(5, 1, $formData.academic_period_id);
+	let filterSocialProjectListsPromise: Promise<FilterSocialProjectListsByAcademicPeriodResponse>;
+	let popoverFilterDataMap: PopoverFilterDataMap = newPopoverFilterDataMap();
+
 	let formDataAcademicPeriodID = writable($formData.academic_period_id);
 	formDataAcademicPeriodID.subscribe((value) => {
 		$formData.academic_period_id = value;
-		fetchPostFilterSocialProjectLists();
+		fetchFilterSocialProjecListsOnAcademicPeriodChange();
 	});
 
-	let filterSocialProjectListsByAcademicPeriodRequest: FilterSocialProjectListsByAcademicPeriodRequest =
-		newFilterSocialProjectListsByAcademiPeriodRequest(5, 1, $formData.academic_period_id);
-	let filterSocialProjectListsPromise: Promise<FilterSocialProjectListsByAcademicPeriodResponse> =
-		fetchFilterSocialProjectLists(filterSocialProjectListsByAcademicPeriodRequest);
-	let popoverFilterDataMap: PopoverFilterDataMap = newPopoverFilterDataMap();
-
-	function fetchPostFilterSocialProjectLists() {
-		console.log('loading...');
+	function fetchFilterSocialProjecListsOnAcademicPeriodChange() {
+		filterSocialProjectListsByAcademicPeriodRequest.academic_period_id =
+			$formData.academic_period_id;
+		filterSocialProjectListsPromise = fetchFilterSocialProjectLists(
+			filterSocialProjectListsByAcademicPeriodRequest
+		);
 	}
 
 	function fetchOnSuccess(event: CustomEvent) {
@@ -121,7 +125,10 @@
 				on:paginationChanged={handlePaginationChanged}
 			></Table>
 		{:else}
-			<Alert title="Sin registros" description={'Ups, no hay artículos registrados.'} />
+			<Alert
+				title="Sin registros"
+				description={'Ups, no hay proyectos de vinvulación registrados.'}
+			/>
 		{/if}
 	{:catch error}
 		<Alert variant="destructive" description={error.message} />
