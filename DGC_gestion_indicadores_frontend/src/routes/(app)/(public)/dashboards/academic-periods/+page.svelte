@@ -1,23 +1,22 @@
 <script lang="ts">
-	import Icon from 'lucide-svelte/icons/circle-gauge';
-	import Activity from 'lucide-svelte/icons/activity';
-
-	import AcademicPeriodCombo from '$lib/components/combobox/academicPeriodCombo.svelte';
 	import type { PageServerData } from './$types';
-	import type { IndicatorsAcademicPeriod } from '$lib/api/model/api/indicators/academicPeriods';
-	import type { CommonError } from '$lib/api/model/errors';
 	import { goto } from '$app/navigation';
+
+	import Icon from 'lucide-svelte/icons/circle-gauge';
+
+	import type { IndicatorAcademicPeriodJoined } from '$lib/api/model/api/indicators/academicPeriods';
+	import AcademicPeriodCombo from '$lib/components/combobox/academicPeriodCombo.svelte';
+	import type { CommonError } from '$lib/api/model/errors';
 	import Alert from '$lib/components/alert/alert.svelte';
 
-	import * as Card from '$lib/components/ui/card';
-	import { Progress } from '$lib/components/ui/progress';
+	import IndicatorCard from '$lib/components/indicators/IndicatorCard.svelte';
 
 	export let data: PageServerData;
 
 	const academicPeriodsData = data.academicPeriodsData;
 	let selectedAcademicPeriod: number = academicPeriodsData.periods.at(0)!.ID;
 
-	let indicatorsPromise: Promise<IndicatorsAcademicPeriod[]> =
+	let indicatorsPromise: Promise<IndicatorAcademicPeriodJoined[]> =
 		FetchGetIndicatorsByAcademicPeriodID();
 
 	async function FetchGetIndicatorsByAcademicPeriodID() {
@@ -58,28 +57,9 @@
 		cargando...
 	{:then indicators}
 		{#if indicators.length > 0}
-			<div class="my-auto grid min-h-40 w-full grid-cols-4 gap-6">
+			<div class="my-auto grid min-h-40 w-full grid-cols-2 gap-6">
 				{#each indicators as indicator}
-					<Card.Root class="bg-secondary/50">
-						<Card.Header class="pb-2">
-							<Card.Description>Indicador {indicator.indicator_type_id}</Card.Description>
-							<Card.Title class="flex justify-between text-4xl">
-								{indicator.actual_value.toFixed(2)}%
-								<Activity class="text-muted-foreground h-4 w-4" />
-							</Card.Title>
-						</Card.Header>
-						<Card.Content>
-							<div class="text-muted-foreground text-xs">
-								Obetivo {indicator.target_value}%
-							</div>
-						</Card.Content>
-						<Card.Footer>
-							<Progress
-								value={(indicator.actual_value * 100) / indicator.target_value}
-								aria-label="25% increase"
-							/>
-						</Card.Footer>
-					</Card.Root>
+					<IndicatorCard {indicator} />
 				{/each}
 			</div>
 		{:else}
