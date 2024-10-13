@@ -123,9 +123,7 @@
 			<Form.FieldErrors />
 		</Form.Field>
 	</div>
-	<div class="flex items-center justify-center gap-2">
-		<Form.Button>Actualizar</Form.Button>
-	</div>
+	<Form.Button class="my-2 w-full">Guardar</Form.Button>
 	<!-- {#if browser}
 		<SuperDebug data={$formData} />
 	{/if} -->
