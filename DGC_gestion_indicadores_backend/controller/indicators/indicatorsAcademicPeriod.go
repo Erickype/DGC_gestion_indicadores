@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func GetCalculateIndicatorByTypeID(context *gin.Context) {
+func GetCalculateIndicatorByTypeIDAndAcademicPeriod(context *gin.Context) {
 	var response model.IndicatorsAcademicPeriod
 	academicPeriodID, _ := strconv.Atoi(context.Param("academicPeriodID"))
 	indicatorTypeID, _ := strconv.Atoi(context.Param("indicatorTypeID"))
