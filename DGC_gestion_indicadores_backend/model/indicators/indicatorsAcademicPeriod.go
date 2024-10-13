@@ -19,6 +19,15 @@ type IndicatorsAcademicPeriod struct {
 	AcademicPeriod academicPeriod.AcademicPeriod `json:"-"`
 }
 
+type IndicatorAcademicPeriodJoined struct {
+	IndicatorTypeID  uint     `json:"indicator_type_id"`
+	IndicatorType    string   `json:"indicator_type"`
+	AcademicPeriodID uint     `json:"academic_period_id"`
+	AcademicPeriod   string   `json:"academic_period"`
+	ActualValue      *float64 `json:"actual_value,omitempty"`
+	TargetValue      float64  `json:"target_value"`
+}
+
 func (iep IndicatorsAcademicPeriod) TableName() string {
 	return model.IndicatorsSchema + ".indicators_academic_periods"
 }
@@ -41,8 +50,16 @@ func CalculateIndicatorByTypeIDAndAcademicPeriod(academicPeriodID, indicatorType
 	return nil
 }
 
-func GetIndicatorsByAcademicPeriod(academicPeriodID int, response *[]IndicatorsAcademicPeriod) (err error) {
-	err = database.DB.Model(&IndicatorsAcademicPeriod{}).
+func GetIndicatorsByAcademicPeriod(academicPeriodID int, response *[]IndicatorAcademicPeriodJoined) (err error) {
+	err = database.DB.Table("indicators.indicators_academic_periods iap").
+		Select(`iap.indicator_type_id,
+			it.name as indicator_type,
+			iap.academic_period_id,
+			ap.name as academic_period,
+			iap.actual_value,
+			iap.target_value`).
+		Joins("join indicators.indicator_types it on iap.indicator_type_id = it.id").
+		Joins("join academic_periods ap on iap.academic_period_id = ap.id").
 		Where("academic_period_id = ?", academicPeriodID).
 		Scan(response).Error
 	if err != nil {

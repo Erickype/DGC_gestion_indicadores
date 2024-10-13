@@ -21,12 +21,15 @@ func GetCalculateIndicatorByTypeID(context *gin.Context) {
 }
 
 func GetIndicatorsByAcademicPeriod(context *gin.Context) {
-	var response = []model.IndicatorsAcademicPeriod{}
+	var response []model.IndicatorAcademicPeriodJoined
 	academicPeriodID, _ := strconv.Atoi(context.Param("academicPeriodID"))
 	err := model.GetIndicatorsByAcademicPeriod(academicPeriodID, &response)
 	if err != nil {
 		errors.InternalServerErrorResponse(context, "Error obteniendo indicador", err)
 		return
+	}
+	if len(response) == 0 {
+		response = []model.IndicatorAcademicPeriodJoined{}
 	}
 	context.JSON(http.StatusOK, response)
 }
