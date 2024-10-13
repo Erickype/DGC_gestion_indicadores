@@ -41,6 +41,22 @@
 		}
 		return (calculateIndicatorPromise = response.json());
 	}
+
+	async function fetchGetCalculateIndicatorByTypeIDAndAcademicPeriod() {
+		const actualIndicator = indicator as IndicatorAcademicPeriodJoined;
+		const url = `/api/indicators/academicPeriod/calculate/${actualIndicator.academic_period_id}/${actualIndicator.indicator_type_id}`;
+		const response = await fetch(url, {
+			method: 'GET'
+		});
+		if (!response.ok) {
+			const errorData = (await response.json()) as CommonError;
+			if (response.status === 401) {
+				throw goto('/');
+			}
+			throw errorData;
+		}
+		return (calculateIndicatorPromise = response.json());
+	}
 </script>
 
 {#if isAcademicPeriodIndicator}
@@ -48,14 +64,33 @@
 		<Card.Header class="pb-2">
 			<Card.Title class="flex items-center justify-between gap-2 text-xl">
 				<p>{indicator.indicator_type}</p>
-				<Button variant="ghost" size="icon">
-					<Activity class="h-4 w-4" />
-				</Button>
+				{#await calculateIndicatorPromise}
+					<Button variant="ghost" size="icon" disabled>
+						<Loader class="h-4 w-4" />
+					</Button>
+				{:then _}
+					<Button
+						variant="ghost"
+						size="icon"
+						on:click={fetchGetCalculateIndicatorByTypeIDAndAcademicPeriod}
+					>
+						<Activity class="h-4 w-4" />
+					</Button>
+				{/await}
 			</Card.Title>
 			<Card.Description>Objetivo {indicator.target_value}</Card.Description>
 		</Card.Header>
 		<Card.Content>
-			<IndicatorPie {indicator} isPercentaje={false} />
+			{#await calculateIndicatorPromise}
+				cargando...
+			{:then calculateIndicator}
+				{#if calculateIndicator}
+					<p class="hidden">
+						{(indicator.actual_value = calculateIndicator.actual_value)}
+					</p>
+				{/if}
+				<IndicatorPie {indicator} isPercentaje={false} />
+			{/await}
 		</Card.Content>
 	</Card.Root>
 {:else}
