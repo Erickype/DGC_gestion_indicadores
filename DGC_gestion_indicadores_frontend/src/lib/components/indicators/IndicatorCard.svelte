@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { CommonError } from '$lib/api/model/errors';
 	import { goto } from '$app/navigation';
+	import { toast } from 'svelte-sonner';
 
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Card from '$lib/components/ui/card';
@@ -39,6 +40,7 @@
 			}
 			throw errorData;
 		}
+		toast.success(`${actualIndicator.indicator_type} actualizado`);
 		return (calculateIndicatorPromise = response.json());
 	}
 
@@ -55,6 +57,7 @@
 			}
 			throw errorData;
 		}
+		toast.success(`${actualIndicator.indicator_type} actualizado`);
 		return (calculateIndicatorPromise = response.json());
 	}
 </script>
