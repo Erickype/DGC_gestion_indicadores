@@ -1,16 +1,14 @@
 <script lang="ts">
 	import type { IndicatorEvaluationPeriodJoined } from '$lib/api/model/api/indicators/evaluationPeriod';
-	import type { IndicatorsAcademicPeriod } from '$lib/api/model/api/indicators/academicPeriods';
-	
-    import { Chart, Svg, Group, LinearGradient, Arc, Text } from 'layerchart';
+	import type { IndicatorAcademicPeriodJoined } from '$lib/api/model/api/indicators/academicPeriods';
 
-	export let indicator: IndicatorsAcademicPeriod | IndicatorEvaluationPeriodJoined;
+	import { Chart, Svg, Group, LinearGradient, Arc, Text } from 'layerchart';
+
+	export let indicator: IndicatorAcademicPeriodJoined | IndicatorEvaluationPeriodJoined;
 	export let isPercentaje: boolean = true;
 
 	let value = (indicator.actual_value * 100) / indicator.target_value;
 	let valueText = `${indicator.actual_value.toFixed(2)} ${isPercentaje ? '%' : ''}`;
-
-	console.log(indicator);
 </script>
 
 <div class="h-[120px] rounded p-4">
