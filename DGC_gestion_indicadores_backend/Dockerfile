@@ -4,8 +4,6 @@ WORKDIR /dgc_gestion_indicadores/backend
 
 COPY go.mod go.sum ./
 
-COPY .env ../
-
 RUN go mod download
 
 COPY . .
