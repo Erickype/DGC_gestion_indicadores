@@ -27,6 +27,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"log"
+	"os"
 )
 
 func main() {
@@ -39,14 +40,26 @@ func main() {
 }
 
 func loadEnv() {
-	err := godotenv.Load("../.env")
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	appEnv := os.Getenv("APP_ENV")
+
+	// Skip loading .env file if running in production
+	if appEnv != "production" {
+		err := godotenv.Load("../.env")
+		if err != nil {
+			log.Fatal("Error loading .env file")
+		}
+		log.Println(".env file loaded successfully")
+	} else {
+		log.Println("Running in production mode, .env file not loaded")
 	}
-	log.Println(".env file loaded successfully")
 }
 
 func serveApplication() {
+	appEnv := os.Getenv("APP_ENV")
+	if appEnv == "production" {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	router := gin.Default()
 
 	// - No origin allowed by default
