@@ -132,6 +132,12 @@ func seedData() {
 			Abbreviation: "Producción Académica",
 			Description:  "La institución cuenta con producción académica como resultado de sus procesos de investigación. Se espera que el índice de producción académica per cápita sea de al menos 1,5 en 3 años.",
 		},
+		{
+			ID:           29,
+			Name:         "Indicador 29: Proyectos de vinculación con la sociedad",
+			Abbreviation: "Proyectos de vinculación con la sociedad",
+			Description:  "Se espera un mínimo de 1,5 proyectos de vinculación por carrera y programa con resultados verificables totales o parciales.",
+		},
 	}
 
 	var compensationFactors = []academicProduction.CompensationFactor{
