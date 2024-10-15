@@ -46,19 +46,19 @@
 		}),
 		table.column({
 			accessor: 'count_graduated_students',
-			header: 'Estudiantes graduados'
+			header: 'Graduados'
 		}),
 		table.column({
 			accessor: 'count_court_students',
-			header: 'Estudiantes en cohorte'
+			header: 'Cohorte'
 		}),
 		table.column({
 			accessor: 'count_admitted_matriculated_students',
-			header: 'Estudiantes matriculados'
+			header: 'Matriculados'
 		}),
 		table.column({
 			accessor: 'count_admitted_students',
-			header: 'Estudiantes admitidos'
+			header: 'Admitidos'
 		}),
 		table.column({
 			accessor: ({ academic_period_id }) => academic_period_id,

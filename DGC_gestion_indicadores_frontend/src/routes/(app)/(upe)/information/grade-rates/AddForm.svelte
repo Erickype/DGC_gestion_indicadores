@@ -67,39 +67,43 @@
 			/>
 			<Form.FieldErrors />
 		</Form.Field>
-		<Form.Field {form} name="count_graduated_students">
-			<Form.Control let:attrs>
-				<Form.Label>Estudiantes graduados</Form.Label>
-				<Input {...attrs} bind:value={$formData.count_graduated_students} type="number" min="0" />
-			</Form.Control>
-			<Form.FieldErrors />
-		</Form.Field>
-		<Form.Field {form} name="count_court_students">
-			<Form.Control let:attrs>
-				<Form.Label>Estudiantes en cohorte</Form.Label>
-				<Input {...attrs} bind:value={$formData.count_court_students} type="number" min="0" />
-			</Form.Control>
-			<Form.FieldErrors />
-		</Form.Field>
-		<Form.Field {form} name="count_admitted_matriculated_students">
-			<Form.Control let:attrs>
-				<Form.Label>Estudiantes matriculados</Form.Label>
-				<Input
-					{...attrs}
-					bind:value={$formData.count_admitted_matriculated_students}
-					type="number"
-					min="0"
-				/>
-			</Form.Control>
-			<Form.FieldErrors />
-		</Form.Field>
-		<Form.Field {form} name="count_admitted_students">
-			<Form.Control let:attrs>
-				<Form.Label>Estudiantes admitidos</Form.Label>
-				<Input {...attrs} bind:value={$formData.count_admitted_students} type="number" min="0" />
-			</Form.Control>
-			<Form.FieldErrors />
-		</Form.Field>
+		<div class="grid grid-cols-2 justify-between gap-4">
+			<Form.Field {form} name="count_graduated_students">
+				<Form.Control let:attrs>
+					<Form.Label>Estudiantes graduados</Form.Label>
+					<Input {...attrs} bind:value={$formData.count_graduated_students} type="number" min="0" />
+				</Form.Control>
+				<Form.FieldErrors />
+			</Form.Field>
+			<Form.Field {form} name="count_court_students">
+				<Form.Control let:attrs>
+					<Form.Label>Estudiantes en cohorte</Form.Label>
+					<Input {...attrs} bind:value={$formData.count_court_students} type="number" min="0" />
+				</Form.Control>
+				<Form.FieldErrors />
+			</Form.Field>
+		</div>
+		<div class="grid grid-cols-2 justify-between gap-4">
+			<Form.Field {form} name="count_admitted_matriculated_students">
+				<Form.Control let:attrs>
+					<Form.Label>Estudiantes matriculados</Form.Label>
+					<Input
+						{...attrs}
+						bind:value={$formData.count_admitted_matriculated_students}
+						type="number"
+						min="0"
+					/>
+				</Form.Control>
+				<Form.FieldErrors />
+			</Form.Field>
+			<Form.Field {form} name="count_admitted_students">
+				<Form.Control let:attrs>
+					<Form.Label>Estudiantes admitidos</Form.Label>
+					<Input {...attrs} bind:value={$formData.count_admitted_students} type="number" min="0" />
+				</Form.Control>
+				<Form.FieldErrors />
+			</Form.Field>
+		</div>
 	</div>
 	<Form.Button class="my-2 w-full">Guardar</Form.Button>
 	<!-- {#if browser}
