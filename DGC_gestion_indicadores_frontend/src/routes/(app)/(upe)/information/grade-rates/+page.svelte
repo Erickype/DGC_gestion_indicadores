@@ -6,7 +6,6 @@
 	import type { PageServerData } from './$types';
 	import { writable } from 'svelte/store';
 	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
 
 	import * as Form from '$lib/components/ui/form';
 
@@ -40,20 +39,15 @@
 	let gradeRateListsPromise: Promise<GradeRateListJoined[]>;
 
 	let formDataAcademicPeriodID = writable($formData.academic_period_id);
-
-	onMount(async () => {
-		formDataAcademicPeriodID.subscribe((value) => {
-			$formData.academic_period_id = value;
-			addGradeRateListForm.data.academic_period_id = $formData.academic_period_id;
-			updateGradeRateListForm.data.academic_period_id = $formData.academic_period_id;
-			fetchGradeRateListsByAcademicPeriod();
-		});
+	formDataAcademicPeriodID.subscribe((value) => {
+		$formData.academic_period_id = value;
+		addGradeRateListForm.data.academic_period_id = $formData.academic_period_id;
+		updateGradeRateListForm.data.academic_period_id = $formData.academic_period_id;
+		gradeRateListsPromise = fetchGradeRateListsByAcademicPeriod();
 	});
 
-	async function fetchGradeRateListsByAcademicPeriod() {
+	async function fetchGradeRateListsByAcademicPeriod(): Promise<GradeRateListJoined[]> {
 		const url = `/api/indicatorsInformation/gradeRateLists/${$formData.academic_period_id}`;
-		console.log(url);
-
 		const response = await fetch(url, {
 			method: 'GET'
 		});
@@ -64,13 +58,13 @@
 			}
 			throw errorData;
 		}
-		return (gradeRateListsPromise = response.json());
+		return response.json();
 	}
 
 	function fetchOnSuccess(event: CustomEvent) {
 		const detail: { status: boolean } = event.detail;
 		if (detail.status) {
-			fetchGradeRateListsByAcademicPeriod();
+			gradeRateListsPromise = fetchGradeRateListsByAcademicPeriod();
 		}
 	}
 </script>
