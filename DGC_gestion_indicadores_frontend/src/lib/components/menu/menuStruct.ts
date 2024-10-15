@@ -35,6 +35,7 @@ export const menus: Menu[] = [
             { name: 'Publicaciones Académicas', route: '/information/academic-publications' },
             { name: 'Libros o Capítulos', route: '/information/books' },
             { name: 'Proyectos vinculación', route: '/information/social-projects' },
+            { name: 'Tasas de grado', route: '/information/grade-rates' },
         ],
         roles: [1, 2]
     },
