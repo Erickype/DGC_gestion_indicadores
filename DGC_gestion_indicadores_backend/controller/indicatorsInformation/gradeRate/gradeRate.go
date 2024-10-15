@@ -25,7 +25,7 @@ func GetGradeRateListsByAcademicPeriod(context *gin.Context) {
 	context.JSON(http.StatusOK, gradeRateListsJoined)
 }
 
-func PostSocialProjectList(c *gin.Context) {
+func PostGradeRateList(c *gin.Context) {
 	var gradeRateList model.GradeRateList
 	err := c.BindJSON(&gradeRateList)
 	if err != nil {
