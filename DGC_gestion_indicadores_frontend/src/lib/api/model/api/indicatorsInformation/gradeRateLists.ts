@@ -1,6 +1,6 @@
 export interface GradeRateList {
-    created_at: string
-    updated_at: string
+    created_at?: string
+    updated_at?: string
     academic_period_id: number
     career_id: number
     count_graduated_students: number

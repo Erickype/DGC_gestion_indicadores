@@ -64,6 +64,7 @@
 	function fetchOnSuccess(event: CustomEvent) {
 		const detail: { status: boolean } = event.detail;
 		if (detail.status) {
+			$formData.academic_period_id = $formDataAcademicPeriodID;
 			gradeRateListsPromise = fetchGradeRateListsByAcademicPeriod();
 		}
 	}
