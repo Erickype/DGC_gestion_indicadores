@@ -22,7 +22,7 @@
 
 	const dispatch = createEventDispatcher();
 
-	function SocialProjectListCreated() {
+	function GradeRateListCreated() {
 		dispatch('message', {
 			created: true
 		});
@@ -37,9 +37,8 @@
 				return manageToastFromInvalidAddForm();
 			}
 			if (message.success) {
-				const response = message.data as SocialProjectList;
-				SocialProjectListCreated();
-				return toast.success(`Proyecto de vinculación creado:${response.name}`);
+				GradeRateListCreated();
+				return toast.success(`Valores de tasas de grado creados`);
 			}
 			return manageToastFromErrorMessageOnAddForm(message);
 		}
