@@ -35,9 +35,17 @@ func (grl GradeRateList) TableName() string {
 func GetGradeRateListsByAcademicPeriod(
 	academicPeriodID int, gradeRateLists *[]GradeRateListJoined) (err error) {
 	err = database.DB.Table("indicators_information.grade_rate_lists grl").
+		Select(`grl.academic_period_id,
+			ap.name as academic_period,
+			grl.career_id,
+			c.name as career,
+			grl.count_graduated_students,
+			grl.count_court_students,
+			grl.count_admitted_matriculated_students,
+			grl.count_admitted_students`).
 		Joins("join academic_periods ap on grl.academic_period_id = ap.id").
 		Joins("join careers c on grl.career_id = c.id").
-		Where("where academic_period_id = ?", academicPeriodID).
+		Where("academic_period_id = ?", academicPeriodID).
 		Scan(gradeRateLists).Error
 	if err != nil {
 		return err

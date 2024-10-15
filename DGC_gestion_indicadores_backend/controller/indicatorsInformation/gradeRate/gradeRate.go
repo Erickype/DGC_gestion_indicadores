@@ -19,5 +19,8 @@ func GetGradeRateListsByAcademicPeriod(context *gin.Context) {
 		errors.InternalServerErrorResponse(context, "Error retornando listas de tasas de grado", err)
 		return
 	}
+	if len(gradeRateListsJoined) == 0 {
+		gradeRateListsJoined = []model.GradeRateListJoined{}
+	}
 	context.JSON(http.StatusOK, gradeRateListsJoined)
 }
