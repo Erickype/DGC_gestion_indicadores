@@ -9,25 +9,25 @@ export const addGradeRateListSchema = z.object({
         message: "Ingrese una carrera válida"
     }),
 
-    count_graduated_students: z.number({
+    count_graduated_students: z.coerce.number({
         required_error: "Estudiantes graduados requerido"
     }).gt(0, {
         message: "Ingrese una valor válido"
     }),
 
-    count_court_students: z.number({
+    count_court_students: z.coerce.number({
         required_error: "Estudiantes en cohorte requerido"
     }).gt(0, {
         message: "Ingrese una valor válido"
     }),
 
-    count_admitted_matriculated_students: z.number({
+    count_admitted_matriculated_students: z.coerce.number({
         required_error: "Estudiantes admitidos matriculados requerido"
     }).gt(0, {
         message: "Ingrese una valor válido"
     }),
 
-    count_admitted_students: z.number({
+    count_admitted_students: z.coerce.number({
         required_error: "Estudiantes admitidos requerido"
     }).gt(0, {
         message: "Ingrese una valor válido"
@@ -43,25 +43,25 @@ export const updateGradeRateListSchema = z.object({
         message: "Ingrese una carrera válida"
     }),
 
-    count_graduated_students: z.number({
+    count_graduated_students: z.coerce.number({
         required_error: "Estudiantes graduados requerido"
     }).gt(0, {
         message: "Ingrese una valor válido"
     }),
 
-    count_court_students: z.number({
+    count_court_students: z.coerce.number({
         required_error: "Estudiantes en cohorte requerido"
     }).gt(0, {
         message: "Ingrese una valor válido"
     }),
 
-    count_admitted_matriculated_students: z.number({
+    count_admitted_matriculated_students: z.coerce.number({
         required_error: "Estudiantes admitidos matriculados requerido"
     }).gt(0, {
         message: "Ingrese una valor válido"
     }),
 
-    count_admitted_students: z.number({
+    count_admitted_students: z.coerce.number({
         required_error: "Estudiantes admitidos requerido"
     }).gt(0, {
         message: "Ingrese una valor válido"
