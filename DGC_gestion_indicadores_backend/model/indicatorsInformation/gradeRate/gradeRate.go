@@ -1,8 +1,10 @@
 package model
 
 import (
+	"errors"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -48,6 +50,17 @@ func GetGradeRateListsByAcademicPeriod(
 		Where("academic_period_id = ?", academicPeriodID).
 		Scan(gradeRateLists).Error
 	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func PostGradeRateList(gradeRateLists *GradeRateList) (err error) {
+	err = database.DB.Create(gradeRateLists).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("valores de tasa de grado ya registrados")
+		}
 		return err
 	}
 	return nil

@@ -198,6 +198,7 @@ func serveApplication() {
 		indicatorsInformationSocialProject.FilterSocialProjectListsByAcademicPeriod)
 
 	indicatorsInformationRoutes.GET("/gradeRateLists/:id", indicatorsInformationGradeRate.GetGradeRateListsByAcademicPeriod)
+	indicatorsInformationRoutes.POST("/gradeRateList", indicatorsInformationGradeRate.PostSocialProjectList)
 
 	// Indicators routes
 	indicatorsRoutes := router.Group("/api/indicators/")

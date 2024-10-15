@@ -24,3 +24,18 @@ func GetGradeRateListsByAcademicPeriod(context *gin.Context) {
 	}
 	context.JSON(http.StatusOK, gradeRateListsJoined)
 }
+
+func PostSocialProjectList(c *gin.Context) {
+	var gradeRateList model.GradeRateList
+	err := c.BindJSON(&gradeRateList)
+	if err != nil {
+		errors.BadRequestResponse(c, err)
+		return
+	}
+	err = model.PostGradeRateList(&gradeRateList)
+	if err != nil {
+		errors.InternalServerErrorResponse(c, "Error añadiendo valores de tasa de grado a lista", err)
+		return
+	}
+	c.JSON(http.StatusCreated, gradeRateList)
+}
