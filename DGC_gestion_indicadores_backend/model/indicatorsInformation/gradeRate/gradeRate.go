@@ -48,6 +48,7 @@ func GetGradeRateListsByAcademicPeriod(
 		Joins("join academic_periods ap on grl.academic_period_id = ap.id").
 		Joins("join careers c on grl.career_id = c.id").
 		Where("academic_period_id = ?", academicPeriodID).
+		Order("grl.updated_at desc").
 		Scan(gradeRateLists).Error
 	if err != nil {
 		return err
