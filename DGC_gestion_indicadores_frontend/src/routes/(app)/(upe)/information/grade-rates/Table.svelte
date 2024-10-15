@@ -126,7 +126,7 @@
 	on:updated={handleUpdated}
 /> -->
 
-<div class="inline-block">
+<div class="w-full">
 	<Table
 		tableHeightClass={'h-[45vh]'}
 		{table}

@@ -19,7 +19,7 @@
 	import AddModal from '$lib/components/modal/AddModal.svelte';
 	import type { CommonError } from '$lib/api/model/errors';
 	import Alert from '$lib/components/alert/alert.svelte';
-	/* import AddForm from './AddForm.svelte'; */
+	import AddForm from './AddForm.svelte';
 	import Table from './Table.svelte';
 
 	export let data: PageServerData;
@@ -91,13 +91,13 @@
 		<AcademicPeriodsServer {formDataAcademicPeriodID} />
 	</Form.Field>
 
-	<!-- <AddModal
+	<AddModal
 		formComponent={AddForm}
-		modalTitle="Crear proyecto vinculación"
-		formData={addSocialProjectListForm}
+		modalTitle="Crear tasa de grado"
+		formData={addGradeRateListForm}
 		{comboMessages}
 		on:created={fetchOnSuccess}
-	/> -->
+	/>
 </div>
 
 <div class="mx-auto flex w-full flex-col place-content-center px-8">
