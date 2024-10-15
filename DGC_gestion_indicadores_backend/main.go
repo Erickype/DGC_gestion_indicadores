@@ -16,6 +16,7 @@ import (
 	indicatorsInformation "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation"
 	indicatorsInformationAcademicProduction "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation/academicProduction"
 	indicatorsInformationBooksOrChaptersProduction "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation/booksOrChaptersProduction"
+	indicatorsInformationGradeRate "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation/gradeRate"
 	indicatorsInformationSocialProject "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation/socialProjectProduction"
 	indicatorsInformationTeachers "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation/teachers"
 	knowledgeField "github.com/Erickype/DGC_gestion_indicadores_backend/controller/knowledgeLevel"
@@ -195,6 +196,8 @@ func serveApplication() {
 	indicatorsInformationRoutes.PUT("/socialProjectList/:id", indicatorsInformationSocialProject.PutSocialProjectList)
 	indicatorsInformationRoutes.POST("/socialProjectLists/filter",
 		indicatorsInformationSocialProject.FilterSocialProjectListsByAcademicPeriod)
+
+	indicatorsInformationRoutes.GET("/gradeRateLists/:id", indicatorsInformationGradeRate.GetGradeRateListsByAcademicPeriod)
 
 	// Indicators routes
 	indicatorsRoutes := router.Group("/api/indicators/")
