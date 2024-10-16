@@ -8,6 +8,9 @@
 	export let isPercentaje: boolean = true;
 
 	let value = (indicator.actual_value * 100) / indicator.target_value;
+	if(value > indicator.target_value){
+		value = 100
+	}
 	let valueText = `${indicator.actual_value.toFixed(2)} ${isPercentaje ? '%' : ''}`;
 </script>
 
