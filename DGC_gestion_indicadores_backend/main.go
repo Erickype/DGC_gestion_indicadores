@@ -199,7 +199,8 @@ func serveApplication() {
 
 	indicatorsInformationRoutes.GET("/gradeRateLists/:id", indicatorsInformationGradeRate.GetGradeRateListsByAcademicPeriod)
 	indicatorsInformationRoutes.POST("/gradeRateList", indicatorsInformationGradeRate.PostGradeRateList)
-	indicatorsInformationRoutes.PUT("/gradeRateList", indicatorsInformationGradeRate.UpdateGradeRateList)
+	indicatorsInformationRoutes.PUT("/gradeRateList/:academicPeriodID/:careerID",
+		indicatorsInformationGradeRate.UpdateGradeRateList)
 
 	// Indicators routes
 	indicatorsRoutes := router.Group("/api/indicators/")
