@@ -2,9 +2,7 @@ FROM golang:1.22.0
 
 WORKDIR /dgc_gestion_indicadores_backend
 
-COPY go.mod ./
-
-COPY go.sum ./
+COPY ./go.mod ./go.sum ./
 
 RUN go mod download
 
