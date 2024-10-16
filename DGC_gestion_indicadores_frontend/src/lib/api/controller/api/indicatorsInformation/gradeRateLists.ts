@@ -1,4 +1,4 @@
-import { getGradeRateListsByAcademicPeriodRoute, postGradeRateListRoute } from "$lib/api/routes/api/indicatorsInformation/gradeRateLists";
+import { getGradeRateListsByAcademicPeriodRoute, postGradeRateListRoute, updateGradeRateListRoute } from "$lib/api/routes/api/indicatorsInformation/gradeRateLists";
 import type { GradeRateList, GradeRateListJoined } from "$lib/api/model/api/indicatorsInformation/gradeRateLists";
 
 import { generateCommonErrorFromFetchError } from "$lib/utils";
@@ -29,6 +29,28 @@ export async function PostGradeRateList(token: string, request: GradeRateList): 
     try {
         const response = await fetch(postGradeRateListRoute, {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify(request)
+        });
+
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
+        }
+        const gradeRateList: GradeRateList = await response.json()
+        return gradeRateList
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
+}
+
+export async function UpdateGradeRateList(token: string, request: GradeRateList): Promise<GradeRateList | CommonError> {
+    try {
+        const response = await fetch(updateGradeRateListRoute + request.academic_period_id + "/" + request.career_id, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': token
