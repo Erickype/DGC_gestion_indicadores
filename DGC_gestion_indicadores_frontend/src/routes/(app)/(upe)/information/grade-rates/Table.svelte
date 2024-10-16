@@ -12,14 +12,13 @@
 	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
 	import type { Message } from '$lib/components/combobox/combobox';
 	import Table from '$lib/components/table/table.svelte';
-	/* import UpdateForm from './UpdateForm.svelte'; */
+	import UpdateForm from './UpdateForm.svelte';
 	import { toast } from 'svelte-sonner';
-
 
 	export let formData: SuperValidated<Infer<UpdateGradeRateListSchema>>;
 	export let comboMessages: Message[][] | undefined = undefined;
 	export let gradeRateLists: GradeRateListJoined[];
-	let academicPeriod: GradeRateListJoined;
+	let gradeRateList: GradeRateListJoined;
 
 	const filterFields = [
 		'career',
@@ -61,7 +60,7 @@
 			header: 'Admitidos'
 		}),
 		table.column({
-			accessor: ({ academic_period_id }) => academic_period_id,
+			accessor: ({ career_id }) => career_id,
 			header: '',
 			cell: ({ value }) => {
 				const actions = createRender(DataTableActions, { id: value.toString() });
@@ -76,7 +75,7 @@
 	async function handleDeleteConfirmation(event: any) {
 		const detail: { status: boolean; id: number } = event.detail;
 		if (detail.status) {
-			const res = await deleteAcademicPeriod(detail.id.toString());
+			const res = await deleteGradeRateList(detail.id.toString());
 			if (!res.ok) {
 				return toast.error('Error eliminando el registro');
 			}
@@ -89,16 +88,20 @@
 
 	let updateFormOpen = false;
 	function handleUpdateAction(event: any) {
-		/* const detail: { status: boolean; id: string } = event.detail;
+		const detail: { status: boolean; id: string } = event.detail;
 		if (detail.status) {
-			academicPeriod = periods.find((period) => period.ID.toString() === detail.id)!;
+			gradeRateList = gradeRateLists.find(
+				(gradeRateList) =>
+					gradeRateList.career_id.toString() === detail.id &&
+					gradeRateList.academic_period_id === formData.data.academic_period_id
+			)!;
 			updateFormOpen = true;
 		} else {
 			updateFormOpen = false;
-		} */
+		}
 	}
 
-	async function deleteAcademicPeriod(id: string) {
+	async function deleteGradeRateList(id: string) {
 		const url = `/api/academicPeriod/` + id;
 		const response = await fetch(url, {
 			method: 'DELETE'
@@ -116,15 +119,15 @@
 	}
 </script>
 
-<!-- 
 <UpdateModal
-	modalTitle="Actualizar información de periodo académico"
+	modalTitle="Actualizar información tasas de grado"
 	{formData}
+	{comboMessages}
 	formComponent={UpdateForm}
-	bind:updateEntity={academicPeriod}
+	bind:updateEntity={gradeRateList}
 	bind:open={updateFormOpen}
 	on:updated={handleUpdated}
-/> -->
+/>
 
 <div class="w-full">
 	<Table
