@@ -1,6 +1,6 @@
 FROM golang:1.22.0
 
-WORKDIR /dgc_gestion_indicadores/backend
+WORKDIR /dgc_gestion_indicadores_backend
 
 COPY go.mod go.sum ./
 
