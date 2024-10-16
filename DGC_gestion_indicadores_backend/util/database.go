@@ -129,6 +129,12 @@ func seedData() {
 			Description:  "Tasa del personal académico con dedicación a tiempo completo al menos el 50%",
 		},
 		{
+			ID:           21,
+			Name:         "Indicador 21: Tasa de Titulación Institucional - Oferta Académica de Grado",
+			Abbreviation: "Tasa de Titulación Institucional - Oferta Académica de Grado",
+			Description:  "La institución cuenta con una tasa promedio de titulación institucional de la oferta académica de grado de al menos el 50%.",
+		},
+		{
 			ID:           26,
 			Name:         "Indicador 26: Producción Académica",
 			Abbreviation: "Producción Académica",
