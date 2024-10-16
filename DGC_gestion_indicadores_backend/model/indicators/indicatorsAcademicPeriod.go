@@ -76,6 +76,7 @@ func GetIndicatorsByAcademicPeriod(academicPeriodID int, response *[]IndicatorAc
 		Joins("join indicators.indicator_types it on iap.indicator_type_id = it.id").
 		Joins("join academic_periods ap on iap.academic_period_id = ap.id").
 		Where("academic_period_id = ?", academicPeriodID).
+		Order("iap.indicator_type_id").
 		Scan(response).Error
 	if err != nil {
 		return err
