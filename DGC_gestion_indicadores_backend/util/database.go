@@ -129,6 +129,12 @@ func seedData() {
 			Description:  "Tasa del personal académico con dedicación a tiempo completo al menos el 50%",
 		},
 		{
+			ID:           19,
+			Name:         "Indicador 19: Tasa de Deserción Institucional de Segundo Año – Oferta Académica de Grado",
+			Abbreviation: "Tasa de Deserción Institucional de Segundo Año – Oferta Académica de Grado",
+			Description:  "La institución cuenta con una tasa promedio de deserción de estudiantes de grado al segundo año de máximo el 14%.",
+		},
+		{
 			ID:           21,
 			Name:         "Indicador 21: Tasa de Titulación Institucional - Oferta Académica de Grado",
 			Abbreviation: "Tasa de Titulación Institucional - Oferta Académica de Grado",
