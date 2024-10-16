@@ -46,6 +46,11 @@ func CalculateIndicatorByTypeIDAndAcademicPeriod(academicPeriodID, indicatorType
 		if err != nil {
 			return err
 		}
+	case model.Indicator21:
+		err := CalculateIndicator21(academicPeriodID, response)
+		if err != nil {
+			return err
+		}
 	case model.Indicator29:
 		err := CalculateIndicator29(academicPeriodID, response)
 		if err != nil {
