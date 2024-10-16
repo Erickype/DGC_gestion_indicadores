@@ -1,6 +1,6 @@
 <script lang="ts">
 	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
-	import { addGradeRateListSchema, type AddGradeRateListSchema } from './schema';
+	import { updateGradeRateListSchema, type UpdateGradeRateListSchema } from './schema';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	import { createEventDispatcher } from 'svelte';
@@ -14,21 +14,23 @@
 	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
 	import FormSelect from '$lib/components/combobox/formSelect.svelte';
 	import type { Message } from '$lib/components/combobox/combobox';
+	import type { GradeRateListJoined } from '$lib/api/model/api/indicatorsInformation/gradeRateLists';
 
-	export let data: SuperValidated<Infer<AddGradeRateListSchema>, App.Superforms.Message>;
+	export let data: SuperValidated<Infer<UpdateGradeRateListSchema>, App.Superforms.Message>;
 	export let comboMessages: Message[][];
+	export let updateEntity: GradeRateListJoined;
 	const careersComboData = comboMessages.at(0)!;
 
 	const dispatch = createEventDispatcher();
 
 	function GradeRateListCreated() {
-		dispatch('message', {
+		dispatch('updated', {
 			created: true
 		});
 	}
 
 	const form = superForm(data, {
-		validators: zodClient(addGradeRateListSchema),
+		validators: zodClient(updateGradeRateListSchema),
 		taintedMessage: null,
 		onUpdated: ({ form: f }) => {
 			const message = f.message;
@@ -39,17 +41,29 @@
 				GradeRateListCreated();
 				return toast.success(`Valores de tasas de grado creados`);
 			}
+			fillForm();
 			return manageToastFromErrorMessageOnAddForm(message);
 		}
 	});
 
 	const { form: formData, enhance } = form;
 
+	fillForm();
+
 	let formDataCareerID = writable($formData.career_id);
 	formDataCareerID.subscribe((value) => ($formData.career_id = value));
+
+	function fillForm() {
+		$formData.career_id = updateEntity.career_id;
+		$formData.count_graduated_students = updateEntity.count_graduated_students;
+		$formData.count_court_students = updateEntity.count_court_students;
+		$formData.count_admitted_matriculated_students =
+			updateEntity.count_admitted_matriculated_students;
+		$formData.count_admitted_students = updateEntity.count_admitted_students;
+	}
 </script>
 
-<form action="?/postGradeRateList" use:enhance>
+<form action="?/updateGradeRateList" use:enhance>
 	<div class="flex flex-col gap-2">
 		<Form.Field {form} name="academic_period_id">
 			<Form.Control let:attrs>
