@@ -56,8 +56,32 @@ func GetGradeRateListsByAcademicPeriod(
 	return nil
 }
 
+func GetGradeRateListByAcademicPeriodAndCareer(academicPeriodID, careerID int, gradeRateList *GradeRateList) (err error) {
+	err = database.DB.Model(&GradeRateList{}).
+		Where("academic_period_id = ? and career_id = ?", academicPeriodID, careerID).
+		Scan(&gradeRateList).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("no existe la tasa en el periodo")
+		}
+		return err
+	}
+	return nil
+}
+
 func PostGradeRateList(gradeRateLists *GradeRateList) (err error) {
 	err = database.DB.Create(gradeRateLists).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("valores de tasa de grado ya registrados")
+		}
+		return err
+	}
+	return nil
+}
+
+func UpdateGradeRateList(gradeRateLists *GradeRateList) (err error) {
+	err = database.DB.Save(gradeRateLists).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
 			return errors.New("valores de tasa de grado ya registrados")
