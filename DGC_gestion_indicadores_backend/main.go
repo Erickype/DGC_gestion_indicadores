@@ -27,6 +27,9 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	healthcheck "github.com/tavsec/gin-healthcheck"
+	healthcheckChecks "github.com/tavsec/gin-healthcheck/checks"
+	healthcheckConfig "github.com/tavsec/gin-healthcheck/config"
 	"log"
 	"os"
 )
@@ -224,7 +227,12 @@ func serveApplication() {
 
 	academicPeriodRoutes.GET("/evaluationPeriods", evaluationPeriod.GetEvaluationPeriods)
 
-	err := router.Run(":8000")
+	err := healthcheck.New(router, healthcheckConfig.DefaultConfig(), []healthcheckChecks.Check{})
+	if err != nil {
+		log.Fatal("Error creating healthcheck")
+	}
+
+	err = router.Run(":8000")
 	if err != nil {
 		log.Fatal("Error running server")
 	}
