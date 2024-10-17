@@ -207,7 +207,6 @@ func serveApplication() {
 
 	// Indicators routes
 	indicatorsRoutes := router.Group("/api/indicators/")
-	indicatorsRoutes.Use(util.JWTAuth())
 
 	indicatorsRoutes.GET("/evaluationPeriod/calculate/:evaluationPeriodID/:indicatorTypeID",
 		indicators.GetCalculateIndicatorByTypeIDAndEvaluationPeriod)
