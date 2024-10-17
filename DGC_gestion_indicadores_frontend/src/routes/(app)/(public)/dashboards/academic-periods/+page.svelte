@@ -57,7 +57,7 @@
 		cargando...
 	{:then indicators}
 		{#if indicators.length > 0}
-			<div class="my-auto grid min-h-40 w-full grid-cols-2 gap-6">
+			<div class="my-auto grid min-h-40 w-full grid-cols-3 gap-6">
 				{#each indicators as indicator}
 					<IndicatorCard {indicator} />
 				{/each}
