@@ -1,4 +1,4 @@
-import { API_URL } from "$env/static/private";
+import { PUBLIC_API_URL } from "$env/static/public";
 
 // Base domain
-export const domain = API_URL
+export const domain = PUBLIC_API_URL
