@@ -1,2 +1,4 @@
+import { API_URL } from "$env/static/private";
+
 // Base domain
-export const domain = "http://localhost:8000"
+export const domain = API_URL
