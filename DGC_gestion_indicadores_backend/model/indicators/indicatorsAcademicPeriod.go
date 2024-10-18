@@ -4,6 +4,7 @@ import (
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicPeriod"
+	"sync"
 	"time"
 )
 
@@ -67,22 +68,55 @@ func CalculateIndicatorByTypeIDAndAcademicPeriod(academicPeriodID, indicatorType
 	return nil
 }
 
-func CalculateIndicatorsByAcademicPeriod(academicPeriodID int, response *[]IndicatorAcademicPeriodJoined) (err error) {
+func CalculateIndicatorsByAcademicPeriod(academicPeriodID int, response *[]IndicatorAcademicPeriodJoined) (errs []error) {
+	var wg sync.WaitGroup
+	var mu sync.Mutex
+	done := make(chan IndicatorAcademicPeriodJoined, len(academicPeriodIndicators))
+	errCh := make(chan error, len(academicPeriodIndicators)) // Channel for errors
+
 	for i := 0; i < len(academicPeriodIndicators); i++ {
-		indicatorID := academicPeriodIndicators[i]
-		var indicator IndicatorsAcademicPeriod
-		err = CalculateIndicatorByTypeIDAndAcademicPeriod(academicPeriodID, indicatorID, &indicator)
-		if err != nil {
-			return
-		}
-		var indicatorJoined IndicatorAcademicPeriodJoined
-		err = GetIndicatorByTypeIDAndAcademicPeriodJoined(academicPeriodID, indicatorID, &indicatorJoined)
-		if err != nil {
-			return
-		}
-		*response = append(*response, indicatorJoined)
+		wg.Add(1)
+		go func(indicatorID int) {
+			defer wg.Done()
+
+			var indicator IndicatorsAcademicPeriod
+			err := CalculateIndicatorByTypeIDAndAcademicPeriod(academicPeriodID, indicatorID, &indicator)
+			if err != nil {
+				errCh <- err // Send error to error channel
+				return
+			}
+
+			var indicatorJoined IndicatorAcademicPeriodJoined
+			err = GetIndicatorByTypeIDAndAcademicPeriodJoined(academicPeriodID, indicatorID, &indicatorJoined)
+			if err != nil {
+				errCh <- err // Send error to error channel
+				return
+			}
+
+			// Safely append to the response slice
+			mu.Lock()
+			*response = append(*response, indicatorJoined)
+			mu.Unlock()
+
+			// Send result to done channel
+			done <- indicatorJoined
+		}(academicPeriodIndicators[i])
 	}
-	return nil
+
+	// Wait for all goroutines to finish
+	wg.Wait()
+	close(done)
+	close(errCh)
+
+	// Collect all errors from the error channel
+	for e := range errCh {
+		if e != nil {
+			errs = append(errs, e)
+		}
+	}
+
+	// Return the collected errors (if any)
+	return errs
 }
 
 func GetIndicatorsByAcademicPeriod(academicPeriodID int, response *[]IndicatorAcademicPeriodJoined) (err error) {
