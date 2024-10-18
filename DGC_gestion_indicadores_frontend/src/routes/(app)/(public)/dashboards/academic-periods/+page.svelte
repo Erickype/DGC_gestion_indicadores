@@ -59,7 +59,7 @@
 	</div>
 </div>
 
-<div class="mx-auto flex h-[70vh] w-full place-content-center px-8">
+<div class="mx-auto flex w-full place-content-center px-8">
 	{#await indicatorsPromise}
 		cargando...
 	{:then indicators}
