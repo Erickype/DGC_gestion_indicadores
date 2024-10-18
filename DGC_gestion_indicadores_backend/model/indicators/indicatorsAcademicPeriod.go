@@ -68,6 +68,20 @@ func CalculateIndicatorByTypeIDAndAcademicPeriod(academicPeriodID, indicatorType
 }
 
 func CalculateIndicatorsByAcademicPeriod(academicPeriodID int, response *[]IndicatorAcademicPeriodJoined) (err error) {
+	for i := 0; i < len(academicPeriodIndicators); i++ {
+		indicatorID := academicPeriodIndicators[i]
+		var indicator IndicatorsAcademicPeriod
+		err = CalculateIndicatorByTypeIDAndAcademicPeriod(academicPeriodID, indicatorID, &indicator)
+		if err != nil {
+			return
+		}
+		var indicatorJoined IndicatorAcademicPeriodJoined
+		err = GetIndicatorByTypeIDAndAcademicPeriodJoined(academicPeriodID, indicatorID, &indicatorJoined)
+		if err != nil {
+			return
+		}
+		*response = append(*response, indicatorJoined)
+	}
 	return nil
 }
 
@@ -82,6 +96,25 @@ func GetIndicatorsByAcademicPeriod(academicPeriodID int, response *[]IndicatorAc
 		Joins("join indicators.indicator_types it on iap.indicator_type_id = it.id").
 		Joins("join academic_periods ap on iap.academic_period_id = ap.id").
 		Where("academic_period_id = ?", academicPeriodID).
+		Order("iap.indicator_type_id").
+		Scan(response).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func GetIndicatorByTypeIDAndAcademicPeriodJoined(academicPeriodID, indicatorTypeID int, response *IndicatorAcademicPeriodJoined) (err error) {
+	err = database.DB.Table("indicators.indicators_academic_periods iap").
+		Select(`iap.indicator_type_id,
+			it.name as indicator_type,
+			iap.academic_period_id,
+			ap.name as academic_period,
+			iap.actual_value,
+			iap.target_value`).
+		Joins("join indicators.indicator_types it on iap.indicator_type_id = it.id").
+		Joins("join academic_periods ap on iap.academic_period_id = ap.id").
+		Where("academic_period_id = ? and iap.indicator_type_id = ?", academicPeriodID, indicatorTypeID).
 		Order("iap.indicator_type_id").
 		Scan(response).Error
 	if err != nil {
