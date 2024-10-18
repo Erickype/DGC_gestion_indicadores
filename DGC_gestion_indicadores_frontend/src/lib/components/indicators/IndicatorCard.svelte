@@ -6,7 +6,7 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Card from '$lib/components/ui/card';
 
-	import Activity from 'lucide-svelte/icons/activity';
+	import Activity from 'lucide-svelte/icons/refresh-ccw';
 	import Loader from 'lucide-svelte/icons/loader';
 
 	import type { IndicatorAcademicPeriodJoined } from '$lib/api/model/api/indicators/academicPeriods';
@@ -63,10 +63,10 @@
 </script>
 
 {#if isAcademicPeriodIndicator}
-	<Card.Root class="bg-secondary/50">
+	<Card.Root class="bg-secondary/50 flex flex-col justify-between">
 		<Card.Header class="pb-2">
-			<Card.Title class="flex items-center justify-between gap-2 text-xl">
-				<p>{indicator.indicator_type}</p>
+			<Card.Title class="flex items-center justify-between gap-2">
+				<h5 class="text w-4/5 text-pretty text-lg">{indicator.indicator_type}</h5>
 				{#await calculateIndicatorPromise}
 					<Button variant="ghost" size="icon" disabled>
 						<Loader class="h-4 w-4" />
@@ -99,8 +99,8 @@
 {:else}
 	<Card.Root class="bg-secondary/50">
 		<Card.Header class="pb-2">
-			<Card.Title class="flex items-center justify-between gap-2 text-xl">
-				<p>{indicator.indicator_type}</p>
+			<Card.Title class="flex items-center justify-between gap-2">
+				<h5 class="text w-4/5 text-pretty text-lg">{indicator.indicator_type}</h5>
 				{#await calculateIndicatorPromise}
 					<Button variant="ghost" size="icon" disabled>
 						<Loader class="h-4 w-4" />
