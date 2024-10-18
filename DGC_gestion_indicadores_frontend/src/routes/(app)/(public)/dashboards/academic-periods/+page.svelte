@@ -3,9 +3,11 @@
 	import { goto } from '$app/navigation';
 
 	import Icon from 'lucide-svelte/icons/circle-gauge';
+	import Refresh from 'lucide-svelte/icons/refresh-ccw';
 
 	import type { IndicatorAcademicPeriodJoined } from '$lib/api/model/api/indicators/academicPeriods';
 	import AcademicPeriodCombo from '$lib/components/combobox/academicPeriodCombo.svelte';
+	import { Button } from '$lib/components/ui/button/index.js';
 	import type { CommonError } from '$lib/api/model/errors';
 	import Alert from '$lib/components/alert/alert.svelte';
 
@@ -44,12 +46,17 @@
 		<Icon class="h-8 w-8" />
 		<h2 class="text-2xl font-bold">Dashboards Periodos Académicos</h2>
 	</div>
+	<div class="flex items-center gap-2">
+		<Button variant="outline" role="combobox" size="icon">
+			<Refresh class="h-4 w-4" />
+		</Button>
 
-	<AcademicPeriodCombo
-		messages={academicPeriodsData.messages}
-		bind:selectedValue={selectedAcademicPeriod}
-		on:message={FetchGetIndicatorsByAcademicPeriodID}
-	></AcademicPeriodCombo>
+		<AcademicPeriodCombo
+			messages={academicPeriodsData.messages}
+			bind:selectedValue={selectedAcademicPeriod}
+			on:message={FetchGetIndicatorsByAcademicPeriodID}
+		></AcademicPeriodCombo>
+	</div>
 </div>
 
 <div class="mx-auto flex h-[70vh] w-full place-content-center px-8">
