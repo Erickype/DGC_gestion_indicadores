@@ -215,6 +215,7 @@ func serveApplication() {
 
 	indicatorsRoutes.GET("/academicPeriod/calculate/:academicPeriodID/:indicatorTypeID",
 		indicators.GetCalculateIndicatorByTypeIDAndAcademicPeriod)
+	indicatorsRoutes.GET("/academicPeriod/calculate/:academicPeriodID", indicators.GetCalculateIndicatorsByAcademicPeriod)
 	indicatorsRoutes.GET("/academicPeriod/:academicPeriodID", indicators.GetIndicatorsByAcademicPeriod)
 
 	// Public view routes

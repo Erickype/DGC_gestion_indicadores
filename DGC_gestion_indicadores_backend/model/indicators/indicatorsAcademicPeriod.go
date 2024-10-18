@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+var academicPeriodIndicators = []int{16, 17, 19, 21, 29}
+
 type IndicatorsAcademicPeriod struct {
 	CreatedAt        time.Time `json:"created_at"`
 	UpdatedAt        time.Time `json:"updated_at"`
@@ -62,6 +64,10 @@ func CalculateIndicatorByTypeIDAndAcademicPeriod(academicPeriodID, indicatorType
 			return err
 		}
 	}
+	return nil
+}
+
+func CalculateIndicatorsByAcademicPeriod(academicPeriodID int, response *[]IndicatorAcademicPeriodJoined) (err error) {
 	return nil
 }
 
