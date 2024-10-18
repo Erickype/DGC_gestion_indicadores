@@ -35,6 +35,21 @@
 		}
 		return (indicatorsPromise = response.json());
 	}
+
+	async function fetchGetCalculateIndicatorsByAcademicPeriod() {
+		const url = `/api/indicators/academicPeriod/calculate/${selectedAcademicPeriod}`;
+		const response = await fetch(url, {
+			method: 'GET'
+		});
+		if (!response.ok) {
+			const errorData = (await response.json()) as CommonError;
+			if (response.status === 401) {
+				throw goto('/');
+			}
+			throw errorData;
+		}
+		return (indicatorsPromise = response.json());
+	}
 </script>
 
 <svelte:head>
@@ -47,7 +62,7 @@
 		<h2 class="text-2xl font-bold">Dashboards Periodos Académicos</h2>
 	</div>
 	<div class="flex items-center gap-2">
-		<Button variant="outline" role="combobox" size="icon">
+		<Button variant="outline" role="combobox" size="icon" on:click={fetchGetCalculateIndicatorsByAcademicPeriod}>
 			<Refresh class="h-4 w-4" />
 		</Button>
 
