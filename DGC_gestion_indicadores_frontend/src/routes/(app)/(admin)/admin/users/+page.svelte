@@ -1,12 +1,19 @@
 <script lang="ts">
-	import Alert from '$lib/components/alert/alert.svelte';
-	import Icon from 'lucide-svelte/icons/user-round-search';
-
-	import Table from './Table.svelte';
-	import type { User } from '$lib/api/model/admin/user';
-	import type { CommonError } from '$lib/api/model/errors';
+	import type { PageData } from './$types';
 	import { goto } from '$app/navigation';
+
+	import Icon from 'lucide-svelte/icons/user-round-search';
+	import Alert from '$lib/components/alert/alert.svelte';
+
+	import type { CommonError } from '$lib/api/model/errors';
 	import { toast } from 'svelte-sonner';
+	import Table from './Table.svelte';
+
+	import type { User } from '$lib/api/model/admin/user';
+
+	export let data: PageData;
+
+	const updateUserForm = data.updateUserForm;
 
 	let usersPromise: Promise<User[]> = fetchUsers();
 
@@ -49,7 +56,12 @@
 		cargando...
 	{:then users}
 		{#if users.length > 0}
-			<Table {users} on:updated={fetchOnSuccess} on:deleted={fetchOnSuccess}></Table>
+			<Table
+				{users}
+				formData={updateUserForm}
+				on:updated={fetchOnSuccess}
+				on:deleted={fetchOnSuccess}
+			></Table>
 		{:else}
 			<Alert title="Sin registros" description={'Ups, no hay usuarios'} />
 		{/if}
