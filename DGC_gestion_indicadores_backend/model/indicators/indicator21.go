@@ -21,7 +21,7 @@ func CalculateIndicator21(academicPeriodID int, indicator *IndicatorsAcademicPer
 	if err != nil {
 		return
 	}
-	if len(facultiesAverage) >= 0 {
+	if len(facultiesAverage) <= 0 {
 		return errors.New(fmt.Sprintf("indicador %d: sin valores para cálculo de tasas", indicator.IndicatorTypeID))
 	}
 

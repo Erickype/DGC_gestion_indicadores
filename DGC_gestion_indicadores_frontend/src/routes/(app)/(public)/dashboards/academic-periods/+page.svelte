@@ -50,6 +50,7 @@
 			toast.error(errorData.message);
 			return FetchGetIndicatorsByAcademicPeriodID();
 		}
+		toast.success('Indicadores actualizados');
 		return (indicatorsPromise = response.json());
 	}
 </script>
