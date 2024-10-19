@@ -2,6 +2,7 @@ package model
 
 import (
 	"errors"
+	"fmt"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	evaluationAcademicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationAcademicPeriod"
@@ -115,7 +116,7 @@ func calculateIndicator26BooksOrChapterPublication(
 		return err
 	}
 	if countPeerReviewedChapters == 0 {
-		return errors.New("no hay capítulos revisados pares")
+		return errors.New(fmt.Sprintf("indicador %d: no hay capítulos revisados pares", 26))
 	}
 
 	*booksOrChaptersPublication =
@@ -133,6 +134,9 @@ func getFullTimeTeachers(academicPeriodIds []int, countFullTimeTeachers *int64) 
 	if err != nil {
 		return err
 	}
+	if *countFullTimeTeachers <= 0 {
+		return errors.New(fmt.Sprintf("indicador %d: no hay profesores a tiempo completo", 26))
+	}
 	return nil
 }
 
@@ -144,6 +148,9 @@ func getPartTimeTeachers(academicPeriodIds []int, countFullTimeTeachers *int64) 
 		Distinct("teacher_id").Count(countFullTimeTeachers).Error
 	if err != nil {
 		return err
+	}
+	if *countFullTimeTeachers <= 0 {
+		return errors.New(fmt.Sprintf("indicador %d: no hay profesores a tiempo parcial", 26))
 	}
 	return nil
 }
