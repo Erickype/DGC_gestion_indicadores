@@ -1,5 +1,36 @@
 <script lang="ts">
+	import Alert from '$lib/components/alert/alert.svelte';
 	import Icon from 'lucide-svelte/icons/user-round-search';
+
+	import Table from './Table.svelte';
+	import type { User } from '$lib/api/model/admin/user';
+	import type { CommonError } from '$lib/api/model/errors';
+	import { goto } from '$app/navigation';
+	import { toast } from 'svelte-sonner';
+
+	let usersPromise: Promise<User[]> = fetchUsers();
+
+	async function fetchUsers() {
+		const url = `/api/admin/users`;
+		const response = await fetch(url, {
+			method: 'GET'
+		});
+		if (!response.ok) {
+			const errorData = (await response.json()) as CommonError;
+			if (response.status === 401) {
+				throw goto('/');
+			}
+			return toast.error(errorData.message);
+		}
+		return (usersPromise = response.json());
+	}
+
+	function fetchOnSuccess(event: CustomEvent) {
+		const detail: { status: boolean } = event.detail;
+		if (detail.status) {
+			fetchUsers();
+		}
+	}
 </script>
 
 <svelte:head>
@@ -14,4 +45,15 @@
 </div>
 
 <div class="mx-auto flex w-full place-content-center px-8">
+	{#await usersPromise}
+		cargando...
+	{:then users}
+		{#if users.length > 0}
+			<Table {users} on:updated={fetchOnSuccess} on:deleted={fetchOnSuccess}></Table>
+		{:else}
+			<Alert title="Sin registros" description={'Ups, no hay usuarios'} />
+		{/if}
+	{:catch error}
+		<Alert variant="destructive" description={error.message} />
+	{/await}
 </div>
