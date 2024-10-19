@@ -125,16 +125,15 @@ func UpdateUser(c *gin.Context) {
 	err := model.GetUser(&User, id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			c.AbortWithStatus(http.StatusNotFound)
+			commonErrors.NotFoundResponse(c, "Usuario no encontrado", err)
 			return
 		}
-
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
+		commonErrors.InternalServerErrorResponse(c, "Error encontrando usuario", err)
 		return
 	}
 	err = c.BindJSON(&Update)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err})
+		commonErrors.BadRequestResponse(c, err)
 		return
 	}
 	User.Username = Update.Username
@@ -143,8 +142,8 @@ func UpdateUser(c *gin.Context) {
 
 	err = model.UpdateUser(&User)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err})
+		commonErrors.InternalServerErrorResponse(c, "Error actualizando usuario", err)
 		return
 	}
-	c.JSON(http.StatusOK, User)
+	c.JSON(http.StatusAccepted, User)
 }
