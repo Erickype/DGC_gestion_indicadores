@@ -2,6 +2,7 @@ package model
 
 import (
 	"errors"
+	"fmt"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 )
@@ -16,7 +17,7 @@ func CalculateIndicator29(academicPeriodID int, indicator *IndicatorsAcademicPer
 		return err
 	}
 	if careersCount == 0 {
-		return errors.New("sin carreras en lista")
+		return errors.New(fmt.Sprintf("indicador %d: sin carreras en lista", indicator.IndicatorTypeID))
 	}
 	var socialProjectListsCount int64
 	err = database.DB.Table("indicators_information.social_project_lists spl").

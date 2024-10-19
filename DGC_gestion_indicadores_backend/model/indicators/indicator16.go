@@ -1,6 +1,8 @@
 package model
 
 import (
+	"errors"
+	"fmt"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	indicatorsInformation "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/teachers"
@@ -24,6 +26,10 @@ func CalculateIndicator16(academicPeriodID int, indicator *IndicatorsAcademicPer
 	if err != nil {
 		return err
 	}
+	if teachersCount <= 0 {
+		return errors.New(fmt.Sprintf("indicador %d: sin profesores en lista", indicator.IndicatorTypeID))
+	}
+
 	indicator.ActualValue = float64(phdCount) / float64(teachersCount) * 100
 	indicator.TargetValue = model.Indicator16TargetValue
 	err = RefreshIndicatorAcademicPeriod(indicator)
