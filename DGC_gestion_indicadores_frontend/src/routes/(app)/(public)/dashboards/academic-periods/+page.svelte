@@ -32,7 +32,7 @@
 			if (response.status === 401) {
 				throw goto('/');
 			}
-			return toast.error(errorData.message)
+			return toast.error(errorData.message);
 		}
 		return (indicatorsPromise = response.json());
 	}
@@ -47,7 +47,8 @@
 			if (response.status === 401) {
 				throw goto('/');
 			}
-			return toast.error(errorData.message)
+			toast.error(errorData.message);
+			return FetchGetIndicatorsByAcademicPeriodID();
 		}
 		return (indicatorsPromise = response.json());
 	}
@@ -63,7 +64,12 @@
 		<h2 class="text-2xl font-bold">Dashboards Periodos Académicos</h2>
 	</div>
 	<div class="flex items-center gap-2">
-		<Button variant="outline" role="combobox" size="icon" on:click={fetchGetCalculateIndicatorsByAcademicPeriod}>
+		<Button
+			variant="outline"
+			role="combobox"
+			size="icon"
+			on:click={fetchGetCalculateIndicatorsByAcademicPeriod}
+		>
 			<Refresh class="h-4 w-4" />
 		</Button>
 
