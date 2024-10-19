@@ -9,6 +9,7 @@ export interface User {
 }
 
 export interface UpdateUsersRequest {
+    ID: number
     username: string;
     email: string;
     role_id: number;
