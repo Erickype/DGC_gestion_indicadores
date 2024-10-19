@@ -65,7 +65,6 @@ export const menus: Menu[] = [
             { name: 'Periodos Evaluación', route: '/admin/evaluation-periods' },
             { name: 'Periodos Académicos', route: '/admin/academic-periods' },
             { name: 'Usuarios', route: '/admin/users' },
-            { name: 'Admin', route: '/admin' },
         ],
         roles: [1]
     }
