@@ -4,20 +4,19 @@
 	import { readable } from 'svelte/store';
 
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
-
 	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
 	import Table from '$lib/components/table/table.svelte';
+	import { toast } from 'svelte-sonner';
 
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
-	/* import type { UpdateEvaluationPeriodSchema } from './schema'; */
+	import type { UpdateUserSchema } from './schema';
 	import { createEventDispatcher } from 'svelte';
-	import { toast } from 'svelte-sonner';
-	import type { User } from '$lib/api/model/admin/user';
 
-	/* import UpdateForm from './UpdateForm.svelte'; */
+	import type { User } from '$lib/api/model/admin/user';
+	import UpdateForm from './UpdateForm.svelte';
 
 	export let users: User[];
-	/* export let formData: SuperValidated<Infer<UpdateEvaluationUserchema>>; */
+	export let formData: SuperValidated<Infer<UpdateUserSchema>>;
 	let user: User;
 
 	const filterFields = ['username', 'email', 'role_id'];
@@ -100,14 +99,14 @@
 	}
 </script>
 
-<!-- <UpdateModal
-	modalTitle="Actualizar periodo de evaluación"
+<UpdateModal
+	modalTitle="Actualizar rol de usuario"
 	{formData}
 	formComponent={UpdateForm}
 	bind:updateEntity={user}
 	bind:open={updateFormOpen}
 	on:updated={handleUpdated}
-/> -->
+/>
 
 <div class="w-full">
 	<Table {table} {columns} {filterFields} itemCount={users.length} />
