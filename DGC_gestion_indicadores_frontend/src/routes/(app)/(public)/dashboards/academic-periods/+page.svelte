@@ -12,6 +12,7 @@
 	import Alert from '$lib/components/alert/alert.svelte';
 
 	import IndicatorCard from '$lib/components/indicators/IndicatorCard.svelte';
+	import { toast } from 'svelte-sonner';
 
 	export let data: PageServerData;
 
@@ -31,7 +32,7 @@
 			if (response.status === 401) {
 				throw goto('/');
 			}
-			throw errorData;
+			return toast.error(errorData.message)
 		}
 		return (indicatorsPromise = response.json());
 	}
@@ -46,7 +47,7 @@
 			if (response.status === 401) {
 				throw goto('/');
 			}
-			throw errorData;
+			return toast.error(errorData.message)
 		}
 		return (indicatorsPromise = response.json());
 	}
