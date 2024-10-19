@@ -38,7 +38,7 @@
 			if (response.status === 401) {
 				throw goto('/');
 			}
-			throw errorData;
+			return toast.error(errorData.message);
 		}
 		toast.success(`${actualIndicator.indicator_type} actualizado`);
 		return (calculateIndicatorPromise = response.json());
@@ -55,7 +55,7 @@
 			if (response.status === 401) {
 				throw goto('/');
 			}
-			throw errorData;
+			return toast.error(errorData.message);
 		}
 		toast.success(`${actualIndicator.indicator_type} actualizado`);
 		return (calculateIndicatorPromise = response.json());
