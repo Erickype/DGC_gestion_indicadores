@@ -36,7 +36,7 @@ func CreateCareer(c *gin.Context) {
 	c.JSON(http.StatusCreated, career)
 }
 
-func GetFaculties(context *gin.Context) {
+func GetCareers(context *gin.Context) {
 	var careers []model.Career
 	err := model.GetCareers(&careers)
 	if err != nil {

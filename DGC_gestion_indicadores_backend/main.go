@@ -112,7 +112,7 @@ func serveApplication() {
 
 	// UPE routes
 	upeRoutes := router.Group("/api")
-	upeRoutes.Use(util.JWTAuth(), util.JWTAuthUPE())
+	upeRoutes.Use(util.JWTAuthUPE())
 	upeRoutes.GET("/people", person.GetPersons)
 	upeRoutes.POST("/people/filter", person.FilterPeople)
 	upeRoutes.POST("/person", person.CreatePerson)
@@ -121,7 +121,7 @@ func serveApplication() {
 
 	upeRoutes.GET("/faculties", faculty.GetFaculties)
 
-	upeRoutes.GET("/careers", career.GetFaculties)
+	upeRoutes.GET("/careers", career.GetCareers)
 
 	upeRoutes.GET("/dedications", dedication.GetDedications)
 
@@ -154,7 +154,7 @@ func serveApplication() {
 
 	// Indicators information routes
 	indicatorsInformationRoutes := router.Group("/api/indicators/information")
-	indicatorsInformationRoutes.Use(util.JWTAuth(), util.JWTAuthUPE())
+	indicatorsInformationRoutes.Use(util.JWTAuthUPE())
 
 	indicatorsInformationRoutes.GET("/academicPeriodAuthorPreviousCareers/:authorID",
 		indicatorsInformation.GetAcademicPeriodAuthorPreviousCareers)
