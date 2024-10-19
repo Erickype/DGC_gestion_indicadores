@@ -1,6 +1,8 @@
 package model
 
 import (
+	"errors"
+	"fmt"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 )
@@ -19,6 +21,10 @@ func CalculateIndicator19(academicPeriodID int, indicator *IndicatorsAcademicPer
 	if err != nil {
 		return
 	}
+	if len(facultiesAverage) >= 0 {
+		return errors.New(fmt.Sprintf("indicador %d: sin valores para cálculo de tasas", indicator.IndicatorTypeID))
+	}
+
 	var sum float64
 	for _, average := range facultiesAverage {
 		sum += average.Avg
