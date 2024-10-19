@@ -6,7 +6,6 @@
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
 	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
 	import Table from '$lib/components/table/table.svelte';
-	import { toast } from 'svelte-sonner';
 
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import type { UpdateUserSchema } from './schema';
@@ -14,9 +13,11 @@
 
 	import type { User } from '$lib/api/model/admin/user';
 	import UpdateForm from './UpdateForm.svelte';
+	import type { Message } from '$lib/components/combobox/combobox';
 
-	export let users: User[];
+	export let comboMessages: Message[][] | undefined = undefined;
 	export let formData: SuperValidated<Infer<UpdateUserSchema>>;
+	export let users: User[];
 	let user: User;
 
 	const filterFields = ['username', 'email', 'role_id'];
@@ -78,9 +79,9 @@
 
 	let updateFormOpen = false;
 	function handleUpdateAction(event: any) {
-		const detail: { status: boolean; id: number } = event.detail;
+		const detail: { status: boolean; id: string } = event.detail;
 		if (detail.status) {
-			user = users.find((period) => period.ID === detail.id)!;
+			user = users.find((period) => period.ID.toString() === detail.id)!;
 			updateFormOpen = true;
 		} else {
 			updateFormOpen = false;
@@ -102,6 +103,7 @@
 <UpdateModal
 	modalTitle="Actualizar rol de usuario"
 	{formData}
+	{comboMessages}
 	formComponent={UpdateForm}
 	bind:updateEntity={user}
 	bind:open={updateFormOpen}

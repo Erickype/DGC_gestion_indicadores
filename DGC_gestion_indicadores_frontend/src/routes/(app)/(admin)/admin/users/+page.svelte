@@ -10,10 +10,18 @@
 	import Table from './Table.svelte';
 
 	import type { User } from '$lib/api/model/admin/user';
+	import type { Message } from '$lib/components/combobox/combobox';
 
 	export let data: PageData;
 
 	const updateUserForm = data.updateUserForm;
+
+	const comboMessages: Message[][] = [
+		[
+			{ label: 'Usuario UPE', value: 2 },
+			{ label: 'Autoridad', value: 3 }
+		]
+	];
 
 	let usersPromise: Promise<User[]> = fetchUsers();
 
@@ -58,6 +66,7 @@
 		{#if users.length > 0}
 			<Table
 				{users}
+				{comboMessages}
 				formData={updateUserForm}
 				on:updated={fetchOnSuccess}
 				on:deleted={fetchOnSuccess}
