@@ -39,10 +39,10 @@ func (user *User) BeforeSave(*gorm.DB) error {
 }
 
 // GetUsers return the lost of users
-func GetUsers(User *[]User) (err error) {
-	err = database.DB.Find(User).
+func GetUsers(users *[]User) (err error) {
+	err = database.DB.Table("users").
 		Where("role_id != 1").
-		Error
+		Scan(&users).Error
 	if err != nil {
 		return err
 	}
