@@ -78,6 +78,7 @@
 						bind:value={$formData.username}
 						placeholder="NombreUsuario"
 					/>
+					<input hidden value={$formData.username} name={attrs.name} />
 				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
@@ -91,6 +92,7 @@
 						bind:value={$formData.email}
 						placeholder="ejemplo@ejemplo.com"
 					/>
+					<input hidden value={$formData.email} name={attrs.name} />
 				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
@@ -101,7 +103,7 @@
 		</Form.Field>
 	</div>
 	<Form.Button class="my-2 w-full">Guardar</Form.Button>
-	<!-- {#if browser}
+	{#if browser}
 		<SuperDebug data={$formData} />
-	{/if} -->
+	{/if}
 </form>
