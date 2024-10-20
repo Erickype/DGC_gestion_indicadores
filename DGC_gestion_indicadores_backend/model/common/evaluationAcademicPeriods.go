@@ -2,7 +2,6 @@ package model
 
 import (
 	"errors"
-
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	acaP "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicPeriod"
 	evaAcaP "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationAcademicPeriod"
@@ -23,7 +22,7 @@ func CreateAcademicPeriod(acaPeriod *acaP.AcademicPeriod) (err error) {
 			return err
 		}
 		if len(evalPeriods) == 0 {
-			return errors.New("incorrect time period")
+			return errors.New("no existe un periodo de evaluación válido")
 		}
 		for _, evalPeriod := range evalPeriods {
 			var evaluationAcademicPeriod evaAcaP.EvaluationAcademicPeriod
