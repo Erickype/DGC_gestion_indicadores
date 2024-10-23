@@ -53,8 +53,6 @@ export const menus: Menu[] = [
         icon: BookUser,
         links: [
             { name: "Personas", route: "/actors/people" },
-            { name: "Profesores", route: "/actors/teachers" },
-            { name: "Autores", route: "/actors/authors" },
         ],
         roles: [1, 2]
     },
