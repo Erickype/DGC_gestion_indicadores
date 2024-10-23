@@ -119,6 +119,8 @@ func serveApplication() {
 	upeRoutes.PUT("/person/:id", person.UpdatePerson)
 	upeRoutes.DELETE("/person/:id", person.DeletePerson)
 
+	upeRoutes.POST("/person/withRoles", person.PostPersonWithRoles)
+
 	upeRoutes.GET("/faculties", faculty.GetFaculties)
 
 	upeRoutes.GET("/careers", career.GetCareers)
@@ -146,7 +148,6 @@ func serveApplication() {
 
 	upeRoutes.POST("/author", author.PostAuthor)
 	upeRoutes.GET("/author/joined/:id", author.GetAuthorPersonJoinedByAuthorID)
-	upeRoutes.POST("/author/fromPerson", author.PostAuthorFromPerson)
 	upeRoutes.POST("/authors/filter", author.FilterAuthors)
 
 	upeRoutes.POST("/detailedFields/filter", knowledgeField.FilterDetailedFields)

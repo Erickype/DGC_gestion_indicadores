@@ -3,12 +3,30 @@ package controller
 import (
 	errorsS "errors"
 	errors "github.com/Erickype/DGC_gestion_indicadores_backend/model"
+	common "github.com/Erickype/DGC_gestion_indicadores_backend/model/common"
 	model "github.com/Erickype/DGC_gestion_indicadores_backend/model/person"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
 	"strconv"
 )
+
+func PostPersonWithRoles(c *gin.Context) {
+	var postPersonWithRolesRequest common.PostPersonWithRolesRequest
+	err := c.BindJSON(&postPersonWithRolesRequest)
+	if err != nil {
+		err := errors.CreateCommonError(http.StatusBadRequest, "Error en la solicitud", err.Error())
+		c.AbortWithStatusJSON(http.StatusBadRequest, err)
+		return
+	}
+	err = common.PostPersonWithRoles(&postPersonWithRolesRequest)
+	if err != nil {
+		err := errors.CreateCommonError(http.StatusInternalServerError, "Error creando persona y sus roles", err.Error())
+		c.AbortWithStatusJSON(http.StatusInternalServerError, err)
+		return
+	}
+	c.JSON(http.StatusOK, postPersonWithRolesRequest)
+}
 
 func CreatePerson(c *gin.Context) {
 	var person model.Person
