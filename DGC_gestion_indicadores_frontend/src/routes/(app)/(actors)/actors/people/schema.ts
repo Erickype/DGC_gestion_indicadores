@@ -1,5 +1,18 @@
 import { z } from "zod";
 
+export const roles = {
+  teacher: "Profesor",
+  author: "Autor"
+} as const
+
+type Role = keyof typeof roles;
+
+export const schema = z.object({
+  roles: z
+    .array(z.enum(Object.keys(roles) as [Role, ...Role[]]))
+    .min(1, "Seleccionar al menos un rol"),
+});
+
 export const addPersonSchema = z.object({
   identity: z.string({
     required_error: "Cédula requerida"
@@ -24,6 +37,10 @@ export const addPersonSchema = z.object({
   email: z.string({
     required_error: "Abreviación requerida"
   }).email({ message: "Formato: user@mail.com" }),
+
+  roles: z
+    .array(z.enum(Object.keys(roles) as [Role, ...Role[]]))
+    .min(1, "Seleccionar al menos un rol"),
 });
 
 export const updatePersonSchema = z.object({
@@ -52,6 +69,10 @@ export const updatePersonSchema = z.object({
   email: z.string({
     required_error: "Abreviación requerida"
   }).email({ message: "Formato: user@mail.com" }),
+
+  roles: z
+    .array(z.enum(Object.keys(roles) as [Role, ...Role[]]))
+    .min(1, "Seleccionar al menos un rol"),
 });
 
 export type AddPersonSchema = typeof addPersonSchema;
