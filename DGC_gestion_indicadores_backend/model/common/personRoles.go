@@ -11,7 +11,7 @@ import (
 )
 
 type PostPersonWithRolesRequest struct {
-	Roles  []int         `json:"roles"`
+	Roles  []string      `json:"roles"`
 	Person person.Person `json:"person"`
 }
 
@@ -26,7 +26,7 @@ func PostPersonWithRoles(request *PostPersonWithRolesRequest) (err error) {
 		for _, roleID := range request.Roles {
 			switch roleID {
 			case model.PersonRoleTeacher:
-				newAuthor := author.Author{
+				newAuthor := teacher.Teacher{
 					PersonID: request.Person.ID,
 				}
 				if err = tx.Create(&newAuthor).Error; err != nil {
@@ -41,7 +41,7 @@ func PostPersonWithRoles(request *PostPersonWithRolesRequest) (err error) {
 				break
 
 			case model.PersonRoleAuthor:
-				newTeacher := teacher.Teacher{
+				newTeacher := author.Author{
 					PersonID: request.Person.ID,
 				}
 				if err = tx.Create(&newTeacher).Error; err != nil {

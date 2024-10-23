@@ -24,6 +24,6 @@ const (
 	FullTimeDedication = "Tiempo completo"
 	PartTimeDedication = "Medio tiempo"
 
-	PersonRoleTeacher = 1
-	PersonRoleAuthor  = 2
+	PersonRoleTeacher = "teacher"
+	PersonRoleAuthor  = "author"
 )
