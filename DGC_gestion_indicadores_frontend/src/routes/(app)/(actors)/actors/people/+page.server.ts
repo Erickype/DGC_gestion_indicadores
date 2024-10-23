@@ -5,9 +5,9 @@ import { zod } from "sveltekit-superforms/adapters";
 import { redirect, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
+import type { Person, PostPersonWithRolesRequest, PutPersonRequest } from "$lib/api/model/api/person";
 import { generateFormMessageFromHttpResponse, generateFormMessageFromInvalidForm } from "$lib/utils";
-import type { PostPersonRequest, PutPersonRequest } from "$lib/api/model/api/person";
-import { PostPerson, PutPerson } from "$lib/api/controller/api/person";
+import { PostPersonWithRoles, PutPerson } from "$lib/api/controller/api/person";
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (!locals.user) {
@@ -21,39 +21,33 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-    addPerson: async (event) => {
+    addPersonWithRoles: async (event) => {
         const form = await superValidate(event, zod(addPersonSchema))
 
         if (!form.valid) {
-            return message(form,
-                { success: false, error: "Invalid form" },
-                { status: 400 })
+            return generateFormMessageFromInvalidForm(form)
         }
 
         const token = event.cookies.get("AuthorizationToken")
         const data = form.data
-        const person: PostPersonRequest = {
+        const person: Person = {
             identity: data.identity,
             name: data.name,
             lastname: data.lastname,
-            email: data.email
+            email: data.email,
+        }
+        const request: PostPersonWithRolesRequest = {
+            person: person,
+            roles: data.roles
         }
 
-        const res = await PostPerson(person, token!)
+        const response = await PostPersonWithRoles(request, token!)
 
-        if (!res.ok) {
-            const status = res.status as unknown as ErrorStatus
-            const data = await res.json()
-            return message(form,
-                { success: false, error: data },
-                { status: status })
-        }
-        return message(form, {
-            success: true
-        })
+        return generateFormMessageFromHttpResponse(form, response)
+
     },
 
-    updatePerson: async (event) => {
+    updatePersonWithRoles: async (event) => {
         const form = await superValidate(event, zod(updatePersonSchema))
         if (!form.valid) {
             return generateFormMessageFromInvalidForm(form)
