@@ -1,6 +1,7 @@
-import type { FilterPeopleRequest, FilterPeopleResponse, Person, PostPersonRequest, PutPersonRequest } from "$lib/api/model/api/person";
+import type { FilterPeopleRequest, FilterPeopleResponse, Person, PostPersonRequest, PostPersonWithRolesRequest, PutPersonRequest } from "$lib/api/model/api/person";
+import { deletePersonRoute, getPeopleRoute, postFilterPeopleRoute, postPersonRoute, postPersonWithRolesRoute, putPersonRoute } from "$lib/api/routes/api/person";
+
 import { generateErrorFromCommonError, type CommonError } from "$lib/api/model/errors";
-import { deletePersonRoute, getPeopleRoute, postFilterPeopleRoute, postPersonRoute, putPersonRoute } from "$lib/api/routes/api/person";
 import type { Message } from "$lib/components/combobox/combobox";
 import { generateCommonErrorFromFetchError } from "$lib/utils";
 
@@ -56,6 +57,28 @@ export async function PostPerson(person: PostPersonRequest, token: string) {
         },
         body: JSON.stringify(person)
     });
+}
+
+export async function PostPersonWithRoles(postPersonWithRolesRequest: PostPersonWithRolesRequest, token: string) {
+    try {
+        const response = await fetch(postPersonWithRolesRoute, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify(postPersonWithRolesRequest)
+        });
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
+        }
+        const postPersonWithRolesResponse: PostPersonWithRolesRequest = await response.json()
+
+        return postPersonWithRolesResponse
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
 }
 
 export async function PutPerson(person: PutPersonRequest, token: string) {

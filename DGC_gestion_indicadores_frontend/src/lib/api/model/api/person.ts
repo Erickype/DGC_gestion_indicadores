@@ -1,6 +1,6 @@
 export interface Person {
-    CreatedAt: string;
-    UpdatedAt: string;
+    CreatedAt?: string;
+    UpdatedAt?: string;
     ID: number;
     identity: string;
     name: string;
@@ -13,6 +13,11 @@ export interface PostPersonRequest {
     name: string;
     lastname: string;
     email: string;
+}
+
+export interface PostPersonWithRolesRequest {
+    roles: number[]
+    person: Person
 }
 
 export interface PutPersonRequest {
