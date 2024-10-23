@@ -21,19 +21,3 @@ func PostAuthor(context *gin.Context) {
 	}
 	context.JSON(http.StatusCreated, author)
 }
-
-func PostAuthorFromPerson(context *gin.Context) {
-	var postAuthorFromPersonRequest model.PostAuthorFromPersonRequest
-	err := context.BindJSON(&postAuthorFromPersonRequest)
-	if err != nil {
-		errors.BadRequestResponse(context, err)
-		return
-	}
-	var author model.Author
-	err = model.PostAuthorFromPerson(&postAuthorFromPersonRequest, &author)
-	if err != nil {
-		errors.InternalServerErrorResponse(context, "Error creando autor", err)
-		return
-	}
-	context.JSON(http.StatusCreated, postAuthorFromPersonRequest)
-}
