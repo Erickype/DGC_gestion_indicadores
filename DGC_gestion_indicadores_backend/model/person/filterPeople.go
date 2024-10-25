@@ -71,14 +71,37 @@ func FilterPeople(filterPeopleResponse *FilterPeopleResponse, filterPeopleReques
 		return err
 	}
 
+	var peopleAux []struct {
+		ID       int
+		Identity string `json:"identity"`
+		Name     string `json:"name"`
+		Lastname string `json:"lastname"`
+		Email    string `json:"email"`
+	}
 	pageSize := filterPeopleRequest.PageSize
 	page := filterPeopleRequest.Page
 	err = query.
 		Order("updated_at DESC").
 		Scopes(model.Paginate(pageSize, page)).
-		Find(&filterPeopleResponse.People).Error
+		Find(&peopleAux).Error
 	if err != nil {
 		return err
+	}
+	if len(peopleAux) <= 0 {
+		filterPeopleResponse.People = make([]PersonWithRoles, 0)
+		return nil
+	}
+
+	for _, personAux := range peopleAux {
+		personWithRoles := PersonWithRoles{
+			ID:       personAux.ID,
+			Identity: personAux.Identity,
+			Name:     personAux.Name,
+			Lastname: personAux.Lastname,
+			Email:    personAux.Email,
+			Roles:    nil,
+		}
+		filterPeopleResponse.People = append(filterPeopleResponse.People, personWithRoles)
 	}
 
 	for i := range filterPeopleResponse.People {
