@@ -8,3 +8,4 @@ export const putPersonRoute = apiBaseURL + "/person/"
 export const deletePersonRoute = apiBaseURL + "/person/"
 
 export const postPersonWithRolesRoute = apiBaseURL + "/person/withRoles"
+export const updatePersonWithRolesRoute = apiBaseURL + "/person/withRoles"

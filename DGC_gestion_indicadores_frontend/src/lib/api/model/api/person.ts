@@ -20,6 +20,11 @@ export interface PostPersonWithRolesRequest {
     person: Person
 }
 
+export interface UpdatePersonWithRolesRequest {
+    roles: string[]
+    person: Person
+}
+
 export interface PutPersonRequest {
     ID: number;
     identity: string;

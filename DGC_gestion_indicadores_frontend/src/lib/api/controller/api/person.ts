@@ -1,5 +1,5 @@
-import type { FilterPeopleRequest, FilterPeopleResponse, Person, PersonWithRoles, PostPersonRequest, PostPersonWithRolesRequest, PutPersonRequest } from "$lib/api/model/api/person";
-import { deletePersonRoute, getPeopleRoute, postFilterPeopleRoute, postPersonRoute, postPersonWithRolesRoute, putPersonRoute } from "$lib/api/routes/api/person";
+import type { FilterPeopleRequest, FilterPeopleResponse, Person, PersonWithRoles, PostPersonRequest, PostPersonWithRolesRequest, PutPersonRequest, UpdatePersonWithRolesRequest } from "$lib/api/model/api/person";
+import { deletePersonRoute, getPeopleRoute, postFilterPeopleRoute, postPersonRoute, postPersonWithRolesRoute, putPersonRoute, updatePersonWithRolesRoute } from "$lib/api/routes/api/person";
 
 import { generateErrorFromCommonError, type CommonError } from "$lib/api/model/errors";
 import type { Message } from "$lib/components/combobox/combobox";
@@ -74,6 +74,28 @@ export async function PostPersonWithRoles(postPersonWithRolesRequest: PostPerson
             return error
         }
         const postPersonWithRolesResponse: PostPersonWithRolesRequest = await response.json()
+
+        return postPersonWithRolesResponse
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
+}
+
+export async function UpdatePersonWithRoles(updatePersonWithRolesRequest: UpdatePersonWithRolesRequest, token: string) {
+    try {
+        const response = await fetch(updatePersonWithRolesRoute, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify(updatePersonWithRolesRequest)
+        });
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
+        }
+        const postPersonWithRolesResponse: UpdatePersonWithRolesRequest = await response.json()
 
         return postPersonWithRolesResponse
     } catch (error) {
