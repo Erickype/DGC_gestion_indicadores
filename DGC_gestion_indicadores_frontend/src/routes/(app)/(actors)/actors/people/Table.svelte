@@ -29,7 +29,7 @@
 	let people: PersonWithRoles[] = filterPeopleResponse.people;
 
 	export let formData: SuperValidated<Infer<UpdatePersonSchema>>;
-	let person: Person;
+	let person: PersonWithRoles;
 
 	let filterValue = '';
 	let pageIndex: number = 0;
