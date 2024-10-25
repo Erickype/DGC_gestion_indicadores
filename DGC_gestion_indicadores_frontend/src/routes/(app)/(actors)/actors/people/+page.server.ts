@@ -1,13 +1,13 @@
-import { message, superValidate, type ErrorStatus } from "sveltekit-superforms";
 import { addPersonSchema, updatePersonSchema } from "./schema";
+import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 
 import { redirect, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
-import type { Person, PostPersonWithRolesRequest, PutPersonRequest } from "$lib/api/model/api/person";
+import type { Person, PostPersonWithRolesRequest, UpdatePersonWithRolesRequest } from "$lib/api/model/api/person";
 import { generateFormMessageFromHttpResponse, generateFormMessageFromInvalidForm } from "$lib/utils";
-import { PostPersonWithRoles, PutPerson } from "$lib/api/controller/api/person";
+import { PostPersonWithRoles, UpdatePersonWithRoles } from "$lib/api/controller/api/person";
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (!locals.user) {
@@ -55,15 +55,19 @@ export const actions: Actions = {
 
         const token = event.cookies.get("AuthorizationToken")
         const data = form.data
-        const person: PutPersonRequest = {
+        const person: Person = {
             ID: data.ID,
             identity: data.identity,
             name: data.name,
             lastname: data.lastname,
-            email: data.email
+            email: data.email,
+        }
+        const request: UpdatePersonWithRolesRequest = {
+            person: person,
+            roles: data.roles
         }
 
-        const response = await PutPerson(person, token!)
+        const response = await UpdatePersonWithRoles(request, token!)
 
         return generateFormMessageFromHttpResponse(form, response)
     }
