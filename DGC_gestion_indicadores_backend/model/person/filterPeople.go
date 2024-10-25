@@ -8,10 +8,19 @@ import (
 )
 
 type FilterPeopleResponse struct {
-	Count    int64    `json:"count"`
-	PageSize int      `json:"page_size"`
-	Page     int      `json:"page"`
-	People   []Person `json:"people"`
+	Count    int64             `json:"count"`
+	PageSize int               `json:"page_size"`
+	Page     int               `json:"page"`
+	People   []PersonWithRoles `json:"people"`
+}
+
+type PersonWithRoles struct {
+	ID       int
+	Identity string   `json:"identity"`
+	Name     string   `json:"name"`
+	Lastname string   `json:"lastname"`
+	Email    string   `json:"email"`
+	Roles    []string `json:"roles"`
 }
 
 type FilterPeopleRequest struct {
@@ -50,8 +59,14 @@ func FilterPeople(filterPeopleResponse *FilterPeopleResponse, filterPeopleReques
 		query = query.Where(strings.Join(conditions, " OR "), values...)
 	}
 
+	query = query.Select(`p.id,
+		p.identity,
+		p.name,
+		p.lastname,
+		p.email`)
+
 	var totalCount int64
-	err = query.Model(&Person{}).Count(&totalCount).Error
+	err = query.Table("people as p").Count(&totalCount).Error
 	if err != nil {
 		return err
 	}
@@ -64,6 +79,41 @@ func FilterPeople(filterPeopleResponse *FilterPeopleResponse, filterPeopleReques
 		Find(&filterPeopleResponse.People).Error
 	if err != nil {
 		return err
+	}
+
+	for i := range filterPeopleResponse.People {
+		var rawRoles string
+
+		// Use raw SQL for the role part since GORM does not support array subqueries directly.
+		query := `
+        SELECT array_agg(role)
+        FROM (
+            SELECT 'teacher' AS role
+            WHERE EXISTS (SELECT 1 FROM teachers t WHERE t.person_id = ?)
+            UNION ALL
+            SELECT 'author' AS role
+            WHERE EXISTS (SELECT 1 FROM authors a WHERE a.person_id = ?)
+        ) roles;
+    `
+
+		// Use db.Raw to execute the custom SQL query for each person
+		err = database.DB.Raw(query, filterPeopleResponse.People[i].ID, filterPeopleResponse.People[i].ID).
+			Scan(&rawRoles).Error
+		if err != nil {
+			return err
+		}
+
+		if len(rawRoles) <= 0 {
+			filterPeopleResponse.People[i].Roles = []string{}
+			return
+		}
+
+		roles := strings.Trim(rawRoles, "{}")
+		if roles != "" {
+			filterPeopleResponse.People[i].Roles = strings.Split(roles, ",")
+		} else {
+			filterPeopleResponse.People[i].Roles = []string{}
+		}
 	}
 
 	filterPeopleResponse.Count = totalCount
