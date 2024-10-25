@@ -5,7 +5,7 @@ export const roles = {
   author: "Autor"
 } as const
 
-type Role = keyof typeof roles;
+export type Role = keyof typeof roles;
 
 export const schema = z.object({
   roles: z
