@@ -103,9 +103,9 @@ func GetPersonRoles(personID int, roles *[]string) (err error) {
 		return
 	}
 
-	trimedRoles := strings.Trim(rawRoles, "{}")
-	if trimedRoles != "" {
-		*roles = strings.Split(trimedRoles, ",")
+	trimmedRoles := strings.Trim(rawRoles, "{}")
+	if trimmedRoles != "" {
+		*roles = strings.Split(trimmedRoles, ",")
 	} else {
 		*roles = []string{}
 	}
