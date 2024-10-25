@@ -5,8 +5,8 @@
 
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
 
-	import Table from '$lib/components/table/tablePaginated.svelte';
 	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
+	import Table from '$lib/components/table/tablePaginated.svelte';
 
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import { createEventDispatcher } from 'svelte';
@@ -14,15 +14,19 @@
 	import type {
 		FilterPeopleRequest,
 		FilterPeopleResponse,
-		Person
+		Person,
+		PersonWithRoles
 	} from '$lib/api/model/api/person';
 	import type { PopoverFilterDataMap } from '$lib/components/table/types';
-	import type { UpdatePersonSchema } from './schema';
+	import { roles, type Role, type UpdatePersonSchema } from './schema';
 	import UpdateForm from './UpdateForm.svelte';
-	import { generateInitialFilterValue, newFilterPeopleRequest } from '$lib/components/filters/people';
+	import {
+		generateInitialFilterValue,
+		newFilterPeopleRequest
+	} from '$lib/components/filters/people';
 
 	export let filterPeopleResponse: FilterPeopleResponse;
-	let people: Person[] = filterPeopleResponse.people;
+	let people: PersonWithRoles[] = filterPeopleResponse.people;
 
 	export let formData: SuperValidated<Infer<UpdatePersonSchema>>;
 	let person: Person;
@@ -32,11 +36,11 @@
 	let pageSize: number = 0;
 	export let filterPeopleRequest: FilterPeopleRequest = newFilterPeopleRequest(pageSize, pageIndex);
 
-	let initialFilterValue: string | undefined = generateInitialFilterValue(filterPeopleRequest)
+	let initialFilterValue: string | undefined = generateInitialFilterValue(filterPeopleRequest);
 
 	export let popoverFilterDataMap: PopoverFilterDataMap = new Map();
 
-	const filterFields = ['identity', 'name', 'lastname', 'email'];
+	const filterFields = ['identity', 'name', 'lastname', 'email', 'roles'];
 
 	const table = createTable(readable(people), {
 		page: addPagination({
@@ -70,10 +74,22 @@
 			header: 'Correo'
 		}),
 		table.column({
+			accessor: 'roles',
+			header: 'Roles',
+			cell: ({ value }) => {
+				let label = '';
+				value!.map((career) => {
+					label += roles[career as Role] + ', ';
+				});
+				label = label.slice(0, label.length - 2);
+				return label;
+			}
+		}),
+		table.column({
 			accessor: ({ ID }) => ID,
 			header: '',
 			cell: ({ value }) => {
-				const actions = createRender(DataTableActions, { id: value.toString() });
+				const actions = createRender(DataTableActions, { id: value!.toString() });
 				actions.on('delete-confirmation', handleDeleteConfirmation);
 				actions.on('update-action', handleUpdateAction);
 				return actions;
@@ -100,7 +116,7 @@
 	function handleUpdateAction(event: any) {
 		const detail: { status: boolean; id: string } = event.detail;
 		if (detail.status) {
-			person = people.find((person) => person.ID.toString() === detail.id)!;
+			person = people.find((person) => person.ID!.toString() === detail.id)!;
 			updateFormOpen = true;
 		} else {
 			updateFormOpen = false;
