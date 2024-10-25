@@ -120,6 +120,7 @@ func serveApplication() {
 	upeRoutes.DELETE("/person/:id", person.DeletePerson)
 
 	upeRoutes.POST("/person/withRoles", person.PostPersonWithRoles)
+	upeRoutes.PUT("/person/withRoles", person.UpdatePersonWithRoles)
 
 	upeRoutes.GET("/faculties", faculty.GetFaculties)
 

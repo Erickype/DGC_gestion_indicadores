@@ -25,7 +25,24 @@ func PostPersonWithRoles(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, err)
 		return
 	}
-	c.JSON(http.StatusOK, postPersonWithRolesRequest)
+	c.JSON(http.StatusCreated, postPersonWithRolesRequest)
+}
+
+func UpdatePersonWithRoles(c *gin.Context) {
+	var postPersonWithRolesRequest common.UpdatePersonWithRolesRequest
+	err := c.BindJSON(&postPersonWithRolesRequest)
+	if err != nil {
+		err := errors.CreateCommonError(http.StatusBadRequest, "Error en la solicitud", err.Error())
+		c.AbortWithStatusJSON(http.StatusBadRequest, err)
+		return
+	}
+	err = common.UpdatePersonWithRoles(&postPersonWithRolesRequest)
+	if err != nil {
+		err := errors.CreateCommonError(http.StatusInternalServerError, "Error actualizando persona y sus roles", err.Error())
+		c.AbortWithStatusJSON(http.StatusInternalServerError, err)
+		return
+	}
+	c.JSON(http.StatusAccepted, postPersonWithRolesRequest)
 }
 
 func CreatePerson(c *gin.Context) {
