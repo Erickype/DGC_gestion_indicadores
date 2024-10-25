@@ -1,11 +1,11 @@
-import type { FilterPeopleRequest, FilterPeopleResponse, Person, PostPersonRequest, PostPersonWithRolesRequest, PutPersonRequest } from "$lib/api/model/api/person";
+import type { FilterPeopleRequest, FilterPeopleResponse, Person, PersonWithRoles, PostPersonRequest, PostPersonWithRolesRequest, PutPersonRequest } from "$lib/api/model/api/person";
 import { deletePersonRoute, getPeopleRoute, postFilterPeopleRoute, postPersonRoute, postPersonWithRolesRoute, putPersonRoute } from "$lib/api/routes/api/person";
 
 import { generateErrorFromCommonError, type CommonError } from "$lib/api/model/errors";
 import type { Message } from "$lib/components/combobox/combobox";
 import { generateCommonErrorFromFetchError } from "$lib/utils";
 
-export async function GetPeople(token: string): Promise<Person[] | CommonError> {
+export async function GetPeople(token: string): Promise<PersonWithRoles[] | CommonError> {
     try {
         const response = await fetch(getPeopleRoute, {
             method: 'GET',
@@ -18,7 +18,7 @@ export async function GetPeople(token: string): Promise<Person[] | CommonError> 
             const error: CommonError = await response.json()
             return error
         }
-        const periods: Person[] = await response.json()
+        const periods: PersonWithRoles[] = await response.json()
         return periods
 
     } catch (error) {
@@ -119,7 +119,7 @@ export async function LoadPeopleWithComboMessages(token: string) {
     if ((response as CommonError).status) {
         throw generateErrorFromCommonError(response as CommonError)
     }
-    const people = response as Person[]
+    const people = response as PersonWithRoles[]
     let messages: Message[] = []
     messages = messages.concat(
         people.map((person) => ({
@@ -134,7 +134,7 @@ export async function LoadPeopleWithComboMessages(token: string) {
     }
 }
 
-export function GenerateComboMessagesFromPeople(people: Person[]): Message[] {
+export function GenerateComboMessagesFromPeople(people: PersonWithRoles[]): Message[] {
     let messages: Message[] = []
     messages = messages.concat(
         people.map((person) => ({

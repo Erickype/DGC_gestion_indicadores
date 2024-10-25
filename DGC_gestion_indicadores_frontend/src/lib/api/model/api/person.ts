@@ -37,9 +37,18 @@ export interface FilterPeopleRequest {
     page: number
 }
 
+export interface PersonWithRoles {
+    ID: number
+    identity: string
+    name: string
+    lastname: string
+    email: string
+    roles: string[]
+}
+
 export interface FilterPeopleResponse {
     count: number,
     page_size: number,
     page: number,
-    people: Person[]
+    people: PersonWithRoles[]
 }
