@@ -15,6 +15,11 @@ type PostPersonWithRolesRequest struct {
 	Person person.Person `json:"person"`
 }
 
+type UpdatePersonWithRolesRequest struct {
+	Roles  []string      `json:"roles"`
+	Person person.Person `json:"person"`
+}
+
 func PostPersonWithRoles(request *PostPersonWithRolesRequest) (err error) {
 	return database.DB.Transaction(func(tx *gorm.DB) error {
 		if err = tx.Create(&request.Person).Error; err != nil {
@@ -56,6 +61,13 @@ func PostPersonWithRoles(request *PostPersonWithRolesRequest) (err error) {
 				break
 			}
 		}
+		return nil
+	})
+}
+
+func UpdatePersonWithRoles(request *UpdatePersonWithRolesRequest) (err error) {
+	return database.DB.Transaction(func(tx *gorm.DB) error {
+		
 		return nil
 	})
 }

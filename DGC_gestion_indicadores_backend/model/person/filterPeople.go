@@ -104,11 +104,7 @@ func FilterPeople(filterPeopleResponse *FilterPeopleResponse, filterPeopleReques
 		filterPeopleResponse.People = append(filterPeopleResponse.People, personWithRoles)
 	}
 
-	for i := range filterPeopleResponse.People {
-		var rawRoles string
-
-		// Use raw SQL for the role part since GORM does not support array subqueries directly.
-		query := `
+	rolesQuery := `
         SELECT array_agg(role)
         FROM (
             SELECT 'teacher' AS role
@@ -119,8 +115,11 @@ func FilterPeople(filterPeopleResponse *FilterPeopleResponse, filterPeopleReques
         ) roles;
     `
 
+	for i := range filterPeopleResponse.People {
+		var rawRoles string
+
 		// Use db.Raw to execute the custom SQL query for each person
-		err = database.DB.Raw(query, filterPeopleResponse.People[i].ID, filterPeopleResponse.People[i].ID).
+		err = database.DB.Raw(rolesQuery, filterPeopleResponse.People[i].ID, filterPeopleResponse.People[i].ID).
 			Scan(&rawRoles).Error
 		if err != nil {
 			return err
