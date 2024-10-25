@@ -42,7 +42,7 @@
 
 	const { form: formData, enhance } = form;
 
-	$formData.roles.push('teacher');
+	$formData.roles = [...$formData.roles, 'teacher'];
 
 	$: selectedColors = $formData.roles.map((c) => ({ label: roles[c], value: c }));
 </script>
