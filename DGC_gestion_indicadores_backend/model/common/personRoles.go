@@ -8,6 +8,7 @@ import (
 	person "github.com/Erickype/DGC_gestion_indicadores_backend/model/person"
 	teacher "github.com/Erickype/DGC_gestion_indicadores_backend/model/teacher"
 	"gorm.io/gorm"
+	"slices"
 	"strings"
 )
 
@@ -68,10 +69,54 @@ func PostPersonWithRoles(request *PostPersonWithRolesRequest) (err error) {
 
 func UpdatePersonWithRoles(request *UpdatePersonWithRolesRequest) (err error) {
 	return database.DB.Transaction(func(tx *gorm.DB) error {
+		if len(request.Roles) <= 0 {
+			return errors.New("seleccione al menos un rol")
+		}
 		var roles []string
 		err = GetPersonRoles(int(request.Person.ID), &roles)
 		if err != nil {
 			return err
+		}
+
+		//Delete
+		if len(request.Roles) < len(roles) {
+			var toDelete []string
+			var findIndexes []int
+			for _, role := range request.Roles {
+				index := slices.IndexFunc(roles, func(s string) bool {
+					return s == role
+				})
+				findIndexes = append(findIndexes, index)
+			}
+
+			for i, role := range roles {
+				if !slices.Contains(findIndexes, i) {
+					toDelete = append(toDelete, role)
+				}
+			}
+			for _, role := range toDelete {
+				switch role {
+				case model.PersonRoleTeacher:
+					err = tx.Delete(&teacher.Teacher{}, "person_id = ?", request.Person.ID).Error
+					if err != nil {
+						return err
+					}
+					break
+				case model.PersonRoleAuthor:
+					err = tx.Delete(&author.Author{}, "person_id = ?", request.Person.ID).Error
+					if err != nil {
+						return err
+					}
+					break
+				}
+			}
+
+			return nil
+		}
+
+		//Insert
+		if len(request.Roles) > len(roles) {
+			return nil
 		}
 
 		return nil
