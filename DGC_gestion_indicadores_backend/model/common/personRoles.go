@@ -116,6 +116,41 @@ func UpdatePersonWithRoles(request *UpdatePersonWithRolesRequest) (err error) {
 
 		//Insert
 		if len(request.Roles) > len(roles) {
+			var toInsert []string
+			var findIndexes []int
+			for _, role := range roles {
+				index := slices.IndexFunc(request.Roles, func(s string) bool {
+					return s == role
+				})
+				findIndexes = append(findIndexes, index)
+			}
+
+			for i, role := range request.Roles {
+				if !slices.Contains(findIndexes, i) {
+					toInsert = append(toInsert, role)
+				}
+			}
+			for _, roleID := range toInsert {
+				switch roleID {
+				case model.PersonRoleTeacher:
+					newAuthor := teacher.Teacher{
+						PersonID: request.Person.ID,
+					}
+					if err = tx.Create(&newAuthor).Error; err != nil {
+						return err
+					}
+					break
+
+				case model.PersonRoleAuthor:
+					newTeacher := author.Author{
+						PersonID: request.Person.ID,
+					}
+					if err = tx.Create(&newTeacher).Error; err != nil {
+						return err
+					}
+					break
+				}
+			}
 			return nil
 		}
 
