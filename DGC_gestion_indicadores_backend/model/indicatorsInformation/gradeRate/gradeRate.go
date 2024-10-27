@@ -4,6 +4,8 @@ import (
 	"errors"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
+	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicPeriod"
+	career "github.com/Erickype/DGC_gestion_indicadores_backend/model/career"
 	"gorm.io/gorm"
 	"time"
 )
@@ -17,6 +19,9 @@ type GradeRateList struct {
 	CountCourtStudents                uint      `json:"count_court_students"`
 	CountAdmittedMatriculatedStudents uint      `json:"count_admitted_matriculated_students"`
 	CountAdmittedStudents             uint      `json:"count_admitted_students"`
+
+	AcademicPeriod academicPeriod.AcademicPeriod `json:"-"`
+	Career         career.Career                 `json:"-"`
 }
 
 type GradeRateListJoined struct {
