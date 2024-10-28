@@ -30,40 +30,7 @@ func PostPersonWithRoles(request *PostPersonWithRolesRequest) (err error) {
 			}
 			return err
 		}
-		for _, roleID := range request.Roles {
-			switch roleID {
-			case model.PersonRoleTeacher:
-				newAuthor := teacher.Teacher{
-					PersonID: request.Person.ID,
-				}
-				if err = tx.Create(&newAuthor).Error; err != nil {
-					if errors.Is(err, gorm.ErrForeignKeyViolated) {
-						return errors.New("persona no encontrada")
-					}
-					if errors.Is(err, gorm.ErrDuplicatedKey) {
-						return errors.New("persona ya registrada como docente")
-					}
-					return err
-				}
-				break
-
-			case model.PersonRoleAuthor:
-				newTeacher := author.Author{
-					PersonID: request.Person.ID,
-				}
-				if err = tx.Create(&newTeacher).Error; err != nil {
-					if errors.Is(err, gorm.ErrForeignKeyViolated) {
-						return errors.New("persona no encontrada")
-					}
-					if errors.Is(err, gorm.ErrDuplicatedKey) {
-						return errors.New("persona ya registrada como autor")
-					}
-					return err
-				}
-				break
-			}
-		}
-		return nil
+		return InsertPersonRolesFromRolesList(tx, request.Person.ID, request.Roles)
 	})
 }
 
@@ -78,45 +45,7 @@ func UpdatePersonWithRoles(request *UpdatePersonWithRolesRequest) (err error) {
 			return err
 		}
 
-		//Delete
-		if len(request.Roles) < len(roles) {
-			var toDelete []string
-			var findIndexes []int
-			for _, role := range request.Roles {
-				index := slices.IndexFunc(roles, func(s string) bool {
-					return s == role
-				})
-				findIndexes = append(findIndexes, index)
-			}
-
-			for i, role := range roles {
-				if !slices.Contains(findIndexes, i) {
-					toDelete = append(toDelete, role)
-				}
-			}
-			for _, role := range toDelete {
-				switch role {
-				case model.PersonRoleTeacher:
-					err = tx.Delete(&teacher.Teacher{}, "person_id = ?", request.Person.ID).Error
-					if err != nil {
-						return err
-					}
-					break
-				case model.PersonRoleAuthor:
-					err = tx.Delete(&author.Author{}, "person_id = ?", request.Person.ID).Error
-					if err != nil {
-						return err
-					}
-					break
-				}
-			}
-
-			return nil
-		}
-
-		//Insert
-		if len(request.Roles) > len(roles) {
-			var toInsert []string
+		if len(request.Roles) == len(roles) {
 			var findIndexes []int
 			for _, role := range roles {
 				index := slices.IndexFunc(request.Roles, func(s string) bool {
@@ -124,38 +53,120 @@ func UpdatePersonWithRoles(request *UpdatePersonWithRolesRequest) (err error) {
 				})
 				findIndexes = append(findIndexes, index)
 			}
-
-			for i, role := range request.Roles {
-				if !slices.Contains(findIndexes, i) {
-					toInsert = append(toInsert, role)
+			var notFoundRoles int
+			for _, index := range findIndexes {
+				if index == -1 {
+					notFoundRoles++
 				}
 			}
-			for _, roleID := range toInsert {
-				switch roleID {
-				case model.PersonRoleTeacher:
-					newAuthor := teacher.Teacher{
-						PersonID: request.Person.ID,
-					}
-					if err = tx.Create(&newAuthor).Error; err != nil {
-						return err
-					}
-					break
-
-				case model.PersonRoleAuthor:
-					newTeacher := author.Author{
-						PersonID: request.Person.ID,
-					}
-					if err = tx.Create(&newTeacher).Error; err != nil {
-						return err
-					}
-					break
-				}
+			if notFoundRoles <= 0 {
+				return nil
 			}
-			return nil
+
+			var toDelete = GetRolesToUpdate(request.Roles, roles)
+			err = DeletePersonRolesFromRolesLists(tx, request.Person.ID, toDelete)
+			if err != nil {
+				return err
+			}
+
+			var toInsert = GetRolesToUpdate(roles, request.Roles)
+			return InsertPersonRolesFromRolesList(tx, request.Person.ID, toInsert)
+		}
+
+		//Delete
+		if len(request.Roles) < len(roles) {
+			var toDelete = GetRolesToUpdate(request.Roles, roles)
+			return DeletePersonRolesFromRolesLists(tx, request.Person.ID, toDelete)
+		}
+
+		//Insert
+		if len(request.Roles) > len(roles) {
+			var toInsert = GetRolesToUpdate(roles, request.Roles)
+			return InsertPersonRolesFromRolesList(tx, request.Person.ID, toInsert)
 		}
 
 		return nil
 	})
+}
+
+func GetRolesToUpdate(currentRoles, requestRoles []string) (rolesToUpdate []string) {
+	var findIndexes []int
+	for _, role := range currentRoles {
+		index := slices.IndexFunc(requestRoles, func(s string) bool {
+			return s == role
+		})
+		findIndexes = append(findIndexes, index)
+	}
+
+	for i, role := range requestRoles {
+		if !slices.Contains(findIndexes, i) {
+			rolesToUpdate = append(rolesToUpdate, role)
+		}
+	}
+	return rolesToUpdate
+}
+
+func DeletePersonRolesFromRolesLists(tx *gorm.DB, personID uint, Roles []string) (err error) {
+	for _, role := range Roles {
+		switch role {
+		case model.PersonRoleTeacher:
+			err = tx.Delete(&teacher.Teacher{}, "person_id = ?", personID).Error
+			if err != nil {
+				if errors.Is(err, gorm.ErrForeignKeyViolated) {
+					return errors.New("profesor en uso")
+				}
+				return err
+			}
+			break
+		case model.PersonRoleAuthor:
+			err = tx.Delete(&author.Author{}, "person_id = ?", personID).Error
+			if err != nil {
+				if errors.Is(err, gorm.ErrForeignKeyViolated) {
+					return errors.New("autor en uso")
+				}
+				return err
+			}
+			break
+		}
+	}
+	return nil
+}
+
+func InsertPersonRolesFromRolesList(tx *gorm.DB, personID uint, Roles []string) (err error) {
+	for _, roleID := range Roles {
+		switch roleID {
+		case model.PersonRoleTeacher:
+			newAuthor := teacher.Teacher{
+				PersonID: personID,
+			}
+			if err = tx.Create(&newAuthor).Error; err != nil {
+				if errors.Is(err, gorm.ErrForeignKeyViolated) {
+					return errors.New("persona no encontrada")
+				}
+				if errors.Is(err, gorm.ErrDuplicatedKey) {
+					return errors.New("persona ya registrada como docente")
+				}
+				return err
+			}
+			break
+
+		case model.PersonRoleAuthor:
+			newTeacher := author.Author{
+				PersonID: personID,
+			}
+			if err = tx.Create(&newTeacher).Error; err != nil {
+				if errors.Is(err, gorm.ErrForeignKeyViolated) {
+					return errors.New("persona no encontrada")
+				}
+				if errors.Is(err, gorm.ErrDuplicatedKey) {
+					return errors.New("persona ya registrada como autor")
+				}
+				return err
+			}
+			break
+		}
+	}
+	return nil
 }
 
 func GetPersonRoles(personID int, roles *[]string) (err error) {
