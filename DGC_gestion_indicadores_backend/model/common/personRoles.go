@@ -39,6 +39,12 @@ func UpdatePersonWithRoles(request *UpdatePersonWithRolesRequest) (err error) {
 		if len(request.Roles) <= 0 {
 			return errors.New("seleccione al menos un rol")
 		}
+
+		err = tx.Save(&request.Person).Error
+		if err != nil {
+			return err
+		}
+
 		var roles []string
 		err = GetPersonRoles(int(request.Person.ID), &roles)
 		if err != nil {
