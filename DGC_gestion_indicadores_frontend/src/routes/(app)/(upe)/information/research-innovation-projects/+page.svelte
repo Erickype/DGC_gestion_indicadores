@@ -67,7 +67,7 @@
 
 <div class="mx-auto flex w-full flex-col place-content-center px-8">
 	{#await researchInnovationProjectListsPromise}
-		<TableSkeleton tableHeightClass="h-[55vh]" />
+		<TableSkeleton tableHeightClass="h-[60vh]" />
 	{:then researchInnovationProjectLists}
 		{#if researchInnovationProjectLists && researchInnovationProjectLists.length > 0}
 			<Table

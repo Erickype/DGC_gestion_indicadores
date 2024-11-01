@@ -24,11 +24,11 @@
 	let researchInnovationProjectList: ResearchInnovationProjectListJoined;
 
 	const filterFields = [
-		'career',
-		'count_graduated_students',
-		'count_court_students',
-		'count_admitted_matriculated_students',
-		'count_admitted_students'
+		'academic_period',
+		'total_projects_uep',
+		'projects_external_funding',
+		'international_cooperation_projects',
+		'national_cooperation_projects'
 	];
 
 	const table = createTable(readable(researchInnovationProjectLists), {
@@ -114,7 +114,7 @@
 
 <div class="w-full">
 	<Table
-		tableHeightClass={'h-[45vh]'}
+		tableHeightClass={'h-[55vh]'}
 		{table}
 		{columns}
 		{filterFields}
