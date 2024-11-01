@@ -22,7 +22,9 @@ func CreateScaledGrade(ScaledGrade *ScaledGrade) (err error) {
 }
 
 func GetScaledGrades(ScaledGrades *[]ScaledGrade) (err error) {
-	err = database.DB.Find(ScaledGrades).Error
+	err = database.DB.Model(ScaledGrade{}).
+		Where("id != 0").
+		Find(ScaledGrades).Error
 	if err != nil {
 		return err
 	}
