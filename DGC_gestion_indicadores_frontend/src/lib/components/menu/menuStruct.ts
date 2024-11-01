@@ -32,6 +32,7 @@ export const menus: Menu[] = [
         icon: FileText,
         links: [
             { name: 'Listas Docentes', route: '/information/teachers' },
+            { name: 'Proyectos innovación', route: '/information/research-innovation-projects' },
             { name: 'Publicaciones Académicas', route: '/information/academic-publications' },
             { name: 'Libros o Capítulos', route: '/information/books' },
             { name: 'Proyectos vinculación', route: '/information/social-projects' },
