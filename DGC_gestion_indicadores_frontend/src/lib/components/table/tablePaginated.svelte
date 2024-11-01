@@ -34,6 +34,7 @@
 	export let page_index = $pageIndex;
 	export let filter_value = $filterValue;
 	export let page_size = $pageSize;
+	export let filterTimeout = 750
 
 	$: {
 		filter_value = $filterValue;
@@ -74,7 +75,7 @@
 		clearTimeout(typingTimeout);
 		typingTimeout = window.setTimeout(() => {
 			handleFilterChanged();
-		}, 500);
+		}, filterTimeout);
 	}
 
 	const dispatch = createEventDispatcher();
