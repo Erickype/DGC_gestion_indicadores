@@ -61,6 +61,7 @@ func GetTeachersListByAcademicPeriod(academicPeriodID int, teacherID int) (err e
 
 func PatchTeachersLists(teachersLists *TeachersList) (err error) {
 	err = database.DB.Model(&TeachersList{}).
+		Select("*").
 		Where("academic_period_id = ? and teacher_id = ?",
 			teachersLists.AcademicPeriodID, teachersLists.TeacherID).
 		Updates(teachersLists).
