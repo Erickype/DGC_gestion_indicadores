@@ -24,6 +24,8 @@ type UpdatePersonWithRolesRequest struct {
 
 func PostPersonWithRoles(request *PostPersonWithRolesRequest) (err error) {
 	return database.DB.Transaction(func(tx *gorm.DB) error {
+		request.Person.Name = strings.ToUpper(request.Person.Name)
+		request.Person.Lastname = strings.ToUpper(request.Person.Lastname)
 		if err = tx.Create(&request.Person).Error; err != nil {
 			if errors.Is(err, gorm.ErrDuplicatedKey) {
 				return errors.New("persona ya registrada")
@@ -40,6 +42,8 @@ func UpdatePersonWithRoles(request *UpdatePersonWithRolesRequest) (err error) {
 			return errors.New("seleccione al menos un rol")
 		}
 
+		request.Person.Name = strings.ToUpper(request.Person.Name)
+		request.Person.Lastname = strings.ToUpper(request.Person.Lastname)
 		err = tx.Save(&request.Person).Error
 		if err != nil {
 			return err
