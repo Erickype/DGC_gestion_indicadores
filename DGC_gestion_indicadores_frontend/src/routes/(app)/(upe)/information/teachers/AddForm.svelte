@@ -43,6 +43,7 @@
 				TeacherCreated();
 				return toast.success(`Docente creado`);
 			}
+			fillForm();
 			return manageToastFromErrorMessageOnAddForm(message);
 		}
 	});
@@ -50,15 +51,20 @@
 	const { form: formData, enhance } = form;
 
 	let formDataTeacherID = writable($formData.teacher);
-	formDataTeacherID.subscribe((value) => ($formData.teacher = value));
 	let formDataCareerID = writable($formData.career);
-	formDataCareerID.subscribe((value) => ($formData.career = value));
 	let formDataDedicationID = writable($formData.dedication);
-	formDataDedicationID.subscribe((value) => ($formData.dedication = value));
 	let formDataScaledGradeID = writable($formData.scaledGrade);
-	formDataScaledGradeID.subscribe((value) => ($formData.scaledGrade = value));
 	let formDataContractTypeID = writable($formData.contractType);
-	formDataContractTypeID.subscribe((value) => ($formData.contractType = value));
+
+	fillForm();
+
+	function fillForm() {
+		formDataTeacherID.subscribe((value) => ($formData.teacher = value));
+		formDataCareerID.subscribe((value) => ($formData.career = value));
+		formDataDedicationID.subscribe((value) => ($formData.dedication = value));
+		formDataScaledGradeID.subscribe((value) => ($formData.scaledGrade = value));
+		formDataContractTypeID.subscribe((value) => ($formData.contractType = value));
+	}
 </script>
 
 <form action="?/addTeacher" use:enhance>
@@ -88,14 +94,6 @@
 			/>
 			<Form.FieldErrors />
 		</Form.Field>
-		<Form.Field {form} name="scaledGrade" class="flex flex-col">
-			<FormSelect
-				formLabel="Grado escalafonado"
-				comboData={scaledGradesComboData}
-				bind:formDataID={formDataScaledGradeID}
-			/>
-			<Form.FieldErrors />
-		</Form.Field>
 		<Form.Field {form} name="contractType" class="flex flex-col">
 			<FormSelect
 				formLabel="Tipo contrato"
@@ -104,6 +102,16 @@
 			/>
 			<Form.FieldErrors />
 		</Form.Field>
+		{#if $formData.contractType && contractTypesComboData.find((contractType) => contractType.value === $formData.contractType)?.label === 'Nombramiento'}
+			<Form.Field {form} name="scaledGrade" class="flex flex-col">
+				<FormSelect
+					formLabel="Grado escalafonario"
+					comboData={scaledGradesComboData}
+					bind:formDataID={formDataScaledGradeID}
+				/>
+				<Form.FieldErrors />
+			</Form.Field>
+		{/if}
 	</div>
 	<Form.Button class="my-2 w-full">Guardar</Form.Button>
 	<!-- {#if browser}
