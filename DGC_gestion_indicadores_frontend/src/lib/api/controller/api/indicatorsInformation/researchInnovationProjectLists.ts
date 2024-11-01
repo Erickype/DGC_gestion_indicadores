@@ -1,12 +1,12 @@
-import { getResearchInnovationProjectListsByAcademicPeriodRoute, postResearchInnovationProjectListRoute, updateResearchInnovationProjectListRoute } from "$lib/api/routes/api/indicatorsInformation/researchInnovationProjectLists";
-import type { ResearchInnovationProjectList } from "$lib/api/model/api/indicatorsInformation/researchInnovationProjectLists";
+import { getResearchInnovationProjectListsRoute, postResearchInnovationProjectListRoute, updateResearchInnovationProjectListRoute } from "$lib/api/routes/api/indicatorsInformation/researchInnovationProjectLists";
+import type { ResearchInnovationProjectList, ResearchInnovationProjectListJoined } from "$lib/api/model/api/indicatorsInformation/researchInnovationProjectLists";
 
 import { generateCommonErrorFromFetchError } from "$lib/utils";
 import type { CommonError } from "$lib/api/model/errors";
 
-export async function GetResearchInnovationProjectListsByAcademicPeriod(token: string, academicPeriodID: string): Promise<ResearchInnovationProjectList[] | CommonError> {
+export async function GetResearchInnovationProjectLists(token: string): Promise<ResearchInnovationProjectListJoined[] | CommonError> {
     try {
-        const response = await fetch(getResearchInnovationProjectListsByAcademicPeriodRoute + academicPeriodID, {
+        const response = await fetch(getResearchInnovationProjectListsRoute, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -18,7 +18,7 @@ export async function GetResearchInnovationProjectListsByAcademicPeriod(token: s
             const error: CommonError = await response.json()
             return error
         }
-        const researchInnovationProjectListsJoined: ResearchInnovationProjectList[] = await response.json()
+        const researchInnovationProjectListsJoined: ResearchInnovationProjectListJoined[] = await response.json()
         return researchInnovationProjectListsJoined
     } catch (error) {
         return generateCommonErrorFromFetchError(error)

@@ -7,3 +7,12 @@ export interface ResearchInnovationProjectList {
     international_cooperation_projects: number
     national_cooperation_projects: number
 }
+
+export interface ResearchInnovationProjectListJoined {
+    academic_period_id: number
+    academic_period: string
+    total_projects_uep: number
+    projects_external_funding: number
+    international_cooperation_projects: number
+    national_cooperation_projects: number
+}
