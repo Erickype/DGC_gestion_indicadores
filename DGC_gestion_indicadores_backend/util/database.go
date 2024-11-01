@@ -97,6 +97,7 @@ func seedData() {
 		{Name: "Tiempo completo 10 horas permiso", Abbreviation: "TCP", Description: "Personal 8 horas diarias y horas de permiso"},
 	}
 	var scaledGrades = []scaledGrade.ScaledGrade{
+		{ID: 0, Name: "N/A", Abbreviation: "N/A", Description: "N/A"},
 		{Name: "Profesor titular agregado 1", Abbreviation: "Titular agregado 1", Description: "Profesor agregado"},
 		{Name: "Profesor titular agregado 2", Abbreviation: "Titular agregado 2", Description: "Profesor agregado"},
 		{Name: "Profesor titular agregado 3", Abbreviation: "Titular agregado 3", Description: "Profesor agregado"},
@@ -180,7 +181,6 @@ func seedData() {
 		{ID: 5, AcademicDatabaseID: 1, CompensationFactorID: 5},
 		{ID: 6, AcademicDatabaseID: 2, CompensationFactorID: 5},
 		{ID: 7, AcademicDatabaseID: 3, CompensationFactorID: 6},
-		{ID: 8, AcademicDatabaseID: 4, CompensationFactorID: 6},
 		{ID: 9, AcademicDatabaseID: 5, CompensationFactorID: 7},
 	}
 
