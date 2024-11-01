@@ -19,15 +19,30 @@ type ResearchInnovationProjectList struct {
 	AcademicPeriod academicPeriod.AcademicPeriod `json:"-"`
 }
 
+type ResearchInnovationProjectListJoined struct {
+	AcademicPeriodID                 uint   `json:"academic_period_id"`
+	AcademicPeriod                   string `json:"academic_period"`
+	TotalProjectsUEP                 uint   `json:"total_projects_uep"`
+	ProjectsExternalFunding          uint   `json:"projects_external_funding"`
+	InternationalCooperationProjects uint   `json:"international_cooperation_projects"`
+	NationalCooperationProjects      uint   `json:"national_cooperation_projects"`
+}
+
 func (grl ResearchInnovationProjectList) TableName() string {
 	return model.IndicatorsInformationSchema + ".research_innovation_project_lists"
 }
 
-func GetResearchInnovationProjectListByAcademicPeriod(
-	academicPeriodID int, researchInnovationProjectList *[]ResearchInnovationProjectList) (err error) {
-	err = database.DB.Model(ResearchInnovationProjectList{}).
-		Where("academic_period_id = ?", academicPeriodID).
-		Order("updated_at desc").
+func GetResearchInnovationProjectLists(
+	researchInnovationProjectList *[]ResearchInnovationProjectListJoined) (err error) {
+	err = database.DB.Table("indicators_information.research_innovation_project_lists ripl").
+		Select(`ripl.academic_period_id,
+			ap.name as academic_period,
+			ripl.total_projects_uep,
+			ripl.projects_external_funding,
+			ripl.international_cooperation_projects,
+			ripl.national_cooperation_projects`).
+		Joins("join academic_periods ap on ripl.academic_period_id = ap.id").
+		Order("ripl.updated_at desc").
 		Scan(researchInnovationProjectList).Error
 	if err != nil {
 		return err

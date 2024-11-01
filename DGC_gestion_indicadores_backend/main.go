@@ -208,7 +208,7 @@ func serveApplication() {
 	indicatorsInformationRoutes.PUT("/gradeRateList/:academicPeriodID/:careerID",
 		indicatorsInformationGradeRate.UpdateGradeRateList)
 
-	indicatorsInformationRoutes.GET("/researchInnovationProjectLists/:academicPeriodID",
+	indicatorsInformationRoutes.GET("/researchInnovationProjectLists",
 		indicatorsInformationResearchInnovationProject.GetResearchInnovationProjectListsByAcademicPeriod)
 
 	// Indicators routes
