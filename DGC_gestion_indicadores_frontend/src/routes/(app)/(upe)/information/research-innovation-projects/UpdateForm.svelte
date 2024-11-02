@@ -30,7 +30,7 @@
 	const dispatch = createEventDispatcher();
 
 	function ResearchInnovationProjectListCreated() {
-		dispatch('message', {
+		dispatch('updated', {
 			created: true
 		});
 	}
