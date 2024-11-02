@@ -45,6 +45,7 @@
 				ResearchInnovationProjectListCreated();
 				return toast.success(`Proyecto investigación e innovación creado`);
 			}
+			formDataAcademicPeriodID.subscribe((value) => ($formData.academic_period_id = value));
 			return manageToastFromErrorMessageOnAddForm(message);
 		}
 	});
@@ -58,7 +59,7 @@
 <form action="?/postResearchInnovationProjectList" use:enhance>
 	<div class="flex flex-col gap-2">
 		<Form.Field {form} name="academic_period_id" class="w-full">
-			<AcademicPeriodsServer {formDataAcademicPeriodID} formSelectWidth="w-[90%]"/>
+			<AcademicPeriodsServer {formDataAcademicPeriodID} formSelectWidth="w-[90%]" />
 		</Form.Field>
 
 		<div class="grid grid-cols-2 justify-between gap-4">
@@ -110,7 +111,7 @@
 		</div>
 	</div>
 	<Form.Button class="my-2 w-full">Guardar</Form.Button>
-	<!-- {#if browser}
+	{#if browser}
 		<SuperDebug data={$formData} />
-	{/if} -->
+	{/if}
 </form>
