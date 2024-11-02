@@ -210,6 +210,8 @@ func serveApplication() {
 
 	indicatorsInformationRoutes.GET("/researchInnovationProjectLists",
 		indicatorsInformationResearchInnovationProject.GetResearchInnovationProjectListsByAcademicPeriod)
+	indicatorsInformationRoutes.POST("/researchInnovationProjectLists",
+		indicatorsInformationResearchInnovationProject.PostResearchInnovationProjectList)
 
 	// Indicators routes
 	indicatorsRoutes := router.Group("/api/indicators/")

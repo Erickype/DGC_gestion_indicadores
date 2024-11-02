@@ -1,9 +1,11 @@
 package model
 
 import (
+	"errors"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicPeriod"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -45,6 +47,17 @@ func GetResearchInnovationProjectLists(
 		Order("ripl.updated_at desc").
 		Scan(researchInnovationProjectList).Error
 	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func PostResearchInnovationProjectList(researchInnovationProjectList *ResearchInnovationProjectList) (err error) {
+	err = database.DB.Create(&researchInnovationProjectList).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("valores para el periodo ya registrados")
+		}
 		return err
 	}
 	return nil

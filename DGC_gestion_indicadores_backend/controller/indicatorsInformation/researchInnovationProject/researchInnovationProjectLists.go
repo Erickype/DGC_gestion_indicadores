@@ -19,3 +19,18 @@ func GetResearchInnovationProjectListsByAcademicPeriod(context *gin.Context) {
 	}
 	context.JSON(http.StatusOK, researchInnovationProjectLists)
 }
+
+func PostResearchInnovationProjectList(c *gin.Context) {
+	var researchInnovationProjectList model.ResearchInnovationProjectList
+	err := c.BindJSON(&researchInnovationProjectList)
+	if err != nil {
+		errors.BadRequestResponse(c, err)
+		return
+	}
+	err = model.PostResearchInnovationProjectList(&researchInnovationProjectList)
+	if err != nil {
+		errors.InternalServerErrorResponse(c, "Error añadiendo valores proyectos innovación a lista", err)
+		return
+	}
+	c.JSON(http.StatusCreated, researchInnovationProjectList)
+}
