@@ -65,6 +65,13 @@ func CalculateIndicatorByTypeIDAndEvaluationPeriod(evaluationPeriodID, indicator
 		if err != nil {
 			return err
 		}
+		break
+	case model.Indicator25:
+		err := CalculateIndicator25(evaluationPeriodID, response)
+		if err != nil {
+			return err
+		}
+		break
 	}
 	return nil
 }
