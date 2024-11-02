@@ -14,7 +14,12 @@
 	import AddModal from '$lib/components/modal/AddModal.svelte';
 	import type { CommonError } from '$lib/api/model/errors';
 	import Alert from '$lib/components/alert/alert.svelte';
+	import AddForm from './AddForm.svelte';
 	import Table from './Table.svelte';
+
+	export let data: PageServerData;
+	const addResearchInnovationProjectListForm = data.addResearchInnovationProjectListForm;
+	const updateResearchInnovationProjectListForm = data.updateResearchInnovationProjectListForm;
 
 	let researchInnovationProjectListsPromise: Promise<ResearchInnovationProjectListJoined[]> =
 		fetchResearchInnovationProjectListsByAcademicPeriod();
@@ -53,21 +58,18 @@
 		<Icon class="h-8 w-8" />
 		<h2 class="text-2xl font-bold">Proyectos de investigación e innovación</h2>
 	</div>
-</div>
-
-<div class="mx-auto flex w-full place-content-center justify-between px-8">
-	<!-- <AddModal
+	<AddModal
 		formComponent={AddForm}
-		modalTitle="Crear tasa de grado"
-		formData={addGradeRateListForm}
-		{comboMessages}
+		modalTitle="Crear proyecto de investigación e innovación"
+		formData={addResearchInnovationProjectListForm}
+		comboMessages={undefined}
 		on:created={fetchOnSuccess}
-	/> -->
+	/>
 </div>
 
 <div class="mx-auto flex w-full flex-col place-content-center px-8">
 	{#await researchInnovationProjectListsPromise}
-		<TableSkeleton tableHeightClass="h-[60vh]" />
+		<TableSkeleton tableHeightClass="h-[65vh]" />
 	{:then researchInnovationProjectLists}
 		{#if researchInnovationProjectLists && researchInnovationProjectLists.length > 0}
 			<Table
