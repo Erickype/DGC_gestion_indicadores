@@ -1,10 +1,5 @@
 <script lang="ts">
-	import { filterAcademicPeriodsAuxSchema } from '$lib/utils';
-	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { superForm } from 'sveltekit-superforms';
-
 	import type { PageServerData } from './$types';
-	import { writable } from 'svelte/store';
 	import { goto } from '$app/navigation';
 
 	import Icon from 'lucide-svelte/icons/projector';
@@ -73,6 +68,7 @@
 	{:then researchInnovationProjectLists}
 		{#if researchInnovationProjectLists && researchInnovationProjectLists.length > 0}
 			<Table
+				formData={updateResearchInnovationProjectListForm}
 				{researchInnovationProjectLists}
 				comboMessages={undefined}
 				on:updated={fetchOnSuccess}

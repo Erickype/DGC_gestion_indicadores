@@ -4,24 +4,21 @@
 	import { createEventDispatcher } from 'svelte';
 	import { readable } from 'svelte/store';
 
+	import type { UpdateResearchInnovationProjectListSchema } from './schema';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
-	/*import type { UpdateGradeRateListSchema } from './schema';*/
-	import type {
-		ResearchInnovationProjectList,
-		ResearchInnovationProjectListJoined
-	} from '$lib/api/model/api/indicatorsInformation/researchInnovationProjectLists';
+
+	import type { ResearchInnovationProjectListJoined } from '$lib/api/model/api/indicatorsInformation/researchInnovationProjectLists';
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
 	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
 	import type { Message } from '$lib/components/combobox/combobox';
 	import Table from '$lib/components/table/table.svelte';
-	/*import UpdateForm from './UpdateForm.svelte';*/
-	import { toast } from 'svelte-sonner';
+	import UpdateForm from './UpdateForm.svelte';
 
-	/*export let formData: SuperValidated<Infer<UpdateGradeRateListSchema>>;*/
+	export let formData: SuperValidated<Infer<UpdateResearchInnovationProjectListSchema>>;
 	export let comboMessages: Message[][] | undefined = undefined;
-	comboMessages = [];
 	export let researchInnovationProjectLists: ResearchInnovationProjectListJoined[];
 	let researchInnovationProjectList: ResearchInnovationProjectListJoined;
+	comboMessages = [];
 
 	const filterFields = [
 		'academic_period',
@@ -79,17 +76,16 @@
 
 	let updateFormOpen = false;
 	function handleUpdateAction(event: any) {
-		/* const detail: { status: boolean; id: string } = event.detail;
+		const detail: { status: boolean; id: string } = event.detail;
 		if (detail.status) {
 			researchInnovationProjectList = researchInnovationProjectLists.find(
 				(researchInnovationProjectList) =>
-					researchInnovationProjectList.career_id.toString() === detail.id &&
-					researchInnovationProjectList.academic_period_id === formData.data.academic_period_id
+					researchInnovationProjectList.academic_period_id.toString() === detail.id
 			)!;
 			updateFormOpen = true;
 		} else {
 			updateFormOpen = false;
-		} */
+		}
 	}
 
 	function handleUpdated(event: any) {
@@ -102,15 +98,15 @@
 	}
 </script>
 
-<!-- <UpdateModal
-	modalTitle="Actualizar información tasas de grado"
+<UpdateModal
+	modalTitle="Actualizar información proyecto innovación"
 	{formData}
 	{comboMessages}
 	formComponent={UpdateForm}
 	bind:updateEntity={researchInnovationProjectList}
 	bind:open={updateFormOpen}
 	on:updated={handleUpdated}
-/> -->
+/>
 
 <div class="w-full">
 	<Table
