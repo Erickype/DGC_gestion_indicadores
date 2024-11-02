@@ -3,7 +3,7 @@ import type { PageServerLoad, Actions } from "./$types";
 import { redirect } from "@sveltejs/kit"
 
 import { generateFormMessageFromHttpResponse, generateFormMessageFromInvalidForm } from "$lib/utils";
-/* import { addGradeRateListSchema, updateGradeRateListSchema } from "./schema"; */
+import { addResearchInnovationProjectListSchema, updateResearchInnovationProjectListSchema } from "./schema";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 
@@ -17,6 +17,8 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
     }
 
     return {
+        addResearchInnovationProjectListForm: await superValidate(zod(addResearchInnovationProjectListSchema)),
+        updateResearchInnovationProjectListForm: await superValidate(zod(updateResearchInnovationProjectListSchema)),
     }
 };
 

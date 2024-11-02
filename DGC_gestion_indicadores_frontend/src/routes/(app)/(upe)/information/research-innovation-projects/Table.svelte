@@ -114,7 +114,7 @@
 
 <div class="w-full">
 	<Table
-		tableHeightClass={'h-[55vh]'}
+		tableHeightClass={'h-[60vh]'}
 		{table}
 		{columns}
 		{filterFields}
