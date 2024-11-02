@@ -61,7 +61,7 @@ export async function fetchFilterAcademicPeriods(filterAcademicPeriodsRequest: F
     return response.json();
 }
 
-export async function fetchAcademicPeriodByID(academicPeriodID: string): Promise<AcademicPeriod> {
+export async function fetchAcademicPeriodByID(academicPeriodID: string) {
     const url = `/api/academicPeriod/` + academicPeriodID;
     const response = await fetch(url, {
         method: 'GET',
@@ -71,7 +71,7 @@ export async function fetchAcademicPeriodByID(academicPeriodID: string): Promise
         if (response.status === 401) {
             throw goto('/');
         }
-        throw errorData;
+        return errorData;
     }
     return response.json();
 }

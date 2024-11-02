@@ -21,6 +21,7 @@
 		FilterAcademicPeriodsResponse
 	} from '$lib/api/model/view/academicPeriod';
 
+	export let formSelectWidth = "w-[25%]"
 	export let formDataAcademicPeriodID = writable();
 	let academicPeriodPromise: Promise<AcademicPeriod>;
 
@@ -62,7 +63,7 @@
 {#await Promise.all([filterAcademicPeriodsPromise, academicPeriodPromise])}
 	<FormFieldSkeleton />
 {:then [filterAcademicPeriodsResponse, academicPeriodResponse]}
-	{#if academicPeriodResponse.ID}
+	{#if academicPeriodResponse && academicPeriodResponse.ID}
 		{#if !filterAcademicPeriodsResponse.academic_periods.some((academicPeriod) => academicPeriod.ID === academicPeriodResponse.ID)}
 			<p class="hidden">
 				{filterAcademicPeriodsResponse.academic_periods.unshift(academicPeriodResponse)}
@@ -71,7 +72,7 @@
 	{/if}
 
 	<ServerFormSelect
-		formSelectWidth="w-[25%]"
+		{formSelectWidth}
 		bind:filterValue={academicPeriodsFilterValue}
 		formLabel="Periodo académico"
 		bind:popoverFilterDataMap={academicPeriodsPopoverFilterDataMap}
