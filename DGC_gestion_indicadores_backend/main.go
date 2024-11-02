@@ -212,6 +212,8 @@ func serveApplication() {
 		indicatorsInformationResearchInnovationProject.GetResearchInnovationProjectListsByAcademicPeriod)
 	indicatorsInformationRoutes.POST("/researchInnovationProjectList",
 		indicatorsInformationResearchInnovationProject.PostResearchInnovationProjectList)
+	indicatorsInformationRoutes.PUT("/researchInnovationProjectList/:academicPeriodID",
+		indicatorsInformationResearchInnovationProject.UpdateResearchInnovationProjectList)
 
 	// Indicators routes
 	indicatorsRoutes := router.Group("/api/indicators/")

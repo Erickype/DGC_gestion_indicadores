@@ -52,8 +52,32 @@ func GetResearchInnovationProjectLists(
 	return nil
 }
 
+func GetResearchInnovationProjectListByAcademicPeriod(academicPeriodID int, researchInnovationProjectList *ResearchInnovationProjectList) (err error) {
+	err = database.DB.Model(&ResearchInnovationProjectList{}).
+		Where("academic_period_id = ?", academicPeriodID).
+		Scan(&researchInnovationProjectList).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("no existe el periodo de proyectos de innovación")
+		}
+		return err
+	}
+	return nil
+}
+
 func PostResearchInnovationProjectList(researchInnovationProjectList *ResearchInnovationProjectList) (err error) {
 	err = database.DB.Create(&researchInnovationProjectList).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("valores para el periodo ya registrados")
+		}
+		return err
+	}
+	return nil
+}
+
+func UpdateResearchInnovationProjectList(researchInnovationProjectList *ResearchInnovationProjectList) (err error) {
+	err = database.DB.Save(researchInnovationProjectList).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
 			return errors.New("valores para el periodo ya registrados")
