@@ -210,7 +210,7 @@ func serveApplication() {
 
 	indicatorsInformationRoutes.GET("/researchInnovationProjectLists",
 		indicatorsInformationResearchInnovationProject.GetResearchInnovationProjectListsByAcademicPeriod)
-	indicatorsInformationRoutes.POST("/researchInnovationProjectLists",
+	indicatorsInformationRoutes.POST("/researchInnovationProjectList",
 		indicatorsInformationResearchInnovationProject.PostResearchInnovationProjectList)
 
 	// Indicators routes
