@@ -144,6 +144,12 @@ func seedData() {
 			Description:  "La institución cuenta con una tasa promedio de titulación institucional de la oferta académica de grado de al menos el 50%.",
 		},
 		{
+			ID:           25,
+			Name:         "Indicador 25: Proyectos de Investigación e Innovación con Financiamiento Externo o en Red",
+			Abbreviation: "Proyectos de Investigación e Innovación con Financiamiento Externo o en Red",
+			Description:  "Se espera que al menos el 40% de los proyectos de investigación e innovación concluidos o en ejecución cuenten con financiamiento externo o con participación en redes internacionales o nacionales.",
+		},
+		{
 			ID:           26,
 			Name:         "Indicador 26: Producción Académica",
 			Abbreviation: "Producción Académica",
