@@ -18,7 +18,7 @@
 	<Chart>
 		<Svg center>
 			<Group y={16}>
-				<LinearGradient class="from-primary to-green-700" let:url>
+				<LinearGradient class="from-red-500 to-green-500" let:url>
 					<Arc
 						{value}
 						range={[-120, 120]}
