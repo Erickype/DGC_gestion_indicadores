@@ -10,17 +10,18 @@
 
 	import IndicatorCard from '$lib/components/indicators/IndicatorCard.svelte';
 	import { toast } from 'svelte-sonner';
+	import Alert from '$lib/components/alert/alert.svelte';
 
 	export let data: PageServerData;
 
 	const evaluationPeriodsData = data.evaluationPeriodsData;
 	let selectedEvaluationPeriod: number = evaluationPeriodsData.periods.at(0)!.ID;
 
-	let indicatorsPromise: Promise<IndicatorEvaluationPeriodJoined> =
-		fetchGetIndicatorsByTypeIDAndEvaluationPeriodID(25);
+	let indicatorsPromise: Promise<IndicatorEvaluationPeriodJoined[]> =
+		fetchGetIndicatorsByEvaluationPeriod();
 
-	async function fetchGetIndicatorsByTypeIDAndEvaluationPeriodID(indicatorTypeID: number) {
-		const url = `/api/indicators/evaluationPeriod/${selectedEvaluationPeriod + '/' + indicatorTypeID}`;
+	async function fetchGetIndicatorsByEvaluationPeriod() {
+		const url = `/api/indicators/evaluationPeriod/${selectedEvaluationPeriod}`;
 		const response = await fetch(url, {
 			method: 'GET'
 		});
@@ -48,16 +49,24 @@
 	<AcademicPeriodCombo
 		messages={evaluationPeriodsData.messages}
 		bind:selectedValue={selectedEvaluationPeriod}
-		on:message={() => {
-			fetchGetIndicatorsByTypeIDAndEvaluationPeriodID(25);
-		}}
+		on:message={fetchGetIndicatorsByEvaluationPeriod}
 	></AcademicPeriodCombo>
 </div>
 
 <div class="mx-auto flex w-full place-content-center justify-between px-8">
 	{#await indicatorsPromise}
 		cargando...
-	{:then indicator}
-		<IndicatorCard {indicator} />
+	{:then indicators}
+		{#if indicators.length > 0}
+			<div class="my-auto grid min-h-40 w-full grid-cols-3 gap-6">
+				{#each indicators as indicator}
+					<IndicatorCard {indicator} />
+				{/each}
+			</div>
+		{:else}
+			<Alert title="Sin registros" description={'Ups, aún no hay datos aquí.'} />
+		{/if}
+	{:catch error}
+		<Alert variant="destructive" description={error.message} />
 	{/await}
 </div>

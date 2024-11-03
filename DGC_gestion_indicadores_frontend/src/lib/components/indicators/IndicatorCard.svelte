@@ -97,7 +97,7 @@
 		</Card.Content>
 	</Card.Root>
 {:else}
-	<Card.Root class="bg-secondary/50">
+	<Card.Root class="bg-secondary/50 flex flex-col justify-between">
 		<Card.Header class="pb-2">
 			<Card.Title class="flex items-center justify-between gap-2">
 				<h5 class="text w-4/5 text-pretty text-lg">{indicator.indicator_type}</h5>
