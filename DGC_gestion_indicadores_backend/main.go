@@ -222,6 +222,7 @@ func serveApplication() {
 		indicators.GetCalculateIndicatorByTypeIDAndEvaluationPeriod)
 	indicatorsRoutes.GET("/evaluationPeriod/:evaluationPeriodID/:indicatorTypeID",
 		indicators.GetIndicatorByTypeIDAndEvaluationPeriodJoined)
+	indicatorsRoutes.GET("/evaluationPeriod/calculate/:evaluationPeriodID", indicators.GetCalculateIndicatorsByEvaluationPeriod)
 
 	indicatorsRoutes.GET("/academicPeriod/calculate/:academicPeriodID/:indicatorTypeID",
 		indicators.GetCalculateIndicatorByTypeIDAndAcademicPeriod)

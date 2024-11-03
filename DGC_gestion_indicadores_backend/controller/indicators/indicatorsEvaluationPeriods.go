@@ -1,6 +1,7 @@
 package controller
 
 import (
+	errors2 "errors"
 	errors "github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	model "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicators"
 	"github.com/gin-gonic/gin"
@@ -28,6 +29,24 @@ func GetIndicatorByTypeIDAndEvaluationPeriodJoined(context *gin.Context) {
 	if err != nil {
 		errors.InternalServerErrorResponse(context, "Error retornando indicador", err)
 		return
+	}
+	context.JSON(http.StatusOK, response)
+}
+
+func GetCalculateIndicatorsByEvaluationPeriod(context *gin.Context) {
+	var response []model.IndicatorEvaluationPeriodJoined
+	evaluationPeriodID, _ := strconv.Atoi(context.Param("evaluationPeriodID"))
+	errs := model.CalculateIndicatorsByEvaluationPeriod(evaluationPeriodID, &response)
+	if len(errs) > 0 {
+		var resultError string
+		for _, err := range errs {
+			resultError += err.Error() + "\n"
+		}
+		errors.InternalServerErrorResponse(context, "Error calculando indicadores", errors2.New(resultError))
+		return
+	}
+	if len(response) == 0 {
+		response = []model.IndicatorEvaluationPeriodJoined{}
 	}
 	context.JSON(http.StatusOK, response)
 }

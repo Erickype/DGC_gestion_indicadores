@@ -4,8 +4,11 @@ import (
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	evaluationPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationPeriod"
+	"sync"
 	"time"
 )
+
+var evaluationPeriodIndicators = []int{25, 26}
 
 type IndicatorsEvaluationPeriod struct {
 	CreatedAt          time.Time `json:"created_at"`
@@ -50,6 +53,56 @@ func CalculateIndicatorByTypeIDAndEvaluationPeriod(evaluationPeriodID, indicator
 		break
 	}
 	return nil
+}
+
+func CalculateIndicatorsByEvaluationPeriod(evaluationPeriodID int, response *[]IndicatorEvaluationPeriodJoined) (errs []error) {
+	var wg sync.WaitGroup
+	var mu sync.Mutex
+	done := make(chan IndicatorEvaluationPeriodJoined, len(evaluationPeriodIndicators))
+	errCh := make(chan error, len(evaluationPeriodIndicators)) // Channel for errors
+
+	for i := 0; i < len(evaluationPeriodIndicators); i++ {
+		wg.Add(1)
+		go func(indicatorID int) {
+			defer wg.Done()
+
+			var indicator IndicatorsEvaluationPeriod
+			err := CalculateIndicatorByTypeIDAndEvaluationPeriod(evaluationPeriodID, indicatorID, &indicator)
+			if err != nil {
+				errCh <- err // Send error to error channel
+				return
+			}
+
+			var indicatorJoined IndicatorEvaluationPeriodJoined
+			err = GetIndicatorByTypeIDAndEvaluationPeriodJoined(evaluationPeriodID, indicatorID, &indicatorJoined)
+			if err != nil {
+				errCh <- err // Send error to error channel
+				return
+			}
+
+			// Safely append to the response slice
+			mu.Lock()
+			*response = append(*response, indicatorJoined)
+			mu.Unlock()
+
+			done <- indicatorJoined
+		}(evaluationPeriodIndicators[i])
+	}
+
+	// Wait for all goroutines to finish
+	wg.Wait()
+	close(done)
+	close(errCh)
+
+	// Collect all errors from the error channel
+	for e := range errCh {
+		if e != nil {
+			errs = append(errs, e)
+		}
+	}
+
+	// Return the collected errors (if any)
+	return errs
 }
 
 func GetIndicatorByTypeIDAndEvaluationPeriodJoined(
