@@ -1,4 +1,4 @@
-import { getCalculateIndicatorByTypeIDAndEvaluationPeriodRoute, getIndicatorByTypeIDAndEvaluationPeriod } from "$lib/api/routes/api/indicators/evaluationPeriod";
+import { getCalculateIndicatorByTypeIDAndEvaluationPeriodRoute, getIndicatorByTypeIDAndEvaluationPeriod, getIndicatorsByEvaluationPeriodRoute } from "$lib/api/routes/api/indicators/evaluationPeriod";
 
 import { generateCommonErrorFromFetchError } from "$lib/utils";
 import type { CommonError } from "$lib/api/model/errors";
@@ -20,6 +20,27 @@ export async function GetIndicatorByTypeIDAndEvaluationPeriod(evaluation_period_
         }
         const indicator: IndicatorEvaluationPeriodJoined = await response.json()
         return indicator
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
+}
+
+export async function GetIndicatorsByEvaluationPeriod(evaluationPeriodID: string, token: string) {
+    try {
+        const response = await fetch(getIndicatorsByEvaluationPeriodRoute + evaluationPeriodID, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            }
+        });
+
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
+        }
+        const indicators: IndicatorEvaluationPeriodJoined[] = await response.json()
+        return indicators
     } catch (error) {
         return generateCommonErrorFromFetchError(error)
     }
