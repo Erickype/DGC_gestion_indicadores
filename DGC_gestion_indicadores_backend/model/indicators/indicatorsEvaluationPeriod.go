@@ -105,6 +105,25 @@ func CalculateIndicatorsByEvaluationPeriod(evaluationPeriodID int, response *[]I
 	return errs
 }
 
+func GetIndicatorsByEvaluationPeriod(evaluationPeriodID int, response *[]IndicatorEvaluationPeriodJoined) (err error) {
+	err = database.DB.Table("indicators.indicators_evaluation_periods iep").
+		Select(`iep.indicator_type_id,
+			it.name as indicator_type,
+			iep.evaluation_period_id,
+			ep.name as evaluation_period,
+			iep.actual_value,
+			iep.target_value`).
+		Joins("join indicators.indicator_types it on iep.indicator_type_id = it.id").
+		Joins("join evaluation_periods ep on iep.evaluation_period_id = ep.id").
+		Where("iep.evaluation_period_id = ?", evaluationPeriodID).
+		Order("iep.indicator_type_id").
+		Scan(response).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func GetIndicatorByTypeIDAndEvaluationPeriodJoined(
 	evaluationPeriodID, indicatorTypeID int, indicatorEvaluationPeriodJoined *IndicatorEvaluationPeriodJoined) (err error) {
 	err = database.DB.Table("indicators.indicators_evaluation_periods iep").

@@ -50,3 +50,17 @@ func GetCalculateIndicatorsByEvaluationPeriod(context *gin.Context) {
 	}
 	context.JSON(http.StatusOK, response)
 }
+
+func GetIndicatorsByEvaluationPeriod(context *gin.Context) {
+	var response []model.IndicatorEvaluationPeriodJoined
+	evaluationPeriodID, _ := strconv.Atoi(context.Param("evaluationPeriodID"))
+	err := model.GetIndicatorsByEvaluationPeriod(evaluationPeriodID, &response)
+	if err != nil {
+		errors.InternalServerErrorResponse(context, "Error obteniendo indicadores", err)
+		return
+	}
+	if len(response) == 0 {
+		response = []model.IndicatorEvaluationPeriodJoined{}
+	}
+	context.JSON(http.StatusOK, response)
+}
