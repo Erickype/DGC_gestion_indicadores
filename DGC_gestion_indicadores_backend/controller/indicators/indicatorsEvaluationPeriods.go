@@ -20,11 +20,11 @@ func GetCalculateIndicatorByTypeIDAndEvaluationPeriod(context *gin.Context) {
 	context.JSON(http.StatusOK, response)
 }
 
-func GetIndicatorByTypeIDAndEvaluationPeriod(context *gin.Context) {
+func GetIndicatorByTypeIDAndEvaluationPeriodJoined(context *gin.Context) {
 	var response model.IndicatorEvaluationPeriodJoined
 	evaluationPeriodID, _ := strconv.Atoi(context.Param("evaluationPeriodID"))
 	indicatorTypeID, _ := strconv.Atoi(context.Param("indicatorTypeID"))
-	err := model.GetIndicatorByTypeIDAndEvaluationPeriod(evaluationPeriodID, indicatorTypeID, &response)
+	err := model.GetIndicatorByTypeIDAndEvaluationPeriodJoined(evaluationPeriodID, indicatorTypeID, &response)
 	if err != nil {
 		errors.InternalServerErrorResponse(context, "Error retornando indicador", err)
 		return

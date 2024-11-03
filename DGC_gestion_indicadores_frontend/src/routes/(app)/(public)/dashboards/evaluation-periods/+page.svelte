@@ -17,7 +17,7 @@
 	let selectedEvaluationPeriod: number = evaluationPeriodsData.periods.at(0)!.ID;
 
 	let indicatorsPromise: Promise<IndicatorEvaluationPeriodJoined> =
-		fetchGetIndicatorsByTypeIDAndEvaluationPeriodID(26);
+		fetchGetIndicatorsByTypeIDAndEvaluationPeriodID(25);
 
 	async function fetchGetIndicatorsByTypeIDAndEvaluationPeriodID(indicatorTypeID: number) {
 		const url = `/api/indicators/evaluationPeriod/${selectedEvaluationPeriod + '/' + indicatorTypeID}`;
@@ -49,7 +49,7 @@
 		messages={evaluationPeriodsData.messages}
 		bind:selectedValue={selectedEvaluationPeriod}
 		on:message={() => {
-			fetchGetIndicatorsByTypeIDAndEvaluationPeriodID(26);
+			fetchGetIndicatorsByTypeIDAndEvaluationPeriodID(25);
 		}}
 	></AcademicPeriodCombo>
 </div>
