@@ -3,14 +3,16 @@
 	import type { PageServerData } from './$types';
 	import { goto } from '$app/navigation';
 
+	import Refresh from 'lucide-svelte/icons/refresh-ccw';
 	import Icon from 'lucide-svelte/icons/circle-gauge';
 
 	import type { IndicatorEvaluationPeriodJoined } from '$lib/api/model/api/indicators/evaluationPeriod';
 	import AcademicPeriodCombo from '$lib/components/combobox/academicPeriodCombo.svelte';
 
 	import IndicatorCard from '$lib/components/indicators/IndicatorCard.svelte';
-	import { toast } from 'svelte-sonner';
+	import { Button } from '$lib/components/ui/button/index.js';
 	import Alert from '$lib/components/alert/alert.svelte';
+	import { toast } from 'svelte-sonner';
 
 	export let data: PageServerData;
 
@@ -34,6 +36,23 @@
 		}
 		return (indicatorsPromise = response.json());
 	}
+
+	async function fetchGetCalculateIndicatorByEvaluationPeriod() {
+		const url = `/api/indicators/evaluationPeriod/calculate/${selectedEvaluationPeriod}`;
+		const response = await fetch(url, {
+			method: 'GET'
+		});
+		if (!response.ok) {
+			const errorData = (await response.json()) as CommonError;
+			if (response.status === 401) {
+				throw goto('/');
+			}
+			toast.error(errorData.message);
+			return fetchGetIndicatorsByEvaluationPeriod();
+		}
+		toast.success('Indicadores actualizados');
+		return (indicatorsPromise = response.json());
+	}
 </script>
 
 <svelte:head>
@@ -45,12 +64,22 @@
 		<Icon class="h-8 w-8" />
 		<h2 class="text-2xl font-bold">Dashboards Periodos Evaluación</h2>
 	</div>
+	<div class="flex items-center gap-2">
+		<Button
+			variant="outline"
+			role="combobox"
+			size="icon"
+			on:click={fetchGetCalculateIndicatorByEvaluationPeriod}
+		>
+			<Refresh class="h-4 w-4" />
+		</Button>
 
-	<AcademicPeriodCombo
-		messages={evaluationPeriodsData.messages}
-		bind:selectedValue={selectedEvaluationPeriod}
-		on:message={fetchGetIndicatorsByEvaluationPeriod}
-	></AcademicPeriodCombo>
+		<AcademicPeriodCombo
+			messages={evaluationPeriodsData.messages}
+			bind:selectedValue={selectedEvaluationPeriod}
+			on:message={fetchGetIndicatorsByEvaluationPeriod}
+		></AcademicPeriodCombo>
+	</div>
 </div>
 
 <div class="mx-auto flex w-full place-content-center justify-between px-8">
