@@ -50,7 +50,7 @@
 	formDataAcademicPeriodID.subscribe((value) => ($formData.academic_period_id = value));
 </script>
 
-<form action="?/postResearchInnovationProjectList" use:enhance>
+<form action="?/postArtisticProductionList" use:enhance>
 	<div class="flex flex-col gap-2">
 		<Form.Field {form} name="academic_period_id" class="w-full">
 			<AcademicPeriodsServer {formDataAcademicPeriodID} formSelectWidth="w-[90%]" />

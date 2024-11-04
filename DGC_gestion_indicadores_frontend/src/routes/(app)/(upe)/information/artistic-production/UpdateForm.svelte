@@ -66,7 +66,7 @@
 	}
 </script>
 
-<form action="?/updateResearchInnovationProjectList" use:enhance>
+<form action="?/updateArtisticProductionList" use:enhance>
 	<div class="flex flex-col gap-2">
 		<Form.Field {form} name="academic_period_id" class="w-full">
 			<AcademicPeriodsServer {formDataAcademicPeriodID} formSelectWidth="w-[90%]" />
