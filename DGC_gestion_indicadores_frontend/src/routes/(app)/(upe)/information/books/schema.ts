@@ -32,6 +32,9 @@ export const addBookOrChaptersProductionListSchema = z.object({
     }).gt(0, {
         message: "Ingrese un campo detallado válido"
     }),
+
+    startDate: z.string(),
+    endDate: z.string(),
 });
 
 export const updateBookOrChaptersProductionListSchema = z.object({
@@ -68,6 +71,9 @@ export const updateBookOrChaptersProductionListSchema = z.object({
     }).gt(0, {
         message: "Ingrese un campo detallado válido"
     }),
+
+    startDate: z.string(),
+    endDate: z.string(),
 });
 
 export type AddBookOrChaptersProductionListSchema = typeof addBookOrChaptersProductionListSchema;
