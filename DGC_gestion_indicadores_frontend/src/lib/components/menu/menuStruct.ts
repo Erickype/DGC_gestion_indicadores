@@ -34,6 +34,7 @@ export const menus: Menu[] = [
             { name: 'Listas Docentes', route: '/information/teachers' },
             { name: 'Proyectos innovación', route: '/information/research-innovation-projects' },
             { name: 'Publicaciones Académicas', route: '/information/academic-publications' },
+            { name: 'Producción artística', route: '/information/artistic-production' },
             { name: 'Libros o Capítulos', route: '/information/books' },
             { name: 'Proyectos vinculación', route: '/information/social-projects' },
             { name: 'Tasas de grado', route: '/information/grade-rates' },
