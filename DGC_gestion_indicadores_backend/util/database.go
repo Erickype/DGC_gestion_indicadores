@@ -17,6 +17,7 @@ import (
 	indicators "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicators"
 	indicatorsInformation "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation"
 	indicatorsInformationAcademicProduction "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/academicProduction"
+	indicatorsInformationArtisticProduction "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/artisticProduction"
 	indicatorsInformationBooksOrChaptersProduction "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/booksOrChaptersProduction"
 	indicatorInformationGradeRate "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/gradeRate"
 	researchInnovationProject "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/researchInnovationProjectLists"
@@ -66,6 +67,7 @@ func LoadDatabase() {
 		&indicatorInformationSocialProject.SocialProjectList{},
 		&researchInnovationProject.ResearchInnovationProjectList{},
 		&indicatorsInformationAcademicProduction.AcademicProductionList{},
+		&indicatorsInformationArtisticProduction.ArtisticProductionList{},
 		&indicatorsInformationAcademicProduction.AcademicProductionListsAuthor{},
 		&indicatorsInformationBooksOrChaptersProduction.BooksOrChaptersProductionList{},
 		&indicatorsInformationBooksOrChaptersProduction.BooksOrChaptersProductionListAuthor{},
