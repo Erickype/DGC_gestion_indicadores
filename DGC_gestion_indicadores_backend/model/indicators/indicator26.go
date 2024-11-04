@@ -7,6 +7,7 @@ import (
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	evaluationAcademicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationAcademicPeriod"
 	evaluationPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/evaluationPeriod"
+	production "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/artisticProduction"
 	"gorm.io/datatypes"
 )
 
@@ -40,6 +41,13 @@ func CalculateIndicator26(evaluationPeriodID int, indicator *IndicatorsEvaluatio
 	if err != nil {
 		return err
 	}
+
+	var artisticProduction float64
+	err = calculateIndicator26ArtisticProduction(academicPeriodIds, &artisticProduction)
+	if err != nil {
+		return err
+	}
+
 	var booksOrChaptersPublication float64
 	err = calculateIndicator26BooksOrChapterPublication(
 		selectedEvaluationPeriod.StartYear, selectedEvaluationPeriod.EndYear, &booksOrChaptersPublication)
@@ -48,7 +56,7 @@ func CalculateIndicator26(evaluationPeriodID int, indicator *IndicatorsEvaluatio
 	}
 
 	indicator.ActualValue =
-		(academicPublication + booksOrChaptersPublication) /
+		(academicPublication + artisticProduction + booksOrChaptersPublication) /
 			(float64(countFullTimeTeachers) + 0.5*float64(countPartTimeTeachers))
 	indicator.TargetValue = model.Indicator26TargetValue
 	err = RefreshIndicatorEvaluationPeriod(indicator)
@@ -82,6 +90,21 @@ func calculateIndicator26AcademicPublication(startYear, endYear datatypes.Date, 
 		}
 		*academicPublication += weightedValue
 	}
+	return nil
+}
+
+func calculateIndicator26ArtisticProduction(
+	academicPeriodIds []int, artisticProduction *float64) (err error) {
+	var valuesSums production.ArtisticProductionList
+	err = database.DB.Table("indicators_information.artistic_production_lists apl").
+		Select(`sum(apl.international_artistic_work) as international_artistic_work,
+			sum(apl.national_artistic_work) as national_artistic_work`).
+		Where("apl.academic_period_id in ?", academicPeriodIds).
+		Scan(&valuesSums).Error
+	if err != nil {
+		return err
+	}
+	*artisticProduction = float64(valuesSums.InternationalArtisticWork) + 0.9*float64(valuesSums.NationalArtisticWork)
 	return nil
 }
 
