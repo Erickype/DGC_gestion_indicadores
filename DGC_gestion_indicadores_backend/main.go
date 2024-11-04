@@ -218,6 +218,10 @@ func serveApplication() {
 
 	indicatorsInformationRoutes.GET("/artisticProductionLists",
 		indicatorsInformationArtisticProduction.GetArtisticProductionLists)
+	indicatorsInformationRoutes.POST("/artisticProductionList",
+		indicatorsInformationArtisticProduction.PostArtisticProductionList)
+	indicatorsInformationRoutes.PUT("/artisticProductionList/:academicPeriodID",
+		indicatorsInformationArtisticProduction.UpdateArtisticProjectList)
 
 	// Indicators routes
 	indicatorsRoutes := router.Group("/api/indicators/")

@@ -1,9 +1,11 @@
 package model
 
 import (
+	"errors"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	academicPeriod "github.com/Erickype/DGC_gestion_indicadores_backend/model/academicPeriod"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -39,6 +41,41 @@ func GetArtisticProductionLists(
 		Order("apl.updated_at desc").
 		Scan(researchInnovationProjectList).Error
 	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func GetArtisticProductionListByAcademicPeriod(academicPeriodID int, artisticProductionList *ArtisticProductionList) (err error) {
+	err = database.DB.Model(&ArtisticProductionList{}).
+		Where("academic_period_id = ?", academicPeriodID).
+		Scan(&artisticProductionList).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("no existe el periodo de producción artística")
+		}
+		return err
+	}
+	return nil
+}
+
+func PostArtisticProductionList(artisticProductionList *ArtisticProductionList) (err error) {
+	err = database.DB.Create(&artisticProductionList).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("valores para el periodo ya registrados")
+		}
+		return err
+	}
+	return nil
+}
+
+func UpdateArtisticProductionList(artisticProductionList *ArtisticProductionList) (err error) {
+	err = database.DB.Save(artisticProductionList).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("valores para el periodo ya registrados")
+		}
 		return err
 	}
 	return nil
