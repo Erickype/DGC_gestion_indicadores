@@ -32,8 +32,21 @@
 	let selectedAcademicPeriod: number = academicPeriodsData.periods.at(0)!.ID;
 
 	$: {
-		addBookOrChaptersProductionForm.data.academic_period_id = selectedAcademicPeriod;
 		updateBookOrChaptersProductionForm.data.academic_period_id = selectedAcademicPeriod;
+		addBookOrChaptersProductionForm.data.academic_period_id = selectedAcademicPeriod;
+
+		addBookOrChaptersProductionForm.data.startDate = academicPeriodsData.periods.find(
+			(period) => period.ID === selectedAcademicPeriod
+		)!.start_date;
+		addBookOrChaptersProductionForm.data.endDate = academicPeriodsData.periods.find(
+			(period) => period.ID === selectedAcademicPeriod
+		)!.end_date;
+		updateBookOrChaptersProductionForm.data.startDate = academicPeriodsData.periods.find(
+			(period) => period.ID === selectedAcademicPeriod
+		)!.start_date;
+		updateBookOrChaptersProductionForm.data.endDate = academicPeriodsData.periods.find(
+			(period) => period.ID === selectedAcademicPeriod
+		)!.end_date;
 	}
 
 	let filterBooksOrChaptersProductionListsByAcademicPeriodRequest: FilterBooksOrChaptersProductionListsByAcademicPeriodRequest =

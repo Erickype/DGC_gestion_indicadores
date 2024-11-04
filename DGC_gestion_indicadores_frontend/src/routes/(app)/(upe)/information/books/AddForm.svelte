@@ -8,8 +8,8 @@
 
 	import { createEventDispatcher } from 'svelte';
 	import { browser } from '$app/environment';
+	import { cn, toISO8601 } from '$lib/utils';
 	import { writable } from 'svelte/store';
-	import { cn } from '$lib/utils';
 
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import { Textarea } from '$lib/components/ui/textarea/index.js';
@@ -66,7 +66,9 @@
 	let formDataDetailedFieldID = writable($formData.detailed_field_id);
 	formDataDetailedFieldID.subscribe((value) => ($formData.detailed_field_id = value));
 
-	let placeholderStart = today(getLocalTimeZone()).set({ day: 1, month: 1 });
+	let startYear = new Date($formData.startDate).getFullYear();
+	let endYear = new Date($formData.endDate).getFullYear();
+	let placeholderStart = parseDate(toISO8601(startYear.toString())).set({ day: 1, month: 1 });
 
 	const df = new DateFormatter('ec-EC', {
 		dateStyle: 'long'
@@ -163,6 +165,8 @@
 					</Popover.Trigger>
 					<Popover.Content class="w-auto p-0" side="top">
 						<CalendarMY
+							{startYear}
+							{endYear}
 							placeholder={placeholderStart}
 							on:keydown={(v) => {
 								manageDateChanged(v);
