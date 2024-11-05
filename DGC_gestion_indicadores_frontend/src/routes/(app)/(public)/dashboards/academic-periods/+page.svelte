@@ -22,6 +22,12 @@
 	let indicatorsPromise: Promise<IndicatorAcademicPeriodJoined[]> =
 		FetchGetIndicatorsByAcademicPeriodID();
 
+	function orderIndicators(indicators: IndicatorAcademicPeriodJoined[]) {
+		return indicators.sort((a, b) => {
+			return a.indicator_type_id - b.indicator_type_id;
+		});
+	}
+
 	async function FetchGetIndicatorsByAcademicPeriodID() {
 		const url = `/api/indicators/academicPeriod/${selectedAcademicPeriod}`;
 		const response = await fetch(url, {
@@ -88,7 +94,7 @@
 	{:then indicators}
 		{#if indicators.length > 0}
 			<div class="my-auto grid min-h-40 w-full grid-cols-3 gap-6">
-				{#each indicators as indicator}
+				{#each orderIndicators(indicators) as indicator}
 					<IndicatorCard {indicator} />
 				{/each}
 			</div>
