@@ -55,8 +55,14 @@ func CalculateIndicator26(evaluationPeriodID int, indicator *IndicatorsEvaluatio
 		return err
 	}
 
+	var intellectualProperty float64
+	err = calculateIndicator26IntellectualProperty(academicPeriodIds, &intellectualProperty)
+	if err != nil {
+		return err
+	}
+
 	indicator.ActualValue =
-		(academicPublication + artisticProduction + booksOrChaptersPublication) /
+		(academicPublication + artisticProduction + booksOrChaptersPublication + intellectualProperty) /
 			(float64(countFullTimeTeachers) + 0.5*float64(countPartTimeTeachers))
 	indicator.TargetValue = model.Indicator26TargetValue
 	err = RefreshIndicatorEvaluationPeriod(indicator)
@@ -145,6 +151,20 @@ func calculateIndicator26BooksOrChapterPublication(
 	*booksOrChaptersPublication =
 		float64(countPeerReviewedBooks) +
 			float64(countChapters)/float64(countPeerReviewedChapters)
+	return nil
+}
+
+func calculateIndicator26IntellectualProperty(
+	academicPeriodIds []int, intellectualProperty *float64) (err error) {
+	var valuesSums production.ArtisticProductionList
+	err = database.DB.Table("indicators_information.artistic_production_lists apl").
+		Select(`sum(apl.intellectual_property) as intellectual_property`).
+		Where("apl.academic_period_id in ?", academicPeriodIds).
+		Scan(&valuesSums).Error
+	if err != nil {
+		return err
+	}
+	*intellectualProperty = float64(valuesSums.IntellectualProperty)
 	return nil
 }
 
