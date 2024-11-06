@@ -15,6 +15,7 @@ type ArtisticProductionList struct {
 	AcademicPeriodID          uint      `gorm:"primary_key" json:"academic_period_id"`
 	InternationalArtisticWork uint      `json:"international_artistic_work"`
 	NationalArtisticWork      uint      `json:"national_artistic_work"`
+	IntellectualProperty      uint      `json:"intellectual_property"`
 
 	AcademicPeriod academicPeriod.AcademicPeriod `json:"-"`
 }
@@ -24,6 +25,7 @@ type ArtisticProductionListJoined struct {
 	AcademicPeriod            string `json:"academic_period"`
 	InternationalArtisticWork uint   `json:"international_artistic_work"`
 	NationalArtisticWork      uint   `json:"national_artistic_work"`
+	IntellectualProperty      uint   `json:"intellectual_property"`
 }
 
 func (grl ArtisticProductionList) TableName() string {
@@ -36,7 +38,8 @@ func GetArtisticProductionLists(
 		Select(`apl.academic_period_id,
 			ap.name as academic_period,
 			apl.international_artistic_work,
-			apl.national_artistic_work`).
+			apl.national_artistic_work,
+			apl.intellectual_property`).
 		Joins("join academic_periods ap on apl.academic_period_id = ap.id").
 		Order("apl.updated_at desc").
 		Scan(researchInnovationProjectList).Error
