@@ -20,7 +20,7 @@
 	let artisticProductionListJoined: ArtisticProductionListJoined;
 	comboMessages = [];
 
-	const filterFields = ['academic_period', 'international_artistic_work', 'national_artistic_work'];
+	const filterFields = ['academic_period', 'international_artistic_work', 'national_artistic_work', 'intellectual_property'];
 
 	const table = createTable(readable(artisticProductionLists), {
 		page: addPagination({
@@ -44,6 +44,10 @@
 		table.column({
 			accessor: 'national_artistic_work',
 			header: 'Obras nacionales'
+		}),
+		table.column({
+			accessor: 'intellectual_property',
+			header: 'Propiedad intelectual'
 		}),
 		table.column({
 			accessor: ({ academic_period_id }) => academic_period_id,
