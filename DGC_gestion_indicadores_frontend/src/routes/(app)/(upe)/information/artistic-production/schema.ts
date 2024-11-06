@@ -18,6 +18,12 @@ export const addArtisticProductionListSchema = z.object({
     }).gt(0, {
         message: "Ingrese una valor válido"
     }),
+
+    intellectual_property: z.coerce.number({
+        required_error: "Propiedad intelectual requerida"
+    }).gt(0, {
+        message: "Ingrese una valor válido"
+    }),
 });
 
 export const updateArtisticProductionListSchema = z.object({
@@ -32,9 +38,15 @@ export const updateArtisticProductionListSchema = z.object({
     }).gt(0, {
         message: "Ingrese una valor válido"
     }),
-
+    
     national_artistic_work: z.coerce.number({
         required_error: "Obra nacional requerida"
+    }).gt(0, {
+        message: "Ingrese una valor válido"
+    }),
+    
+    intellectual_property: z.coerce.number({
+        required_error: "Propiedad intelectual requerida"
     }).gt(0, {
         message: "Ingrese una valor válido"
     }),
