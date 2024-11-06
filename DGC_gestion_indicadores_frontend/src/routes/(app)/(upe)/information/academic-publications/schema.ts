@@ -44,6 +44,9 @@ export const addAcademicProductionSchema = z.object({
     intercultural_component: z.boolean({
         required_error: "Componente intercultural requerido"
     }).default(false),
+
+    startDate: z.string(),
+    endDate: z.string(),
 });
 
 export const updateAcademicProductionSchema = z.object({
@@ -92,6 +95,9 @@ export const updateAcademicProductionSchema = z.object({
     intercultural_component: z.boolean({
         required_error: "Componente intercultural requerido"
     }).default(false),
+
+    startDate: z.string(),
+    endDate: z.string(),
 });
 
 export type AddAcademicProductionSchema = typeof addAcademicProductionSchema;

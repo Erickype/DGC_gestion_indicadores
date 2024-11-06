@@ -6,7 +6,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import { browser } from '$app/environment';
 	import { writable } from 'svelte/store';
-	import { cn } from '$lib/utils';
+	import { cn, toISO8601 } from '$lib/utils';
 
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import { Checkbox } from '$lib/components/ui/checkbox/index.js';
@@ -71,7 +71,9 @@
 	let formDataDetailedFieldID = writable($formData.detailed_field_id);
 	formDataDetailedFieldID.subscribe((value) => ($formData.detailed_field_id = value));
 
-	let placeholderStart = today(getLocalTimeZone()).set({ day: 1, month: 1 });
+	let startYear = new Date($formData.startDate).getFullYear();
+	let endYear = new Date($formData.endDate).getFullYear();
+	let placeholderStart = parseDate(toISO8601($formData.publication_date));
 
 	const df = new DateFormatter('ec-EC', {
 		dateStyle: 'long'
@@ -90,14 +92,6 @@
 		$formData.science_magazine_id = updateEntity.science_magazine_id;
 		$formData.impact_coefficient_id = updateEntity.impact_coefficient_id;
 		$formData.intercultural_component = updateEntity.intercultural_component;
-	}
-
-	function toISO8601(dateString: string): string {
-		const date = new Date(dateString);
-		const year = date.getUTCFullYear();
-		const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // getUTCMonth() is zero-based
-		const day = String(date.getUTCDate()).padStart(2, '0');
-		return `${year}-${month}-${day}`;
 	}
 
 	function manageDateChanged(event: any) {
@@ -163,6 +157,8 @@
 						</Popover.Trigger>
 						<Popover.Content class="w-auto p-0" side="top">
 							<CalendarMY
+								{startYear}
+								{endYear}
 								placeholder={placeholderStart}
 								on:keydown={(v) => {
 									manageDateChanged(v);

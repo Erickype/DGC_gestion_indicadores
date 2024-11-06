@@ -39,6 +39,19 @@
 	$: {
 		addAcademicProductionForm.data.academicPeriod = selectedAcademicPeriod;
 		updateAcademicProductionForm.data.academicPeriod = selectedAcademicPeriod;
+
+		addAcademicProductionForm.data.startDate = academicPeriodsData.periods.find(
+			(period) => period.ID === selectedAcademicPeriod
+		)!.start_date;
+		addAcademicProductionForm.data.endDate = academicPeriodsData.periods.find(
+			(period) => period.ID === selectedAcademicPeriod
+		)!.end_date;
+		updateAcademicProductionForm.data.startDate = academicPeriodsData.periods.find(
+			(period) => period.ID === selectedAcademicPeriod
+		)!.start_date;
+		updateAcademicProductionForm.data.endDate = academicPeriodsData.periods.find(
+			(period) => period.ID === selectedAcademicPeriod
+		)!.end_date;
 	}
 
 	let filterAcademicProductionListRequest: FilterAcademicProductionListsByAcademicPeriodRequest =
