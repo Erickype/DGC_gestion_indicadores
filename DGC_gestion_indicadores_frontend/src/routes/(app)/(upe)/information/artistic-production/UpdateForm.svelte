@@ -63,6 +63,7 @@
 		$formData.academic_period_id = updateEntity.academic_period_id;
 		$formData.international_artistic_work = updateEntity.international_artistic_work;
 		$formData.national_artistic_work = updateEntity.national_artistic_work;
+		$formData.intellectual_property = updateEntity.intellectual_property;
 	}
 </script>
 
@@ -93,6 +94,13 @@
 				<Form.FieldErrors />
 			</Form.Field>
 		</div>
+		<Form.Field {form} name="intellectual_property">
+			<Form.Control let:attrs>
+				<Form.Label>Propiedad intelectual</Form.Label>
+				<Input {...attrs} bind:value={$formData.intellectual_property} type="number" min="0" />
+			</Form.Control>
+			<Form.FieldErrors />
+		</Form.Field>
 	</div>
 	<Form.Button class="my-2 w-full">Guardar</Form.Button>
 	<!-- {#if browser}

@@ -77,6 +77,13 @@
 				<Form.FieldErrors />
 			</Form.Field>
 		</div>
+		<Form.Field {form} name="intellectual_property">
+			<Form.Control let:attrs>
+				<Form.Label>Propiedad intelectual</Form.Label>
+				<Input {...attrs} bind:value={$formData.intellectual_property} type="number" min="0" />
+			</Form.Control>
+			<Form.FieldErrors />
+		</Form.Field>
 	</div>
 	<Form.Button class="my-2 w-full">Guardar</Form.Button>
 	<!-- {#if browser}

@@ -37,7 +37,8 @@ export const actions: Actions = {
         const request: ArtisticProductionList = {
             academic_period_id: data.academic_period_id,
             international_artistic_work: data.international_artistic_work,
-            national_artistic_work: data.national_artistic_work
+            national_artistic_work: data.national_artistic_work,
+            intellectual_property: data.intellectual_property
         }
 
         const response = await PostArtisticProductionList(token!, request)
@@ -57,7 +58,8 @@ export const actions: Actions = {
         const request: ArtisticProductionList = {
             academic_period_id: data.academic_period_id,
             international_artistic_work: data.international_artistic_work,
-            national_artistic_work: data.national_artistic_work
+            national_artistic_work: data.national_artistic_work,
+            intellectual_property: data.intellectual_property
         }
 
         const response = await UpdateArtisticProductionList(token!, request)
