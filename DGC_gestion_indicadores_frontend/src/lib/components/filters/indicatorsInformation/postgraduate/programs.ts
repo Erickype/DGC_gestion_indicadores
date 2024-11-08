@@ -5,11 +5,9 @@ import type { CommonError } from "$lib/api/model/errors";
 import { goto } from "$app/navigation";
 import { toast } from "svelte-sonner";
 
-export function newFilterDetailedFieldsRequest(page_size: number, page: number): FilterPostgraduateProgramsRequest {
+export function newFilterPostgraduateProgramsRequest(page_size: number, page: number): FilterPostgraduateProgramsRequest {
     let filterPostgraduateProgramsRequest: FilterPostgraduateProgramsRequest = {
         name: '',
-        start_year: -1,
-        end_year: -1,
         page_size: page_size,
         page: page
     };
