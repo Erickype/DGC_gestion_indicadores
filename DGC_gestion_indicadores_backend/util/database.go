@@ -20,6 +20,7 @@ import (
 	indicatorsInformationArtisticProduction "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/artisticProduction"
 	indicatorsInformationBooksOrChaptersProduction "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/booksOrChaptersProduction"
 	indicatorInformationGradeRate "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/gradeRate"
+	postgraduate "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/postgraduate"
 	researchInnovationProject "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/researchInnovationProjectLists"
 	indicatorInformationSocialProject "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/socialProjectProduction"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/teachers"
@@ -62,6 +63,8 @@ func LoadDatabase() {
 		&knowledgeField.WideField{},
 		&knowledgeField.SpecificField{},
 		&knowledgeField.DetailedField{},
+		&postgraduate.PostgraduateProgram{},
+		&postgraduate.PostgraduateCohortList{},
 		&indicatorInformationGradeRate.GradeRateList{},
 		&indicatorsInformation.AcademicPeriodAuthorCareer{},
 		&indicatorInformationSocialProject.SocialProjectList{},
