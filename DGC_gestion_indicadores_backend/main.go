@@ -18,6 +18,7 @@ import (
 	indicatorsInformationArtisticProduction "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation/artisticProduction"
 	indicatorsInformationBooksOrChaptersProduction "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation/booksOrChaptersProduction"
 	indicatorsInformationGradeRate "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation/gradeRate"
+	indicatorsInformationPostgraduate "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation/postgraduate"
 	indicatorsInformationResearchInnovationProject "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation/researchInnovationProject"
 	indicatorsInformationSocialProject "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation/socialProjectProduction"
 	indicatorsInformationTeachers "github.com/Erickype/DGC_gestion_indicadores_backend/controller/indicatorsInformation/teachers"
@@ -222,6 +223,9 @@ func serveApplication() {
 		indicatorsInformationArtisticProduction.PostArtisticProductionList)
 	indicatorsInformationRoutes.PUT("/artisticProductionList/:academicPeriodID",
 		indicatorsInformationArtisticProduction.UpdateArtisticProjectList)
+
+	indicatorsInformationRoutes.POST("/postgraduate/program",
+		indicatorsInformationPostgraduate.PostPostgraduateProgram)
 
 	// Indicators routes
 	indicatorsRoutes := router.Group("/api/indicators/")

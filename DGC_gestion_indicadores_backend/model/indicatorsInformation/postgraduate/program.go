@@ -1,7 +1,10 @@
 package model
 
 import (
+	"errors"
+	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -17,4 +20,15 @@ type PostgraduateProgram struct {
 
 func (grl PostgraduateProgram) TableName() string {
 	return model.IndicatorsInformationSchema + ".postgraduate_programs"
+}
+
+func PostPostgraduateProgram(program *PostgraduateProgram) (err error) {
+	err = database.DB.Create(program).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("posgrado ya existe")
+		}
+		return err
+	}
+	return nil
 }
