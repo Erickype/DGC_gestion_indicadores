@@ -47,6 +47,7 @@ export const menus: Menu[] = [
         links: [
             { name: "Facultades", route: "/institution/faculties" },
             { name: "Carreras", route: "/institution/careers" },
+            { name: "Programas posgrado", route: "/institution/postgraduate/programs" },
         ],
         roles: [1]
     },
