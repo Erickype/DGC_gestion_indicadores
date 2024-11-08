@@ -26,6 +26,25 @@ func FilterPostGraduatePrograms(context *gin.Context) {
 	context.JSON(http.StatusOK, filterPostGraduateProgramsResponse)
 }
 
+func GetPostgraduateProgramByID(context *gin.Context) {
+	var authorPerson model.PostgraduateProgram
+	programID, err := strconv.Atoi(context.Param("programID"))
+	if err != nil {
+		errors.BadRequestResponse(context, err)
+		return
+	}
+	err = model.GetPostgraduateProgramByID(programID, &authorPerson)
+	if err != nil {
+		if errorsS.Is(err, gorm.ErrRecordNotFound) {
+			errors.NotFoundResponse(context, "Programa posgrado no encontrado", err)
+			return
+		}
+		errors.InternalServerErrorResponse(context, "Error retornando programa posgrado", err)
+		return
+	}
+	context.JSON(http.StatusOK, authorPerson)
+}
+
 func PostPostgraduateProgram(c *gin.Context) {
 	var postgraduateProgram model.PostgraduateProgram
 	err := c.BindJSON(&postgraduateProgram)

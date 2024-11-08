@@ -226,6 +226,8 @@ func serveApplication() {
 
 	indicatorsInformationRoutes.POST("/postgraduate/programs/filter",
 		indicatorsInformationPostgraduate.FilterPostGraduatePrograms)
+	indicatorsInformationRoutes.GET("/postgraduate/program/:programID",
+		indicatorsInformationPostgraduate.GetPostgraduateProgramByID)
 	indicatorsInformationRoutes.POST("/postgraduate/program",
 		indicatorsInformationPostgraduate.PostPostgraduateProgram)
 	indicatorsInformationRoutes.PUT("/postgraduate/program/:programID",
