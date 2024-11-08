@@ -224,6 +224,8 @@ func serveApplication() {
 	indicatorsInformationRoutes.PUT("/artisticProductionList/:academicPeriodID",
 		indicatorsInformationArtisticProduction.UpdateArtisticProjectList)
 
+	indicatorsInformationRoutes.GET("/postgraduate/programs/filter",
+		indicatorsInformationPostgraduate.FilterPostGraduatePrograms)
 	indicatorsInformationRoutes.POST("/postgraduate/program",
 		indicatorsInformationPostgraduate.PostPostgraduateProgram)
 

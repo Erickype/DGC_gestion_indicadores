@@ -7,6 +7,22 @@ import (
 	"net/http"
 )
 
+func FilterPostGraduatePrograms(context *gin.Context) {
+	var filterPostgraduateProgramsRequest model.FilterPostgraduateProgramsRequest
+	err := context.BindJSON(&filterPostgraduateProgramsRequest)
+	if err != nil {
+		errors.BadRequestResponse(context, err)
+		return
+	}
+	var filterPostGraduateProgramsResponse model.FilterPostGraduateProgramsResponse
+	err = model.FilterPostGraduatePrograms(&filterPostGraduateProgramsResponse, &filterPostgraduateProgramsRequest)
+	if err != nil {
+		errors.InternalServerErrorResponse(context, "Error retornando programas posgrado", err)
+		return
+	}
+	context.JSON(http.StatusOK, filterPostGraduateProgramsResponse)
+}
+
 func PostPostgraduateProgram(c *gin.Context) {
 	var postgraduateProgram model.PostgraduateProgram
 	err := c.BindJSON(&postgraduateProgram)
