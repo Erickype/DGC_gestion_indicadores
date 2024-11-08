@@ -1,5 +1,5 @@
 import type { FilterPostgraduateProgramsRequest, FilterPostGraduateProgramsResponse, PostgraduateProgram } from "$lib/api/model/api/indicatorsInformation/postgraduate";
-import { postFilterPostgraduateProgramsRoute, postPostgraduateProgramRoute } from "$lib/api/routes/api/indicatorsInformation/postgraduate";
+import { getPostgraduateProgramByProgramIDRoute, postFilterPostgraduateProgramsRoute, postPostgraduateProgramRoute } from "$lib/api/routes/api/indicatorsInformation/postgraduate";
 
 import { generateCommonErrorFromFetchError } from "$lib/utils";
 import type { CommonError } from "$lib/api/model/errors";
@@ -21,6 +21,27 @@ export async function PostFilterPostGraduatePrograms(token: string, request: Fil
         }
         const filterPostGraduateProgramsResponse: FilterPostGraduateProgramsResponse[] = await response.json()
         return filterPostGraduateProgramsResponse
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
+}
+
+export async function GetPostgraduateProgramByProgramID(token: string, request: PostgraduateProgram) {
+    try {
+        const response = await fetch(getPostgraduateProgramByProgramIDRoute + request.ID, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify(request)
+        })
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
+        }
+        const postgraduateProgram: PostgraduateProgram = await response.json()
+        return postgraduateProgram;
     } catch (error) {
         return generateCommonErrorFromFetchError(error)
     }
