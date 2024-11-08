@@ -26,15 +26,14 @@ export async function PostFilterPostGraduatePrograms(token: string, request: Fil
     }
 }
 
-export async function GetPostgraduateProgramByProgramID(token: string, request: PostgraduateProgram) {
+export async function GetPostgraduateProgramByProgramID(token: string, programID: string) {
     try {
-        const response = await fetch(getPostgraduateProgramByProgramIDRoute + request.ID, {
+        const response = await fetch(getPostgraduateProgramByProgramIDRoute + programID, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': token
             },
-            body: JSON.stringify(request)
         })
         if (!response.ok) {
             const error: CommonError = await response.json()
