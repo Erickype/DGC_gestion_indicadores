@@ -53,7 +53,10 @@ func FilterPostGraduatePrograms(
 		query = query.Where(strings.Join(conditions, " OR "), values...)
 	}
 
-	query = query.Select("pp.*")
+	query = query.Select(`pp.name,
+			pp.start_year,
+			pp.end_year,
+			pp.is_active`)
 
 	var totalCount int64
 	err = query.Table("indicators_information.postgraduate_programs pp").Count(&totalCount).Error
