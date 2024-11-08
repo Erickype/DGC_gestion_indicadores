@@ -228,6 +228,8 @@ func serveApplication() {
 		indicatorsInformationPostgraduate.FilterPostGraduatePrograms)
 	indicatorsInformationRoutes.POST("/postgraduate/program",
 		indicatorsInformationPostgraduate.PostPostgraduateProgram)
+	indicatorsInformationRoutes.PUT("/postgraduate/program/:programID",
+		indicatorsInformationPostgraduate.UpdatePostGraduateProgram)
 
 	// Indicators routes
 	indicatorsRoutes := router.Group("/api/indicators/")

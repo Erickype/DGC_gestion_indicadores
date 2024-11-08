@@ -22,11 +22,33 @@ func (grl PostgraduateProgram) TableName() string {
 	return model.IndicatorsInformationSchema + ".postgraduate_programs"
 }
 
+func GetPostgraduateProgramByID(programID int, postgraduateProgram *PostgraduateProgram) (err error) {
+	err = database.DB.First(&postgraduateProgram, programID).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("no existe el programa posgrado")
+		}
+		return err
+	}
+	return nil
+}
+
 func PostPostgraduateProgram(program *PostgraduateProgram) (err error) {
 	err = database.DB.Create(program).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
 			return errors.New("posgrado ya existe")
+		}
+		return err
+	}
+	return nil
+}
+
+func UpdatePostgraduateProgram(postgraduateProgram *PostgraduateProgram) (err error) {
+	err = database.DB.Save(postgraduateProgram).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("programa posgrado ya registrado")
 		}
 		return err
 	}
