@@ -1,4 +1,4 @@
-import type { FilterPostgraduateProgramsRequest, FilterPostGraduateProgramsResponse } from "$lib/api/model/api/indicatorsInformation/postgraduate";
+import type { FilterPostgraduateProgramsRequest, FilterPostGraduateProgramsResponse, PostgraduateProgram } from "$lib/api/model/api/indicatorsInformation/postgraduate";
 import type { PopoverFilterDataMap } from "$lib/components/table/types";
 
 import type { CommonError } from "$lib/api/model/errors";
@@ -44,6 +44,21 @@ export async function fetchFilterPostgraduatePrograms(filterPostgraduatePrograms
     const response = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(filterPostgraduateProgramsRequest)
+    });
+    if (!response.ok) {
+        const errorData = (await response.json()) as CommonError;
+        if (response.status === 401) {
+            throw goto('/');
+        }
+        throw errorData;
+    }
+    return response.json();
+}
+
+export async function fetchGetGetPostgraduateProgramByID(programID: string): Promise<PostgraduateProgram> {
+    const url = `/api/indicatorsInformation/postgraduate/program/` + programID;
+    const response = await fetch(url, {
+        method: 'GET',
     });
     if (!response.ok) {
         const errorData = (await response.json()) as CommonError;
