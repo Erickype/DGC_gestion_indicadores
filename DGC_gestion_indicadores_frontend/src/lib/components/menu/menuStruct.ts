@@ -38,6 +38,7 @@ export const menus: Menu[] = [
             { name: 'Libros o Capítulos', route: '/information/books' },
             { name: 'Proyectos vinculación', route: '/information/social-projects' },
             { name: 'Tasas de grado', route: '/information/grade-rates' },
+            { name: 'Tasas de posgrado', route: '/information/postgraduate-rates' },
         ],
         roles: [1, 2]
     },
