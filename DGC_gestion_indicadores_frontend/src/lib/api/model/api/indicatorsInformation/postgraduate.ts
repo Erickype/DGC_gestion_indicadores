@@ -10,8 +10,8 @@ export interface PostgraduateProgram {
 
 export interface FilterPostgraduateProgramsRequest {
     name?: string
-    start_year?: number
-    end_year?: number
+    start_year?: string
+    end_year?: string
     is_active?: boolean
     page_size: number,
     page: number

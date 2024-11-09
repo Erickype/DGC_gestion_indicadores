@@ -4,14 +4,13 @@ import (
 	"fmt"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
-	"strconv"
 	"strings"
 )
 
 type FilterPostgraduateProgramsRequest struct {
 	Name      string `json:"name,omitempty"`
-	StartYear uint   `json:"start_year,omitempty"`
-	EndYear   uint   `json:"end_year,omitempty"`
+	StartYear string `json:"start_year,omitempty"`
+	EndYear   string `json:"end_year,omitempty"`
 	IsActive  *bool  `json:"is_active,omitempty"`
 	PageSize  int    `json:"page_size"`
 	Page      int    `json:"page"`
@@ -36,13 +35,13 @@ func FilterPostGraduatePrograms(
 		conditions = append(conditions, "LOWER(pp.name) LIKE ?")
 		values = append(values, fmt.Sprintf("%%%s%%", strings.ToLower(filterPostgraduateProgramsRequest.Name)))
 	}
-	if strconv.Itoa(int(filterPostgraduateProgramsRequest.StartYear)) != "" {
+	if filterPostgraduateProgramsRequest.StartYear != "" {
 		conditions = append(conditions, "cast(pp.start_year as varchar) LIKE ?")
-		values = append(values, fmt.Sprintf("%%%s%%", strconv.Itoa(int(filterPostgraduateProgramsRequest.StartYear))))
+		values = append(values, fmt.Sprintf("%%%s%%", filterPostgraduateProgramsRequest.StartYear))
 	}
-	if strconv.Itoa(int(filterPostgraduateProgramsRequest.EndYear)) != "" {
+	if filterPostgraduateProgramsRequest.EndYear != "" {
 		conditions = append(conditions, "cast(pp.end_year as varchar) LIKE ?")
-		values = append(values, fmt.Sprintf("%%%s%%", strconv.Itoa(int(filterPostgraduateProgramsRequest.EndYear))))
+		values = append(values, fmt.Sprintf("%%%s%%", filterPostgraduateProgramsRequest.EndYear))
 	}
 	if filterPostgraduateProgramsRequest.IsActive != nil {
 		conditions = append(conditions, "pp.is_active = ?")
