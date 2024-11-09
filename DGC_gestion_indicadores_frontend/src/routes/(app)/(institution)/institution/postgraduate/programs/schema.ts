@@ -3,6 +3,8 @@ import { z } from "zod";
 export const addPostgraduateProgramSchema = z.object({
     name: z.string({
         required_error: "Nombre requerido"
+    }).min(10, {
+        message: "Ingrese al menos 10 caracteres"
     }).max(1000),
 
     start_year: z.coerce.number({
@@ -27,6 +29,8 @@ export const updatePostgraduateProgramSchema = z.object({
 
     name: z.string({
         required_error: "Nombre requerido"
+    }).min(10, {
+        message: "Ingrese al menos 10 caracteres"
     }).max(1000),
 
     start_year: z.coerce.number({
