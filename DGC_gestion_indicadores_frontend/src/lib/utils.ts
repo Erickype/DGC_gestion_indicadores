@@ -135,4 +135,8 @@ export const filterAcademicPeriodsAuxSchema = z.object({
 	academic_period_id: z.number().gt(0)
 })
 
+export const filterPostgraduateProgramAuxSchema = z.object({
+	programID: z.number().gt(0)
+})
+
 export type FilterAcademicPeriodsAuxSchema = typeof filterAcademicPeriodsAuxSchema
