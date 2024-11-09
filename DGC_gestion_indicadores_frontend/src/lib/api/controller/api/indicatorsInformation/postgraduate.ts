@@ -1,5 +1,6 @@
 import { getPostgraduateProgramByProgramIDRoute, postFilterPostgraduateProgramsRoute, postPostgraduateProgramRoute, updatePostgraduateProgramRoute } from "$lib/api/routes/api/indicatorsInformation/postgraduate";
 import type { FilterPostgraduateProgramsRequest, FilterPostGraduateProgramsResponse, PostgraduateProgram } from "$lib/api/model/api/indicatorsInformation/postgraduate";
+import type { Message } from "$lib/components/combobox/combobox";
 
 import { generateCommonErrorFromFetchError } from "$lib/utils";
 import type { CommonError } from "$lib/api/model/errors";
@@ -86,4 +87,15 @@ export async function UpdatePostgraduateProgram(token: string, request: Postgrad
     } catch (error) {
         return generateCommonErrorFromFetchError(error)
     }
+}
+
+export function GenerateComboMessagesFromAuthors(programs: PostgraduateProgram[]): Message[] {
+    let messages: Message[] = []
+    messages = messages.concat(
+        programs.map((program) => ({
+            value: program.ID!,
+            label: program.name,
+        }))
+    );
+    return messages
 }
