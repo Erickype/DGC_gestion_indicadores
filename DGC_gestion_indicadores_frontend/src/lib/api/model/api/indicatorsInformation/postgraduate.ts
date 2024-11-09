@@ -1,7 +1,7 @@
 export interface PostgraduateProgram {
-    created_at: string
-    updated_at: string
-    ID: number
+    created_at?: string
+    updated_at?: string
+    ID?: number
     name: string
     start_year: number
     end_year: number
