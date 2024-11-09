@@ -52,7 +52,8 @@ func FilterPostGraduatePrograms(
 		query = query.Where(strings.Join(conditions, " OR "), values...)
 	}
 
-	query = query.Select(`pp.name,
+	query = query.Select(`pp.id,
+			pp.name,
 			pp.start_year,
 			pp.end_year,
 			pp.is_active`)
@@ -66,7 +67,7 @@ func FilterPostGraduatePrograms(
 	pageSize := filterPostgraduateProgramsRequest.PageSize
 	page := filterPostgraduateProgramsRequest.Page
 	err = query.
-		Order("pp.start_year desc, pp.is_active desc").
+		Order("pp.is_active desc, pp.start_year desc").
 		Scopes(model.Paginate(pageSize, page)).
 		Scan(&filterPostGraduateProgramsResponse.PostgraduatePrograms).Error
 	if err != nil {
