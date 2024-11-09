@@ -2,7 +2,7 @@
 	import TableSkeleton from '$lib/components/skeleton/table.svelte';
 	import AddModal from '$lib/components/modal/AddModal.svelte';
 	import Alert from '$lib/components/alert/alert.svelte';
-	/* mport AddForm from './AddForm.svelte';*/
+	import AddForm from './AddForm.svelte';
 	import Table from './Table.svelte';
 
 	import Icon from 'lucide-svelte/icons/brain-circuit';
@@ -16,11 +16,11 @@
 		newFilterPostgraduateProgramsRequest,
 		newPopoverFilterDataMap
 	} from '$lib/components/filters/indicatorsInformation/postgraduate/programs';
+	import type { PopoverFilterDataMap } from '$lib/components/table/types';
 	import type {
 		FilterPostgraduateProgramsRequest,
 		FilterPostGraduateProgramsResponse
 	} from '$lib/api/model/api/indicatorsInformation/postgraduate';
-	import type { PopoverFilterDataMap } from '$lib/components/table/types';
 
 	export let data: PageServerData;
 	const addPostGraduateProgramForm = data.addPostGraduateProgramForm;
@@ -76,15 +76,12 @@
 		<Icon class="h-8 w-8" />
 		<h2 class="text-2xl font-bold">Programas de posgrado</h2>
 	</div>
-</div>
-
-<div class="mx-auto flex w-full place-content-center justify-between px-8">
-	<!-- <AddModal
+	<AddModal
 		formComponent={AddForm}
-		modalTitle="Crear libro o capítulo"
+		modalTitle="Crear programa posgrado"
 		formData={addPostGraduateProgramForm}
 		on:created={fetchOnSuccess}
-	/> -->
+	/>
 </div>
 
 <div class="mx-auto flex w-full flex-col place-content-center px-8">
