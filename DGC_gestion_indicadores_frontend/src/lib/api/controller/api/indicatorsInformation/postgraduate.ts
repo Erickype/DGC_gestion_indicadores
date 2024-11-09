@@ -1,5 +1,5 @@
+import { getPostgraduateProgramByProgramIDRoute, postFilterPostgraduateProgramsRoute, postPostgraduateProgramRoute, updatePostgraduateProgramRoute } from "$lib/api/routes/api/indicatorsInformation/postgraduate";
 import type { FilterPostgraduateProgramsRequest, FilterPostGraduateProgramsResponse, PostgraduateProgram } from "$lib/api/model/api/indicatorsInformation/postgraduate";
-import { getPostgraduateProgramByProgramIDRoute, postFilterPostgraduateProgramsRoute, postPostgraduateProgramRoute } from "$lib/api/routes/api/indicatorsInformation/postgraduate";
 
 import { generateCommonErrorFromFetchError } from "$lib/utils";
 import type { CommonError } from "$lib/api/model/errors";
@@ -69,7 +69,7 @@ export async function PostPostgraduateProgram(token: string, request: Postgradua
 
 export async function UpdatePostgraduateProgram(token: string, request: PostgraduateProgram) {
     try {
-        const response = await fetch(postPostgraduateProgramRoute + request.ID, {
+        const response = await fetch(updatePostgraduateProgramRoute + request.ID, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
