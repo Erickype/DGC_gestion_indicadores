@@ -53,7 +53,7 @@ export async function fetchFilterPostgraduatePrograms(filterPostgraduatePrograms
     return response.json();
 }
 
-export async function fetchGetGetPostgraduateProgramByID(programID: string): Promise<PostgraduateProgram> {
+export async function fetchGetGetPostgraduateProgramByID(programID: string) {
     const url = `/api/indicatorsInformation/postgraduate/program/` + programID;
     const response = await fetch(url, {
         method: 'GET',
@@ -63,7 +63,7 @@ export async function fetchGetGetPostgraduateProgramByID(programID: string): Pro
         if (response.status === 401) {
             throw goto('/');
         }
-        throw errorData;
+        return errorData;
     }
     return response.json();
 }
