@@ -155,7 +155,7 @@
 
 <div class="w-full">
 	<Table
-		tableHeightClass="h-[50vh]"
+		tableHeightClass="h-[58vh]"
 		{table}
 		{columns}
 		serverItemCount={filterPostGraduateProgramsResponse.count}

@@ -86,7 +86,7 @@
 
 <div class="mx-auto flex w-full flex-col place-content-center px-8">
 	{#await filterPostGraduateProgramsPromise}
-		<TableSkeleton />
+		<TableSkeleton tableHeightClass="h-[65vh]" />
 	{:then filterPostGraduateProgramsResponse}
 		{#if filterPostGraduateProgramsResponse.postgraduate_programs}
 			<Table
