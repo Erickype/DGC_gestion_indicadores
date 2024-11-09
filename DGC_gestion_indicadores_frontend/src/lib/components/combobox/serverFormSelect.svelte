@@ -5,18 +5,19 @@
 	import * as Form from '$lib/components/ui/form';
 	import { cn } from '$lib/utils.js';
 
+	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
+	import { createEventDispatcher, tick } from 'svelte';
+	import { Button } from '$lib/components/ui/button';
 	import Check from 'lucide-svelte/icons/check';
 	import type { Message } from './combobox';
 	import { writable } from 'svelte/store';
-	import { createEventDispatcher, tick } from 'svelte';
-	import { Button } from '$lib/components/ui/button';
 
 	import PopoverFilter from '$lib/components/table/popoverFilter.svelte';
 
+	import type { PopoverFilterDataMap } from '../table/types';
 	import Search from 'lucide-svelte/icons/search';
 	import X from 'lucide-svelte/icons/x';
-	import type { PopoverFilterDataMap } from '../table/types';
 
 	export let comboData: Message[];
 	export let openCombo = false;
@@ -81,7 +82,9 @@
 			role="combobox"
 			{...attrs}
 		>
-			{comboData.find((f) => f.value === $formDataID)?.label ?? emptyLabel}
+			<ScrollArea class="w-auto text-pretty py-4 text-left" orientation="horizontal">
+				{comboData.find((f) => f.value === $formDataID)?.label ?? emptyLabel}
+			</ScrollArea>
 			<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
 		</Popover.Trigger>
 		<input hidden value={$formDataID} name={attrs.name} />
