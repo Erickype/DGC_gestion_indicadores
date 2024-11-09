@@ -2,8 +2,8 @@
 	import TableSkeleton from '$lib/components/skeleton/table.svelte';
 	import AddModal from '$lib/components/modal/AddModal.svelte';
 	import Alert from '$lib/components/alert/alert.svelte';
-	/* mport AddForm from './AddForm.svelte';
-	import Table from './Table.svelte'; */
+	/* mport AddForm from './AddForm.svelte';*/
+	import Table from './Table.svelte';
 
 	import Icon from 'lucide-svelte/icons/brain-circuit';
 
@@ -92,7 +92,7 @@
 		<TableSkeleton />
 	{:then filterPostGraduateProgramsResponse}
 		{#if filterPostGraduateProgramsResponse.postgraduate_programs}
-			<!-- <Table
+			<Table
 				bind:filterPostgraduateProgramsRequest
 				formData={updatePostGraduateProgramForm}
 				{filterPostGraduateProgramsResponse}
@@ -103,7 +103,7 @@
 				on:filterChanged={handleOnFilterChanged}
 				on:detailedFilter={handleOnDetailedFilter}
 				on:paginationChanged={handlePaginationChanged}
-			></Table> -->
+			/>
 		{:else}
 			<Alert title="Sin registros" description={'Ups, no hay programas posgrado registrados.'} />
 		{/if}
