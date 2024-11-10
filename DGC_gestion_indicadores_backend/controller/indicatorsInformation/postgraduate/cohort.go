@@ -53,3 +53,33 @@ func PostPostgraduateCohortList(c *gin.Context) {
 	}
 	c.JSON(http.StatusCreated, postgraduateCohortList)
 }
+
+func UpdatePostgraduateCohortList(c *gin.Context) {
+	var postgraduateCohortList model.PostgraduateCohortList
+	programID, _ := strconv.Atoi(c.Param("programID"))
+	year, _ := strconv.Atoi(c.Param("year"))
+
+	var cohortList model.PostgraduateCohortList
+	err := model.GetPostgraduateCohortListByProgramIDAndYear(programID, year, &cohortList)
+	if err != nil {
+		if errorsS.Is(err, gorm.ErrRecordNotFound) {
+			errors.NotFoundResponse(c, "Cohorte no encontrada en programa posgrado", err)
+			return
+		}
+		errors.InternalServerErrorResponse(c, "Error encontrando cohorte en programa posgrado", err)
+		return
+	}
+
+	err = c.BindJSON(&postgraduateCohortList)
+	if err != nil {
+		errors.BadRequestResponse(c, err)
+		return
+	}
+
+	err = model.UpdatePostgraduateCohortList(&postgraduateCohortList)
+	if err != nil {
+		errors.InternalServerErrorResponse(c, "Error actualizando cohorte de programa posgrado", err)
+		return
+	}
+	c.JSON(http.StatusAccepted, postgraduateCohortList)
+}

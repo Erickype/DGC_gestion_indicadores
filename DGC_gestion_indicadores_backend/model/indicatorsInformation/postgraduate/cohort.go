@@ -11,7 +11,7 @@ import (
 type PostgraduateCohortList struct {
 	CreatedAt             time.Time `json:"created_at"`
 	UpdatedAt             time.Time `json:"updated_at"`
-	PostgraduateProgramID uint      `gorm:"primary_key" json:"program_id"`
+	PostgraduateProgramID uint      `gorm:"primary_key" json:"postgraduate_program_id"`
 	Year                  uint      `gorm:"primary_key" json:"year"`
 	Name                  string    `json:"name"`
 	GraduatedStudents     uint      `json:"graduated_students"`
@@ -22,6 +22,17 @@ type PostgraduateCohortList struct {
 
 func (c PostgraduateCohortList) TableName() string {
 	return model.IndicatorsInformationSchema + ".postgraduate_cohort_lists"
+}
+
+func GetPostgraduateCohortListByProgramIDAndYear(programID, year int, postgraduateCohortList *PostgraduateCohortList) (err error) {
+	err = database.DB.Model(&PostgraduateCohortList{}).
+		Find(&postgraduateCohortList,
+			"postgraduate_program_id = ? and year = ?", programID, year).
+		Error
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func GetPostgraduateCohortListsByProgramID(programID int, postgraduateCohortLists *[]PostgraduateCohortList) (err error) {
@@ -48,6 +59,17 @@ func PostPostgraduateCohortList(postgraduateCohortList *PostgraduateCohortList) 
 	if err != nil {
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
 			return errors.New("cohorte ya existe")
+		}
+		return err
+	}
+	return nil
+}
+
+func UpdatePostgraduateCohortList(postgraduateCohortList *PostgraduateCohortList) (err error) {
+	err = database.DB.Save(postgraduateCohortList).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("valores para la cohorte ya registrados")
 		}
 		return err
 	}
