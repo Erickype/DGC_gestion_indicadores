@@ -24,6 +24,16 @@ func (c PostgraduateCohortList) TableName() string {
 	return model.IndicatorsInformationSchema + ".postgraduate_cohort_lists"
 }
 
+func GetPostgraduateCohortListsByProgramID(programID int, postgraduateCohortLists *[]PostgraduateCohortList) (err error) {
+	err = database.DB.Model(&PostgraduateCohortList{}).
+		Where("program_id = ?", programID).
+		Find(&postgraduateCohortLists).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func PostPostgraduateCohortList(postgraduateCohortList *PostgraduateCohortList) (err error) {
 	var postgraduateProgram PostgraduateProgram
 	err = GetPostgraduateProgramByID(int(postgraduateCohortList.PostgraduateProgramID), &postgraduateProgram)
