@@ -1,7 +1,10 @@
 package model
 
 import (
+	"errors"
+	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -19,4 +22,24 @@ type PostgraduateCohortList struct {
 
 func (c PostgraduateCohortList) TableName() string {
 	return model.IndicatorsInformationSchema + ".postgraduate_cohort_lists"
+}
+
+func PostPostgraduateCohortList(postgraduateCohortList *PostgraduateCohortList) (err error) {
+	var postgraduateProgram PostgraduateProgram
+	err = GetPostgraduateProgramByID(int(postgraduateCohortList.PostgraduateProgramID), &postgraduateProgram)
+	if err != nil {
+		return err
+	}
+	if postgraduateProgram.StartYear < postgraduateCohortList.Year ||
+		postgraduateProgram.EndYear > postgraduateCohortList.Year {
+		return errors.New("año fuera de intervalo de programa")
+	}
+	err = database.DB.Create(&postgraduateCohortList).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("cohorte ya existe")
+		}
+		return err
+	}
+	return nil
 }
