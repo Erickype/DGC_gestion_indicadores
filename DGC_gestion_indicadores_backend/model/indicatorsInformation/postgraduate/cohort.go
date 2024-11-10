@@ -37,7 +37,7 @@ func GetPostgraduateCohortListByProgramIDAndYear(programID, year int, postgradua
 
 func GetPostgraduateCohortListsByProgramID(programID int, postgraduateCohortLists *[]PostgraduateCohortList) (err error) {
 	err = database.DB.Model(&PostgraduateCohortList{}).
-		Where("program_id = ?", programID).
+		Where("postgraduate_program_id = ?", programID).
 		Find(&postgraduateCohortLists).Error
 	if err != nil {
 		return err
