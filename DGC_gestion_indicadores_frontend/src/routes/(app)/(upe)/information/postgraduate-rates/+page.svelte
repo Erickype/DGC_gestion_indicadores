@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { filterAcademicPeriodsAuxSchema, filterPostgraduateProgramAuxSchema } from '$lib/utils';
-	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { filterPostgraduateProgramAuxSchema } from '$lib/utils';
 	import SuperDebug, { superForm } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	import type { PageServerData } from './$types';
 	import { browser } from '$app/environment';
@@ -13,14 +13,14 @@
 	import Icon from 'lucide-svelte/icons/graduation-cap';
 
 	import PostgraduateProgramsServer from '$lib/components/filters/indicatorsInformation/postgraduate/programsServer.svelte';
-	import type { GradeRateListJoined } from '$lib/api/model/api/indicatorsInformation/gradeRateLists';
+	import type { PostgraduateCohortList } from '$lib/api/model/api/indicatorsInformation/postgraduate';
 	import TableSkeleton from '$lib/components/skeleton/table.svelte';
 	import type { Message } from '$lib/components/combobox/combobox';
 	import AddModal from '$lib/components/modal/AddModal.svelte';
 	import type { CommonError } from '$lib/api/model/errors';
 	import Alert from '$lib/components/alert/alert.svelte';
-	/* import AddForm from './AddForm.svelte';
-	import Table from './Table.svelte'; */
+	/* import AddForm from './AddForm.svelte'; */
+	import Table from './Table.svelte';
 
 	export let data: PageServerData;
 	const filterPostgraduateProgramAuxForm = data.filterPostgraduateProgramAuxForm;
@@ -33,18 +33,18 @@
 
 	const { form: formData } = form;
 
-	let gradeRateListsPromise: Promise<GradeRateListJoined[]>;
+	let postgraduateCohortListsPromise: Promise<PostgraduateCohortList[]>;
 
 	let formDataPostgraduateProgramID = writable($formData.programID);
 	formDataPostgraduateProgramID.subscribe((value) => {
 		$formData.programID = value;
-		addPostgraduateCohortListForm.data.postgraduate_program_id = $formData.programID
-		updatePostgraduateCohortListForm.data.postgraduate_program_id = $formData.programID
-		gradeRateListsPromise = fetchGradeRateListsByAcademicPeriod();
+		addPostgraduateCohortListForm.data.postgraduate_program_id = $formData.programID;
+		updatePostgraduateCohortListForm.data.postgraduate_program_id = $formData.programID;
+		postgraduateCohortListsPromise = fetchPostgraduateCohortListsByAcademicPeriod();
 	});
 
-	async function fetchGradeRateListsByAcademicPeriod(): Promise<GradeRateListJoined[]> {
-		const url = `/api/indicatorsInformation/gradeRateLists/${$formData.programID}`;
+	async function fetchPostgraduateCohortListsByAcademicPeriod(): Promise<PostgraduateCohortList[]> {
+		const url = `/api/indicatorsInformation/postgraduate/cohortLists/${$formData.programID}`;
 		const response = await fetch(url, {
 			method: 'GET'
 		});
@@ -62,7 +62,7 @@
 		const detail: { status: boolean } = event.detail;
 		if (detail.status) {
 			$formData.programID = $formDataPostgraduateProgramID;
-			gradeRateListsPromise = fetchGradeRateListsByAcademicPeriod();
+			postgraduateCohortListsPromise = fetchPostgraduateCohortListsByAcademicPeriod();
 		}
 	}
 </script>
@@ -93,17 +93,17 @@
 </div>
 
 <div class="mx-auto flex w-full flex-col place-content-center px-8">
-	{#await gradeRateListsPromise}
-		<TableSkeleton tableHeightClass="h-[55vh]" />
-	{:then gradeRateLists}
-		{#if gradeRateLists && gradeRateLists.length > 0}
-			<!-- <Table
-				formData={updateGradeRateListForm}
-				{gradeRateLists}
-				{comboMessages}
+	{#await postgraduateCohortListsPromise}
+		<TableSkeleton tableHeightClass="h-[50vh]" />
+	{:then postgraduateCohortLists}
+		{#if postgraduateCohortLists && postgraduateCohortLists.length > 0}
+			<Table
+				formData={updatePostgraduateCohortListForm}
+				{postgraduateCohortLists}
+				comboMessages={undefined}
 				on:updated={fetchOnSuccess}
 				on:deleted={fetchOnSuccess}
-			></Table> -->
+			></Table>
 		{:else}
 			<Alert
 				title="Sin registros"
