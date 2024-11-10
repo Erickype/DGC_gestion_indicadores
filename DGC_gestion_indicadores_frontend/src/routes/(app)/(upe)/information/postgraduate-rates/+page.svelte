@@ -24,6 +24,8 @@
 
 	export let data: PageServerData;
 	const filterPostgraduateProgramAuxForm = data.filterPostgraduateProgramAuxForm;
+	const addPostgraduateCohortListForm = data.addPostgraduateCohortListForm;
+	const updatePostgraduateCohortListForm = data.updatePostgraduateCohortListForm;
 
 	const form = superForm(filterPostgraduateProgramAuxForm, {
 		validators: zodClient(filterPostgraduateProgramAuxSchema)
@@ -36,6 +38,8 @@
 	let formDataPostgraduateProgramID = writable($formData.programID);
 	formDataPostgraduateProgramID.subscribe((value) => {
 		$formData.programID = value;
+		addPostgraduateCohortListForm.data.postgraduate_program_id = $formData.programID
+		updatePostgraduateCohortListForm.data.postgraduate_program_id = $formData.programID
 		gradeRateListsPromise = fetchGradeRateListsByAcademicPeriod();
 	});
 
