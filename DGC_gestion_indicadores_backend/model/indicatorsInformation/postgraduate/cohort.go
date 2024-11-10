@@ -51,8 +51,8 @@ func PostPostgraduateCohortList(postgraduateCohortList *PostgraduateCohortList) 
 	if err != nil {
 		return err
 	}
-	if postgraduateProgram.StartYear < postgraduateCohortList.Year ||
-		postgraduateProgram.EndYear > postgraduateCohortList.Year {
+	if postgraduateCohortList.Year < postgraduateProgram.StartYear ||
+		postgraduateCohortList.Year > postgraduateProgram.EndYear {
 		return errors.New("año fuera de intervalo de programa")
 	}
 	err = database.DB.Create(&postgraduateCohortList).Error
