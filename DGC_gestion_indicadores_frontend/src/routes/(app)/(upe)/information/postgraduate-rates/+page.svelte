@@ -15,11 +15,10 @@
 	import PostgraduateProgramsServer from '$lib/components/filters/indicatorsInformation/postgraduate/programsServer.svelte';
 	import type { PostgraduateCohortList } from '$lib/api/model/api/indicatorsInformation/postgraduate';
 	import TableSkeleton from '$lib/components/skeleton/table.svelte';
-	import type { Message } from '$lib/components/combobox/combobox';
 	import AddModal from '$lib/components/modal/AddModal.svelte';
 	import type { CommonError } from '$lib/api/model/errors';
 	import Alert from '$lib/components/alert/alert.svelte';
-	/* import AddForm from './AddForm.svelte'; */
+	import AddForm from './AddForm.svelte';
 	import Table from './Table.svelte';
 
 	export let data: PageServerData;
@@ -83,13 +82,13 @@
 		<PostgraduateProgramsServer {formDataPostgraduateProgramID} />
 	</Form.Field>
 
-	<!-- <AddModal
+	<AddModal
 		formComponent={AddForm}
-		modalTitle="Crear tasa de grado"
-		formData={addGradeRateListForm}
-		{comboMessages}
+		modalTitle="Crear tasa de posgrado para cohorte"
+		formData={addPostgraduateCohortListForm}
+		comboMessages={undefined}
 		on:created={fetchOnSuccess}
-	/> -->
+	/>
 </div>
 
 <div class="mx-auto flex w-full flex-col place-content-center px-8">
