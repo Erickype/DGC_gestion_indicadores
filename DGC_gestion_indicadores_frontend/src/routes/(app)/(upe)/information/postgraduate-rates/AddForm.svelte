@@ -39,6 +39,10 @@
 				GradeRateListCreated();
 				return toast.success(`Valores de tasas de cohorte creados: ${response.name}`);
 			}
+			$formData.name = f.data.name;
+			$formData.year = f.data.year;
+			$formData.graduated_students = f.data.graduated_students;
+			$formData.total_students = f.data.total_students;
 			return manageToastFromErrorMessageOnAddForm(message);
 		}
 	});
@@ -46,7 +50,7 @@
 	const { form: formData, enhance } = form;
 </script>
 
-<form action="?/postGradeRateList" use:enhance>
+<form action="?/postPostgraduateCohortList" use:enhance>
 	<div class="flex flex-col gap-2">
 		<Form.Field {form} name="postgraduate_program_id">
 			<Form.Control let:attrs>
