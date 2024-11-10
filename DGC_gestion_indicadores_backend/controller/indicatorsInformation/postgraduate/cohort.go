@@ -39,6 +39,35 @@ func GetPostgraduateCohortListsByProgramID(context *gin.Context) {
 	context.JSON(http.StatusOK, postgraduateCohortLists)
 }
 
+func GetPostgraduateProgramMissingCohortYearsByProgramID(context *gin.Context) {
+	programID, err := strconv.Atoi(context.Param("programID"))
+	if err != nil {
+		errors.BadRequestResponse(context, err)
+		return
+	}
+	var postgraduateProgram model.PostgraduateProgram
+	err = model.GetPostgraduateProgramByID(programID, &postgraduateProgram)
+	if err != nil {
+		if errorsS.Is(err, gorm.ErrRecordNotFound) {
+			errors.NotFoundResponse(context, "Programa posgrado no encontrado", err)
+			return
+		}
+		errors.InternalServerErrorResponse(context, "Error retornando programa posgrado", err)
+		return
+	}
+
+	var response model.GetPostgraduateProgramMissingCohortYearsByProgramIDResponse
+	err = model.GetPostgraduateProgramMissingCohortYearsByProgramID(programID, &response)
+	if err != nil {
+		errors.InternalServerErrorResponse(context, "Error retornando rango años para program", err)
+		return
+	}
+	if len(response.Years) == 0 {
+		response.Years = []int{}
+	}
+	context.JSON(http.StatusOK, response)
+}
+
 func PostPostgraduateCohortList(c *gin.Context) {
 	var postgraduateCohortList model.PostgraduateCohortList
 	err := c.BindJSON(&postgraduateCohortList)

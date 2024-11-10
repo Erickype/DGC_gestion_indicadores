@@ -228,6 +228,8 @@ func serveApplication() {
 		indicatorsInformationPostgraduate.FilterPostGraduatePrograms)
 	indicatorsInformationRoutes.GET("/postgraduate/program/:programID",
 		indicatorsInformationPostgraduate.GetPostgraduateProgramByID)
+	indicatorsInformationRoutes.GET("/postgraduate/program/cohort/missingYears/:programID",
+		indicatorsInformationPostgraduate.GetPostgraduateProgramMissingCohortYearsByProgramID)
 	indicatorsInformationRoutes.POST("/postgraduate/program",
 		indicatorsInformationPostgraduate.PostPostgraduateProgram)
 	indicatorsInformationRoutes.PUT("/postgraduate/program/:programID",

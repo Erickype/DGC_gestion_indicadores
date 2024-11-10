@@ -18,6 +18,10 @@ type PostgraduateProgram struct {
 	IsActive  *bool     `json:"is_active"`
 }
 
+type GetPostgraduateProgramMissingCohortYearsByProgramIDResponse struct {
+	Years []int `json:"years"`
+}
+
 func (grl PostgraduateProgram) TableName() string {
 	return model.IndicatorsInformationSchema + ".postgraduate_programs"
 }
@@ -33,7 +37,40 @@ func GetPostgraduateProgramByID(programID int, postgraduateProgram *Postgraduate
 	return nil
 }
 
+func GetPostgraduateProgramMissingCohortYearsByProgramID(
+	programID int, response *GetPostgraduateProgramMissingCohortYearsByProgramIDResponse) (err error) {
+	var postgraduateProgram PostgraduateProgram
+	err = GetPostgraduateProgramByID(programID, &postgraduateProgram)
+	if err != nil {
+		return err
+	}
+	if postgraduateProgram.StartYear > postgraduateProgram.EndYear {
+		return errors.New("año de inicio es mayor que año de fin")
+	}
+	var postgraduateCohortLists []PostgraduateCohortList
+	err = GetPostgraduateCohortListsByProgramID(programID, &postgraduateCohortLists)
+	if err != nil {
+		return err
+	}
+
+	existingYears := make(map[int]struct{})
+	for _, cohort := range postgraduateCohortLists {
+		existingYears[int(cohort.Year)] = struct{}{}
+	}
+
+	// Add each year to response.Years only if it's not in the existingYears set
+	for i := int(postgraduateProgram.StartYear); i <= int(postgraduateProgram.EndYear); i++ {
+		if _, exists := existingYears[i]; !exists {
+			response.Years = append(response.Years, i)
+		}
+	}
+	return nil
+}
+
 func PostPostgraduateProgram(program *PostgraduateProgram) (err error) {
+	if program.StartYear > program.EndYear {
+		return errors.New("año de inicio es mayor que año de fin")
+	}
 	err = database.DB.Create(program).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
