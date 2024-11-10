@@ -23,3 +23,13 @@ export interface FilterPostGraduateProgramsResponse {
     page: number,
     postgraduate_programs: PostgraduateProgram[]
 }
+
+export interface PostgraduateCohortList {
+    created_at?: string
+    updated_at?: string
+    postgraduate_program_id: number
+    year: number
+    name: string
+    graduated_students: number
+    total_students: number
+}

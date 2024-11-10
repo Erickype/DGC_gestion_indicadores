@@ -1,5 +1,5 @@
-import { getPostgraduateProgramByProgramIDRoute, postFilterPostgraduateProgramsRoute, postPostgraduateProgramRoute, updatePostgraduateProgramRoute } from "$lib/api/routes/api/indicatorsInformation/postgraduate";
-import type { FilterPostgraduateProgramsRequest, FilterPostGraduateProgramsResponse, PostgraduateProgram } from "$lib/api/model/api/indicatorsInformation/postgraduate";
+import { getPostgraduateCohortListsByProgramIDRoute, getPostgraduateProgramByProgramIDRoute, postFilterPostgraduateProgramsRoute, postPostgraduateCohortListRoute, postPostgraduateProgramRoute, updatePostgraduateProgramRoute } from "$lib/api/routes/api/indicatorsInformation/postgraduate";
+import type { FilterPostgraduateProgramsRequest, FilterPostGraduateProgramsResponse, PostgraduateCohortList, PostgraduateProgram } from "$lib/api/model/api/indicatorsInformation/postgraduate";
 import type { Message } from "$lib/components/combobox/combobox";
 
 import { generateCommonErrorFromFetchError } from "$lib/utils";
@@ -98,4 +98,66 @@ export function GenerateComboMessagesFromAuthors(programs: PostgraduateProgram[]
         }))
     );
     return messages
+}
+
+export async function GetPostgraduateCohortListsByProgramID(token: string, programID: string) {
+    try {
+        const response = await fetch(getPostgraduateCohortListsByProgramIDRoute + programID, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+        })
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
+        }
+        const postgraduateCohortLists: PostgraduateCohortList[] = await response.json()
+        return postgraduateCohortLists;
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
+}
+
+export async function PostPostgraduateCohortList(token: string, request: PostgraduateCohortList) {
+    try {
+        const response = await fetch(postPostgraduateCohortListRoute, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify(request)
+        })
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
+        }
+        const postgraduateCohortList: PostgraduateCohortList = await response.json()
+        return postgraduateCohortList;
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
+}
+
+export async function UpdatePostgraduateCohortList(token: string, request: PostgraduateCohortList) {
+    try {
+        const response = await fetch(updatePostgraduateProgramRoute + request.postgraduate_program_id + "/" + request.year, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify(request)
+        })
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
+        }
+        const postgraduateCohortList: PostgraduateCohortList = await response.json()
+        return postgraduateCohortList;
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
 }
