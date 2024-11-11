@@ -38,6 +38,7 @@ func GetPostgraduateCohortListByProgramIDAndYear(programID, year int, postgradua
 func GetPostgraduateCohortListsByProgramID(programID int, postgraduateCohortLists *[]PostgraduateCohortList) (err error) {
 	err = database.DB.Model(&PostgraduateCohortList{}).
 		Where("postgraduate_program_id = ?", programID).
+		Order("year desc").
 		Find(&postgraduateCohortLists).Error
 	if err != nil {
 		return err
@@ -66,7 +67,12 @@ func PostPostgraduateCohortList(postgraduateCohortList *PostgraduateCohortList) 
 }
 
 func UpdatePostgraduateCohortList(postgraduateCohortList *PostgraduateCohortList) (err error) {
-	err = database.DB.Save(postgraduateCohortList).Error
+	err = database.DB.Model(&PostgraduateCohortList{}).
+		Select("*").
+		Where("postgraduate_program_id = ? and year = ?",
+			postgraduateCohortList.PostgraduateProgramID, postgraduateCohortList.Year).
+		Updates(postgraduateCohortList).
+		Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
 			return errors.New("valores para la cohorte ya registrados")
