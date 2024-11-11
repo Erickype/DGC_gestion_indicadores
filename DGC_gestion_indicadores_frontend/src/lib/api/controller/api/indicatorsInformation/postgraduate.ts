@@ -120,6 +120,17 @@ export async function GetPostgraduateProgramMissingCohortYearsByProgramID(token:
     }
 }
 
+export function GenerateComboMessagesFromMissingYears(programs: number[]): Message[] {
+    let messages: Message[] = []
+    messages = messages.concat(
+        programs.map((year) => ({
+            value: year,
+            label: year.toString(),
+        }))
+    );
+    return messages
+}
+
 export async function GetPostgraduateCohortListsByProgramID(token: string, programID: string) {
     try {
         const response = await fetch(getPostgraduateCohortListsByProgramIDRoute + programID, {
