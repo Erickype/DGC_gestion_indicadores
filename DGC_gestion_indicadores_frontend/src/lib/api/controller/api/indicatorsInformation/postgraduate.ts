@@ -1,4 +1,4 @@
-import { getPostgraduateCohortListsByProgramIDRoute, getPostgraduateProgramByProgramIDRoute, getPostgraduateProgramMissingCohortYearsByProgramIDRoute, postFilterPostgraduateProgramsRoute, postPostgraduateCohortListRoute, postPostgraduateProgramRoute, updatePostgraduateProgramRoute } from "$lib/api/routes/api/indicatorsInformation/postgraduate";
+import { getPostgraduateCohortListsByProgramIDRoute, getPostgraduateProgramByProgramIDRoute, getPostgraduateProgramMissingCohortYearsByProgramIDRoute, postFilterPostgraduateProgramsRoute, postPostgraduateCohortListRoute, postPostgraduateProgramRoute, updatePostgraduateCohortListRoute, updatePostgraduateProgramRoute } from "$lib/api/routes/api/indicatorsInformation/postgraduate";
 import type { FilterPostgraduateProgramsRequest, FilterPostGraduateProgramsResponse, GetPostgraduateProgramMissingCohortYearsByProgramIDResponse, PostgraduateCohortList, PostgraduateProgram } from "$lib/api/model/api/indicatorsInformation/postgraduate";
 import type { Message } from "$lib/components/combobox/combobox";
 
@@ -174,7 +174,7 @@ export async function PostPostgraduateCohortList(token: string, request: Postgra
 
 export async function UpdatePostgraduateCohortList(token: string, request: PostgraduateCohortList) {
     try {
-        const response = await fetch(updatePostgraduateProgramRoute + request.postgraduate_program_id + "/" + request.year, {
+        const response = await fetch(updatePostgraduateCohortListRoute + request.postgraduate_program_id + "/" + request.year, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
