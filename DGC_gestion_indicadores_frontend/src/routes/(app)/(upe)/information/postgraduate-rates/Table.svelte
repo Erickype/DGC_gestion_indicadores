@@ -12,7 +12,7 @@
 	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
 	import type { Message } from '$lib/components/combobox/combobox';
 	import Table from '$lib/components/table/table.svelte';
-	/* import UpdateForm from './UpdateForm.svelte'; */
+	import UpdateForm from './UpdateForm.svelte';
 	import { toast } from 'svelte-sonner';
 
 	export let formData: SuperValidated<Infer<UpdatePostgraduateCohortListSchema>>;
@@ -110,15 +110,15 @@
 	}
 </script>
 
-<!-- <UpdateModal
-	modalTitle="Actualizar información tasas de grado"
+<UpdateModal
+	modalTitle="Actualizar tasa de posgrado para cohorte"
 	{formData}
 	{comboMessages}
 	formComponent={UpdateForm}
 	bind:updateEntity={postgraduateCohortList}
 	bind:open={updateFormOpen}
 	on:updated={handleUpdated}
-/> -->
+/>
 
 <div class="w-full">
 	<Table
