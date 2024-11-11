@@ -34,7 +34,7 @@
 		<Popover.Trigger
 			class={cn(
 				buttonVariants({ variant: 'outline' }),
-				'w-full justify-between',
+				'w-full justify-between h-full',
 				!$formDataID && 'text-muted-foreground'
 			)}
 			role="combobox"
