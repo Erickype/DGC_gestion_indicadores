@@ -6,13 +6,22 @@
 	import { createEventDispatcher } from 'svelte';
 	import { browser } from '$app/environment';
 
+	import FormFieldSkeleton from '$lib/components/skeleton/formField.svelte';
+	import FormSelect from '$lib/components/combobox/formSelect.svelte';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import * as Form from '$lib/components/ui/form';
 	import { toast } from 'svelte-sonner';
 
 	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
 	import type { Message } from '$lib/components/combobox/combobox';
-	import type { PostgraduateCohortList } from '$lib/api/model/api/indicatorsInformation/postgraduate';
+	import type {
+		GetPostgraduateProgramMissingCohortYearsByProgramIDResponse,
+		PostgraduateCohortList
+	} from '$lib/api/model/api/indicatorsInformation/postgraduate';
+	import type { CommonError } from '$lib/api/model/errors';
+	import { goto } from '$app/navigation';
+	import { GenerateComboMessagesFromMissingYears } from '$lib/api/controller/api/indicatorsInformation/postgraduate';
+	import { writable } from 'svelte/store';
 
 	export let data: SuperValidated<Infer<AddPostgraduateCohortListSchema>, App.Superforms.Message>;
 	export let comboMessages: Message[][];
@@ -48,6 +57,27 @@
 	});
 
 	const { form: formData, enhance } = form;
+
+	let formDataYear = writable($formData.year);
+	formDataYear.subscribe((value) => ($formData.year = value));
+
+	let missingYearsPromise: Promise<GetPostgraduateProgramMissingCohortYearsByProgramIDResponse> =
+		fetchGetPostgraduateProgramMissingCohortYearsByProgramID();
+
+	async function fetchGetPostgraduateProgramMissingCohortYearsByProgramID(): Promise<GetPostgraduateProgramMissingCohortYearsByProgramIDResponse> {
+		const url = `/api/indicatorsInformation/postgraduate/program/cohort/missingYears/${$formData.postgraduate_program_id}`;
+		const response = await fetch(url, {
+			method: 'GET'
+		});
+		if (!response.ok) {
+			const errorData = (await response.json()) as CommonError;
+			if (response.status === 401) {
+				throw goto('/');
+			}
+			throw errorData;
+		}
+		return response.json();
+	}
 </script>
 
 <form action="?/postPostgraduateCohortList" use:enhance>
@@ -65,11 +95,17 @@
 				</Form.Control>
 				<Form.FieldErrors />
 			</Form.Field>
-			<Form.Field {form} name="year">
-				<Form.Control let:attrs>
-					<Form.Label>Año</Form.Label>
-					<Input {...attrs} bind:value={$formData.year} type="number" min="2020" />
-				</Form.Control>
+			<Form.Field {form} name="year" class="flex flex-col">
+				{#await missingYearsPromise}
+					<FormFieldSkeleton />
+				{:then missingYears}
+					<FormSelect
+						formLabel="Año"
+						formSelectWidth="w-[45%]"
+						comboData={GenerateComboMessagesFromMissingYears(missingYears.years)}
+						bind:formDataID={formDataYear}
+					/>
+				{/await}
 				<Form.FieldErrors />
 			</Form.Field>
 		</div>
