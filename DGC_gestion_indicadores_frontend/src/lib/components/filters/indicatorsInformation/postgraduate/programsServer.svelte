@@ -52,6 +52,7 @@
 			postgraduateProgramsPopoverFilterDataMap
 		).then(({ request, response }) => {
 			filterPostgraduateProgramsRequest = request;
+			filterPostgraduateProgramsRequest.is_active = true;
 			postgraduateProgramsFilter = generateInitialFilterValue(filterPostgraduateProgramsRequest)!;
 			return response;
 		});
