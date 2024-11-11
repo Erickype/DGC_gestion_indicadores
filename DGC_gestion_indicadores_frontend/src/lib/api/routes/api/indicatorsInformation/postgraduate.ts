@@ -8,6 +8,8 @@ export const getPostgraduateProgramByProgramIDRoute = postgraduateRoute + "/prog
 export const postPostgraduateProgramRoute = postgraduateRoute + "/program"
 export const updatePostgraduateProgramRoute = postgraduateRoute + "/program/"
 
+export const getPostgraduateProgramMissingCohortYearsByProgramIDRoute = postgraduateRoute + "/program/cohort/missingYears/"
+
 //Cohorts
 export const getPostgraduateCohortListsByProgramIDRoute = postgraduateRoute + "/cohortLists/"
 export const postPostgraduateCohortListRoute = postgraduateRoute + "/cohortList"

@@ -17,6 +17,10 @@ export interface FilterPostgraduateProgramsRequest {
     page: number
 }
 
+export interface GetPostgraduateProgramMissingCohortYearsByProgramIDResponse {
+    years: number[]
+}
+
 export interface FilterPostGraduateProgramsResponse {
     count: number,
     page_size: number,

@@ -1,5 +1,5 @@
-import { getPostgraduateCohortListsByProgramIDRoute, getPostgraduateProgramByProgramIDRoute, postFilterPostgraduateProgramsRoute, postPostgraduateCohortListRoute, postPostgraduateProgramRoute, updatePostgraduateProgramRoute } from "$lib/api/routes/api/indicatorsInformation/postgraduate";
-import type { FilterPostgraduateProgramsRequest, FilterPostGraduateProgramsResponse, PostgraduateCohortList, PostgraduateProgram } from "$lib/api/model/api/indicatorsInformation/postgraduate";
+import { getPostgraduateCohortListsByProgramIDRoute, getPostgraduateProgramByProgramIDRoute, getPostgraduateProgramMissingCohortYearsByProgramIDRoute, postFilterPostgraduateProgramsRoute, postPostgraduateCohortListRoute, postPostgraduateProgramRoute, updatePostgraduateProgramRoute } from "$lib/api/routes/api/indicatorsInformation/postgraduate";
+import type { FilterPostgraduateProgramsRequest, FilterPostGraduateProgramsResponse, GetPostgraduateProgramMissingCohortYearsByProgramIDResponse, PostgraduateCohortList, PostgraduateProgram } from "$lib/api/model/api/indicatorsInformation/postgraduate";
 import type { Message } from "$lib/components/combobox/combobox";
 
 import { generateCommonErrorFromFetchError } from "$lib/utils";
@@ -98,6 +98,26 @@ export function GenerateComboMessagesFromAuthors(programs: PostgraduateProgram[]
         }))
     );
     return messages
+}
+
+export async function GetPostgraduateProgramMissingCohortYearsByProgramID(token: string, programID: string) {
+    try {
+        const response = await fetch(getPostgraduateProgramMissingCohortYearsByProgramIDRoute + programID, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+        })
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
+        }
+        const missingYears: GetPostgraduateProgramMissingCohortYearsByProgramIDResponse = await response.json()
+        return missingYears;
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
 }
 
 export async function GetPostgraduateCohortListsByProgramID(token: string, programID: string) {
