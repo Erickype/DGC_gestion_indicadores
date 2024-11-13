@@ -23,6 +23,21 @@ func PostFilterScienceMagazines(context *gin.Context) {
 	context.JSON(http.StatusOK, filterScienceMagazinesResponse)
 }
 
+func PostScienceMagazine(c *gin.Context) {
+	var scienceMagazine model.ScienceMagazine
+	err := c.BindJSON(&scienceMagazine)
+	if err != nil {
+		errors.BadRequestResponse(c, err)
+		return
+	}
+	err = model.PostScienceMagazine(&scienceMagazine)
+	if err != nil {
+		errors.InternalServerErrorResponse(c, "Error añadiendo revista científica", err)
+		return
+	}
+	c.JSON(http.StatusCreated, scienceMagazine)
+}
+
 func GetScienceMagazines(context *gin.Context) {
 	var magazines []model.ScienceMagazine
 	err := model.GetScienceMagazines(&magazines)

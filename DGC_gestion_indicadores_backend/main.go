@@ -137,6 +137,7 @@ func serveApplication() {
 
 	upeRoutes.GET("/scienceMagazines", academicProduction.GetScienceMagazines)
 	upeRoutes.POST("/scienceMagazines/filter", academicProduction.PostFilterScienceMagazines)
+	upeRoutes.POST("/scienceMagazine", academicProduction.PostScienceMagazine)
 
 	upeRoutes.GET("/impactCoefficients", academicProduction.GetImpactCoefficients)
 

@@ -1,9 +1,11 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
+	"gorm.io/gorm"
 	"strings"
 	"time"
 )
@@ -48,6 +50,17 @@ type FilterScienceMagazinesResponse struct {
 func GetScienceMagazines(magazines *[]ScienceMagazine) (err error) {
 	err = database.DB.Order("updated_at desc").Find(magazines).Error
 	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func PostScienceMagazine(magazine *ScienceMagazine) (err error) {
+	err = database.DB.Create(magazine).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("revista científica ya existe")
+		}
 		return err
 	}
 	return nil
