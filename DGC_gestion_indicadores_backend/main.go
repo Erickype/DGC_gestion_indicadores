@@ -135,6 +135,8 @@ func serveApplication() {
 
 	upeRoutes.GET("/scaledGrades", scaledGrade.GetScaledGrades)
 
+	upeRoutes.GET("/academicDatabases", academicProduction.GetAcademicDatabases)
+
 	upeRoutes.GET("/scienceMagazines", academicProduction.GetScienceMagazines)
 	upeRoutes.POST("/scienceMagazines/filter", academicProduction.PostFilterScienceMagazines)
 	upeRoutes.GET("/scienceMagazine/filter/:id", academicProduction.GetScienceMagazineFilterJoinedByScienceMagazineID)
