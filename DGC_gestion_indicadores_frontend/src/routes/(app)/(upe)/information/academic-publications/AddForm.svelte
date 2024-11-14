@@ -18,6 +18,7 @@
 	import { toast } from 'svelte-sonner';
 
 	import type { AcademicProductionList } from '$lib/api/model/api/indicatorsInformation/academicProductionLists';
+	import ScienceMagazinesServer from '$lib/components/filters/scienceMagazines/scienceMagazinesServer.svelte';
 	import DetailedFieldsServer from '$lib/components/filters/detailedFields/detailedFieldsServer.svelte';
 	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
 	import { DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date';
@@ -147,13 +148,8 @@
 					<input hidden value={$formData.publication_date} name={attrs.name} />
 				</Form.Control>
 			</Form.Field>
-			<Form.Field {form} name="science_magazine_id" class="flex flex-col">
-				<FormSelect
-					formLabel="Revista científica"
-					formSelectWidth="w-[45%]"
-					comboData={scienceMagazinesComboData}
-					bind:formDataID={formDataScienceMagazineID}
-				/>
+			<Form.Field class="flex flex-col" {form} name="science_magazine_id">
+				<ScienceMagazinesServer {formDataScienceMagazineID} />
 			</Form.Field>
 		</div>
 		<Form.Field {form} name="detailed_field_id">
