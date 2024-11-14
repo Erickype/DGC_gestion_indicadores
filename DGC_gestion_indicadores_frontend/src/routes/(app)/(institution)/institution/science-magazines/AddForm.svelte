@@ -5,20 +5,21 @@
 
 	import { createEventDispatcher } from 'svelte';
 	import { browser } from '$app/environment';
+	import { writable } from 'svelte/store';
 
 	import { Textarea } from '$lib/components/ui/textarea/index.js';
-	import { Switch } from '$lib/components/ui/switch/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import * as Form from '$lib/components/ui/form';
 	import { toast } from 'svelte-sonner';
 
 	import type { ScienceMagazine } from '$lib/api/model/api/academicProduction/scienceMagazines/scienceMagazine';
 	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
+	import FormSelect from '$lib/components/combobox/formSelect.svelte';
 	import type { Message } from '$lib/components/combobox/combobox';
 
 	export let data: SuperValidated<Infer<AddScienceMagazineSchema>, App.Superforms.Message>;
 	export let comboMessages: Message[][];
-	comboMessages = [];
+	const academicDatabasesComboData = comboMessages.at(0)!;
 
 	const dispatch = createEventDispatcher();
 
@@ -46,10 +47,20 @@
 	});
 
 	const { form: formData, enhance } = form;
+
+	let formDataAcademicDatabaseID = writable($formData.academic_database_id);
+	formDataAcademicDatabaseID.subscribe((value) => ($formData.academic_database_id = value));
 </script>
 
 <form action="?/postScienceMagazine" use:enhance>
 	<div class="flex flex-col gap-2">
+		<Form.Field {form} name="academic_database_id" class="flex flex-col">
+			<FormSelect
+				formLabel="Base de datos"
+				comboData={academicDatabasesComboData}
+				bind:formDataID={formDataAcademicDatabaseID}
+			/>
+		</Form.Field>
 		<Form.Field {form} name="name">
 			<Form.Control let:attrs>
 				<Form.Label>Nombre</Form.Label>

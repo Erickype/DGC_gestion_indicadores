@@ -21,10 +21,15 @@
 		FilterScienceMagazinesRequest,
 		FilterScienceMagazinesResponse
 	} from '$lib/api/model/api/academicProduction/scienceMagazines/scienceMagazine';
+	import type { Message } from '$lib/components/combobox/combobox';
 
 	export let data: PageServerData;
 	const addScienceMagazineForm = data.addScienceMagazineForm;
 	const updateScienceMagazineForm = data.updateScienceMagazineForm;
+
+	const comboMessages: Message[][] = [
+		data.academicDatabasesData.messages
+	];
 
 	let filterScienceMagazinesRequest: FilterScienceMagazinesRequest =
 		newFilterScienceMagazinesRequest(5, 1);
@@ -74,6 +79,7 @@
 	</div>
 	<AddModal
 		formComponent={AddForm}
+		{comboMessages}
 		modalTitle="Crear revista científica"
 		formData={addScienceMagazineForm}
 		on:created={fetchOnSuccess}
