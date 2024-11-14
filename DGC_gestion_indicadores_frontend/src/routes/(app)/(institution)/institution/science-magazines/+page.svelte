@@ -27,9 +27,7 @@
 	const addScienceMagazineForm = data.addScienceMagazineForm;
 	const updateScienceMagazineForm = data.updateScienceMagazineForm;
 
-	const comboMessages: Message[][] = [
-		data.academicDatabasesData.messages
-	];
+	const comboMessages: Message[][] = [data.academicDatabasesData.messages];
 
 	let filterScienceMagazinesRequest: FilterScienceMagazinesRequest =
 		newFilterScienceMagazinesRequest(5, 1);
@@ -96,7 +94,7 @@
 				formData={updateScienceMagazineForm}
 				{filterScienceMagazinesResponse}
 				bind:popoverFilterDataMap
-				comboMessages={undefined}
+				{comboMessages}
 				on:updated={fetchOnSuccess}
 				on:deleted={fetchOnSuccess}
 				on:filterChanged={handleOnFilterChanged}
