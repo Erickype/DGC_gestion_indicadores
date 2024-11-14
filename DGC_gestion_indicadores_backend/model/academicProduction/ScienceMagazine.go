@@ -55,11 +55,30 @@ func GetScienceMagazines(magazines *[]ScienceMagazine) (err error) {
 	return nil
 }
 
+func GetScienceMagazineByID(id int, magazine *ScienceMagazine) (err error) {
+	err = database.DB.First(magazine, id).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func PostScienceMagazine(magazine *ScienceMagazine) (err error) {
 	err = database.DB.Create(magazine).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
 			return errors.New("revista científica ya existe")
+		}
+		return err
+	}
+	return nil
+}
+
+func PutScienceMagazine(magazine *ScienceMagazine) (err error) {
+	err = database.DB.Save(magazine).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return errors.New("programa posgrado ya registrado")
 		}
 		return err
 	}
