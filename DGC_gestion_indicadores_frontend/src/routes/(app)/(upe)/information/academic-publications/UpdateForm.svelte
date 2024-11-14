@@ -5,8 +5,8 @@
 
 	import { createEventDispatcher } from 'svelte';
 	import { browser } from '$app/environment';
-	import { writable } from 'svelte/store';
 	import { cn, toISO8601 } from '$lib/utils';
+	import { writable } from 'svelte/store';
 
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import { Checkbox } from '$lib/components/ui/checkbox/index.js';
@@ -17,13 +17,14 @@
 	import * as Form from '$lib/components/ui/form';
 	import { toast } from 'svelte-sonner';
 
+	import ScienceMagazinesServer from '$lib/components/filters/scienceMagazines/scienceMagazinesServer.svelte';
+	import DetailedFieldsServer from '$lib/components/filters/detailedFields/detailedFieldsServer.svelte';
+	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
+	import { DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date';
 	import type {
 		AcademicProductionList,
 		AcademicProductionListByAcademicPeriodJoined
 	} from '$lib/api/model/api/indicatorsInformation/academicProductionLists';
-	import DetailedFieldsServer from '$lib/components/filters/detailedFields/detailedFieldsServer.svelte';
-	import { manageToastFromErrorMessageOnAddForm, manageToastFromInvalidAddForm } from '$lib/utils';
-	import { DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date';
 	import FormSelect from '$lib/components/combobox/formSelect.svelte';
 	import CalendarMY from '$lib/components/calendar/month-year.svelte';
 	import type { Message } from '$lib/components/combobox/combobox';
@@ -170,13 +171,8 @@
 					<input hidden value={$formData.publication_date} name={attrs.name} />
 				</Form.Control>
 			</Form.Field>
-			<Form.Field {form} name="science_magazine_id" class="flex flex-col">
-				<FormSelect
-					formLabel="Revista científica"
-					formSelectWidth="w-[45%]"
-					comboData={scienceMagazinesComboData}
-					bind:formDataID={formDataScienceMagazineID}
-				/>
+			<Form.Field class="flex flex-col" {form} name="science_magazine_id">
+				<ScienceMagazinesServer {formDataScienceMagazineID} />
 			</Form.Field>
 		</div>
 		<Form.Field {form} name="detailed_field_id">
