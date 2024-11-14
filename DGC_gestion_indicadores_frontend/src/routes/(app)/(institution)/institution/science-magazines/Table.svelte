@@ -40,7 +40,12 @@
 
 	export let popoverFilterDataMap: PopoverFilterDataMap = new Map();
 
-	const filterFields = ['name', 'start_year', 'end_year', 'is_active'];
+	const filterFields = [
+		'academic_database',
+		'science_magazine',
+		'science_magazine_abbreviation',
+		'science_magazine_description'
+	];
 
 	const table = createTable(readable(filterPostgraduateResponse), {
 		page: addPagination({
