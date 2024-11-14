@@ -49,6 +49,7 @@ export const menus: Menu[] = [
             { name: "Facultades", route: "/institution/faculties" },
             { name: "Carreras", route: "/institution/careers" },
             { name: "Programas posgrado", route: "/institution/postgraduate/programs" },
+            { name: "Revistas científicas", route: "/institution/science-magazines" },
         ],
         roles: [1]
     },
