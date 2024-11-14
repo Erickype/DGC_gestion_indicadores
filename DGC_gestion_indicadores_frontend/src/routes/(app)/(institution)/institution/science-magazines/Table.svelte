@@ -10,7 +10,7 @@
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
 	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
 	import Table from '$lib/components/table/tablePaginated.svelte';
-	/* import UpdateForm from './UpdateForm.svelte'; */
+	import UpdateForm from './UpdateForm.svelte';
 
 	import { generateInitialFilterValue } from '$lib/components/filters/indicatorsInformation/postgraduate/programs';
 	import type {
@@ -26,7 +26,6 @@
 		filterScienceMagazinesResponse.science_magazines;
 
 	export let comboMessages: Message[][] | undefined;
-	comboMessages = [];
 	export let formData: SuperValidated<Infer<UpdateScienceMagazineSchema>, App.Superforms.Message>;
 	let scienceMagazineJoined: ScienceMagazineJoined;
 
@@ -138,7 +137,7 @@
 	}
 </script>
 
-<!-- <UpdateModal
+<UpdateModal
 	modalTitle="Actualizar programa posgrado"
 	{formData}
 	formComponent={UpdateForm}
@@ -146,7 +145,7 @@
 	bind:updateEntity={scienceMagazineJoined}
 	bind:open={updateFormOpen}
 	on:updated={handleUpdated}
-/> -->
+/>
 
 <div class="w-full">
 	<Table
