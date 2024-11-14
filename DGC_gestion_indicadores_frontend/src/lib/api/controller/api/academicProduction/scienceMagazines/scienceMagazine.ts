@@ -109,6 +109,17 @@ export async function UpdateScienceMagazine(token: string, request: ScienceMagaz
     }
 }
 
+export function GenerateComboMessagesFromScienceMagazines(programs: ScienceMagazineJoined[]): Message[] {
+    let messages: Message[] = []
+    messages = messages.concat(
+        programs.map((program) => ({
+            value: program.science_magazine_id!,
+            label: program.science_magazine,
+        }))
+    );
+    return messages
+}
+
 export async function LoadGetScienceMagazinesWithComboMessages(token: string) {
     const response = await GetScienceMagazines(token);
     if ((response as CommonError).status) {
