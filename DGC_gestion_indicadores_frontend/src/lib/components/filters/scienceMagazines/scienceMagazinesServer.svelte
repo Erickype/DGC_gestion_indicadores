@@ -55,10 +55,6 @@
 			return response;
 		});
 	}
-
-	function setInitialValue(programID: number | undefined) {
-		formDataScienceMagazineID.set(programID);
-	}
 </script>
 
 {#await Promise.all([filterScienceMagazinesResponsePromise, getScienceMagazinePromise])}
@@ -75,7 +71,7 @@
 	<ServerFormSelect
 		formSelectWidth="w-[50%]"
 		bind:filterValue={postScienceMagazinesFilter}
-		formLabel="Programa posgrado"
+		formLabel="Revista científica"
 		bind:popoverFilterDataMap={postgraduateProgramsPopoverFilterDataMap}
 		comboData={GenerateComboMessagesFromScienceMagazines(
 			filterScienceMagazinesResponse.science_magazines
