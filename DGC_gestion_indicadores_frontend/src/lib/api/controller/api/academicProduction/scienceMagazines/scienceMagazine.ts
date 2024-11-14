@@ -118,8 +118,8 @@ export async function LoadGetScienceMagazinesWithComboMessages(token: string) {
     let messages: Message[] = []
     messages = messages.concat(
         magazines.map((magazine) => ({
-            value: magazine.ID,
-            label: magazine.name,
+            value: magazine.ID!,
+            label: magazine.name!,
         }))
     );
 
