@@ -150,3 +150,21 @@ func PostFilterScienceMagazines(
 	}
 	return nil
 }
+
+func GetScienceMagazineFilterJoinedByScienceMagazineID(scienceMagazineID int, response *ScienceMagazinesJoined) (err error) {
+	err = database.DB.Table("science_magazines sm").
+		Select(`ad.id as academic_database_id,
+		ad.name as academic_database,
+		sm.id as science_magazine_id,
+		sm.name as science_magazine,
+		sm.abbreviation as science_magazine_abbreviation,
+		sm.description as science_magazine_description`).
+		Joins(`join academic_databases ad on sm.academic_database_id = ad.id`).
+		Where("sm.id = ?", scienceMagazineID).
+		Scan(&response).Error
+
+	if err != nil {
+		return err
+	}
+	return nil
+}

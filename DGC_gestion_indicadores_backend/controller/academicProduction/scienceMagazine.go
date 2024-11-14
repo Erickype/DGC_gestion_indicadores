@@ -69,6 +69,17 @@ func UpdateScienceMagazine(c *gin.Context) {
 	c.JSON(http.StatusAccepted, scienceMagazine)
 }
 
+func GetScienceMagazineFilterJoinedByScienceMagazineID(context *gin.Context) {
+	var magazines model.ScienceMagazinesJoined
+	id, _ := strconv.Atoi(context.Param("id"))
+	err := model.GetScienceMagazineFilterJoinedByScienceMagazineID(id, &magazines)
+	if err != nil {
+		errors.InternalServerErrorResponse(context, "Error retornando revista científica", err)
+		return
+	}
+	context.JSON(http.StatusOK, magazines)
+}
+
 func GetScienceMagazines(context *gin.Context) {
 	var magazines []model.ScienceMagazine
 	err := model.GetScienceMagazines(&magazines)
