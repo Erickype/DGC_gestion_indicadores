@@ -6,9 +6,8 @@ import { addAcademicProductionSchema, updateAcademicProductionSchema } from "./s
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 
-import { LoadGetImpactCoefficientssWithComboMessages } from "$lib/api/controller/api/academicProduction/impactCoefficients/impactCoefficient";
-import { LoadGetScienceMagazinesWithComboMessages } from "$lib/api/controller/api/academicProduction/scienceMagazines/scienceMagazine";
 import { PatchAcademicProductionList, PostAcademicProductionList } from "$lib/api/controller/api/indicatorsInformation/academicProductionLists";
+import { LoadGetImpactCoefficientssWithComboMessages } from "$lib/api/controller/api/academicProduction/impactCoefficients/impactCoefficient";
 import type { AcademicProductionList } from "$lib/api/model/api/indicatorsInformation/academicProductionLists";
 import { generateFormMessageFromHttpResponse, generateFormMessageFromInvalidForm } from "$lib/utils";
 import { LoadAcademicPeriodsWithComboMessages } from "$lib/api/controller/view/academicPeriod";
@@ -27,7 +26,6 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
         academicPeriodsData: await LoadAcademicPeriodsWithComboMessages(),
         academicProductionForm: await superValidate(zod(addAcademicProductionSchema)),
         updateAcademicProductionForm: await superValidate(zod(updateAcademicProductionSchema)),
-        scienceMagazinesData: await LoadGetScienceMagazinesWithComboMessages(token!),
         impactCoefficientsData: await LoadGetImpactCoefficientssWithComboMessages(token!),
     }
 };

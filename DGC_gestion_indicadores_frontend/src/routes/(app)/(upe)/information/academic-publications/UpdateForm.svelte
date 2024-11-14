@@ -32,8 +32,7 @@
 	export let updateEntity!: AcademicProductionListByAcademicPeriodJoined;
 	export let data: SuperValidated<Infer<UpdateAcademicProductionSchema>, App.Superforms.Message>;
 	export let comboMessages: Message[][];
-	const scienceMagazinesComboData = comboMessages.at(0)!;
-	const impactCoefficientsComboData = comboMessages.at(1)!;
+	const impactCoefficientsComboData = comboMessages.at(0)!;
 
 	const dispatch = createEventDispatcher();
 

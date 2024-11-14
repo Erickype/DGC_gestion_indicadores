@@ -30,7 +30,6 @@
 	const academicPeriodsData = data.academicPeriodsData;
 
 	const comboMessages: Message[][] = [
-		data.scienceMagazinesData.messages,
 		data.impactCoefficientsData.messages
 	];
 
