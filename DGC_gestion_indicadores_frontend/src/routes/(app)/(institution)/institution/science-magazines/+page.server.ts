@@ -7,6 +7,7 @@ import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 
 import { PostScienceMagazine, UpdateScienceMagazine } from "$lib/api/controller/api/academicProduction/scienceMagazines/scienceMagazine";
+import { LoadAcademicDatabasesWithComboMessages } from "$lib/api/controller/api/academicProduction/academicDatabases/academicDatabases";
 import type { ScienceMagazine } from "$lib/api/model/api/academicProduction/scienceMagazines/scienceMagazine";
 
 import { generateFormMessageFromHttpResponse, generateFormMessageFromInvalidForm } from "$lib/utils";
@@ -23,7 +24,8 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
     }
     return {
         addScienceMagazineForm: await superValidate(zod(addScienceMagazineSchema)),
-        updateScienceMagazineForm: await superValidate(zod(updateScienceMagazineSchema))
+        updateScienceMagazineForm: await superValidate(zod(updateScienceMagazineSchema)),
+        academicDatabasesData: await LoadAcademicDatabasesWithComboMessages(token!)
     }
 };
 

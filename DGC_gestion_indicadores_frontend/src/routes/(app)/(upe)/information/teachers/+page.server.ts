@@ -53,7 +53,7 @@ export const actions: Actions = {
             career_id: data.career,
             dedication_id: data.dedication,
             teacher_id: data.teacher,
-            scaled_grade_id: data.scaledGrade,
+            scaled_grade_id: data.scaledGrade!,
             contract_type_id: data.contractType
         }
 
@@ -76,7 +76,7 @@ export const actions: Actions = {
             teacher_id: data.teacher,
             career_id: data.career,
             dedication_id: data.dedication,
-            scaled_grade_id: data.scaledGrade,
+            scaled_grade_id: data.scaledGrade!,
             contract_type_id: data.contractType
         }
         const response = await PatchTeachersLists(token!, updateTeacherRequest)
