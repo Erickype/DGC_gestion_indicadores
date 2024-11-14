@@ -2,7 +2,7 @@
 	import TableSkeleton from '$lib/components/skeleton/table.svelte';
 	import AddModal from '$lib/components/modal/AddModal.svelte';
 	import Alert from '$lib/components/alert/alert.svelte';
-	/* import AddForm from './AddForm.svelte'; */
+	import AddForm from './AddForm.svelte';
 	import Table from './Table.svelte';
 
 	import Icon from 'lucide-svelte/icons/newspaper';
@@ -72,12 +72,12 @@
 		<Icon class="h-8 w-8" />
 		<h2 class="text-2xl font-bold">Revistas científicas</h2>
 	</div>
-	<!-- <AddModal
+	<AddModal
 		formComponent={AddForm}
-		modalTitle="Crear programa posgrado"
+		modalTitle="Crear revista científica"
 		formData={addScienceMagazineForm}
 		on:created={fetchOnSuccess}
-	/> -->
+	/>
 </div>
 
 <div class="mx-auto flex w-full flex-col place-content-center px-8">
