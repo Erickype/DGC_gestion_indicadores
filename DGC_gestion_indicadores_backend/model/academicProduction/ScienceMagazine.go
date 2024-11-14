@@ -94,19 +94,19 @@ func PostFilterScienceMagazines(
 	var values []interface{}
 
 	if filterScienceMagazinesRequest.AcademicDatabase != "" {
-		conditions = append(conditions, "LOWER(people.identity) LIKE ?")
+		conditions = append(conditions, "LOWER(ad.name) LIKE ?")
 		values = append(values, fmt.Sprintf("%%%s%%", strings.ToLower(filterScienceMagazinesRequest.AcademicDatabase)))
 	}
 	if filterScienceMagazinesRequest.ScienceMagazine != "" {
-		conditions = append(conditions, "LOWER(people.name) LIKE ?")
+		conditions = append(conditions, "LOWER(sm.name) LIKE ?")
 		values = append(values, fmt.Sprintf("%%%s%%", strings.ToLower(filterScienceMagazinesRequest.ScienceMagazine)))
 	}
 	if filterScienceMagazinesRequest.MagazineAbbreviation != "" {
-		conditions = append(conditions, "LOWER(people.lastname) LIKE ?")
+		conditions = append(conditions, "LOWER(sm.abbreviation) LIKE ?")
 		values = append(values, fmt.Sprintf("%%%s%%", strings.ToLower(filterScienceMagazinesRequest.MagazineAbbreviation)))
 	}
 	if filterScienceMagazinesRequest.MagazineDescription != "" {
-		conditions = append(conditions, "LOWER(careers.abbreviation) LIKE ?")
+		conditions = append(conditions, "LOWER(sm.description) LIKE ?")
 		values = append(values, fmt.Sprintf("%%%s%%", strings.ToLower(filterScienceMagazinesRequest.MagazineDescription)))
 	}
 
