@@ -37,3 +37,23 @@ export interface PostgraduateCohortList {
     graduated_students: number
     total_students: number
 }
+
+export interface CohortList {
+    created_at?: string
+    updated_at?: string
+    year: number
+}
+
+export interface FilterCohortListsRequest {
+    start_year: number
+    end_year: number
+    page_size: number
+    page: number
+}
+
+export interface FilterCohortListsResponse {
+    count: number,
+    page_size: number,
+    page: number,
+    cohort_lists: CohortList[]
+}

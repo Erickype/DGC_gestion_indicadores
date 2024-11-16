@@ -1,5 +1,5 @@
-import { getPostgraduateCohortListsByProgramIDRoute, getPostgraduateProgramByProgramIDRoute, getPostgraduateProgramMissingCohortYearsByProgramIDRoute, postFilterPostgraduateProgramsRoute, postPostgraduateCohortListRoute, postPostgraduateProgramRoute, updatePostgraduateCohortListRoute, updatePostgraduateProgramRoute } from "$lib/api/routes/api/indicatorsInformation/postgraduate";
-import type { FilterPostgraduateProgramsRequest, FilterPostGraduateProgramsResponse, GetPostgraduateProgramMissingCohortYearsByProgramIDResponse, PostgraduateCohortList, PostgraduateProgram } from "$lib/api/model/api/indicatorsInformation/postgraduate";
+import { getPostgraduateCohortListsByProgramIDRoute, getPostgraduateProgramByProgramIDRoute, getPostgraduateProgramMissingCohortYearsByProgramIDRoute, postFilterCohortsRoute, postFilterPostgraduateProgramsRoute, postPostgraduateCohortListRoute, postPostgraduateProgramRoute, updatePostgraduateCohortListRoute, updatePostgraduateProgramRoute } from "$lib/api/routes/api/indicatorsInformation/postgraduate";
+import type { FilterCohortListsRequest, FilterCohortListsResponse, FilterPostgraduateProgramsRequest, FilterPostGraduateProgramsResponse, GetPostgraduateProgramMissingCohortYearsByProgramIDResponse, PostgraduateCohortList, PostgraduateProgram } from "$lib/api/model/api/indicatorsInformation/postgraduate";
 import type { Message } from "$lib/components/combobox/combobox";
 
 import { generateCommonErrorFromFetchError } from "$lib/utils";
@@ -188,6 +188,28 @@ export async function UpdatePostgraduateCohortList(token: string, request: Postg
         }
         const postgraduateCohortList: PostgraduateCohortList = await response.json()
         return postgraduateCohortList;
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
+}
+
+export async function PostFilterCohortLists(token: string, request: FilterCohortListsRequest) {
+    try {
+        const response = await fetch(postFilterCohortsRoute, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify(request)
+        });
+
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
+        }
+        const filterCohortListsResponse: FilterCohortListsResponse = await response.json()
+        return filterCohortListsResponse
     } catch (error) {
         return generateCommonErrorFromFetchError(error)
     }
