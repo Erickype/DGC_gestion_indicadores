@@ -16,3 +16,4 @@ export const postPostgraduateCohortListRoute = postgraduateRoute + "/cohortList"
 export const updatePostgraduateCohortListRoute = postgraduateRoute + "/cohortList/"
 
 export const postFilterCohortsRoute = postgraduateRoute + "/cohorts/filter"
+export const getCohortByYearRoute = postgraduateRoute + "/cohort/"

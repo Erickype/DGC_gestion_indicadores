@@ -1,5 +1,5 @@
-import { getPostgraduateCohortListsByProgramIDRoute, getPostgraduateProgramByProgramIDRoute, getPostgraduateProgramMissingCohortYearsByProgramIDRoute, postFilterCohortsRoute, postFilterPostgraduateProgramsRoute, postPostgraduateCohortListRoute, postPostgraduateProgramRoute, updatePostgraduateCohortListRoute, updatePostgraduateProgramRoute } from "$lib/api/routes/api/indicatorsInformation/postgraduate";
-import type { FilterCohortListsRequest, FilterCohortListsResponse, FilterPostgraduateProgramsRequest, FilterPostGraduateProgramsResponse, GetPostgraduateProgramMissingCohortYearsByProgramIDResponse, PostgraduateCohortList, PostgraduateProgram } from "$lib/api/model/api/indicatorsInformation/postgraduate";
+import { getCohortByYearRoute, getPostgraduateCohortListsByProgramIDRoute, getPostgraduateProgramByProgramIDRoute, getPostgraduateProgramMissingCohortYearsByProgramIDRoute, postFilterCohortsRoute, postFilterPostgraduateProgramsRoute, postPostgraduateCohortListRoute, postPostgraduateProgramRoute, updatePostgraduateCohortListRoute, updatePostgraduateProgramRoute } from "$lib/api/routes/api/indicatorsInformation/postgraduate";
+import type { CohortList, FilterCohortListsRequest, FilterCohortListsResponse, FilterPostgraduateProgramsRequest, FilterPostGraduateProgramsResponse, GetPostgraduateProgramMissingCohortYearsByProgramIDResponse, PostgraduateCohortList, PostgraduateProgram } from "$lib/api/model/api/indicatorsInformation/postgraduate";
 import type { Message } from "$lib/components/combobox/combobox";
 
 import { generateCommonErrorFromFetchError } from "$lib/utils";
@@ -210,6 +210,26 @@ export async function PostFilterCohortLists(token: string, request: FilterCohort
         }
         const filterCohortListsResponse: FilterCohortListsResponse = await response.json()
         return filterCohortListsResponse
+    } catch (error) {
+        return generateCommonErrorFromFetchError(error)
+    }
+}
+
+export async function GetCohortByYear(token: string, year: string) {
+    try {
+        const response = await fetch(getCohortByYearRoute + year, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+        })
+        if (!response.ok) {
+            const error: CommonError = await response.json()
+            return error
+        }
+        const cohortList: CohortList = await response.json()
+        return cohortList;
     } catch (error) {
         return generateCommonErrorFromFetchError(error)
     }
