@@ -241,6 +241,8 @@ func serveApplication() {
 	indicatorsInformationRoutes.PUT("/postgraduate/program/:programID",
 		indicatorsInformationPostgraduate.UpdatePostGraduateProgram)
 
+	indicatorsInformationRoutes.POST("/postgraduate/cohorts/filter",
+		indicatorsInformationPostgraduate.PostFilterCohortLists)
 	indicatorsInformationRoutes.GET("/postgraduate/cohortLists/:programID",
 		indicatorsInformationPostgraduate.GetPostgraduateCohortListsByProgramID)
 	indicatorsInformationRoutes.POST("/postgraduate/cohortList",
