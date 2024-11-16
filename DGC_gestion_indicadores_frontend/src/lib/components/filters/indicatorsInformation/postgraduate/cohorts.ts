@@ -52,6 +52,21 @@ export async function fetchFilterCohorts(filterCohortListsRequest: FilterCohortL
     return response.json();
 }
 
+export async function fetchGetCohortByYear(year: string) {
+    const url = `/api/indicatorsInformation/postgraduate/cohort/` + year;
+    const response = await fetch(url, {
+        method: 'GET',
+    });
+    if (!response.ok) {
+        const errorData = (await response.json()) as CommonError;
+        if (response.status === 401) {
+            throw goto('/');
+        }
+        return errorData;
+    }
+    return response.json();
+}
+
 export async function fetchOnFilterChanged(filter: string, filterCohortListsRequest: FilterCohortListsRequest, popoverFilterDataMap: PopoverFilterDataMap): Promise<FilterCohortListsResponse> {
     popoverFilterDataMap.forEach((_, key) => {
         (filterCohortListsRequest as any)[key] = filter;
