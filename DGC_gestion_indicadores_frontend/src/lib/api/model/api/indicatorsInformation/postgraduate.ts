@@ -45,8 +45,8 @@ export interface CohortList {
 }
 
 export interface FilterCohortListsRequest {
-    start_year: number
-    end_year: number
+    start_year?: number
+    end_year?: number
     page_size: number
     page: number
 }
