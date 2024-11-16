@@ -63,6 +63,10 @@ func PostPostgraduateCohortList(postgraduateCohortList *PostgraduateCohortList) 
 		}
 		return err
 	}
+	var cohortList = CohortList{
+		Year: postgraduateCohortList.Year,
+	}
+	_ = PostCohortList(&cohortList)
 	return nil
 }
 
@@ -79,5 +83,9 @@ func UpdatePostgraduateCohortList(postgraduateCohortList *PostgraduateCohortList
 		}
 		return err
 	}
+	var cohortList = CohortList{
+		Year: postgraduateCohortList.Year,
+	}
+	_ = PostCohortList(&cohortList)
 	return nil
 }
