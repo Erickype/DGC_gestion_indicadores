@@ -243,6 +243,9 @@ func serveApplication() {
 
 	indicatorsInformationRoutes.POST("/postgraduate/cohorts/filter",
 		indicatorsInformationPostgraduate.PostFilterCohortLists)
+	indicatorsInformationRoutes.GET("/postgraduate/cohort/:year",
+		indicatorsInformationPostgraduate.GetCohortListByYear)
+
 	indicatorsInformationRoutes.GET("/postgraduate/cohortLists/:programID",
 		indicatorsInformationPostgraduate.GetPostgraduateCohortListsByProgramID)
 	indicatorsInformationRoutes.POST("/postgraduate/cohortList",

@@ -45,6 +45,14 @@ func PostCohortList(cohortList *CohortList) (err error) {
 	return nil
 }
 
+func GetCohortListByYear(year int, cohortLists *CohortList) (err error) {
+	err = database.DB.Where("year = ?", year).First(cohortLists).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func PostFilterCohortLists(
 	filterCohortListsResponse *FilterCohortListsResponse,
 	filterCohortListsRequest *FilterCohortListsRequest) (err error) {
