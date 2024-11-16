@@ -100,6 +100,17 @@ export function GenerateComboMessagesFromAuthors(programs: PostgraduateProgram[]
     return messages
 }
 
+export function GenerateComboMessagesCohorts(cohorts: CohortList[]): Message[] {
+    let messages: Message[] = []
+    messages = messages.concat(
+        cohorts.map((program) => ({
+            value: program.year,
+            label: program.year.toString(),
+        }))
+    );
+    return messages
+}
+
 export async function GetPostgraduateProgramMissingCohortYearsByProgramID(token: string, programID: string) {
     try {
         const response = await fetch(getPostgraduateProgramMissingCohortYearsByProgramIDRoute + programID, {
