@@ -63,6 +63,7 @@ func LoadDatabase() {
 		&knowledgeField.WideField{},
 		&knowledgeField.SpecificField{},
 		&knowledgeField.DetailedField{},
+		&postgraduate.CohortList{},
 		&postgraduate.PostgraduateProgram{},
 		&postgraduate.PostgraduateCohortList{},
 		&indicatorInformationGradeRate.GradeRateList{},
@@ -75,8 +76,9 @@ func LoadDatabase() {
 		&indicatorsInformationBooksOrChaptersProduction.BooksOrChaptersProductionList{},
 		&indicatorsInformationBooksOrChaptersProduction.BooksOrChaptersProductionListAuthor{},
 		&indicators.IndicatorType{},
-		&indicators.IndicatorsEvaluationPeriod{},
+		&indicators.IndicatorsPostgraduate{},
 		&indicators.IndicatorsAcademicPeriod{},
+		&indicators.IndicatorsEvaluationPeriod{},
 	)
 	if err != nil {
 		log.Fatal("Error while migrating: ", err.Error())
