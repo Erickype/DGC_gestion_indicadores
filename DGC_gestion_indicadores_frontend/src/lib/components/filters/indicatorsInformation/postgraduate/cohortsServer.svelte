@@ -40,6 +40,7 @@
 			filterCohortListsRequest,
 			postCohortsPopoverFilterMap
 		);
+		getCohortByYearPromise = fetchGetCohortByYear($formDataCohortYear as string);
 	}
 
 	async function handleOnDetailedFilter() {
@@ -51,10 +52,11 @@
 			postCohortsFilter = generateInitialFilterValue(filterCohortListsRequest)!;
 			return response;
 		});
+		getCohortByYearPromise = fetchGetCohortByYear($formDataCohortYear as string);
 	}
 
-	function setInitialValue(programID: number | undefined) {
-		formDataCohortYear.set(programID);
+	function setInitialValue(year: number | undefined) {
+		formDataCohortYear.set(year);
 	}
 </script>
 
@@ -74,7 +76,7 @@
 	{/if}
 
 	<ServerFormSelect
-		formSelectWidth="w-[50%]"
+		formSelectWidth="w-[25%]"
 		bind:filterValue={postCohortsFilter}
 		formLabel="Cohorte"
 		bind:popoverFilterDataMap={postCohortsPopoverFilterMap}
