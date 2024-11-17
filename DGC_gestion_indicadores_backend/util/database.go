@@ -151,6 +151,12 @@ func seedData() {
 			Description:  "La institución cuenta con una tasa promedio de titulación institucional de la oferta académica de grado de al menos el 50%.",
 		},
 		{
+			ID:           22,
+			Name:         "Indicador 22: Tasa Titulación Institucional - Oferta Académica de Posgrado",
+			Abbreviation: "Tasa Titulación Institucional - Oferta Académica de Posgrado",
+			Description:  "La institución cuenta con una tasa promedio de titulación institucional de la oferta académica de posgrado de al menos el 82%.",
+		},
+		{
 			ID:           25,
 			Name:         "Indicador 25: Proyectos de Investigación e Innovación con Financiamiento Externo o en Red",
 			Abbreviation: "Proyectos de Investigación e Innovación con Financiamiento Externo o en Red",
