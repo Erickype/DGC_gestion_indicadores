@@ -8,8 +8,10 @@
 	import { writable } from 'svelte/store';
 	import { goto } from '$app/navigation';
 
+	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Form from '$lib/components/ui/form';
 
+	import Refresh from 'lucide-svelte/icons/refresh-ccw';
 	import Icon from 'lucide-svelte/icons/circle-gauge';
 
 	import CohortsServer from '$lib/components/filters/indicatorsInformation/postgraduate/cohortsServer.svelte';
@@ -40,9 +42,14 @@
 		<Icon class="h-8 w-8" />
 		<h2 class="text-2xl font-bold">Dashboards posgrado</h2>
 	</div>
-	<Form.Field {form} name="year" class="w-1/3">
-		<CohortsServer {formDataCohortYear} />
-	</Form.Field>
+	<div class="flex items-center gap-2">
+		<Button variant="outline" role="combobox" size="icon">
+			<Refresh class="h-4 w-4" />
+		</Button>
+		<Form.Field {form} name="year" class="w-96 flex justify-between">
+			<CohortsServer {formDataCohortYear} />
+		</Form.Field>
+	</div>
 </div>
 
 <div class="mx-auto flex w-full flex-col place-content-center px-8"></div>
