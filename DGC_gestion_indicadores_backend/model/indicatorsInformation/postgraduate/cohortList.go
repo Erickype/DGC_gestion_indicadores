@@ -2,7 +2,6 @@ package model
 
 import (
 	"errors"
-	"fmt"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	"gorm.io/gorm"
@@ -62,12 +61,12 @@ func PostFilterCohortLists(
 	var values []interface{}
 
 	if filterCohortListsRequest.StartYear > 0 {
-		conditions = append(conditions, "? <= cl.year")
-		values = append(values, fmt.Sprintf("%%%d%%", filterCohortListsRequest.StartYear))
+		conditions = append(conditions, "cl.year >= ?")
+		values = append(values, filterCohortListsRequest.StartYear)
 	}
 	if filterCohortListsRequest.EndYear > 0 {
 		conditions = append(conditions, "cl.year <= ?")
-		values = append(values, fmt.Sprintf("%%%d%%", filterCohortListsRequest.EndYear))
+		values = append(values, filterCohortListsRequest.EndYear)
 	}
 
 	if len(conditions) > 0 {
