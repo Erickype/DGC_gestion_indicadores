@@ -65,7 +65,7 @@
 {:then [filterCohortListsResponse, cohortByYearResponse]}
 	{#if cohortByYearResponse && cohortByYearResponse.year}
 		{#if !filterCohortListsResponse.cohort_lists.some((cohort) => cohort.year === cohortByYearResponse.year)}
-			<p class="hidden">
+			<p class="hidden m-0">
 				{filterCohortListsResponse.cohort_lists.unshift(cohortByYearResponse)}
 			</p>
 		{/if}
@@ -76,6 +76,7 @@
 	{/if}
 
 	<ServerFormSelect
+		hasLabel={false}
 		formSelectWidth="w-[25%]"
 		bind:filterValue={postCohortsFilter}
 		formLabel="Cohorte"
