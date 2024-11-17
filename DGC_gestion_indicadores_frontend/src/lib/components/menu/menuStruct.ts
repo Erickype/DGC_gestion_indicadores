@@ -23,7 +23,7 @@ export const menus: Menu[] = [
         links: [
             { name: 'Periodos Evaluación', route: '/dashboards/evaluation-periods' },
             { name: 'Periodos Académicos', route: '/dashboards/academic-periods' },
-            { name: 'Tasas académicas', route: '/dashboards/academic-fees' }
+            { name: 'Posgrados', route: '/dashboards/postgraduates' }
         ],
         roles: [1, 2, 3]
     },
