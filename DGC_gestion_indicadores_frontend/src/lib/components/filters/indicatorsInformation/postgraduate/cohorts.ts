@@ -71,7 +71,8 @@ export async function fetchOnFilterChanged(filter: string, filterCohortListsRequ
     popoverFilterDataMap.forEach((_, key) => {
         (filterCohortListsRequest as any)[key] = filter;
     });
-
+    filterCohortListsRequest.start_year = parseInt(filterCohortListsRequest.start_year!.toString())
+    filterCohortListsRequest.end_year = parseInt(filterCohortListsRequest.end_year!.toString())
     return fetchFilterCohorts(filterCohortListsRequest).then(
         (response: FilterCohortListsResponse) => {
             if (response.count === 0) {
@@ -79,6 +80,8 @@ export async function fetchOnFilterChanged(filter: string, filterCohortListsRequ
                 popoverFilterDataMap.forEach((_, key) => {
                     (filterCohortListsRequest as any)[key] = '';
                 });
+                filterCohortListsRequest.start_year = 1
+                filterCohortListsRequest.end_year = 10000
                 return fetchFilterCohorts(filterCohortListsRequest);
             }
             return response;
@@ -103,6 +106,10 @@ export async function fetchOnDetailedFilter(
     });
 
     filterCohortListsRequest = request;
+    if (filterCohortListsRequest.start_year)
+        filterCohortListsRequest.start_year = parseInt(filterCohortListsRequest.start_year.toString())
+    if (filterCohortListsRequest.end_year)
+        filterCohortListsRequest.end_year = parseInt(filterCohortListsRequest.end_year.toString())
 
     const response = await fetchFilterCohorts(filterCohortListsRequest);
 
@@ -119,6 +126,11 @@ export async function fetchOnDetailedFilter(
         popoverFilterDataMap.forEach((_, key) => {
             (filterCohortListsRequest as any)[key] = '';
         });
+
+        if (filterCohortListsRequest.start_year)
+            filterCohortListsRequest.start_year = parseInt(filterCohortListsRequest.start_year.toString())
+        if (filterCohortListsRequest.end_year)
+            filterCohortListsRequest.end_year = parseInt(filterCohortListsRequest.end_year.toString())
 
         const newResponse = await fetchFilterCohorts(filterCohortListsRequest);
         return { request: filterCohortListsRequest, response: newResponse };
