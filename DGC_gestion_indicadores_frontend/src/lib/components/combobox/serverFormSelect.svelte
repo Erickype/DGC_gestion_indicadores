@@ -27,6 +27,7 @@
 	export let filterValue: string;
 	export let formLabel: string = 'Object';
 	export let formSelectWidth = 'w-[90%]';
+	export let hasLabel = true
 
 	let isFocused = false;
 
@@ -72,7 +73,9 @@
 
 <Popover.Root bind:open={openCombo} let:ids>
 	<Form.Control let:attrs>
-		<Form.Label>{formLabel}</Form.Label>
+		{#if hasLabel}
+			<Form.Label>{formLabel}</Form.Label>
+		{/if}
 		<Popover.Trigger
 			class={cn(
 				buttonVariants({ variant: 'outline' }),
