@@ -9,6 +9,7 @@ const (
 	Indicator17 = 17
 	Indicator19 = 19
 	Indicator21 = 21
+	Indicator22 = 22
 	Indicator25 = 25
 	Indicator26 = 26
 	Indicator29 = 29
@@ -17,6 +18,7 @@ const (
 	Indicator17TargetValue = 50
 	Indicator19TargetValue = 14
 	Indicator21TargetValue = 50
+	Indicator22TargetValue = 82
 	Indicator25TargetValue = 40
 	Indicator26TargetValue = 1.5
 	Indicator29TargetValue = 1.5
