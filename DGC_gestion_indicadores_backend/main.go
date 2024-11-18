@@ -270,6 +270,8 @@ func serveApplication() {
 
 	indicatorsRoutes.GET("/postgraduate/:cohortYear/:indicatorTypeID",
 		indicators.GetCalculateIndicatorByTypeIDAndCohortYear)
+	indicatorsRoutes.GET("/postgraduate/:cohortYear",
+		indicators.GetIndicatorsByPostgraduateCohortYear)
 
 	// Public view routes
 	academicPeriodRoutes := router.Group("/view")

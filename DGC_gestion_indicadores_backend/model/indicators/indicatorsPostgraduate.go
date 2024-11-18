@@ -47,3 +47,21 @@ func CalculateIndicatorByTypeIDAndCohortYear(indicatorTypeID, cohortYear int, re
 	}
 	return nil
 }
+
+func GetIndicatorsByPostgraduateCohortYear(
+	cohortYear int, response *[]IndicatorsPostgraduateJoined) (err error) {
+	err = database.DB.Table("indicators.indicators_postgraduates ip").
+		Select(`ip.indicator_type_id,
+				it.name as indicator_type,
+				ip.cohort_list_year,
+				ip.actual_value,
+				ip.target_value`).
+		Joins("join indicators.indicator_types it on ip.indicator_type_id = it.id").
+		Where("ip.cohort_list_year = ?", cohortYear).
+		Order("ip.indicator_type_id").
+		Scan(response).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}

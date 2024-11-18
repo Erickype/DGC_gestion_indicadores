@@ -19,3 +19,17 @@ func GetCalculateIndicatorByTypeIDAndCohortYear(context *gin.Context) {
 	}
 	context.JSON(http.StatusOK, response)
 }
+
+func GetIndicatorsByPostgraduateCohortYear(context *gin.Context) {
+	var response []model.IndicatorsPostgraduateJoined
+	cohortYear, _ := strconv.Atoi(context.Param("cohortYear"))
+	err := model.GetIndicatorsByPostgraduateCohortYear(cohortYear, &response)
+	if err != nil {
+		errors.InternalServerErrorResponse(context, "Error obteniendo indicadores", err)
+		return
+	}
+	if len(response) == 0 {
+		response = []model.IndicatorsPostgraduateJoined{}
+	}
+	context.JSON(http.StatusOK, response)
+}
