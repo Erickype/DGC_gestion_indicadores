@@ -1,6 +1,7 @@
 package model
 
 import (
+	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"github.com/Erickype/DGC_gestion_indicadores_backend/model"
 	postgraduate "github.com/Erickype/DGC_gestion_indicadores_backend/model/indicatorsInformation/postgraduate"
 	"time"
@@ -28,4 +29,21 @@ type IndicatorsPostgraduateJoined struct {
 
 func (iep IndicatorsPostgraduate) TableName() string {
 	return model.IndicatorsSchema + ".indicators_postgraduates"
+}
+
+func RefreshIndicatorPostgraduate(indicator *IndicatorsPostgraduate) (err error) {
+	err = database.DB.Save(indicator).Error
+	return nil
+}
+
+func CalculateIndicatorByTypeIDAndCohortYear(indicatorTypeID, cohortYear int, response *IndicatorsPostgraduate) (err error) {
+	switch indicatorTypeID {
+	case model.Indicator22:
+		err = CalculateIndicator22(cohortYear, response)
+		if err != nil {
+			return err
+		}
+		break
+	}
+	return nil
 }
