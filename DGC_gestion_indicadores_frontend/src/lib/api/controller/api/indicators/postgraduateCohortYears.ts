@@ -25,7 +25,7 @@ export async function GetCalculateIndicatorsByPostgraduateCohortYear(postgraduat
     }
 }
 
-export async function getIndicatorsByCohortYear(evaluationPeriodID: string, token: string) {
+export async function GetIndicatorsByCohortYear(evaluationPeriodID: string, token: string) {
     try {
         const response = await fetch(getIndicatorsByCohortYearRoute + evaluationPeriodID, {
             method: 'GET',
