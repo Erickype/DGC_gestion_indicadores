@@ -73,6 +73,23 @@
 		toast.success(`${actualIndicator.indicator_type} actualizado`);
 		return (calculateIndicatorPromise = response.json());
 	}
+
+	async function fetchGetCalculateIndicatorByTypeIDAndCohortYear() {
+		const actualIndicator = indicator as IndicatorsPostgraduateJoined;
+		const url = `/api/indicators/postgraduate/calculate/${actualIndicator.cohort_list_year}/${actualIndicator.indicator_type_id}`;
+		const response = await fetch(url, {
+			method: 'GET'
+		});
+		if (!response.ok) {
+			const errorData = (await response.json()) as CommonError;
+			if (response.status === 401) {
+				throw goto('/');
+			}
+			return toast.error(errorData.message);
+		}
+		toast.success(`${actualIndicator.indicator_type} actualizado`);
+		return (calculateIndicatorPromise = response.json());
+	}
 </script>
 
 {#if indicatorCategory === IndicatorCategory.AcademicPeriod}
@@ -156,7 +173,7 @@
 					<Button
 						variant="ghost"
 						size="icon"
-						on:click={fetchGetCalculateIndicatorByTypeIDAndEvaluationPeriod}
+						on:click={fetchGetCalculateIndicatorByTypeIDAndCohortYear}
 					>
 						<Activity class="h-4 w-4" />
 					</Button>
