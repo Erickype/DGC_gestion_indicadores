@@ -27,7 +27,8 @@
 	export let filterValue: string;
 	export let formLabel: string = 'Object';
 	export let formSelectWidth = 'w-[90%]';
-	export let hasLabel = true
+	export let hasLabel = true;
+	export let filterDelay = 750;
 
 	let isFocused = false;
 
@@ -53,7 +54,7 @@
 		clearTimeout(typingTimeout);
 		typingTimeout = window.setTimeout(() => {
 			handleFilterChanged();
-		}, 500);
+		}, filterDelay);
 	}
 
 	function handleDeleteFilter() {
