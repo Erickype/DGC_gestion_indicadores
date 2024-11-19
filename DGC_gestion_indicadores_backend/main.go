@@ -268,7 +268,7 @@ func serveApplication() {
 	indicatorsRoutes.GET("/academicPeriod/calculate/:academicPeriodID", indicators.GetCalculateIndicatorsByAcademicPeriod)
 	indicatorsRoutes.GET("/academicPeriod/:academicPeriodID", indicators.GetIndicatorsByAcademicPeriod)
 
-	indicatorsRoutes.GET("/postgraduate/:cohortYear/:indicatorTypeID",
+	indicatorsRoutes.GET("/postgraduate/calculate/:cohortYear/:indicatorTypeID",
 		indicators.GetCalculateIndicatorByTypeIDAndCohortYear)
 	indicatorsRoutes.GET("/postgraduate/:cohortYear",
 		indicators.GetIndicatorsByPostgraduateCohortYear)
