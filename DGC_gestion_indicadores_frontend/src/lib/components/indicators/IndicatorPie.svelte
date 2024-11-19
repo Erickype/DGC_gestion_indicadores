@@ -1,10 +1,14 @@
 <script lang="ts">
+	import type { IndicatorsPostgraduateJoined } from '$lib/api/model/api/indicators/postgraduateCohortYears';
 	import type { IndicatorEvaluationPeriodJoined } from '$lib/api/model/api/indicators/evaluationPeriod';
 	import type { IndicatorAcademicPeriodJoined } from '$lib/api/model/api/indicators/academicPeriods';
 
 	import { Chart, Svg, Group, LinearGradient, Arc, Text } from 'layerchart';
 
-	export let indicator: IndicatorAcademicPeriodJoined | IndicatorEvaluationPeriodJoined;
+	export let indicator:
+		| IndicatorAcademicPeriodJoined
+		| IndicatorEvaluationPeriodJoined
+		| IndicatorsPostgraduateJoined;
 	export let isPercentaje: boolean = true;
 
 	let value = (indicator.actual_value * 100) / indicator.target_value;
