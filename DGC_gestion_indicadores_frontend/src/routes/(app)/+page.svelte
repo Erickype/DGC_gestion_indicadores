@@ -1,159 +1,53 @@
 <script lang="ts">
-	import { scaleLinear } from 'd3-scale';
+	import { scaleLinear, scaleBand } from 'd3-scale';
 
-	import { Chart, Svg, Axis, Spline, Highlight, Tooltip } from 'layerchart';
+	import { Chart, Svg, Axis, Spline, Highlight, Tooltip, LinearGradient, Bars } from 'layerchart';
+	import { format, PeriodType } from '@layerstack/utils';
 
 	let chartData = [
 		{
-			year: 1980,
-			efficiency: 24.3,
-			sales: 8949000
+			date: new Date('2024-10-21T05:00:00.000Z'),
+			value: 73,
+			baseline: 68
 		},
 		{
-			year: 1985,
-			efficiency: 27.6,
-			sales: 10979000
+			date: new Date('2024-10-22T05:00:00.000Z'),
+			value: 70,
+			baseline: 85
 		},
 		{
-			year: 1990,
-			efficiency: 28,
-			sales: 9303000
+			date: new Date('2024-10-23T05:00:00.000Z'),
+			value: 66,
+			baseline: 42
 		},
 		{
-			year: 1991,
-			efficiency: 28.4,
-			sales: 8185000
+			date: new Date('2024-10-24T05:00:00.000Z'),
+			value: 68,
+			baseline: 74
 		},
 		{
-			year: 1992,
-			efficiency: 27.9,
-			sales: 8213000
+			date: new Date('2024-10-25T05:00:00.000Z'),
+			value: 86,
+			baseline: 39
 		},
 		{
-			year: 1993,
-			efficiency: 28.4,
-			sales: 8518000
+			date: new Date('2024-10-26T05:00:00.000Z'),
+			value: 64,
+			baseline: 28
 		},
 		{
-			year: 1994,
-			efficiency: 28.3,
-			sales: 8991000
-		},
-		{
-			year: 1995,
-			efficiency: 28.6,
-			sales: 8620000
-		},
-		{
-			year: 1996,
-			efficiency: 28.5,
-			sales: 8479000
-		},
-		{
-			year: 1997,
-			efficiency: 28.7,
-			sales: 8217000
-		},
-		{
-			year: 1998,
-			efficiency: 28.8,
-			sales: 8085000
-		},
-		{
-			year: 1999,
-			efficiency: 28.3,
-			sales: 8638000
-		},
-		{
-			year: 2000,
-			efficiency: 28.5,
-			sales: 8778000
-		},
-		{
-			year: 2001,
-			efficiency: 28.8,
-			sales: 8352000
-		},
-		{
-			year: 2002,
-			efficiency: 29,
-			sales: 8042000
-		},
-		{
-			year: 2003,
-			efficiency: 29.5,
-			sales: 7556000
-		},
-		{
-			year: 2004,
-			efficiency: 29.5,
-			sales: 7483000
-		},
-		{
-			year: 2005,
-			efficiency: 30.3,
-			sales: 7660000
-		},
-		{
-			year: 2006,
-			efficiency: 30.1,
-			sales: 7762000
-		},
-		{
-			year: 2007,
-			efficiency: 31.2,
-			sales: 7562000
-		},
-		{
-			year: 2008,
-			efficiency: 31.5,
-			sales: 6769000
-		},
-		{
-			year: 2009,
-			efficiency: 32.9,
-			sales: 5402000
-		},
-		{
-			year: 2010,
-			efficiency: 33.9,
-			sales: 5636000
-		},
-		{
-			year: 2011,
-			efficiency: 33.1,
-			sales: 6093000
-		},
-		{
-			year: 2012,
-			efficiency: 35.3,
-			sales: 7245000
-		},
-		{
-			year: 2013,
-			efficiency: 36.4,
-			sales: 7586000
-		},
-		{
-			year: 2014,
-			efficiency: 36.5,
-			sales: 7708000
-		},
-		{
-			year: 2015,
-			efficiency: 37.2,
-			sales: 7517000
-		},
-		{
-			year: 2016,
-			efficiency: 37.7,
-			sales: 6873000
-		},
-		{
-			year: 2017,
-			efficiency: 39.4,
-			sales: 6081000
+			date: new Date('2024-10-27T05:00:00.000Z'),
+			value: 94,
+			baseline: 48
 		}
+	];
+	const colorKeys = [...new Set(chartData.map((x) => x.date))];
+
+	const keyColors = [
+		'hsl(212 100% 40.6%)',
+		'hsl(175 100% 50%)',
+		'hsl(289 100% 68%)',
+		'hsl(60 100% 61%)'
 	];
 </script>
 
@@ -161,51 +55,33 @@
 	<title>Home</title>
 </svelte:head>
 
-<div class="h-[300px] w-1/2 rounded border p-4">
+<div class="h-[300px] rounded border p-4">
 	<Chart
 		data={chartData}
-		x="year"
-		y="sales"
+		x="date"
+		xScale={scaleBand().padding(0.4)}
+		y="value"
+		c="date"
 		yDomain={[0, null]}
-		yNice
-		y1="efficiency"
-		y1Scale={scaleLinear()}
-		y1Range={({ yScale }) => yScale.domain()}
-		padding={{ top: 24, bottom: 24, left: 24, right: 24 }}
-		tooltip={{ mode: 'bisect-x' }}
-		let:height
-		let:y1Scale
+		cDomain={colorKeys}
+		cRange={keyColors}
+		yNice={4}
+		padding={{ left: 16, bottom: 24 }}
 	>
 		<Svg>
+			<Axis placement="left" grid rule />
 			<Axis
-				placement="left"
+				placement="bottom"
+				format={(d) => format(d, PeriodType.Day, { variant: 'short' })}
 				rule
-				format="metric"
-				label="↑ sales (M)"
-				labelPlacement="start"
-				labelProps={{ class: 'fill-green-500' }}
 			/>
-			<Axis
-				placement="right"
-				scale={scaleLinear(y1Scale?.domain() ?? [], [height, 0])}
-				ticks={y1Scale?.ticks?.()}
-				rule
-				label="efficiency (mpg) ↑"
-				labelPlacement="start"
-				labelProps={{ class: 'fill-yellow-500' }}
-			/>
-			<Axis placement="bottom" format="none" rule />
-			<Spline class="stroke-green-500 stroke-2" />
-			<Spline y={(d) => y1Scale?.(d.efficiency)} class="stroke-yellow-500 stroke-2" />
-			<Highlight lines points={{ class: 'fill-green-500' }} />
-			<Highlight points={{ class: 'fill-yellow-500' }} y={(d) => y1Scale?.(d.efficiency)} />
+			<Bars strokeWidth={0} />
+			<Highlight area />
 		</Svg>
-
 		<Tooltip.Root let:data>
-			<Tooltip.Header>{data.year}</Tooltip.Header>
+			<Tooltip.Header>{data.date}</Tooltip.Header>
 			<Tooltip.List>
-				<Tooltip.Item label="sales" value={data.sales} format="currencyRound" />
-				<Tooltip.Item label="efficiency" value={data.efficiency} />
+				<Tooltip.Item label={data.date} value={data.value} format="integer" valueAlign="right" />
 			</Tooltip.List>
 		</Tooltip.Root>
 	</Chart>
