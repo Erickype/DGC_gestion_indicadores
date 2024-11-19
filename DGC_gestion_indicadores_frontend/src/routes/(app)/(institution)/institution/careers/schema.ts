@@ -14,14 +14,14 @@ export const addCarrerSchema = z.object({
 
   description: z.string({
     required_error: "Descripción requerida"
-  }).min(10, {
-    message: "Descripción mínimo 10 caracteres."
+  }).min(5, {
+    message: "Descripción mínimo 5 caracteres."
   }).max(50),
 
   abbreviation: z.string({
     required_error: "Abreviación requerida"
-  }).min(5, {
-    message: "Abreviación mínimo 5 caracteres."
+  }).min(2, {
+    message: "Abreviación mínimo 2 caracteres."
   }).max(50),
 });
 
@@ -42,14 +42,14 @@ export const updateCarrerSchema = z.object({
 
   description: z.string({
     required_error: "Descripción requerida"
-  }).min(10, {
-    message: "Descripción mínimo 10 caracteres."
+  }).min(5, {
+    message: "Descripción mínimo 5 caracteres."
   }).max(50),
 
   abbreviation: z.string({
     required_error: "Abreviación requerida"
-  }).min(5, {
-    message: "Abreviación mínimo 5 caracteres."
+  }).min(2, {
+    message: "Abreviación mínimo 2 caracteres."
   }).max(50),
 });
 
