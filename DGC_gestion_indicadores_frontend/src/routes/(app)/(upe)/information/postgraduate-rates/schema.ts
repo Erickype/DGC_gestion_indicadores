@@ -26,6 +26,14 @@ export const addPostgraduateCohortListSchema = z.object({
     }).gt(0, {
         message: "Ingrese una valor válido"
     }),
+}).superRefine(({ graduated_students, total_students }, ctx) => {
+    if (graduated_students > total_students) {
+        ctx.addIssue({
+            code: "custom",
+            message: "Estudiantes graduados menor o igual a total estudiantes",
+            path: ['graduated_students']
+        });
+    }
 });
 
 export const updatePostgraduateCohortListSchema = z.object({
@@ -54,6 +62,14 @@ export const updatePostgraduateCohortListSchema = z.object({
     }).gt(0, {
         message: "Ingrese una valor válido"
     }),
+}).superRefine(({ graduated_students, total_students }, ctx) => {
+    if (graduated_students > total_students) {
+        ctx.addIssue({
+            code: "custom",
+            message: "Estudiantes graduados menor o igual a total estudiantes",
+            path: ['graduated_students']
+        });
+    }
 });
 
 export type AddPostgraduateCohortListSchema = typeof addPostgraduateCohortListSchema;
