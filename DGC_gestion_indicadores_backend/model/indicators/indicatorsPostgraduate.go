@@ -36,10 +36,15 @@ func (iep IndicatorsPostgraduate) TableName() string {
 
 func RefreshIndicatorPostgraduate(indicator *IndicatorsPostgraduate) (err error) {
 	err = database.DB.Save(indicator).Error
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 func CalculateIndicatorByTypeIDAndCohortYear(indicatorTypeID, cohortYear int, response *IndicatorsPostgraduate) (err error) {
+	response.IndicatorTypeID = uint(indicatorTypeID)
+	response.CohortListYear = uint(cohortYear)
 	switch indicatorTypeID {
 	case model.Indicator22:
 		err = CalculateIndicator22(cohortYear, response)
@@ -99,7 +104,7 @@ func GetCalculateByPostgraduateCohortYear(cohortYear int, response *[]Indicators
 			defer wg.Done()
 
 			var indicator IndicatorsPostgraduate
-			err := CalculateIndicatorByTypeIDAndCohortYear(cohortYear, indicatorID, &indicator)
+			err := CalculateIndicatorByTypeIDAndCohortYear(indicatorID, cohortYear, &indicator)
 			if err != nil {
 				errCh <- err // Send error to error channel
 				return
@@ -118,7 +123,7 @@ func GetCalculateByPostgraduateCohortYear(cohortYear int, response *[]Indicators
 			mu.Unlock()
 
 			done <- indicatorJoined
-		}(evaluationPeriodIndicators[i])
+		}(postgraduateIndicators[i])
 	}
 
 	// Wait for all goroutines to finish
