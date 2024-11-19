@@ -3,8 +3,6 @@ import { z } from "zod";
 export const addBookOrChaptersProductionListSchema = z.object({
     doi: z.string({
         required_error: "DOI requerido"
-    }).url({
-        message: "URL inválida"
     }).max(1000),
 
     is_chapter: z.boolean({
@@ -42,8 +40,6 @@ export const updateBookOrChaptersProductionListSchema = z.object({
 
     doi: z.string({
         required_error: "DOI requerido"
-    }).url({
-        message: "URL inválida"
     }).max(1000),
 
     is_chapter: z.boolean({

@@ -94,11 +94,11 @@
 		</Form.Field>
 		<Form.Field {form} name="doi">
 			<Form.Control let:attrs>
-				<Form.Label>DOI</Form.Label>
+				<Form.Label>ISBN</Form.Label>
 				<Input
-					type="url"
+					type="text"
 					{...attrs}
-					placeholder="https://doi.org/10.47366/sabia.v5n1a3..."
+					placeholder="ISBN 978-3-16-148410-0"
 					bind:value={$formData.doi}
 				/>
 			</Form.Control>
