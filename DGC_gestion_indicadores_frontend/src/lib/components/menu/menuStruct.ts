@@ -50,13 +50,6 @@ export const menus: Menu[] = [
             { name: "Carreras", route: "/institution/careers" },
             { name: "Programas posgrado", route: "/institution/postgraduate/programs" },
             { name: "Revistas científicas", route: "/institution/science-magazines" },
-        ],
-        roles: [1]
-    },
-    {
-        name: "Actores",
-        icon: BookUser,
-        links: [
             { name: "Personas", route: "/actors/people" },
         ],
         roles: [1, 2]
