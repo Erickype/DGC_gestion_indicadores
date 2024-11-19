@@ -13,7 +13,7 @@ func GetCalculateIndicatorByTypeIDAndCohortYear(context *gin.Context) {
 	var response model.IndicatorsPostgraduate
 	cohortYear, _ := strconv.Atoi(context.Param("cohortYear"))
 	indicatorTypeID, _ := strconv.Atoi(context.Param("indicatorTypeID"))
-	err := model.CalculateIndicatorByTypeIDAndCohortYear(cohortYear, indicatorTypeID, &response)
+	err := model.CalculateIndicatorByTypeIDAndCohortYear(indicatorTypeID, cohortYear, &response)
 	if err != nil {
 		errors.InternalServerErrorResponse(context, "Error calculando indicador", err)
 		return
