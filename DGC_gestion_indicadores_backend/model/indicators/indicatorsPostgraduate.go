@@ -14,7 +14,7 @@ type IndicatorsPostgraduate struct {
 	CreatedAt       time.Time `json:"created_at"`
 	UpdatedAt       time.Time `json:"updated_at"`
 	IndicatorTypeID uint      `gorm:"primary_key" json:"indicator_type_id"`
-	CohortListYear  uint      `gorm:"primary_key" json:"year"`
+	CohortListYear  uint      `gorm:"primary_key" json:"cohort_list_year"`
 	ActualValue     float64   `json:"actual_value"`
 	TargetValue     float64   `json:"target_value"`
 
