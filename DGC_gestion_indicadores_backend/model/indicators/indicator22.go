@@ -7,17 +7,17 @@ import (
 
 func CalculateIndicator22(cohortYear int, indicator *IndicatorsPostgraduate) (err error) {
 	var average struct {
-		avg float64
+		Value float64 `json:"value"`
 	}
 	err = database.DB.Table("indicators_information.postgraduate_cohort_lists pcl").
-		Select("avg(cast(pcl.graduated_students as decimal)/cast(pcl.total_students as decimal))").
+		Select("avg(cast(pcl.graduated_students as decimal)/cast(pcl.total_students as decimal)) as value").
 		Joins("join indicators_information.postgraduate_programs pp on pcl.postgraduate_program_id = pp.id").
 		Where("pcl.year = ?", cohortYear).
 		Scan(&average).Error
 	if err != nil {
 		return
 	}
-	indicator.ActualValue = average.avg * 100
+	indicator.ActualValue = average.Value * 100
 	indicator.TargetValue = model.Indicator22TargetValue
 	err = RefreshIndicatorPostgraduate(indicator)
 	if err != nil {
