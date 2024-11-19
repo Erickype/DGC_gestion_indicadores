@@ -70,7 +70,7 @@
 			</p>
 		{/if}
 	{:else}
-		<p class="hidden">
+		<p class="hidden m-0">
 			{setInitialValue(filterCohortListsResponse.cohort_lists.at(0)?.year)}
 		</p>
 	{/if}
