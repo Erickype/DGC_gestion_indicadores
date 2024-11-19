@@ -9,6 +9,7 @@
 	import Activity from 'lucide-svelte/icons/refresh-ccw';
 	import Loader from 'lucide-svelte/icons/loader';
 
+	import type { IndicatorsPostgraduateJoined } from '$lib/api/model/api/indicators/postgraduateCohortYears';
 	import type { IndicatorAcademicPeriodJoined } from '$lib/api/model/api/indicators/academicPeriods';
 	import IndicatorPie from '$lib/components/indicators/IndicatorPie.svelte';
 	import type {
@@ -16,13 +17,25 @@
 		IndicatorsEvaluationPeriod
 	} from '$lib/api/model/api/indicators/evaluationPeriod';
 
-	export let indicator: IndicatorEvaluationPeriodJoined | IndicatorAcademicPeriodJoined;
+	export let indicator:
+		| IndicatorEvaluationPeriodJoined
+		| IndicatorAcademicPeriodJoined
+		| IndicatorsPostgraduateJoined;
 
-	let isAcademicPeriodIndicator: boolean;
+	enum IndicatorCategory {
+		EvaluationPeriod,
+		AcademicPeriod,
+		PostgraduateCohortYear
+	}
+	let indicatorCategory: IndicatorCategory | undefined = undefined;
 	if ((indicator as IndicatorAcademicPeriodJoined).academic_period_id) {
-		isAcademicPeriodIndicator = true;
-	} else {
-		isAcademicPeriodIndicator = false;
+		indicatorCategory = IndicatorCategory.AcademicPeriod;
+	}
+	if ((indicator as IndicatorEvaluationPeriodJoined).evaluation_period_id) {
+		indicatorCategory = IndicatorCategory.EvaluationPeriod;
+	}
+	if ((indicator as IndicatorsPostgraduateJoined).cohort_list_year) {
+		indicatorCategory = IndicatorCategory.PostgraduateCohortYear;
 	}
 
 	let calculateIndicatorPromise: Promise<IndicatorsEvaluationPeriod>;
@@ -62,7 +75,7 @@
 	}
 </script>
 
-{#if isAcademicPeriodIndicator}
+{#if indicatorCategory === IndicatorCategory.AcademicPeriod}
 	<Card.Root class="bg-secondary/50 flex flex-col justify-between">
 		<Card.Header class="pb-2">
 			<Card.Title class="flex items-center justify-between gap-2">
@@ -76,6 +89,40 @@
 						variant="ghost"
 						size="icon"
 						on:click={fetchGetCalculateIndicatorByTypeIDAndAcademicPeriod}
+					>
+						<Activity class="h-4 w-4" />
+					</Button>
+				{/await}
+			</Card.Title>
+			<Card.Description>Objetivo {indicator.target_value}</Card.Description>
+		</Card.Header>
+		<Card.Content>
+			{#await calculateIndicatorPromise}
+				cargando...
+			{:then calculateIndicator}
+				{#if calculateIndicator}
+					<p class="hidden">
+						{(indicator.actual_value = calculateIndicator.actual_value)}
+					</p>
+				{/if}
+				<IndicatorPie {indicator} isPercentaje={false} />
+			{/await}
+		</Card.Content>
+	</Card.Root>
+{:else if indicatorCategory === IndicatorCategory.EvaluationPeriod}
+	<Card.Root class="bg-secondary/50 flex flex-col justify-between">
+		<Card.Header class="pb-2">
+			<Card.Title class="flex items-center justify-between gap-2">
+				<h5 class="text w-4/5 text-pretty text-lg">{indicator.indicator_type}</h5>
+				{#await calculateIndicatorPromise}
+					<Button variant="ghost" size="icon" disabled>
+						<Loader class="h-4 w-4" />
+					</Button>
+				{:then _}
+					<Button
+						variant="ghost"
+						size="icon"
+						on:click={fetchGetCalculateIndicatorByTypeIDAndEvaluationPeriod}
 					>
 						<Activity class="h-4 w-4" />
 					</Button>
