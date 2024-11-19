@@ -1,5 +1,5 @@
-import { adminBaseURL } from "./base";
+import { apiBaseURL } from "../api/base";
 
-export const postFacultyRoute = adminBaseURL + "/faculty"
-export const putFacultyRoute = adminBaseURL + "/faculty/"
-export const deleteFacultyRoute = adminBaseURL + "/faculty/"
+export const postFacultyRoute = apiBaseURL + "/faculty"
+export const putFacultyRoute = apiBaseURL + "/faculty/"
+export const deleteFacultyRoute = apiBaseURL + "/faculty/"

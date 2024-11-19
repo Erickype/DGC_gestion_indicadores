@@ -98,13 +98,6 @@ func serveApplication() {
 	adminRoutes.PUT("/academicPeriod/:id", academicPeriod.UpdateAcademicPeriod)
 	adminRoutes.DELETE("/academicPeriod/:id", academicPeriod.DeleteAcademicPeriod)
 
-	adminRoutes.POST("/faculty", faculty.CreateFaculty)
-	adminRoutes.PUT("/faculty/:id", faculty.UpdateFaculty)
-	adminRoutes.DELETE("/faculty/:id", faculty.DeleteFaculty)
-
-	adminRoutes.POST("/career", career.CreateCareer)
-	adminRoutes.PUT("/career/:id", career.UpdateCareer)
-
 	adminRoutes.POST("/dedication", dedication.CreateDedication)
 
 	adminRoutes.POST("/scaledGrade", scaledGrade.CreateScaledGrade)
@@ -126,8 +119,13 @@ func serveApplication() {
 	upeRoutes.PUT("/person/withRoles", person.UpdatePersonWithRoles)
 
 	upeRoutes.GET("/faculties", faculty.GetFaculties)
+	upeRoutes.POST("/faculty", faculty.CreateFaculty)
+	upeRoutes.PUT("/faculty/:id", faculty.UpdateFaculty)
+	upeRoutes.DELETE("/faculty/:id", faculty.DeleteFaculty)
 
 	upeRoutes.GET("/careers", career.GetCareers)
+	upeRoutes.POST("/career", career.CreateCareer)
+	upeRoutes.PUT("/career/:id", career.UpdateCareer)
 
 	upeRoutes.GET("/dedications", dedication.GetDedications)
 

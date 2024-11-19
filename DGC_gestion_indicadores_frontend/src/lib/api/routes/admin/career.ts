@@ -1,5 +1,5 @@
-import { adminBaseURL } from "./base";
+import { apiBaseURL } from "../api/base";
 
-export const postCareerRoute = adminBaseURL + "/career"
-export const putCareerRoute = adminBaseURL + "/career/"
-export const deleteCareerRoute = adminBaseURL + "/career/"
+export const postCareerRoute = apiBaseURL + "/career"
+export const putCareerRoute = apiBaseURL + "/career/"
+export const deleteCareerRoute = apiBaseURL + "/career/"
