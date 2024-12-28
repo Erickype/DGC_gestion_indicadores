@@ -5,11 +5,13 @@ import (
 	"github.com/Erickype/DGC_gestion_indicadores_backend/database"
 	"gorm.io/datatypes"
 	"gorm.io/gorm"
+	"time"
 )
 
 type EvaluationPeriod struct {
-	gorm.Model
 	ID           uint           `gorm:"primary_key"`
+	CreatedAt    time.Time      `json:"created_at"`
+	UpdatedAt    time.Time      `json:"updated_at"`
 	Name         string         `gorm:"size:50;not null" json:"name"`
 	Abbreviation string         `gorm:"size:50;unique" json:"abbreviation"`
 	Description  string         `gorm:"size:255;not null" json:"description"`
@@ -88,6 +90,9 @@ func UpdateEvaluationPeriod(period *EvaluationPeriod) (err error) {
 func DeleteEvaluationPeriod(id int) (err error) {
 	err = database.DB.Delete(&EvaluationPeriod{}, id).Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrForeignKeyViolated) {
+			return errors.New("periodo de evaluación en uso")
+		}
 		return err
 	}
 	return nil
