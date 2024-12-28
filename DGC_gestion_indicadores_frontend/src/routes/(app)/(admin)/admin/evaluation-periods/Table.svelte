@@ -22,7 +22,7 @@
 	export let formData: SuperValidated<Infer<UpdateEvaluationPeriodSchema>>;
 	let evaluationPeriod: EvaluationPeriod;
 
-	const filterFields = ['name', 'abbreviation'];
+	const filterFields = ['name', 'abbreviation', 'description', 'start_year', 'end_year'];
 
 	const table = createTable(readable(periods), {
 		page: addPagination({
