@@ -1,12 +1,14 @@
 import { DeleteEvaluationPeriod } from "$lib/api/controller/admin/evaluationPeriod";
-import { error, json, type RequestHandler } from "@sveltejs/kit";
+import { generateErrorFromCommonError, type CommonError } from "$lib/api/model/errors";
+import { json, type RequestHandler } from "@sveltejs/kit";
 
 export const DELETE: RequestHandler = async ({ cookies, params }) => {
     const id = params.id
     const token = cookies.get("AuthorizationToken")
-    const res = await DeleteEvaluationPeriod(id!, token!)
-    if (!res.ok) {
-        throw error(res.status, { message: await res.json() })
+    const response = await DeleteEvaluationPeriod(id!, token!)
+
+    if ((response as CommonError).status_code) {
+        return generateErrorFromCommonError(response as CommonError)
     }
-    return json(await res.json());
+    return json(response);
 };
