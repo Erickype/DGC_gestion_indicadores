@@ -70,18 +70,14 @@ func UpdateEvaluationPeriod(c *gin.Context) {
 func DeleteEvaluationPeriod(context *gin.Context) {
 	id, err := strconv.ParseInt(context.Param("id"), 10, 64)
 	if err != nil {
-		err := errors.CreateCommonError(http.StatusBadRequest,
-			"Error en parámetro id.", err.Error())
-		context.AbortWithStatusJSON(http.StatusBadRequest, err)
+		errors.BadRequestResponse(context, err)
 		return
 	}
 
 	err = model.DeleteEvaluationPeriod(int(id))
 	if err != nil {
-		err := errors.CreateCommonError(http.StatusInternalServerError,
-			"Error eliminando periodo evaluación", err.Error())
-		context.AbortWithStatusJSON(http.StatusInternalServerError, err)
+		errors.InternalServerErrorResponse(context, "Error eliminando periodo evaluación", err)
 		return
 	}
-	context.JSON(http.StatusOK, gin.H{"status": "success"})
+	context.JSON(http.StatusAccepted, errors.CreateCommonDeleteResponse("EvaluationPeriod", int(id)))
 }
