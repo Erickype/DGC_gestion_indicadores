@@ -2,20 +2,21 @@
 	import { addPagination, addSortBy, addTableFilter } from 'svelte-headless-table/plugins';
 	import { createTable, createRender } from 'svelte-headless-table';
 	import { readable } from 'svelte/store';
+	import { goto } from '$app/navigation';
 
 	import DataTableActions from '$lib/components/table/tableActions.svelte';
 
-	import Table from '$lib/components/table/table.svelte';
 	import UpdateModal from '$lib/components/modal/UpdateModal.svelte';
+	import Table from '$lib/components/table/table.svelte';
+	import UpdateForm from './UpdateForm.svelte';
 
 	import type { EvaluationPeriod } from '$lib/api/model/view/evaluationPeriod';
+	import type { CommonDeleteResponse } from '$lib/api/model/common';
 
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import type { UpdateEvaluationPeriodSchema } from './schema';
 	import { createEventDispatcher } from 'svelte';
 	import { toast } from 'svelte-sonner';
-	
-	import UpdateForm from './UpdateForm.svelte';
 
 	export let periods: EvaluationPeriod[];
 	export let formData: SuperValidated<Infer<UpdateEvaluationPeriodSchema>>;
@@ -91,11 +92,19 @@
 	async function handleDeleteConfirmation(event: any) {
 		const detail: { status: boolean; id: number } = event.detail;
 		if (detail.status) {
-			const res = await deleteEvaluationPeriod(detail.id.toString());
-			if (!res.ok) {
-				return toast.error('Error eliminando el registro');
+			const url = `/api/evaluationPeriod/` + detail.id;
+			const response = await fetch(url, {
+				method: 'DELETE'
+			});
+			if (!response.ok) {
+				const errorData = (await response.json()) as { message: string };
+				if (response.status === 401) {
+					return goto('/');
+				}
+				return toast.error(errorData.message);
 			}
-			toast.success('Se eliminó el registro');
+			const deleteResponse: CommonDeleteResponse = await response.json();
+			toast.success(`Periodo evaluación eliminado: ${deleteResponse.id_deleted}`);
 			return dispatch('deleted', {
 				status: true
 			});
@@ -111,14 +120,6 @@
 		} else {
 			updateFormOpen = false;
 		}
-	}
-
-	async function deleteEvaluationPeriod(id: string) {
-		const url = `/api/evaluationPeriod/` + id;
-		const response = await fetch(url, {
-			method: 'DELETE'
-		});
-		return response;
 	}
 
 	function handleUpdated(event: any) {
