@@ -33,6 +33,7 @@ services:
       TOKEN_TTL: ${TOKEN_TTL}
       JWT_PRIVATE_KEY: ${JWT_PRIVATE_KEY}
       APP_ENV: ${APP_ENV}
+      SSL_MODE: ${SSL_MODE}
     networks:
       - dgc_gestion_indicadores
 
